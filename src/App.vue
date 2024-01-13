@@ -1,16 +1,39 @@
 <template>
 	<main>
-		<div>
-			<input type="text" placeholder="" />
-			<input type="password" placeholder="" />
-			<button>로그인</button>
-			<a href="#">회원가입</a>
-			<a href="#">비밀번호 찾기</a>
-			<a href="#">아이디 찾기</a>
+		<div id="app">
+			<router-view />
 		</div>
 	</main>
 </template>
 
-<script setup></script>
+<script setup>
+import { useLocationStore } from './stores/location.js';
+import { onMounted } from 'vue';
+
+onMounted(async () => {
+	try {
+		if ('geolocation' in navigator) {
+			const position = await new Promise((resolve, reject) => {
+				navigator.geolocation.getCurrentPosition(resolve, reject, {
+					enableHighAccuracy: true,
+					timeout: 5000,
+					maximumAge: 0,
+				});
+			});
+
+			// store에 위치 정보 저장
+			useLocationStore().setLocation({
+				latitude: position.coords.latitude,
+				longitude: position.coords.longitude,
+			});
+
+			console.log('Latitude:', useLocationStore().latitude);
+			console.log('Longitude:', useLocationStore().longitude);
+		}
+	} catch (error) {
+		console.error('Failed to get location:', error);
+	}
+});
+</script>
 
 <style scoped></style>
