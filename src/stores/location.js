@@ -14,3 +14,17 @@ export const useLocationStore = defineStore({
 		},
 	},
 });
+
+export const useCountryStore = defineStore({
+	id: 'country',
+	state: () => ({
+		country: null,
+		region: null,
+	}),
+	actions: {
+		setCountry({ country, region }) {
+			this.country = country;
+			this.region = region;
+		},
+	},
+});

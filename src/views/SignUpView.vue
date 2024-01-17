@@ -180,6 +180,7 @@
 					<div class="input__item">
 						<div class="input__item_inner">
 							<input
+								v-model="country"
 								type="text"
 								class="input__element"
 								placeholder="지역"
@@ -194,28 +195,35 @@
 
 		<div class="footer">
 			<div class="button-wrap">
-				<!-- <button type="button" class="button button--cancle">취소</button> -->
-				<!-- :disabled="!isValidRegister" -->
-				<button @click="register" class="button" role="link">회원가입</button>
+				<button
+					@click="register"
+					:class="{
+						'button button--positive': fullFilled,
+						'button button--disabled': !fullFilled,
+					}"
+					role="link"
+					id="registerBtn"
+				>
+					회원가입
+				</button>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-// import { useAxios } from '@/composables/useAxios.js';
+import { computed, ref } from 'vue';
+import useAxios from '@/composables/useAxios.js';
+import { useLocationStore, useCountryStore } from '@/stores/location.js';
+import { onMounted } from 'vue';
 
 const imagePreview = ref('');
 const emailRegister = ref('');
 const userNickName = ref('');
 const userPassword = ref('');
 const submitted = ref(false);
-
-// 입력값 유효성 검사
-// const isValidRegister = computed(() => {
-// 	return emailRegister.value && userNickName.value && userPassword.value;
-// });
+const country = ref(useCountryStore().country);
+const { sendRequest } = useAxios();
 
 // 프리뷰 이미지
 const previewImage = event => {
@@ -240,19 +248,52 @@ const removeImage = () => {
 	}
 };
 
-const register = () => {
+//입력값 검증
+const fullFilled = computed(() => {
+	return emailRegister.value && userNickName.value && userPassword.value;
+});
+
+const register = async () => {
 	submitted.value = true;
 	if (emailRegister.value && userNickName.value && userPassword.value) {
-		console.log(emailRegister.value);
-		console.log(userNickName.value);
-		console.log(userPassword.value);
+		try {
+			const formData = {
+				email: emailRegister.value,
+				nickname: userNickName.value,
+				password: userPassword.value,
+				country: country.value,
+				latitude: 37.5665,
+				longitude: 126.978,
+			};
+			const { status, data } = await sendRequest('post', '/users', formData);
+
+			if (status === 200) {
+				console.log(data.data);
+				console.dir(data.data);
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	}
 };
 
-// 이메일 도메인 선택
-// const mailSelect = () => {
-// 	emailDomain.value === '99'
-// 		? (hideOptions.value = true)
-// 		: (hideOptions.value = false);
-// };
+onMounted(() => {
+	try {
+		const formData = {
+			latitude: useLocationStore().latitude,
+			longitude: useLocationStore().longitude,
+		};
+		const { status, data } = sendRequest(
+			'post',
+			`/locations?latitude=${formData.latitude}&longitude=${formData.longitude}`,
+		);
+
+		if (status === 200) {
+			useCountryStore().setCountry(data.data.country, data.data.region);
+			country.value = data.data.country;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+});
 </script>

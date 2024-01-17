@@ -109,7 +109,7 @@
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import useAxios from '@/composables/useAxios.js';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useLocationStore } from '@/stores/location.js';
 
 axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
@@ -128,7 +128,6 @@ const signIn = async () => {
 		const { status, data } = await sendRequest('post', '/users/sign-in', {
 			email: email.value,
 			password: password.value,
-			//네이티브 개발 이후에는 위치정보는 백엔드에서만 관리하도록 수정할 예정
 			latitude: useLocationStore().latitude,
 			longitude: useLocationStore().longitude,
 		});
