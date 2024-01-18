@@ -1,15 +1,5 @@
 <template>
 	<div>
-		<div class="header">
-			<div class="h-unit">
-				<button type="button" class="button-util-icon back">이전화면</button>
-			</div>
-			<h1>KoMeet</h1>
-			<div class="h-unit">
-				<button type="button" class="button-util-icon menu">전체메뉴</button>
-			</div>
-		</div>
-
 		<div class="content">
 			<div class="top-box">
 				<div class="page-header">
