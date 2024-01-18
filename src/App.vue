@@ -1,6 +1,7 @@
 <template>
 	<main>
 		<div id="app">
+			<TheHeader> </TheHeader>
 			<router-view />
 		</div>
 	</main>
@@ -9,6 +10,7 @@
 <script setup>
 import { useLocationStore } from './stores/location.js';
 import { onMounted } from 'vue';
+import TheHeader from './components/layouts/TheHeader.vue';
 
 onMounted(async () => {
 	try {

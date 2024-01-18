@@ -1,15 +1,9 @@
 <template>
 	<div class="content">
-		<div class="top-box">
-			<div class="page-header">
-				<span>회원가입</span>
-			</div>
-			<div class="page-guide">
-				<div class="tit-default"><span>서브타이틀</span></div>
-				<p class="txt-default">안내 텍스트</p>
-			</div>
-		</div>
-
+		<TheTopBox
+			:title="'회원가입'"
+			:text="'정보를 입력한 후 회원가입 버튼을 눌러주세요.'"
+		/>
 		<!-- 회원가입 -->
 		<div class="container">
 			<!-- e-mail -->
@@ -192,22 +186,7 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="footer">
-			<div class="button-wrap">
-				<button
-					@click="register"
-					:class="{
-						'button button--positive': fullFilled,
-						'button button--disabled': !fullFilled,
-					}"
-					role="link"
-					id="registerBtn"
-				>
-					회원가입
-				</button>
-			</div>
-		</div>
+		<TheFooter :onClick="register" :condition="fullFilled" />
 	</div>
 </template>
 
@@ -216,6 +195,8 @@ import { computed, ref } from 'vue';
 import useAxios from '@/composables/useAxios.js';
 import { useLocationStore, useCountryStore } from '@/stores/location.js';
 import { onMounted } from 'vue';
+import TheTopBox from '@/components/TheTopBox.vue';
+import TheFooter from '@/components/layouts/TheFooter.vue';
 
 const imagePreview = ref('');
 const emailRegister = ref('');
@@ -250,7 +231,11 @@ const removeImage = () => {
 
 //입력값 검증
 const fullFilled = computed(() => {
-	return emailRegister.value && userNickName.value && userPassword.value;
+	return (
+		emailRegister.value.trim() !== '' &&
+		userNickName.value.trim() !== '' &&
+		userPassword.value.trim() !== ''
+	);
 });
 
 const register = async () => {
