@@ -22,31 +22,6 @@
 							/>
 						</div>
 					</div>
-					<!-- <div class="input__item">
-						<div class="input__item_inner">
-							<select
-								v-if="!hideOptions"
-								v-model="emailDomain"
-								id="emailSelect"
-								class="select__item"
-								@change="mailSelect"
-								required
-							>
-								<option value="0">도메인선택</option>
-								<option value="1">google.com</option>
-								<option value="2">naver.com</option>
-								<option value="99">직접입력</option>
-							</select>
-							<input
-								v-if="hideOptions"
-								v-model="customDomain"
-								type="text"
-								id="emailInput"
-								class="input__element"
-								placeholder="이메일 도메인"
-							/>
-						</div>
-					</div> -->
 				</div>
 				<!-- 에러 메시지 -->
 				<p
@@ -57,7 +32,6 @@
 					이메일을 입력해 주세요.
 				</p>
 			</div>
-
 			<!-- nickname -->
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">닉네임</em>
@@ -84,7 +58,6 @@
 					사용자 이름을 입력해 주세요.
 				</p>
 			</div>
-
 			<!-- profileimage -->
 			<div class="input-wrap">
 				<em class="input__title">프로필 사진</em>
@@ -138,7 +111,6 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- password -->
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">비밀번호</em>
@@ -193,7 +165,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import useAxios from '@/composables/useAxios.js';
-import { useLocationStore, useCountryStore } from '@/stores/location.js';
+import { useLocationStore } from '@/stores/location.js';
 import { onMounted } from 'vue';
 import TheTopBox from '@/components/TheTopBox.vue';
 import TheFooter from '@/components/layouts/TheFooter.vue';
@@ -203,12 +175,14 @@ const emailRegister = ref('');
 const userNickName = ref('');
 const userPassword = ref('');
 const submitted = ref(false);
-const country = ref(useCountryStore().country);
-const region = ref(useCountryStore().region);
+const country = ref('국가정보없음');
+const region = ref('');
 const { sendRequest } = useAxios();
-const retryInterval = ref(5000);
-const maxRetries = ref(5);
-let retryCount = ref(0);
+const retryInterval = ref(10000);
+const maxRetries = ref(1);
+const imageUrl = ref('');
+const imageFile = ref(null);
+const retryCount = ref(0);
 let intervalId;
 
 // 프리뷰 이미지
@@ -218,6 +192,7 @@ const previewImage = event => {
 		const reader = new FileReader();
 		reader.onload = e => {
 			imagePreview.value = e.target.result;
+			imageFile.value = input.files[0];
 		};
 		reader.readAsDataURL(input.files[0]);
 	}
@@ -243,17 +218,43 @@ const fullFilled = computed(() => {
 	);
 });
 
+const hostImage = async () => {
+	if (!imagePreview.value) {
+		return;
+	}
+	try {
+		const formData = new FormData();
+		formData.append('multipartFile', imageFile.value);
+		const { status, data } = await sendRequest(
+			'post',
+			'/images?imagePath=profile',
+			formData,
+			{
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			},
+		);
+		if (status === 200) {
+			imageUrl.value = data.data;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 const register = async () => {
 	submitted.value = true;
 	if (emailRegister.value && userNickName.value && userPassword.value) {
 		try {
+			await hostImage();
 			const formData = {
 				email: emailRegister.value,
 				nickName: userNickName.value,
 				password: userPassword.value,
 				country: country.value,
 				region: region.value,
-				profileimage: imagePreview.value,
+				profileImage: imageUrl.value,
 			};
 			const { status, data } = await sendRequest('post', '/users', formData);
 
@@ -280,8 +281,8 @@ const fetchData = async () => {
 		);
 
 		if (status === 200) {
-			useCountryStore().setCountry(data.data.country, data.data.region);
 			country.value = data.data.country;
+			region.value = data.data.region;
 			maxRetries.value = 0;
 			clearInterval(intervalId); // 최대 재시도 횟수에 도달하면 인터벌 중지
 		}
