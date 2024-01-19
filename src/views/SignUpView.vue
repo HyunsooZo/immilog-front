@@ -204,7 +204,12 @@ const userNickName = ref('');
 const userPassword = ref('');
 const submitted = ref(false);
 const country = ref(useCountryStore().country);
+const region = ref(useCountryStore().region);
 const { sendRequest } = useAxios();
+const retryInterval = ref(5000);
+const maxRetries = ref(5);
+let retryCount = ref(0);
+let intervalId;
 
 // 프리뷰 이미지
 const previewImage = event => {
@@ -244,11 +249,11 @@ const register = async () => {
 		try {
 			const formData = {
 				email: emailRegister.value,
-				nickname: userNickName.value,
+				nickName: userNickName.value,
 				password: userPassword.value,
 				country: country.value,
-				latitude: 37.5665,
-				longitude: 126.978,
+				region: region.value,
+				profileimage: imagePreview.value,
 			};
 			const { status, data } = await sendRequest('post', '/users', formData);
 
@@ -262,23 +267,48 @@ const register = async () => {
 	}
 };
 
-onMounted(() => {
+const fetchData = async () => {
 	try {
 		const formData = {
 			latitude: useLocationStore().latitude,
 			longitude: useLocationStore().longitude,
 		};
-		const { status, data } = sendRequest(
-			'post',
+
+		const { status, data } = await sendRequest(
+			'get',
 			`/locations?latitude=${formData.latitude}&longitude=${formData.longitude}`,
 		);
 
 		if (status === 200) {
 			useCountryStore().setCountry(data.data.country, data.data.region);
 			country.value = data.data.country;
+			maxRetries.value = 0;
+			clearInterval(intervalId); // 최대 재시도 횟수에 도달하면 인터벌 중지
 		}
 	} catch (error) {
 		console.log(error);
+		retryCount.value++;
+
+		if (retryCount.value < maxRetries.value) {
+			// 재시도를 위해 setTimeout을 사용
+			setTimeout(() => {
+				fetchData();
+			}, retryInterval.value);
+		} else {
+			console.log(`Failed after ${maxRetries.value} retries`);
+			clearInterval(intervalId); // 최대 재시도 횟수에 도달하면 인터벌 중지
+		}
 	}
+};
+
+onMounted(() => {
+	fetchData(); // 최초 실행
+
+	// 5초마다 fetchData() 함수 호출
+	intervalId = setInterval(() => {
+		fetchData();
+	}, retryInterval.value);
+
+	// 필요한 경우 clearInterval(intervalId); 로 인터벌 중단 가능
 });
 </script>
