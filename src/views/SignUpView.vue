@@ -48,6 +48,17 @@
 							/>
 						</div>
 					</div>
+					<div class="input__item">
+						<div class="input__item_inner">
+							<button
+								for="file-upload"
+								class="button button--primary"
+								role="button"
+							>
+								중복확인
+							</button>
+						</div>
+					</div>
 				</div>
 				<!-- 에러 메시지 -->
 				<p
@@ -114,6 +125,32 @@
 			<!-- password -->
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">비밀번호</em>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input
+								v-model="userPassword"
+								type="password"
+								class="input__element"
+								placeholder="비밀번호 영문/숫자/특수문자 8자리 이상"
+								required
+							/>
+						</div>
+					</div>
+				</div>
+				<!-- 에러 메시지 -->
+				<p
+					v-if="submitted && !userPassword"
+					class="input__error"
+					aria-live="assertive"
+				>
+					비밀번호를 입력해 주세요.
+				</p>
+			</div>
+			<!-- 비밀번호 확인 -->
+			<div class="input-wrap" aria-label="required">
+				<em class="input__title">비밀번호 확인</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
