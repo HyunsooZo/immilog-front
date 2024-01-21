@@ -195,17 +195,16 @@
 				</div>
 			</div>
 		</div>
-		<TheFooter :onClick="register" :condition="fullFilled" />
+		<TheFooterButton :onClick="register" :condition="fullFilled" />
 	</div>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 import useAxios from '@/composables/useAxios.js';
-import { useLocationStore } from '@/stores/location.js';
 import { onMounted } from 'vue';
 import TheTopBox from '@/components/TheTopBox.vue';
-import TheFooter from '@/components/layouts/TheFooter.vue';
+import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
 
 const imagePreview = ref('');
 const emailRegister = ref('');
@@ -215,12 +214,8 @@ const submitted = ref(false);
 const country = ref('국가정보없음');
 const region = ref('');
 const { sendRequest } = useAxios();
-const retryInterval = ref(10000);
-const maxRetries = ref(1);
 const imageUrl = ref('');
 const imageFile = ref(null);
-const retryCount = ref(0);
-let intervalId;
 
 // 프리뷰 이미지
 const previewImage = event => {
@@ -304,49 +299,60 @@ const register = async () => {
 		}
 	}
 };
+const options = {
+	enableHighAccuracy: true,
+	timeout: 10000,
+	maximumAge: 0,
+};
 
-const fetchData = async () => {
+const errorCallback = error => {
+	console.error(`ERROR(${error.code}): ${error.message}`);
+};
+
+const getCoordinate = async () => {
 	try {
-		const formData = {
-			latitude: useLocationStore().latitude,
-			longitude: useLocationStore().longitude,
-		};
+		if ('geolocation' in navigator) {
+			const permissionResult = await navigator.permissions.query({
+				name: 'geolocation',
+			});
+			if (permissionResult.state === 'granted') {
+				navigator.geolocation.getCurrentPosition(
+					position => {
+						getCountry(position.coords.latitude, position.coords.longitude);
+					},
+					errorCallback,
+					options,
+				);
+			} else if (permissionResult.state === 'prompt') {
+				const position = await new Promise((resolve, reject) => {
+					navigator.geolocation.getCurrentPosition(resolve, reject, options);
+				});
+				getCountry(position.coords.latitude, position.coords.longitude);
+			} else if (permissionResult.state === 'denied') {
+				console.error('Geolocation permission denied.');
+			}
+		}
+	} catch (error) {
+		console.error('Failed to get location:', error);
+	}
+};
 
+const getCountry = async (latitude, longitude) => {
+	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/locations?latitude=${formData.latitude}&longitude=${formData.longitude}`,
+			`/locations?latitude=${latitude}&longitude=${longitude}`,
 		);
-
 		if (status === 200) {
 			country.value = data.data.country;
 			region.value = data.data.region;
-			maxRetries.value = 0;
-			clearInterval(intervalId); // 최대 재시도 횟수에 도달하면 인터벌 중지
 		}
 	} catch (error) {
 		console.log(error);
-		retryCount.value++;
-
-		if (retryCount.value < maxRetries.value) {
-			// 재시도를 위해 setTimeout을 사용
-			setTimeout(() => {
-				fetchData();
-			}, retryInterval.value);
-		} else {
-			console.log(`Failed after ${maxRetries.value} retries`);
-			clearInterval(intervalId); // 최대 재시도 횟수에 도달하면 인터벌 중지
-		}
 	}
 };
 
 onMounted(() => {
-	fetchData(); // 최초 실행
-
-	// 5초마다 fetchData() 함수 호출
-	intervalId = setInterval(() => {
-		fetchData();
-	}, retryInterval.value);
-
-	// 필요한 경우 clearInterval(intervalId); 로 인터벌 중단 가능
+	getCoordinate();
 });
 </script>

@@ -21,7 +21,6 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- password -->
 			<div class="input-wrap">
 				<em class="input__title">비밀번호</em>
@@ -41,10 +40,9 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="button-wrap">
 				<button
-					@click="signIn"
+					@click="getCoordinate"
 					:class="{
 						'button button--positive': isValidLogin,
 						'button button--disabled': !isValidLogin,
@@ -57,7 +55,6 @@
 				</button>
 			</div>
 		</div>
-
 		<!-- login -->
 		<div class="container">
 			<button type="button" class="button-icon google">구글 로그인</button>
@@ -87,8 +84,7 @@
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import useAxios from '@/composables/useAxios.js';
-import { ref } from 'vue';
-import { useLocationStore } from '@/stores/location.js';
+import { computed, ref } from 'vue';
 
 axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
@@ -96,18 +92,19 @@ const email = ref('');
 const password = ref('');
 const router = useRouter();
 const { sendRequest } = useAxios();
+const isValidLogin = computed(() => email.value && password.value);
 
 const onSignUp = () => {
 	router.push({ name: 'SignUp' });
 };
 
-const signIn = async () => {
+const signIn = async (latitude, longitude) => {
 	try {
 		const { status, data } = await sendRequest('post', '/users/sign-in', {
 			email: email.value,
 			password: password.value,
-			latitude: useLocationStore().latitude,
-			longitude: useLocationStore().longitude,
+			latitude: latitude,
+			longitude: longitude,
 		});
 
 		if (status === 200) {
@@ -116,6 +113,44 @@ const signIn = async () => {
 		}
 	} catch (error) {
 		console.log(error);
+	}
+};
+
+const options = {
+	enableHighAccuracy: true,
+	timeout: 10000,
+	maximumAge: 0,
+};
+
+const errorCallback = error => {
+	console.error(`ERROR(${error.code}): ${error.message}`);
+};
+
+const getCoordinate = async () => {
+	try {
+		if ('geolocation' in navigator) {
+			const permissionResult = await navigator.permissions.query({
+				name: 'geolocation',
+			});
+			if (permissionResult.state === 'granted') {
+				navigator.geolocation.getCurrentPosition(
+					position => {
+						signIn(position.coords.latitude, position.coords.longitude);
+					},
+					errorCallback,
+					options,
+				);
+			} else if (permissionResult.state === 'prompt') {
+				const position = await new Promise((resolve, reject) => {
+					navigator.geolocation.getCurrentPosition(resolve, reject, options);
+				});
+				signIn(position.coords.latitude, position.coords.longitude);
+			} else if (permissionResult.state === 'denied') {
+				console.error('Geolocation permission denied.');
+			}
+		}
+	} catch (error) {
+		console.error('Failed to get location:', error);
 	}
 };
 </script>

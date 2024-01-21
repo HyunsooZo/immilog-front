@@ -23,7 +23,7 @@ const router = useRouter();
 const menuOpen = ref(false);
 
 const onBack = () => {
-	router.go(-1);
+	router.back();
 };
 
 const onMenu = () => {
