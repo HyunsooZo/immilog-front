@@ -195,7 +195,10 @@
 				</div>
 			</div>
 		</div>
-		<TheFooterButton :onClick="register" :condition="fullFilled" />
+		<TheFooterButton
+			:onClick="register"
+			:condition="fullFilled && !isLoading"
+		/>
 	</div>
 </template>
 
@@ -205,6 +208,7 @@ import useAxios from '@/composables/useAxios.js';
 import { onMounted } from 'vue';
 import TheTopBox from '@/components/TheTopBox.vue';
 import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
+import { useLocationStore } from '@/stores/location';
 
 const imagePreview = ref('');
 const emailRegister = ref('');
@@ -216,6 +220,7 @@ const region = ref('');
 const { sendRequest } = useAxios();
 const imageUrl = ref('');
 const imageFile = ref(null);
+const isLoading = ref(false);
 
 // 프리뷰 이미지
 const previewImage = event => {
@@ -277,6 +282,7 @@ const hostImage = async () => {
 
 const register = async () => {
 	submitted.value = true;
+	isLoading.value = true;
 	if (emailRegister.value && userNickName.value && userPassword.value) {
 		try {
 			await hostImage();
@@ -296,6 +302,8 @@ const register = async () => {
 			}
 		} catch (error) {
 			console.log(error);
+		} finally {
+			isLoading.value = false;
 		}
 	}
 };
@@ -319,6 +327,10 @@ const getCoordinate = async () => {
 				navigator.geolocation.getCurrentPosition(
 					position => {
 						getCountry(position.coords.latitude, position.coords.longitude);
+						useLocationStore().setLocation(
+							position.coords.latitude,
+							position.coords.longitude,
+						);
 					},
 					errorCallback,
 					options,

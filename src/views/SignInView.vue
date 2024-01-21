@@ -44,8 +44,8 @@
 				<button
 					@click="getCoordinate"
 					:class="{
-						'button button--positive': isValidLogin,
-						'button button--disabled': !isValidLogin,
+						'button button--positive': isValidLogin && !isLoading,
+						'button button--disabled': !isValidLogin || isLoading,
 					}"
 					role="link"
 					id="loginBtn"
@@ -85,6 +85,8 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import useAxios from '@/composables/useAxios.js';
 import { computed, ref } from 'vue';
+import { useLocationStore } from '@/stores/location.js';
+import { useUserInfoStore } from '@/stores/userInfo.js';
 
 axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
@@ -93,6 +95,9 @@ const password = ref('');
 const router = useRouter();
 const { sendRequest } = useAxios();
 const isValidLogin = computed(() => email.value && password.value);
+const lat = useLocationStore.latitude;
+const lon = useLocationStore.longitude;
+const isLoading = ref(false);
 
 const onSignUp = () => {
 	router.push({ name: 'SignUp' });
@@ -110,9 +115,22 @@ const signIn = async (latitude, longitude) => {
 		if (status === 200) {
 			console.log(data.data);
 			console.dir(data.data);
+			useUserInfoStore().setUserInfo(
+				data.data.accessToken,
+				data.data.nickname,
+				data.data.email,
+				data.data.country,
+				data.data.userProfileUrl,
+				data.data.isLocationMatch,
+			);
+			localStorage.setItem('accessToken', data.data.accessToken);
+		} else {
+			password.value = '';
 		}
 	} catch (error) {
 		console.log(error);
+	} finally {
+		isLoading.value = false;
 	}
 };
 
@@ -127,8 +145,11 @@ const errorCallback = error => {
 };
 
 const getCoordinate = async () => {
+	isLoading.value = true;
 	try {
-		if ('geolocation' in navigator) {
+		if (lat && lon) {
+			signIn(lat, lon);
+		} else if ('geolocation' in navigator) {
 			const permissionResult = await navigator.permissions.query({
 				name: 'geolocation',
 			});
@@ -136,6 +157,10 @@ const getCoordinate = async () => {
 				navigator.geolocation.getCurrentPosition(
 					position => {
 						signIn(position.coords.latitude, position.coords.longitude);
+						useLocationStore().setLocation(
+							position.coords.latitude,
+							position.coords.longitude,
+						);
 					},
 					errorCallback,
 					options,
