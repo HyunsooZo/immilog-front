@@ -57,10 +57,12 @@
 					}"
 					role="link"
 					id="loginBtn"
-				>로그인</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
+				>
+					로그인</button
+				><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 		</div>
-		
+
 		<!-- login -->
 		<div class="container">
 			<button type="button" class="button-icon google">구글 로그인</button>
