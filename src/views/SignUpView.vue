@@ -48,17 +48,11 @@
 							/>
 						</div>
 					</div>
-					<div class="input__item">
-						<div class="input__item_inner">
-							<button
-								for="file-upload"
-								class="button button--primary"
-								role="button"
-							>
-								중복확인
-							</button>
-						</div>
-					</div>
+					<button
+						for="file-upload"
+						class="button button--primary"
+						role="button"
+					>중복확인</button>
 				</div>
 				<!-- 에러 메시지 -->
 				<p

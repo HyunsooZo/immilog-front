@@ -40,6 +40,14 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="button-wrap link-type">
+				<strong>비밀번호 분실</strong>
+				<router-link to="/" class="button-text point-color">
+					<span>비밀번호 찾기</span>
+				</router-link>
+			</div>
+
 			<div class="button-wrap">
 				<button
 					@click="getCoordinate"
@@ -49,12 +57,10 @@
 					}"
 					role="link"
 					id="loginBtn"
-				>
-					<!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
-					로그인
-				</button>
+				>로그인</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 		</div>
+		
 		<!-- login -->
 		<div class="container">
 			<button type="button" class="button-icon google">구글 로그인</button>
@@ -64,16 +70,10 @@
 		<div class="container">
 			<ul>
 				<li>
-					<strong>비밀번호 분실</strong>
-					<router-link to="/" class="button-text point-color"
-						><span>비밀번호 찾기</span></router-link
-					>
-				</li>
-				<li>
 					<strong>회원이 아닌 경우</strong>
-					<router-link to="/" class="button-text point-color"
-						><span @click="onSignUp">가입하기</span></router-link
-					>
+					<router-link to="/" class="button-text point-color">
+						<span @click="onSignUp">가입하기</span>
+					</router-link>
 				</li>
 			</ul>
 		</div>

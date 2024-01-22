@@ -88,6 +88,16 @@
 }
 
 /* button */
+.button-wrap {
+    display: flex;
+    justify-content: space-between;
+    margin:24px 0;
+}
+.button-wrap.link-type {
+    display: flex;
+    justify-content: flex-end;
+    margin:10px 0;
+}
 .button {
     display: inline-block;
     padding: 6px;
@@ -109,6 +119,12 @@
     line-height: 1;
     border: 1px solid #333;
     border-radius: 4px;
+}
+strong + .button-text {
+    margin-left: 4px;
+}
+.button-text {
+    display: inline-block;
 }
 .button-text:after {
     content: '';
@@ -138,11 +154,6 @@
 .button-icon.kakao {
     background-image: url(@/assets/images/icon-kakao-480.png);
 }
-.button-wrap {
-    display: flex;
-    justify-content: space-between;
-    margin:24px 19px;
-}
 .button-wrap .button {
     flex: 1;
     height: 40px;
@@ -154,9 +165,6 @@
     background: #9ca7b3;
     border-radius: 6px;
     text-align: center;
-}
-.container > .button-wrap {
-    margin:24px 0;
 }
 
 /* top-box */
@@ -226,6 +234,10 @@
 }
 .input-wrap [class*=input__title] ~ .input__wrap.underline-type {
     margin: 0;
+}
+.input-wrap .input__wrap > .button {
+    flex: 1 0 auto;
+    margin-left: 8px;
 }
     /* 필수입력 */
 .input-wrap[aria-label='required'] > [class*=input__title]:after {
