@@ -43,7 +43,7 @@
 								v-model="userNickName"
 								type="text"
 								class="input__element"
-								placeholder="사용자 이름 영문/숫자 4자리 이상"
+								placeholder="영문/숫자 2자리 이상"
 								required
 							/>
 						</div>
@@ -60,7 +60,7 @@
 					class="input__error"
 					aria-live="assertive"
 				>
-					사용자 이름을 입력해 주세요.
+					닉네임을 입력해 주세요.
 				</p>
 			</div>
 			<!-- profileimage -->
@@ -150,10 +150,10 @@
 					<div class="input__item">
 						<div class="input__item_inner">
 							<input
-								v-model="userPassword"
+								v-model="userPasswordConfirm"
 								type="password"
 								class="input__element"
-								placeholder="비밀번호 영문/숫자/특수문자 8자리 이상"
+								placeholder="비밀번호를 한번 더 입력"
 								required
 							/>
 						</div>
@@ -208,6 +208,7 @@ const imagePreview = ref('');
 const emailRegister = ref('');
 const userNickName = ref('');
 const userPassword = ref('');
+const userPasswordConfirm = ref('');
 const submitted = ref(false);
 const country = ref('국가정보없음');
 const region = ref('');
@@ -215,6 +216,7 @@ const { sendRequest } = useAxios();
 const imageUrl = ref('');
 const imageFile = ref(null);
 const isLoading = ref(false);
+const isNickNameValid = ref(false);
 
 // 프리뷰 이미지
 const previewImage = event => {
@@ -352,6 +354,25 @@ const getCountry = async (latitude, longitude) => {
 		if (status === 200) {
 			country.value = data.data.country;
 			region.value = data.data.region;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const checkNickName = async () => {
+	try {
+		const { status, data } = await sendRequest(
+			'get',
+			`/users/nicknames?nickname=${userNickName.value}`,
+		);
+		if (status === 200) {
+			if (data.data) {
+				isNickNameValid.value = true;
+				console.log('사용가능한 닉네임 입니다.');
+			} else {
+				console.log('이미 사용중인 닉네임 입니다.');
+			}
 		}
 	} catch (error) {
 		console.log(error);
