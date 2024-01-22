@@ -52,7 +52,10 @@
 						for="file-upload"
 						class="button button--primary"
 						role="button"
-					>중복확인</button>
+						@click="checkNickName"
+					>
+						중복확인
+					</button>
 				</div>
 				<!-- 에러 메시지 -->
 				<p
