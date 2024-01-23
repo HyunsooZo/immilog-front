@@ -17,7 +17,7 @@
 								v-model="emailRegister"
 								type="text"
 								class="input__element"
-								placeholder="이메일 아이디"
+								placeholder="이메일 입력"
 								required
 							/>
 						</div>
@@ -43,7 +43,7 @@
 								v-model="userNickName"
 								type="text"
 								class="input__element"
-								placeholder="영문/숫자 2자리 이상"
+								placeholder="닉네임 입력(5자 이상 영문, 숫자 조합)"
 								required
 							/>
 						</div>
@@ -130,24 +130,13 @@
 								v-model="userPassword"
 								type="password"
 								class="input__element"
-								placeholder="비밀번호 영문/숫자/특수문자 8자리 이상"
+								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)"
 								required
 							/>
 						</div>
 					</div>
 				</div>
-				<!-- 에러 메시지 -->
-				<p
-					v-if="submitted && !userPassword"
-					class="input__error"
-					aria-live="assertive"
-				>
-					비밀번호를 입력해 주세요.
-				</p>
-			</div>
-			<!-- 비밀번호 확인 -->
-			<div class="input-wrap" aria-label="required">
-				<em class="input__title">비밀번호 확인</em>
+
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
@@ -156,7 +145,7 @@
 								v-model="userPasswordConfirm"
 								type="password"
 								class="input__element"
-								placeholder="비밀번호를 한번 더 입력"
+								placeholder="비밀번호 확인"
 								required
 							/>
 						</div>

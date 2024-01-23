@@ -42,9 +42,8 @@
 			</div>
 
 			<div class="button-wrap link-type">
-				<strong>비밀번호 분실</strong>
 				<router-link to="/" class="button-text point-color">
-					<span>비밀번호 찾기</span>
+					<span>비밀번호 재설정</span>
 				</router-link>
 			</div>
 
@@ -65,8 +64,12 @@
 
 		<!-- login -->
 		<div class="container">
-			<button type="button" class="button-icon google">구글 로그인</button>
-			<button type="button" class="button-icon kakao">카카오톡 로그인</button>
+			<p>or login with</p>
+			<div class="login-group">
+				<button type="button" class="button-icon google">구글 로그인</button>
+				<button type="button" class="button-icon kakao">카카오톡 로그인</button>
+				<button type="button" class="button-icon naver">네이버 로그인</button>
+			</div>
 		</div>
 
 		<div class="container">
@@ -80,6 +83,14 @@
 			</ul>
 		</div>
 	</div>
+	<teleport to="#modal" v-if="modalValue">
+		<CustomAlert
+			:modalValue="modalValue"
+			:modalTitle="modalTitle"
+			:modalText="modalText"
+			@update:modalValue="closeModal"
+		/>
+	</teleport>
 </template>
 
 <script setup>
@@ -89,6 +100,7 @@ import useAxios from '@/composables/useAxios.js';
 import { computed, ref } from 'vue';
 import { useLocationStore } from '@/stores/location.js';
 import { useUserInfoStore } from '@/stores/userInfo.js';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
 
 axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
@@ -100,6 +112,9 @@ const isValidLogin = computed(() => email.value && password.value);
 const lat = useLocationStore.latitude;
 const lon = useLocationStore.longitude;
 const isLoading = ref(false);
+const modalValue = ref(false);
+const modalTitle = ref('');
+const modalText = ref('');
 
 const onSignUp = () => {
 	router.push({ name: 'SignUp' });
@@ -128,9 +143,11 @@ const signIn = async (latitude, longitude) => {
 			localStorage.setItem('accessToken', data.data.accessToken);
 		} else {
 			password.value = '';
+			openModal('이메일과 비밀번호를 확인해 주세요.');
 		}
 	} catch (error) {
 		console.log(error);
+		openModal('서버와의 통신에 실패했습니다.');
 	} finally {
 		isLoading.value = false;
 	}
@@ -179,5 +196,14 @@ const getCoordinate = async () => {
 	} catch (error) {
 		console.error('Failed to get location:', error);
 	}
+};
+
+const openModal = content => {
+	modalValue.value = true;
+	modalText.value = content;
+};
+
+const closeModal = () => {
+	modalValue.value = false;
 };
 </script>
