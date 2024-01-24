@@ -1,17 +1,16 @@
 <template>
-	<header>
-		<div class="header">
-			<div class="h-unit">
-				<button type="button" class="button-util-icon back" @click="onBack">
-					이전화면
-				</button>
-			</div>
-			<h1>KoMeet</h1>
-			<div class="h-unit">
-				<button type="button" class="button-util-icon menu" @click="onMenu">
-					전체메뉴
-				</button>
-			</div>
+	<header class="header">
+		<div class="item-fnc">
+			<button type="button" class="button-icon button--back" role="link" @click="onBack">
+				<span>이전화면</span>
+			</button>
+		</div>
+		<h1>KoMeet</h1>
+		<div class="item-fnc">
+			<button type="button" class="button-icon button--notice new" role="link" @click="onMenu">
+				<span>알림</span>
+			</button>
+			<!-- //새 알림 있는 경우 .new 추가 -->
 		</div>
 	</header>
 </template>
