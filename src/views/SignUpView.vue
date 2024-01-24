@@ -25,11 +25,11 @@
 				</div>
 				<!-- 에러 메시지 -->
 				<p
-					v-if="submitted && !emailRegister"
+					v-if="submitted && !isValidEmail"
 					class="input__error"
 					aria-live="assertive"
 				>
-					이메일을 입력해 주세요.
+					이메일 형식이 올바르지 않습니다.
 				</p>
 			</div>
 			<!-- nickname -->
@@ -58,12 +58,11 @@
 					</button>
 				</div>
 				<!-- 에러 메시지 -->
-				<p
-					v-if="submitted && !userNickName"
-					class="input__error"
-					aria-live="assertive"
-				>
-					닉네임을 입력해 주세요.
+				<p v-if="isNickNameValid" class="input__error" aria-live="assertive">
+					사용 가능한 닉네임 입니다.
+				</p>
+				<p v-if="!isNickNameValid" class="input__error" aria-live="assertive">
+					이미 사용중인 닉네임 입니다.
 				</p>
 				<p class="input__text"
 					aria-live="assertive"
@@ -141,21 +140,6 @@
 						</div>
 					</div>
 				</div>
-
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input
-								v-model="userPasswordConfirm"
-								type="password"
-								class="input__element"
-								placeholder="비밀번호 확인"
-								required
-							/>
-						</div>
-					</div>
-				</div>
 				<!-- 에러 메시지 -->
 				<p
 					v-if="submitted && !userPassword"
@@ -163,6 +147,32 @@
 					aria-live="assertive"
 				>
 					비밀번호를 입력해 주세요.
+				</p>
+
+				<!-- input__wrap -->
+				<div class="input-wrap" aria-label="required">
+					<em class="input__title">비밀번호 확인</em>
+					<div class="input__wrap underline-type">
+						<div class="input__item">
+							<div class="input__item_inner">
+								<input
+									v-model="userPasswordConfirm"
+									type="password"
+									class="input__element"
+									placeholder="비밀번호 확인"
+									required
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 에러 메시지 -->
+				<p
+					v-if="submitted && !userPasswordConfirm"
+					class="input__error"
+					aria-live="assertive"
+				>
+					비밀번호를 한번 더 입력해 주세요.
 				</p>
 			</div>
 
@@ -191,6 +201,14 @@
 			:condition="fullFilled && !isLoading"
 		/>
 	</div>
+	<teleport to="#modal" v-if="modalValue">
+		<CustomAlert
+			:modalValue="modalValue"
+			:modalTitle="modalTitle"
+			:modalText="modalText"
+			@update:modalValue="closeAlert"
+		/>
+	</teleport>
 </template>
 
 <script setup>
@@ -200,6 +218,7 @@ import { onMounted } from 'vue';
 import TheTopBox from '@/components/TheTopBox.vue';
 import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
 import { useLocationStore } from '@/stores/location';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
 
 const imagePreview = ref('');
 const emailRegister = ref('');
@@ -214,6 +233,19 @@ const imageUrl = ref('');
 const imageFile = ref(null);
 const isLoading = ref(false);
 const isNickNameValid = ref(false);
+const modalValue = ref(false);
+const modalTitle = ref('');
+const modalText = ref('');
+
+const isValidEmail = computed(() => {
+	// 간단한 이메일 형식 체크 정규 표현식
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	return emailRegex.test(emailRegister.value);
+});
+
+const isNickNameChecked = computed(() => {
+	
+});
 
 // 프리뷰 이미지
 const previewImage = event => {
@@ -276,7 +308,12 @@ const hostImage = async () => {
 const register = async () => {
 	submitted.value = true;
 	isLoading.value = true;
-	if (emailRegister.value && userNickName.value && userPassword.value) {
+	if (
+		emailRegister.value &&
+		userNickName.value &&
+		userPassword.value &&
+		isNickNameValid
+	) {
 		try {
 			await hostImage();
 			const formData = {
@@ -374,6 +411,15 @@ const checkNickName = async () => {
 	} catch (error) {
 		console.log(error);
 	}
+};
+
+const openAlert = content => {
+	modalValue.value = true;
+	modalText.value = content;
+};
+
+const closeAlert = () => {
+	modalValue.value = false;
 };
 
 onMounted(() => {
