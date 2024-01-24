@@ -82,8 +82,8 @@
 			<ul>
 				<li>
 					<strong>회원이 아닌 경우</strong>
-					<router-link to="/" class="button-text point-color">
-						<span @click="onSignUp">가입하기</span>
+					<router-link to="/" class="button-text point-color" @click="onSignUp">
+						<span>가입하기</span>
 					</router-link>
 				</li>
 			</ul>
