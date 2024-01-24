@@ -16,7 +16,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 html {min-height: 100vh; height: 100%; box-sizing: border-box; box-sizing: border-box; font-size: 10px;}
 *, *:before, *:after, *:focus {box-sizing: inherit; outline: none;}
 body {position: relative; width: 100%; min-height: 100vh; height: 100%; line-height: 1.6; font-family: 'Roboto', 'notosans', sans-serif; font-size: 1.4rem; font-weight: 400; letter-spacing: -.5px; -webkit-overflow-scrolling: touch;}
-img {vertical-align: top;}
+img {width: 100%; vertical-align: top;}
 ol, ul, li {list-style: none;}
 textarea {resize: none;}
 input {-webkit-appearance: none; appearance: none; border-radius: 0px; cursor: pointer;}

@@ -64,11 +64,11 @@
 
 		<!-- login -->
 		<div class="container">
-			<p>or login with</p>
+			<p class="title--small center">or login with</p>
 			<div class="login-group">
-				<button type="button" class="button-icon google">구글 로그인</button>
-				<button type="button" class="button-icon kakao">카카오톡 로그인</button>
-				<button type="button" class="button-icon naver">네이버 로그인</button>
+				<button type="button" class="button-icon button--login-google"><span>구글 로그인</span></button>
+				<button type="button" class="button-icon button--login-kakao"><span>카카오톡 로그인</span></button>
+				<button type="button" class="button-icon button--login-naver"><span>네이버 로그인</span></button>
 			</div>
 		</div>
 
