@@ -88,7 +88,7 @@
 			:modalValue="modalValue"
 			:modalTitle="modalTitle"
 			:modalText="modalText"
-			@update:modalValue="closeModal"
+			@update:modalValue="closeAlert"
 		/>
 	</teleport>
 </template>
@@ -143,11 +143,11 @@ const signIn = async (latitude, longitude) => {
 			localStorage.setItem('accessToken', data.data.accessToken);
 		} else {
 			password.value = '';
-			openModal('이메일과 비밀번호를 확인해 주세요.');
+			openAlert('이메일과 비밀번호를 확인해 주세요.');
 		}
 	} catch (error) {
 		console.log(error);
-		openModal('서버와의 통신에 실패했습니다.');
+		openAlert('서버와의 통신에 실패했습니다.');
 	} finally {
 		isLoading.value = false;
 	}
@@ -198,12 +198,12 @@ const getCoordinate = async () => {
 	}
 };
 
-const openModal = content => {
+const openAlert = content => {
 	modalValue.value = true;
 	modalText.value = content;
 };
 
-const closeModal = () => {
+const closeAlert = () => {
 	modalValue.value = false;
 };
 </script>

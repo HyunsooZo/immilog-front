@@ -33,8 +33,4 @@ const emits = defineEmits(['update:modalValue']);
 const closeModal = () => {
 	emits('update:modalValue', false);
 };
-
-const closeModalOutside = () => {
-	closeModal();
-};
 </script>

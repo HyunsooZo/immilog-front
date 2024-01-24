@@ -7,6 +7,7 @@
 					'button button--positive': computedCondition,
 					'button button--disabled': !computedCondition,
 				}"
+				:disabled="!computedCondition"
 				role="link"
 				id="registerBtn"
 			>
