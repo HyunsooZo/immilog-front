@@ -66,9 +66,15 @@
 		<div class="container">
 			<p class="title--small center">or login with</p>
 			<div class="login-group">
-				<button type="button" class="button-icon button--login-google"><span>구글 로그인</span></button>
-				<button type="button" class="button-icon button--login-kakao"><span>카카오톡 로그인</span></button>
-				<button type="button" class="button-icon button--login-naver"><span>네이버 로그인</span></button>
+				<button type="button" class="button-icon button--login-google">
+					<span>구글 로그인</span>
+				</button>
+				<button type="button" class="button-icon button--login-kakao">
+					<span>카카오톡 로그인</span>
+				</button>
+				<button type="button" class="button-icon button--login-naver">
+					<span>네이버 로그인</span>
+				</button>
 			</div>
 		</div>
 
@@ -83,12 +89,11 @@
 			</ul>
 		</div>
 	</div>
-	<teleport to="#modal" v-if="modalValue">
+	<teleport to="#modal" v-if="alertValue">
 		<CustomAlert
-			:modalValue="modalValue"
-			:modalTitle="modalTitle"
-			:modalText="modalText"
-			@update:modalValue="closeAlert"
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
 		/>
 	</teleport>
 </template>
@@ -112,9 +117,8 @@ const isValidLogin = computed(() => email.value && password.value);
 const lat = useLocationStore.latitude;
 const lon = useLocationStore.longitude;
 const isLoading = ref(false);
-const modalValue = ref(false);
-const modalTitle = ref('');
-const modalText = ref('');
+const alertValue = ref(false);
+const alertText = ref('');
 
 const onSignUp = () => {
 	router.push({ name: 'SignUp' });
@@ -199,11 +203,11 @@ const getCoordinate = async () => {
 };
 
 const openAlert = content => {
-	modalValue.value = true;
-	modalText.value = content;
+	alertValue.value = true;
+	alertText.value = content;
 };
 
 const closeAlert = () => {
-	modalValue.value = false;
+	alertValue.value = false;
 };
 </script>

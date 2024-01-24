@@ -58,13 +58,16 @@
 					</button>
 				</div>
 				<!-- 에러 메시지 -->
-				<p v-if="isNickNameValid" class="input__error" aria-live="assertive">
-					사용 가능한 닉네임 입니다.
-				</p>
-				<p v-if="!isNickNameValid" class="input__error" aria-live="assertive">
+				<p
+					v-if="nickNameCheckDone && !isNickNameValid"
+					class="input__error"
+					aria-live="assertive"
+				>
 					이미 사용중인 닉네임 입니다.
 				</p>
-				<p class="input__text"
+				<p
+					v-if="nickNameCheckDone && isNickNameValid"
+					class="input__text"
 					aria-live="assertive"
 				>
 					사용 가능한 닉네임입니다.
@@ -142,11 +145,11 @@
 				</div>
 				<!-- 에러 메시지 -->
 				<p
-					v-if="submitted && !userPassword"
+					v-if="submitted && !passwordValidation"
 					class="input__error"
 					aria-live="assertive"
 				>
-					비밀번호를 입력해 주세요.
+					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
 				</p>
 
 				<!-- input__wrap -->
@@ -168,11 +171,11 @@
 				</div>
 				<!-- 에러 메시지 -->
 				<p
-					v-if="submitted && !userPasswordConfirm"
+					v-if="submitted && !passwordMatch"
 					class="input__error"
 					aria-live="assertive"
 				>
-					비밀번호를 한번 더 입력해 주세요.
+					비밀번호가 일치하지 않습니다.
 				</p>
 			</div>
 
@@ -201,18 +204,17 @@
 			:condition="fullFilled && !isLoading"
 		/>
 	</div>
-	<teleport to="#modal" v-if="modalValue">
+	<teleport to="#modal" v-if="alertValue">
 		<CustomAlert
-			:modalValue="modalValue"
-			:modalTitle="modalTitle"
-			:modalText="modalText"
-			@update:modalValue="closeAlert"
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
 		/>
 	</teleport>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import useAxios from '@/composables/useAxios.js';
 import { onMounted } from 'vue';
 import TheTopBox from '@/components/TheTopBox.vue';
@@ -232,19 +234,17 @@ const { sendRequest } = useAxios();
 const imageUrl = ref('');
 const imageFile = ref(null);
 const isLoading = ref(false);
-const isNickNameValid = ref(false);
-const modalValue = ref(false);
-const modalTitle = ref('');
-const modalText = ref('');
+const isNickNameValid = ref(null);
+const alertValue = ref(false);
+const alertText = ref('');
+const nickNameCheckDone = ref(false);
+const passwordValidation = ref(false);
+const passwordMatch = ref(false);
 
 const isValidEmail = computed(() => {
 	// 간단한 이메일 형식 체크 정규 표현식
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	return emailRegex.test(emailRegister.value);
-});
-
-const isNickNameChecked = computed(() => {
-	
 });
 
 // 프리뷰 이미지
@@ -276,7 +276,8 @@ const fullFilled = computed(() => {
 	return (
 		emailRegister.value.trim() !== '' &&
 		userNickName.value.trim() !== '' &&
-		userPassword.value.trim() !== ''
+		userPassword.value.trim() !== '' &&
+		userPasswordConfirm.value.trim() !== ''
 	);
 });
 
@@ -299,6 +300,8 @@ const hostImage = async () => {
 		);
 		if (status === 200) {
 			imageUrl.value = data.data;
+		} else {
+			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
 		}
 	} catch (error) {
 		console.log(error);
@@ -307,14 +310,22 @@ const hostImage = async () => {
 
 const register = async () => {
 	submitted.value = true;
-	isLoading.value = true;
+	passwordValidationCheck();
+	passwordConfirmMatch();
+	if (!passwordMatch.value || !passwordValidation.value) {
+		return;
+	}
 	if (
 		emailRegister.value &&
 		userNickName.value &&
 		userPassword.value &&
+		userPasswordConfirm.value &&
+		passwordValidation.value &&
+		passwordMatch.value &&
 		isNickNameValid
 	) {
 		try {
+			isLoading.value = true;
 			await hostImage();
 			const formData = {
 				email: emailRegister.value,
@@ -326,15 +337,20 @@ const register = async () => {
 			};
 			const { status, data } = await sendRequest('post', '/users', formData);
 
-			if (status === 200) {
+			if (status === 201) {
 				console.log(data.data);
 				console.dir(data.data);
+			} else {
+				openAlert('회원가입에 실패했습니다. 다시 시도해주세요.');
+				returnSubmitValues();
 			}
 		} catch (error) {
 			console.log(error);
-		} finally {
-			isLoading.value = false;
+			returnSubmitValues();
 		}
+	} else {
+		returnSubmitValues();
+		return;
 	}
 };
 const options = {
@@ -388,6 +404,10 @@ const getCountry = async (latitude, longitude) => {
 		if (status === 200) {
 			country.value = data.data.country;
 			region.value = data.data.region;
+		} else {
+			openAlert(
+				'지역정보를 가져오는데 실패했습니다. 위치권한 설정을 확인해주세요.',
+			);
 		}
 	} catch (error) {
 		console.log(error);
@@ -401,12 +421,8 @@ const checkNickName = async () => {
 			`/users/nicknames?nickname=${userNickName.value}`,
 		);
 		if (status === 200) {
-			if (data.data) {
-				isNickNameValid.value = true;
-				console.log('사용가능한 닉네임 입니다.');
-			} else {
-				console.log('이미 사용중인 닉네임 입니다.');
-			}
+			isNickNameValid.value = data.data;
+			nickNameCheckDone.value = true;
 		}
 	} catch (error) {
 		console.log(error);
@@ -414,15 +430,38 @@ const checkNickName = async () => {
 };
 
 const openAlert = content => {
-	modalValue.value = true;
-	modalText.value = content;
+	alertValue.value = true;
+	alertText.value = content;
 };
 
 const closeAlert = () => {
-	modalValue.value = false;
+	alertValue.value = false;
+};
+
+const passwordValidationCheck = () => {
+	const regex =
+		/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
+	passwordValidation.value = regex.test(userPassword.value);
+};
+
+const passwordConfirmMatch = () => {
+	passwordMatch.value = userPassword.value === userPasswordConfirm.value;
+};
+
+const returnSubmitValues = () => {
+	isLoading.value = false;
+	submitted.value = false;
 };
 
 onMounted(() => {
 	getCoordinate();
 });
+
+watch(
+	() => userNickName.value,
+	() => {
+		isNickNameValid.value = false;
+		nickNameCheckDone.value = false;
+	},
+);
 </script>
