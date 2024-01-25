@@ -214,8 +214,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 .menu-wrap .menu__inner .menu__list .button {
     position: relative;
     display: inline-block;
-    width: 100%;
-    padding: 10px;
+    padding: 10px 20px;
     color: #999;
 }
 .menu-wrap .menu__inner .menu__list.active .button {
