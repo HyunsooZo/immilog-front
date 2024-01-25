@@ -16,10 +16,11 @@
       <!-- 검색 -->
       <div class="input-wrap">
         <div class="input__inner search">
-          <input type="search" id="inputSrch" class="input__element input__element--search" placeholder="검색어를 입력해 주세요"
-            autocomplete="off" />
-          <button type="button" class="input__button-remove" title="텍스트삭제"></button>
-          <button type="button" id="btnSrch" class="input__button-search" title="검색"></button>
+          <input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
+            placeholder="검색어를 입력해 주세요" autocomplete="off" />
+          <button v-if="searchInput !== ''" type="button" class="input__button-remove" title="텍스트삭제"
+            @click="searchInput = ''"></button>
+          <button type="button" id="btnSrch" class="input__button-search" title="검색" @click="callSearchApi"></button>
         </div>
       </div>
     </div>
@@ -45,13 +46,13 @@
     <!-- tab button -->
     <div class="menu-wrap">
       <ul class="menu__inner">
-        <li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active }" class="menu__list">
-          <button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.toString()">
+        <li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
+          <button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
             {{ menu.label }}
           </button>
         </li>
       </ul>
-      <span class="menu__bar" v-if="isActive" :style="{ left: buttonPosition, width: buttonWidth }"></span>
+      <span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
     </div>
 
     <!--  -->
@@ -215,49 +216,41 @@
 </template>
 
 <script setup>
-import TheFooter from '@/components/layouts/TheFooter.vue';
-import { computed, onMounted, ref } from 'vue';
+// import TheFooter from '@/components/layouts/TheFooter.vue';
+import { nextTick, onMounted, ref } from 'vue';
 
-const isActive = ref(false);
-const buttonPosition = ref('0px');
-const buttonWidth = ref('0px');
+const searchInput = ref('');
+const menuBarLeft = ref('0px');
+const menuBarWidth = ref('0px');
+
 let menus = [
-  { label: '최신글', active: true },
-  { label: '인기글', active: false }
-  // Add more menu items as needed
+  { label: '최신글', active: ref(true) },
+  { label: '인기글', active: ref(false) },
 ];
 
-const checkButtonActive = () => {
-  const activeMenu = menus.find((menu) => menu.active);
-  if (activeMenu) {
-    menu__bar(activeMenu);
-  }
-};
-
-const selectMenu = (selectedMenu) => {
-  selectedMenu.active = true;
-  isActive.value = true;
-  resetMenus(selectedMenu);
-  menu__bar(selectedMenu);
-};
-
-const resetMenus = (selectedMenu) => {
-  menus.forEach((menu) => {
-    if (menu !== selectedMenu) {
-      menu.active = false;
-    }
+const selectMenu = selectedMenu => {
+  selectedMenu.active.value = true;
+  menus
+    .filter(menu => menu !== selectedMenu)
+    .forEach(menu => {
+      menu.active.value = false;
+    });
+  nextTick(() => {
+    updateMenuBar();
   });
 };
 
-const menu__bar = (activeMenu) => {
+const callSearchApi = () => {
+  console.log('callSearchApi');
+};
+
+const updateMenuBar = () => {
   const activeButton = document.querySelector('.menu__list.active .button');
-  const mp = activeButton ? `${activeButton.offsetLeft}px` : '0px';
-  const wd = activeButton ? `${activeButton.offsetWidth}px` : '0px';
-  buttonPosition = mp;
-  buttonWidth = wd;
+  menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
+  menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
 
 onMounted(() => {
-  checkButtonActive();
+  updateMenuBar();
 });
 </script>
