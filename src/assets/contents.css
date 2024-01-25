@@ -17,6 +17,12 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     line-height: 0;
     white-space: nowrap;
 }
+.flexbox-wrap {
+    display: flex;
+}
+.border--bot {
+    border-bottom: 1px solid #e1e1e1;
+}
 
 .point-color {
     color: #3f51b5;
@@ -100,7 +106,8 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 
 /* 검색 */
 .logo-wrap {
-    width: 32px;
+    width: 26px;
+    margin-right: 10px;
 }
 .search-wrap {
     flex: 1;
@@ -183,11 +190,47 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     transform: translate(-50%, -50%);
 }
 
-/* 탭 */
-.submenu-wrap {
-
+/* tab button */
+.menu-wrap {
+    position: relative;
 }
-
+.menu-wrap .menu__inner {
+    display: flex;
+    position: relative;
+}
+.menu-wrap .menu__inner::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: #e1e1e1;
+}
+.menu-wrap .menu__inner .menu__list {
+    flex: 1;
+    text-align: center;
+}
+.menu-wrap .menu__inner .menu__list .button {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    color: #999;
+}
+.menu-wrap .menu__inner .menu__list.active .button {
+    color: #333;
+}
+.menu-wrap .menu__bar {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    background: #333;
+    z-index: 1;
+    transition:all 0.5s ease-out;
+}
 /* content */
 .content {
     min-height: 100%;
@@ -662,13 +705,12 @@ color: #ed1651;
     justify-content: center;
 }
 
-.category-wrap {
-    display: flex;
-    padding: 0 1rem;
-    border-bottom: 1px solid #e1e1e1;
-}
-.category-wrap .category__list {
+.category__list {
     flex: 1;
+    margin: 0 1rem;
+}
+.sort__list {
+    margin: 0 1rem 0 0;
 }
 
 .list-wrap .list__title {
@@ -678,13 +720,30 @@ color: #ed1651;
     border-bottom: 1px solid #e1e1e1;
 }
 .list-wrap .item {
-    padding: 10px 20px 5px;
+    padding: 10px 20px;
     border-bottom: 1px solid #e1e1e1;
 }
+/*  */
+.list-wrap .item .info__wrap {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.4rem;
+}
+.list-wrap .item .info__wrap [class^=list__item] {
+    display: inline-block;
+    font-size: 1.2rem;
+    color: #666;
+}
+.list-wrap .item .info__wrap [class^=list__item].user {
+    color: #999;
+}
+.list-wrap .item .info__wrap [class^=list__item] * + * {
+    margin-left: 4px;
+}
+/*  */
 .list-wrap .item .text__wrap .list__item_button {
     display: block;
     width: 100%;
-    padding: 0.4rem 0;
     text-align: left;
 }
 .list-wrap .item .text__wrap .list__item_button .title {
@@ -703,62 +762,68 @@ color: #ed1651;
     line-height: 1.7rem;
     max-height: 3.4rem;
 }
-.list-wrap .item .ctg__wrap .list__item_button {
-    display: inline-block;
-    font-size: 1.2rem;
-    color: #666;
+/*  */
+.list-wrap .item .util__wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 8px 4px 0;
 }
-.list-wrap .item .info__wrap .list__item_button,
-.list-wrap .item .info__wrap .item-fnc .list__item {
+.list-wrap .item .util__wrap [class^=list__item],
+.list-wrap .item .util__wrap .item-fnc [class^=list__item] {
     display: inline-block;
     font-size: 1.2rem;
     color: #999;
 }
-.list-wrap .item .info__wrap .item-fnc {
+.list-wrap .item .util__wrap .item-fnc {
     display: flex;
     align-items: center;
 }
-.list-wrap .item .info__wrap .item-fnc .list__item {
+.list-wrap .item .util__wrap .item-fnc [class^=list__item] {
     display: inline-flex;
     align-items: center;
-    padding: 4px 0;
 }
-.list-wrap .item .info__wrap .item-fnc [class^=list__item] + [class^=list__item] {
-    margin-left: 4px;
+.list-wrap .item .util__wrap .item-fnc [class^=list__item] + [class^=list__item] {
+    margin-left: 10px;
 }
-.list-wrap .item .info__wrap .item-fnc .list__item.like svg {
+.list-wrap .item .util__wrap .item-fnc [class^=list__item] .item__count {
+    display: inline-block;
+    line-height: 1.6rem;
+}
+.list-wrap .item .util__wrap .item-fnc [class^=list__item].read svg {
     height: 14px;
 }
-.list-wrap .item .info__wrap .item-fnc .list__item span {
-    display: inline-block;
-    line-height: 16px;
+.list-wrap .item .util__wrap .item-fnc [class^=list__item].like svg {
+    height: 13px;
 }
-.list-wrap .item .info__wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.list-wrap .item .util__wrap .item-fnc [class^=list__item].cmt svg {
+    height: 12px;
 }
-.list-wrap .item .info__wrap .item-fnc .mark {
-    padding: 4px;
+.list-wrap .item .util__wrap .item-fnc .mark {
+    margin: 0 -4px 0 6px !important;
+    padding: 1px 4px;
     font-size: 0;
 }
-.list-wrap .item .info__wrap .item-fnc .mark::after {
+.list-wrap .item .util__wrap .item-fnc [class^=list__item].mark::after {
     content: '';
     display: inline-block;
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z' clip-rule='evenodd'/></svg>");
     background-repeat: no-repeat;
     background-size: 100%;
 }
-.list-wrap .item .info__wrap .item-fnc .mark.active:after {
+.list-wrap .item .util__wrap .item-fnc [class^=list__item].mark.active:after {
     /* background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z' clip-rule='evenodd'/></svg>"); */
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm6.5-11a.5.5 0 0 0-1 0V6H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V7H10a.5.5 0 0 0 0-1H8.5V4.5z' clip-rule='evenodd'/></svg>");
 }
+/* 단순목록형태 :셀렉트박스 */
 .list-wrap li.item {
     padding: 0;
 }
-.list-wrap li.item > a {
+.list-wrap li.item .button {
     display: block;
+    width: 100%;
     padding: 10px;
+    text-align: left;
 }
