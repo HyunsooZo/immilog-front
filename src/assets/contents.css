@@ -70,6 +70,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 .footer .util-item-wrap {
     display: flex;
     border-top: 1px solid #e1e1e1;
+    background: #fff;
 }
 .footer .util-item-wrap .util__item {
     flex: 1;
@@ -93,13 +94,13 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     padding: 3px 0 0;
     line-height: 1;
     font-size: 1rem;
-    color: #666;
+    color: #333;
 }
 .footer .util-item-wrap .util__item .item svg {
     display: inline-block;
     width: 21px;
     height: 24px;
-    fill: #666;
+    fill: #333;
 }
 .footer .util-item-wrap .util__item .item.my svg {
     width: 23px;
@@ -769,8 +770,8 @@ color: #ed1651;
     justify-content: space-between;
     margin: 8px 4px 0;
 }
-.list-wrap .item .util__wrap [class^=list__item],
-.list-wrap .item .util__wrap .item-fnc [class^=list__item] {
+.list-wrap .item .util__wrap [class*=list__item],
+.list-wrap .item .util__wrap .item-fnc [class*=list__item] {
     display: inline-block;
     font-size: 1.2rem;
     color: #999;
@@ -779,19 +780,19 @@ color: #ed1651;
     display: flex;
     align-items: center;
 }
-.list-wrap .item .util__wrap .item-fnc [class^=list__item] {
+.list-wrap .item .util__wrap .item-fnc [class*=list__item] {
     display: inline-flex;
     align-items: center;
     position: relative;
 }
-.list-wrap .item .util__wrap .item-fnc [class^=list__item] + [class^=list__item] {
+.list-wrap .item .util__wrap .item-fnc [class*=list__item] + [class*=list__item] {
     margin-left: 10px;
 }
-.list-wrap .item .util__wrap .item-fnc [class^=list__item] .item__count {
+.list-wrap .item .util__wrap .item-fnc [class*=list__item] .item__count {
     display: inline-block;
     line-height: 1.6rem;
 }
-.list-wrap .item .util__wrap .item-fnc [class^=list__item].read::before {
+.list-wrap .item .util__wrap .item-fnc [class*=list__item].read::before {
     content: '';
     display: inline-block;
     width: 16px;
@@ -801,7 +802,7 @@ color: #ed1651;
     background-position: 50% center;
     background-size: auto 100%;
 }
-.list-wrap .item .util__wrap .item-fnc [class^=list__item].read::after {
+.list-wrap .item .util__wrap .item-fnc [class*=list__item].read::after {
     content: '';
     display: inline-block;
     position: absolute;
@@ -826,7 +827,7 @@ color: #ed1651;
 .list-wrap .item .util__wrap .item-fnc [class*=list__item].like.active::before {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z'/></svg>");
 }
-.list-wrap .item .util__wrap .item-fnc [class^=list__item].cmt::before {
+.list-wrap .item .util__wrap .item-fnc [class*=list__item].cmt::before {
     content: '';
     display: inline-block;
     width: 16px;
@@ -836,8 +837,8 @@ color: #ed1651;
     background-position: 50% center;
     background-size: auto 100%;
 }
-.list-wrap .item .util__wrap .item-fnc .mark {
-    margin: 0 -4px 0 6px !important;
+.list-wrap .item .util__wrap .item-fnc [class*=list__item].mark {
+    margin: 0 -4px 0 6px;
     padding: 1px 4px;
     font-size: 0;
 }
