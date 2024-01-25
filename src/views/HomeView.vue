@@ -52,7 +52,7 @@
 				</li>
 			</ul>
 		</div>
-		
+
 		<!--  -->
 		<div class="category-wrap">
 			<em class="blind">카테고리</em>
@@ -122,7 +122,6 @@
 			</div>
 			<!-- //.item -->
 		</div>
-
 	</div>
 
 	<!-- footer -->
@@ -175,7 +174,7 @@
 	</div>
 
 	<!-- selectdialog -->
-	<div class="modal-container select--dialog" style="display: none;">
+	<div class="modal-container select--dialog" style="display: none">
 		<div class="modal" tabindex="-1" role="dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -197,4 +196,6 @@
 	</div>
 </template>
 
-<script setup></script>
+<script setup>
+import TheFooter from '@/components/layouts/TheFooter.vue';
+</script>

@@ -1,10 +1,10 @@
 <template>
 	<Transition>
-		<div v-if="modalValue" class="modal-container">
+		<div v-if="alertValue" class="modal-container">
 			<div class="modal" tabindex="-1" role="dialog">
 				<div class="modal-content" @click.stop>
 					<div class="modal-body">
-						<p>{{ modalText }}</p>
+						<p>{{ alertText }}</p>
 					</div>
 					<div class="modal-footer">
 						<div class="button-wrap">
@@ -26,11 +26,11 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue';
 
-const { modalValue, modalText } = defineProps(['modalValue', 'modalText']);
+const { alertValue, alertText } = defineProps(['alertValue', 'alertText']);
 
-const emits = defineEmits(['update:modalValue']);
+const emits = defineEmits(['update:alertValue']);
 
 const closeModal = () => {
-	emits('update:modalValue', false);
+	emits('update:alertValue', false);
 };
 </script>
