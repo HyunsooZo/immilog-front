@@ -96,7 +96,7 @@
 					class="button--select"
 					@click="openCategorySelect"
 				>
-					전체
+					{{ selectCategoryValue.name }}
 				</button>
 			</div>
 			<div class="sort__list">
@@ -105,7 +105,7 @@
 					class="button--select sort"
 					@click="openSortingSelect"
 				>
-					최신순
+					{{ selectSortingValue.name }}
 				</button>
 			</div>
 		</div>
@@ -293,8 +293,8 @@ const selectTitle = ref('');
 const selectList = ref('');
 const isCategorySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
-const selectCategoryValue = ref('');
-const selectSortingValue = ref('');
+const selectCategoryValue = ref({ name: '전체', code: 'all' });
+const selectSortingValue = ref({ name: '최신순', code: 'recent' });
 const sortingList = [
 	{ name: '최신순', code: 'recent' },
 	{ name: '좋아요순', code: 'like' },
@@ -353,9 +353,9 @@ const updateMenuBar = () => {
 };
 
 const selectedValue = value => {
-	if (categoryList.some(c => c.code === value)) {
+	if (categoryList.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
-	} else if (sortingList.some(s => s.code === value)) {
+	} else if (sortingList.some(s => s.code === value.code)) {
 		selectSortingValue.value = value;
 	}
 };

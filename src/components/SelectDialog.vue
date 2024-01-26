@@ -20,7 +20,7 @@
 							<button
 								type="button"
 								class="button"
-								@click="selectCategory(item.code)"
+								@click="selectCategory(item)"
 							>
 								<span>{{ item.name }}</span>
 							</button>
