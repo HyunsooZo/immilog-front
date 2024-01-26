@@ -29,12 +29,11 @@
 							</button>
 						</div>
 					</div>
-
 					<!-- 검색결과 -->
 					<div class="search-result-wrap">
 						<ul class="search-result">
-							<li v-for="(item, index) in filteredSearchHistory" :key="'history-' + index" class="item">
-								<button type="button" class="button button--result-recently">
+							<li v-for="(item, index) in filteredSearchHistory.slice(0, 20)" :key="'history-' + index" class="item">
+								<button type="button" class="button button--result-recently" @click="reCallSearchApi(result)">
 									<em>{{ item }}</em>
 								</button>
 								<p class="item-fnc">
@@ -43,7 +42,8 @@
 									</button>
 								</p>
 							</li>
-							<li v-for="(result, resultIndex) in filteredSearchResult" :key="'result-' + resultIndex" class="item">
+							<li v-for="(result, resultIndex) in filteredSearchResult.slice(0, 20)" :key="'result-' + resultIndex"
+								class="item">
 								<button type="button" class="button button--result">
 									<em>{{ result }}</em>
 								</button>
@@ -53,26 +53,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- 검색결과 -->
-	<div class="search-result-wrap">
-		<ul class="search-result">
-			<li v-for="(item, index) in filteredSearchHistory.slice(0, 5)" :key="'history-' + index" class="item">
-				<button type="button" class="button button--result-recently" @click="reCallSearchApi(result)">
-					<em>{{ item }}</em>
-				</button>
-				<p class="item-fnc">
-					<button type="button" class="button button--del" @click="removeSearchHistory(index)">
-						<span class="blind">삭제</span>
-					</button>
-				</p>
-			</li>
-			<li v-for="(result, resultIndex) in filteredSearchResult.slice(0, 30)" :key="'result-' + resultIndex" class="item">
-				<button type="button" class="button button--result">
-					<em>{{ result }}</em>
-				</button>
-			</li>
-		</ul>
 	</div>
 </template>
 
