@@ -964,7 +964,7 @@ color: #ed1651;
     text-align: left;
 }
 .list-wrap .item .text__wrap [class*=list__item] .title {
-    padding-bottom: 2px;
+    padding-bottom: 4px;
 }
 .list-wrap .item .text__wrap [class*=list__item] .text {
     line-height: 1.7rem;
@@ -988,17 +988,17 @@ color: #ed1651;
     margin: 15px -2px;
 }
 .list-wrap .item .tag-wrap .button--hash {
+    position: relative;
     margin: 0 2px;
-    padding: 4px 8px;
+    padding: 2px 2px;
     line-height: 1.4rem;
     font-size: 1.2rem;
-    color: #fff;
-    background: #bdbdbd;
-    border-radius: 20px;
+    color: #54abf6;
 }
 .list-wrap .item .tag-wrap .button--hash::before {
     content: '#';
 }
+
 /*  */
 .list-wrap .item .util__wrap {
     display: flex;
