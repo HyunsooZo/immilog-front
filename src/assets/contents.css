@@ -993,7 +993,7 @@ color: #ed1651;
     padding: 2px 2px;
     line-height: 1.4rem;
     font-size: 1.2rem;
-    color: #54abf6;
+    color: #00bcd4;
 }
 .list-wrap .item .tag-wrap .button--hash::before {
     content: '#';
