@@ -26,28 +26,16 @@
       </div>
     </div>
 
-    <!-- 검색어(해시태그) -->
-    <div class="search-option-wrap" style="display: none">
-      <div class="search-option hash-search__tag" data-element="tab__panel" role="tabpanel">
-        <div class="search-option-inner">
-          <div class="tag-area hide">
-            <button type="button" class="button button--hash">
-              #해시태그
-            </button>
-            <button type="button" class="button button--hash">
-              #해시태그
-            </button>
-            <button type="button" class="button button--hash">
-              #해시태그
-            </button>
-            <button type="button" class="button button--hash">
-              #해시태그
-            </button>
-          </div>
-          <!-- 버튼 -->
-          <div class="btn-area">
-            <button type="button" class="btn-close">접기</button>
-          </div>
+    <!-- 해시태그 -->
+    <div class="tag-wrap">
+      <div class="tag__inner">
+        <div class="item">
+          <button type="button" class="button button--hash">
+            #해시태그
+          </button>
+          <button type="button" class="button button--hash">
+            #해시태그
+          </button>
         </div>
       </div>
     </div>

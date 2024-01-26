@@ -19,6 +19,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 }
 .flexbox-wrap {
     display: flex;
+    justify-content: space-between;
 }
 .border--bot {
     border-bottom: 1px solid #e1e1e1;
@@ -520,7 +521,7 @@ strong + .button-text {
 .button-wrap .button.button--disabled {
     background: #ced3d9;
 }
-.button--select {
+.button--icon, .button--select {
     position: relative;
     display: block;
     width: 100%;
@@ -528,6 +529,10 @@ strong + .button-text {
     text-align: left;
     font-size: 1.4rem;
 }
+.button--icon {
+    padding: 10px 10px 10px 24px;
+}
+.button--icon::after,
 .button--select::after {
     content: '';
     display: inline-block;
@@ -543,6 +548,11 @@ strong + .button-text {
 }
 .button--select.sort::after {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(51 51 51)' xmlns='http://www.w3.org/2000/svg'><path d='M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293V2.5zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z'/></svg>");
+}
+.button--icon.last::after {
+    left: 5px;
+    right: auto;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(51 51 51)' xmlns='http://www.w3.org/2000/svg'><path d='M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6z'/></svg>");
 }
 
 /* title */
@@ -870,8 +880,11 @@ color: #ed1651;
     flex: 1;
     margin: 0 1rem;
 }
-.sort__list {
+.category__list + .sort__list {
     margin: 0 1rem 0 0;
+}
+.sort__list {
+    margin: 0 1rem;
 }
 
 .list-wrap .list__title {
@@ -884,12 +897,28 @@ color: #ed1651;
     padding: 10px 20px;
     border-bottom: 1px solid #e1e1e1;
 }
+.list-wrap.reply .item .info__wrap {
+    margin-bottom: 4px;
+}
+.list-wrap.reply .item .util__wrap {
+    margin-top: 4px;
+}
+.list-wrap.reply .re--reply  .item {
+    padding: 10px 20px 10px 35px;
+    border-bottom: none;
+}
+.list-wrap.reply .re--reply .item:not(:last-child) {
+    border-bottom: 1px solid #f4f4f4;
+}
+.list-wrap.reply .re--reply .item:last-child {
+    border-bottom: 1px solid #e1e1e1;
+}
 /*  */
 .list-wrap .item .info__wrap {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.8rem;
 }
 .list-wrap .item .info__wrap .item__pic {
     overflow: hidden;
@@ -929,33 +958,53 @@ color: #ed1651;
     vertical-align: 0;
 }
 /*  */
-.list-wrap .item .text__wrap .list__item_button {
+.list-wrap .item .text__wrap [class*=list__item] {
     display: block;
     width: 100%;
     text-align: left;
 }
-.list-wrap .item .text__wrap .list__item_button .title {
+.list-wrap .item .text__wrap [class*=list__item] .title {
+    padding-bottom: 2px;
+}
+.list-wrap .item .text__wrap [class*=list__item] .text {
+    line-height: 1.7rem;
+}
+.list-wrap .item .text__wrap [class*=list__item].text-link .title {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     -webkit-line-clamp: 1;
-    padding-bottom: 2px;
 }
-.list-wrap .item .text__wrap .list__item_button .text {
+.list-wrap .item .text__wrap [class*=list__item].text-link .text {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    line-height: 1.7rem;
     max-height: 3.4rem;
+}
+
+.list-wrap .item .tag-wrap {
+    margin: 15px -2px;
+}
+.list-wrap .item .tag-wrap .button--hash {
+    margin: 0 2px;
+    padding: 4px 8px;
+    line-height: 1.4rem;
+    font-size: 1.2rem;
+    color: #fff;
+    background: #bdbdbd;
+    border-radius: 20px;
+}
+.list-wrap .item .tag-wrap .button--hash::before {
+    content: '#';
 }
 /*  */
 .list-wrap .item .util__wrap {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 8px 4px 0;
+    margin: 8px 0 0;
 }
 .list-wrap .item .util__wrap [class*=list__item],
 .list-wrap .item .util__wrap .item-fnc [class*=list__item] {
@@ -1041,6 +1090,29 @@ color: #ed1651;
 .list-wrap .item .util__wrap .item-fnc [class*=list__item].mark.active::before {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z'/></svg>");
     /* background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zm6.5-11a.5.5 0 0 0-1 0V6H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V7H10a.5.5 0 0 0 0-1H8.5V4.5z'/></svg>"); */
+}
+.list-wrap .item .util__wrap .item-fnc [class*=list__item].more {
+    margin: 0 -4px 0 6px;
+    padding: 1px 4px;
+    font-size: 0;
+}
+.list-wrap .item .util__wrap .item-fnc [class*=list__item].more::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z'/></svg>");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.list-wrap .item .util__wrap .item-fnc [class*=list__item].share::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z'/></svg>");
+    background-repeat: no-repeat;
+    background-size: 100%;
 }
 /* 단순목록형태 :셀렉트박스 */
 .list-wrap li.item {
