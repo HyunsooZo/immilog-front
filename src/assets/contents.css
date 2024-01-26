@@ -945,6 +945,12 @@ color: #ed1651;
 .list-wrap .item .info__wrap [class^=list__item].user {
     color: #999;
 }
+.list-wrap .item .info__wrap [class^=list__item].user--author strong::after {
+    content: '*';
+    display: inline;
+    padding-left: 2px;
+    color: #ed1651;
+}
 .list-wrap .item .info__wrap [class^=list__item] * + * {
     margin-left: 4px;
 }

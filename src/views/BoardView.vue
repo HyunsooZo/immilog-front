@@ -55,10 +55,10 @@
 							<i class="blind">좋아요</i>
 							<span class="item__count">10</span>
 						</button>
-						<p class="list__item cmt">
+						<button type="button" class="list__item cmt">
 							<i class="blind">댓글</i>
 							<span class="item__count">10</span>
-						</p>
+						</button>
 						<p class="list__item past">
 							<i class="blind">작성시간</i>
 							<span class="item__count">10시간 전</span>
@@ -110,10 +110,10 @@
 							<i class="blind">좋아요</i>
 							<span class="item__count">10</span>
 						</button>
-						<p class="list__item cmt">
+						<button type="button" class="list__item cmt">
 							<i class="blind">댓글</i>
 							<span class="item__count">10</span>
-						</p>
+						</button>
 						<p class="list__item past">
 							<i class="blind">작성시간</i>
 							<span class="item__count">10시간 전</span>
@@ -132,8 +132,8 @@
 					<div class="info__wrap">
 						<div class="item-fnc">
 							<div class="list__item">
-								<button type="button" class="list__item_button user">
-									<em>대댓글작성자</em>
+								<button type="button" class="list__item_button user user--author">
+									<em>원글작성자 대댓글</em>
 									<strong>닉네임</strong>
 								</button>
 							</div>
