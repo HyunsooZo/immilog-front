@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <!-- 상단 고정 영역 -->
-    <div class="sticky-wrap">
+    <div class="sticky-wrap active"><!-- //scroll up addClass .active / scroll down removeClass .active -->
       <!-- 검색 -->
       <div class="search-wrap">
         <div class="input-wrap">
@@ -10,16 +10,7 @@
           </p>
           <div class="input__inner">
             <button class="button button--search" role="link">
-              <span class="blind">관심 있는 글 검색</span>
-            </button>
-            <div class="input__inner-item">
-              <input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
-                placeholder="검색어를 입력해 주세요" autocomplete="off" />
-              <button v-if="searchInput !== ''" type="button" class="input__button-remove" title="텍스트삭제"
-                @click="searchInput = ''"></button>
-            </div>
-            <button class="button button--back" role="link">
-              <span class="blind">취소</span>
+              <span>관심 있는 글 검색</span>
             </button>
           </div>
           <button type="button" class="button-icon button--notice new" role="link">
@@ -69,6 +60,7 @@
             <div class="list__item">
               <button type="button" class="list__item_button ctg">
                 <em>국가</em>
+                <em>지역</em>
                 <strong>카테고리</strong>
               </button>
             </div>
