@@ -54,7 +54,27 @@
 			</div>
 		</div>
 	</div>
-</template>
+	<!-- 검색결과 -->
+	<div class="search-result-wrap">
+		<ul class="search-result">
+			<li v-for="(item, index) in filteredSearchHistory.slice(0, 5)" :key="'history-' + index" class="item">
+				<button type="button" class="button button--result-recently" @click="reCallSearchApi(result)">
+					<em>{{ item }}</em>
+				</button>
+				<p class="item-fnc">
+					<button type="button" class="button button--del" @click="removeSearchHistory(index)">
+						<span class="blind">삭제</span>
+					</button>
+				</p>
+			</li>
+			<li v-for="(result, resultIndex) in filteredSearchResult.slice(0, 30)" :key="'result-' + resultIndex" class="item">
+				<button type="button" class="button button--result">
+					<em>{{ result }}</em>
+				</button>
+			</li>
+		</ul>
+	</div>
+</div></template>
 
 <script setup>
 import { onMounted, ref, computed } from 'vue';
@@ -76,6 +96,13 @@ const callSearchApi = () => {
 	searchApiCalled.value = true;
 };
 
+const reCallSearchApi = result => {
+	searchInput.value = result;
+	console.log(result);
+	searchApiCalled.value = true;
+	callSearchApi();
+};
+
 const stackSearchHistory = () => {
 	if (!searchInput.value) return;
 
@@ -92,9 +119,6 @@ const stackSearchHistory = () => {
 
 	// 로컬 스토리지에 저장
 	localStorage.setItem('searchInputs', JSON.stringify(storedHistory));
-
-	// 검색어 초기화
-	searchInput.value = '';
 
 	// 검색 기록 업데이트
 	searchHistory.value = storedHistory;
