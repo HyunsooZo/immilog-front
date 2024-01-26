@@ -131,7 +131,11 @@
 					<div class="info__wrap">
 						<div class="item-fnc">
 							<div class="list__item">
-								<button type="button" class="list__item_button user user--author"><!-- //원글작성자 댓글 .user--author -->
+								<button
+									type="button"
+									class="list__item_button user user--author"
+								>
+									<!-- //원글작성자 댓글 .user--author -->
 									<em>원글작성자 대댓글</em>
 									<strong>닉네임</strong>
 								</button>
