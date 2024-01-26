@@ -2,8 +2,11 @@
 	<main>
 		<div id="app">
 			<router-view />
+			<TheFooter v-if="!hideFooter" />
 		</div>
 	</main>
 </template>
 
-<script setup></script>
+<script setup>
+import TheFooter from './components/layouts/TheFooter.vue';
+</script>

@@ -465,3 +465,11 @@ watch(
 	},
 );
 </script>
+
+<script>
+export default {
+	data() {
+		return { hideFooter: true, hideHeader: true };
+	},
+};
+</script>
