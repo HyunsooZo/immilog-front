@@ -46,6 +46,22 @@
       </div>
     </div>
 
+    <!-- sub menu -->
+    <div class="sub-menu-wrap">
+      <ul class="sub-menu__inner">
+        <li class="sub-menu__list active">
+          <button type="button" class="button">
+            지역
+          </button>
+        </li>
+        <li class="sub-menu__list">
+          <button type="button" class="button">
+            지역
+          </button>
+        </li>
+      </ul>
+    </div>
+
     <!-- 목록 -->
     <div class="list-wrap">
       <p class="list__title">
