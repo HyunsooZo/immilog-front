@@ -26,20 +26,6 @@
       </div>
     </div>
 
-    <!-- 해시태그 -->
-    <div class="tag-wrap">
-      <div class="tag__inner">
-        <div class="item">
-          <button type="button" class="button button--hash">
-            #해시태그
-          </button>
-          <button type="button" class="button button--hash">
-            #해시태그
-          </button>
-        </div>
-      </div>
-    </div>
-
     <!-- tab button -->
     <div class="menu-wrap">
       <ul class="menu__inner">
