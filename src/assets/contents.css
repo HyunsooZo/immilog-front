@@ -549,7 +549,7 @@ strong + .button-text {
 .button--select.sort::after {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(51 51 51)' xmlns='http://www.w3.org/2000/svg'><path d='M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293V2.5zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z'/></svg>");
 }
-.button--icon.last::after {
+.button--icon.last-reply::after {
     left: 5px;
     right: auto;
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(51 51 51)' xmlns='http://www.w3.org/2000/svg'><path d='M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6z'/></svg>");
@@ -945,6 +945,12 @@ color: #ed1651;
 .list-wrap .item .info__wrap [class^=list__item].user {
     color: #999;
 }
+.list-wrap .item .info__wrap [class^=list__item].user--author strong::after {
+    content: '*';
+    display: inline;
+    padding-left: 2px;
+    color: #ed1651;
+}
 .list-wrap .item .info__wrap [class^=list__item] * + * {
     margin-left: 4px;
 }
@@ -964,7 +970,7 @@ color: #ed1651;
     text-align: left;
 }
 .list-wrap .item .text__wrap [class*=list__item] .title {
-    padding-bottom: 2px;
+    padding-bottom: 4px;
 }
 .list-wrap .item .text__wrap [class*=list__item] .text {
     line-height: 1.7rem;
@@ -988,17 +994,17 @@ color: #ed1651;
     margin: 15px -2px;
 }
 .list-wrap .item .tag-wrap .button--hash {
+    position: relative;
     margin: 0 2px;
-    padding: 4px 8px;
+    padding: 2px 2px;
     line-height: 1.4rem;
     font-size: 1.2rem;
-    color: #fff;
-    background: #bdbdbd;
-    border-radius: 20px;
+    color: #00bcd4;
 }
 .list-wrap .item .tag-wrap .button--hash::before {
     content: '#';
 }
+
 /*  */
 .list-wrap .item .util__wrap {
     display: flex;
