@@ -412,6 +412,36 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     z-index: 1;
     transition:all 0.5s ease-out;
 }
+
+/* sub menu */
+.sub-menu-wrap {
+    padding: 15px 16px;
+    overflow: auto hidden;
+    scroll-snap-type: x mandatory;
+    scroll-snap-stop: normal;
+    scroll-behavior: smooth;
+}
+.sub-menu-wrap::-webkit-scrollbar {
+    display: none;
+}
+.sub-menu-wrap .sub-menu__inner {
+    display: flex;
+    width: max-content;
+}
+.sub-menu-wrap .sub-menu__list {
+    /* display: inline-flex; */
+    margin: 0 4px;
+}
+.sub-menu-wrap .sub-menu__list .button {
+    padding: 6px 10px;
+    background: #e1e1e1;
+    border-radius: 20px;
+}
+.sub-menu-wrap .sub-menu__list.active .button {
+    color: #fff;
+    background: #999;
+}
+
 /* content */
 .header + .content {
     margin-top: 50px;

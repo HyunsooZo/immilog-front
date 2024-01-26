@@ -1,7 +1,38 @@
 <template>
-	<TheHeader />
 	<div class="content">
-		<!-- 글 상세 -->
+		<!-- 상단 고정 영역 -->
+		<div class="sticky-wrap active"><!-- //scroll up addClass .active / scroll down removeClass .active -->
+			<!-- 검색 -->
+			<div class="search-wrap">
+				<div class="input-wrap">
+					<p class="logo-wrap">
+						<img src="@/assets/images/icon-komeet.png" alt="ko-meet" />
+					</p>
+					<div class="input__inner">
+						<button class="button button--search" role="link">
+							<span>관심 있는 글 검색</span>
+						</button>
+					</div>
+					<button type="button" class="button-icon button--notice new" role="link">
+						<span>알림</span>
+					</button>
+				</div>
+			</div>
+
+			<!-- tab button -->
+			<div class="menu-wrap">
+				<ul class="menu__inner">
+					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
+						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
+							{{ menu.label }}
+						</button>
+					</li>
+				</ul>
+				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
+			</div>
+		</div>
+
+		<!-- 목록 -->
 		<div class="list-wrap">
 			<p class="list__title">
 				<span>카테고리</span>
@@ -15,6 +46,7 @@
 						<div class="list__item">
 							<button type="button" class="list__item_button ctg">
 								<em>국가</em>
+								<em>지역</em>
 								<strong>카테고리</strong>
 							</button>
 						</div>
@@ -27,189 +59,49 @@
 					</div>
 				</div>
 				<div class="text__wrap">
-					<div class="list__item">
-						<p class="title">글제목 글제목 글제목</p>
-						<p class="text">본문내용</p>
-					</div>
-				</div>
-				<!-- 해시태그 -->
-				<div class="tag-wrap">
-					<div class="tag__inner">
-						<div class="tag__item">
-							<button type="button" class="button button--hash">
-								<em>해시태그</em>
-							</button>
-							<button type="button" class="button button--hash">
-								<em>해시태그</em>
-							</button>
-						</div>
-					</div>
+					<button type="button" class="list__item_button text-link">
+						<p class="title">
+							글제목 글제목 글제목 글제목 글제목 글제목 글제목 글제목 글제목
+						</p>
+						<p class="text">
+							내용미리보기 내용미리보기 내용미리보기 내용미리보기 내용미리보기
+							내용미리보기 내용미리보기 내용미리보기 내용미리보기 내용미리보기
+						</p>
+					</button>
 				</div>
 				<div class="util__wrap">
 					<div class="item-fnc">
+						<p class="list__item read">
+							<i class="blind">조회수</i>
+							<span class="item__count">10</span>
+						</p>
 						<button type="button" class="list__item_button like active">
 							<!-- //활성화 .active -->
 							<i class="blind">좋아요</i>
 							<span class="item__count">10</span>
 						</button>
-						<button type="button" class="list__item cmt">
+						<p class="list__item cmt">
 							<i class="blind">댓글</i>
 							<span class="item__count">10</span>
-						</button>
+						</p>
+					</div>
+					<div class="item-fnc">
 						<p class="list__item past">
 							<i class="blind">작성시간</i>
 							<span class="item__count">10시간 전</span>
 						</p>
-					</div>
-					<div class="item-fnc">
-						<button type="button" class="list__item_button share">
-							<i class="blind">공유하기</i>
-						</button>
-					</div>
-				</div>
-			</div>
-			<!-- //.item -->
-		</div>
-
-		<!-- 댓글 기능버튼 -->
-		<div class="flexbox-wrap border--bot">
-			<div class="sort__list">
-				<button type="button" class="button--select sort">최신순</button>
-			</div>
-			<div class="sort__list">
-				<button type="button" class="button--icon last">
-					마지막 댓글로 이동
-				</button>
-			</div>
-		</div>
-		<!-- 댓글 -->
-		<div class="list-wrap reply">
-			<div class="item">
-				<div class="info__wrap">
-					<div class="item-fnc">
-						<div class="list__item">
-							<button type="button" class="list__item_button user">
-								<em>댓글작성자</em>
-								<strong>닉네임</strong>
-							</button>
-						</div>
-					</div>
-				</div>
-				<div class="text__wrap">
-					<div class="list__item">
-						<p class="text">댓글내용</p>
-					</div>
-				</div>
-				<div class="util__wrap">
-					<div class="item-fnc">
-						<button type="button" class="list__item_button like active">
+						<button type="button" class="list__item_button mark active">
 							<!-- //활성화 .active -->
-							<i class="blind">좋아요</i>
-							<span class="item__count">10</span>
-						</button>
-						<button type="button" class="list__item cmt">
-							<i class="blind">댓글</i>
-							<span class="item__count">10</span>
-						</button>
-						<p class="list__item past">
-							<i class="blind">작성시간</i>
-							<span class="item__count">10시간 전</span>
-						</p>
-					</div>
-					<div class="item-fnc">
-						<button type="button" class="list__item_button more">
-							<i class="blind">더보기</i
-							><!-- //차단하기, 대화하기.. -->
+							<i class="blind">북마크</i>
 						</button>
 					</div>
 				</div>
 			</div>
 			<!-- //.item -->
-			<!-- 대댓글 -->
-			<div class="re--reply">
-				<div class="item">
-					<div class="info__wrap">
-						<div class="item-fnc">
-							<div class="list__item">
-								<button
-									type="button"
-									class="list__item_button user user--author"
-								>
-									<!-- //원글작성자 댓글 .user--author -->
-									<em>원글작성자 대댓글</em>
-									<strong>닉네임</strong>
-								</button>
-							</div>
-						</div>
-					</div>
-					<div class="text__wrap">
-						<div class="list__item">
-							<p class="text">대댓글내용</p>
-						</div>
-					</div>
-					<div class="util__wrap">
-						<div class="item-fnc">
-							<button type="button" class="list__item_button like active">
-								<!-- //활성화 .active -->
-								<i class="blind">좋아요</i>
-								<span class="item__count">10</span>
-							</button>
-							<p class="list__item past">
-								<i class="blind">작성시간</i>
-								<span class="item__count">10시간 전</span>
-							</p>
-						</div>
-						<div class="item-fnc">
-							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i
-								><!-- //차단하기, 대화하기.. -->
-							</button>
-						</div>
-					</div>
-				</div>
-				<!-- //.item -->
-				<div class="item">
-					<div class="info__wrap">
-						<div class="item-fnc">
-							<div class="list__item">
-								<button type="button" class="list__item_button user">
-									<em>대댓글작성자</em>
-									<strong>닉네임</strong>
-								</button>
-							</div>
-						</div>
-					</div>
-					<div class="text__wrap">
-						<div class="list__item">
-							<p class="text">대댓글내용</p>
-						</div>
-					</div>
-					<div class="util__wrap">
-						<div class="item-fnc">
-							<button type="button" class="list__item_button like">
-								<!-- //활성화 .active -->
-								<i class="blind">좋아요</i>
-								<span class="item__count">10</span>
-							</button>
-							<p class="list__item past">
-								<i class="blind">작성시간</i>
-								<span class="item__count">10시간 전</span>
-							</p>
-						</div>
-						<div class="item-fnc">
-							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i
-								><!-- //차단하기, 대화하기.. -->
-							</button>
-						</div>
-					</div>
-				</div>
-				<!-- //.item -->
-			</div>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import TheHeader from '@/components/layouts/TheHeader.vue';
+
 </script>
