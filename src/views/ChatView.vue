@@ -1,5 +1,8 @@
 <template>
+	<TheHeader />
 	<div></div>
 </template>
 
-<script setup></script>
+<script setup>
+import TheHeader from '@/components/layouts/TheHeader.vue';
+</script>

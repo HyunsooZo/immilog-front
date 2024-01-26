@@ -1,4 +1,5 @@
 <template>
+	<TheHeader />
 	<div class="content">
 		<!-- 글 상세 -->
 		<div class="list-wrap">
@@ -27,12 +28,8 @@
 				</div>
 				<div class="text__wrap">
 					<div class="list__item">
-						<p class="title">
-							글제목 글제목 글제목
-						</p>
-						<p class="text">
-							본문내용
-						</p>
+						<p class="title">글제목 글제목 글제목</p>
+						<p class="text">본문내용</p>
 					</div>
 				</div>
 				<!-- 해시태그 -->
@@ -80,7 +77,9 @@
 				<button type="button" class="button--select sort">최신순</button>
 			</div>
 			<div class="sort__list">
-				<button type="button" class="button--icon last">마지막 댓글로 이동</button>
+				<button type="button" class="button--icon last">
+					마지막 댓글로 이동
+				</button>
 			</div>
 		</div>
 		<!-- 댓글 -->
@@ -98,9 +97,7 @@
 				</div>
 				<div class="text__wrap">
 					<div class="list__item">
-						<p class="text">
-							댓글내용
-						</p>
+						<p class="text">댓글내용</p>
 					</div>
 				</div>
 				<div class="util__wrap">
@@ -121,11 +118,13 @@
 					</div>
 					<div class="item-fnc">
 						<button type="button" class="list__item_button more">
-							<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
+							<i class="blind">더보기</i
+							><!-- //차단하기, 대화하기.. -->
 						</button>
 					</div>
 				</div>
-			</div><!-- //.item -->
+			</div>
+			<!-- //.item -->
 			<!-- 대댓글 -->
 			<div class="re--reply">
 				<div class="item">
@@ -141,9 +140,7 @@
 					</div>
 					<div class="text__wrap">
 						<div class="list__item">
-							<p class="text">
-								대댓글내용
-							</p>
+							<p class="text">대댓글내용</p>
 						</div>
 					</div>
 					<div class="util__wrap">
@@ -160,11 +157,13 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i
+								><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
-				</div><!-- //.item -->
+				</div>
+				<!-- //.item -->
 				<div class="item">
 					<div class="info__wrap">
 						<div class="item-fnc">
@@ -178,9 +177,7 @@
 					</div>
 					<div class="text__wrap">
 						<div class="list__item">
-							<p class="text">
-								대댓글내용
-							</p>
+							<p class="text">대댓글내용</p>
 						</div>
 					</div>
 					<div class="util__wrap">
@@ -197,15 +194,18 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i
+								><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
-				</div><!-- //.item -->
+				</div>
+				<!-- //.item -->
 			</div>
 		</div>
-
 	</div>
 </template>
 
-<script setup></script>
+<script setup>
+import TheHeader from '@/components/layouts/TheHeader.vue';
+</script>
