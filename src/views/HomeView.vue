@@ -1,9 +1,10 @@
 <template>
   <div class="content">
     <!-- 검색 -->
-    <div class="search-wrap">
+    <div class="search-wrap active">
+      <!-- //.button--search 클릭 addClass .active /  .button--back 클릭 removeClass .active -->
       <!-- 버튼형 -->
-      <div class="input-wrap">
+      <!-- <div class="input-wrap">
         <div class="input__inner">
           <p class="logo-wrap">
             <img src="@/assets/images/icon-komeet.png" alt="ko-meet" />
@@ -12,17 +13,47 @@
             <span>관심 있는 글 검색</span>
           </button>
         </div>
+      </div> -->
+      <div class="input-wrap">
+        <div class="input__inner">
+          <button class="button button--search" role="link">
+            <span class="blind">관심 있는 글 검색</span>
+          </button>
+          <div class="input__inner-item">
+            <input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
+              placeholder="검색어를 입력해 주세요" autocomplete="off" />
+            <button v-if="searchInput !== ''" type="button" class="input__button-remove" title="텍스트삭제"
+              @click="searchInput = ''"></button>
+            <!-- <button type="button" id="btnSrch" class="input__button-search" title="검색" @click="callSearchApi"></button> -->
+          </div>
+          <button class="button button--back" role="link">
+            <span class="blind">취소</span>
+          </button>
+        </div>
+        <button type="button" class="button-icon button--notice new" role="link"><span>알림</span></button>
       </div>
       <!-- 검색 -->
-      <div class="input-wrap">
+      <!-- <div class="input-wrap">
         <div class="input__inner search">
           <input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
-            placeholder="검색어를 입력해 주세요" autocomplete="off" />
+          placeholder="검색어를 입력해 주세요" autocomplete="off" />
           <button v-if="searchInput !== ''" type="button" class="input__button-remove" title="텍스트삭제"
-            @click="searchInput = ''"></button>
+          @click="searchInput = ''"></button>
           <button type="button" id="btnSrch" class="input__button-search" title="검색" @click="callSearchApi"></button>
         </div>
-      </div>
+      </div> -->
+    </div>
+    <div class="search-result-wrap">
+      <ul>
+        <li>
+          <button type="button" class="button"><em>최근검색어</em></button>
+          <button type="button" class="button button--del"><span>삭제</span></button>
+        </li>
+        <li>
+          <button type="button" class="button"><em>최근검색어</em></button>
+          <button type="button" class="button button--del"><span>삭제</span></button>
+        </li>
+      </ul>
     </div>
 
     <!-- 검색어(해시태그) -->
@@ -30,10 +61,10 @@
       <div class="search-option hash-search__tag" data-element="tab__panel" role="tabpanel">
         <div class="search-option-inner">
           <div class="tag-area hide">
-            <button type="button" class="btn-hash">#해시태그</button>
-            <button type="button" class="btn-hash">#해시태그</button>
-            <button type="button" class="btn-hash">#해시태그</button>
-            <button type="button" class="btn-hash">#해시태그</button>
+            <button type="button" class="button button--hash">#해시태그</button>
+            <button type="button" class="button button--hash">#해시태그</button>
+            <button type="button" class="button button--hash">#해시태그</button>
+            <button type="button" class="button button--hash">#해시태그</button>
           </div>
           <!-- 버튼 -->
           <div class="btn-area">
@@ -72,17 +103,22 @@
       </p>
       <div class="item">
         <div class="info__wrap">
-          <div class="item-fnc">
-            <button type="button" class="list__item_button ctg">
-              <em>국가</em>
-              <strong>카테고리</strong>
-            </button>
+          <div class="item__pic">
+            <img src="" alt="" />
           </div>
           <div class="item-fnc">
-            <button type="button" class="list__item_button user">
-              <em>작성자</em>
-              <strong>닉네임</strong>
-            </button>
+            <div class="list__item">
+              <button type="button" class="list__item_button ctg">
+                <em>국가</em>
+                <strong>카테고리</strong>
+              </button>
+            </div>
+            <div class="list__item">
+              <button type="button" class="list__item_button user">
+                <em>작성자</em>
+                <strong>닉네임</strong>
+              </button>
+            </div>
           </div>
         </div>
         <div class="text__wrap">

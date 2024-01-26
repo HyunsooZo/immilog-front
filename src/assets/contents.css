@@ -48,6 +48,21 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     font-size: 1.8rem;
     line-height: 5rem;
 }
+.header h1 em {
+    color: #333;
+    background: linear-gradient(45deg, #3f51b5 25%, #00bcd4 50%, #3f51b5 75%, #001586 100%);
+    background-size: 200% auto;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: animateBg 5s linear infinite;
+}
+@keyframes animateBg {
+    to {
+    background-position: 200% center;
+    }
+}
 
 /* footer */
 .footer {
@@ -112,17 +127,26 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     margin-right: 10px;
 }
 .search-wrap {
-    flex: 1;
+    padding: 1.4rem 0 1rem;
+    background: #fff;
+}
+.search-wrap .input-wrap {
+    display: flex;
+    margin-top: 0;
 }
 .search-wrap .input__inner {
+    flex: 1;
     display: flex;
     align-items: center;
+    overflow: hidden;
     position: relative;
     height: 4rem;
-    padding: 0 1rem;
+    margin: 0 0 0 1rem;
 }
 .search-wrap .input__inner.search {
     border-bottom: 1px solid #e1e1e1;
+    margin: 0;
+    padding: 0 1rem;
 }
 .search-wrap .button.input__button-search {
     flex: 1;
@@ -156,6 +180,39 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     line-height: 39px;
     text-align: left;
 }
+
+.search-wrap .button--search {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    z-index: 3;
+}
+.search-wrap .input__inner-item {
+    flex: 1;
+    display: flex;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #e1e1e1;
+    border-radius: 20px;
+}
+.search-wrap .input__inner-item .input__element--search {
+    margin: 0;
+    padding: 0 0 0 6px;
+    background: transparent;
+}
+.search-wrap .input__inner-item::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 100%;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(102 102 102)' xmlns='http://www.w3.org/2000/svg'><path d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center 50%;
+    background-size: 100% auto;
+}
+
 .search-wrap .input__element {
     flex: 1;
     height: 100%;
@@ -165,7 +222,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     position: relative;
     width: 2rem;
     height: 100%;
-    z-index: 4;
+    z-index: 2;
 }
 .search-wrap .input__button-remove::before {
     content: '';
@@ -191,7 +248,50 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     background-size: 100%;
     transform: translate(-50%, -50%);
 }
-
+/* search active */
+.search-wrap.active .input__inner {
+    margin-right: 1rem;
+}
+.search-wrap.active .button--notice {
+    display: none;
+}
+.search-wrap.active {
+    position: sticky;
+    top: 50px;
+    width: 100%;
+    z-index: 2;
+}
+.search-wrap.active .input__inner .button--search {
+    display: none;
+}
+.search-wrap .input__inner .button--back {
+    width: 0;
+    height: 40px;
+    margin: 0;
+    padding: 0;
+    transition:all 0.2s ease-out;
+    transform-origin: right;
+    transform: scale(0);
+}
+.search-wrap.active .input__inner .button--back {
+    width: 40px;
+    margin-left: 4px;
+    padding: 10px;
+    border: 1px solid #e1e1e1;
+    border-radius: 20px;
+    transition:all 0.4s ease-out;
+    transform: scale(1);
+}
+.search-wrap.active .input__inner .button--back::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(102 102 102)' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z' clip-rule='evenodd'/></svg>");
+    background-repeat: no-repeat;
+    background-position: 50% center;
+    background-size: 120%;
+}
 /* tab button */
 .menu-wrap {
     position: relative;
@@ -727,8 +827,22 @@ color: #ed1651;
 /*  */
 .list-wrap .item .info__wrap {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     margin-bottom: 0.4rem;
+}
+.list-wrap .item .info__wrap .item__pic {
+    overflow: hidden;
+    width: 34px;
+    height: 34px;
+    margin-right: 4px;
+    border: 1px solid #e1e1e1;
+    border-radius: 50%;
+}
+.list-wrap .item .info__wrap .item-fnc {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 .list-wrap .item .info__wrap [class^=list__item] {
     display: inline-block;

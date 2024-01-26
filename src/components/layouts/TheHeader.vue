@@ -5,7 +5,7 @@
 				<span>이전화면</span>
 			</button>
 		</div>
-		<h1>KoMeet</h1>
+		<h1><em>KoMeet</em></h1>
 		<div class="item-fnc">
 			<button type="button" class="button-icon button--notice new" role="link" @click="onMenu">
 				<span>알림</span>
