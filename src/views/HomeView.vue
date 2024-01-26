@@ -55,10 +55,14 @@
     <!--  -->
     <div class="flexbox-wrap border--bot">
       <div class="category__list">
-        <button type="button" class="button--select">전체</button>
+        <button type="button" class="button--select" @click="openCategorySelect">
+          {{ selectCategoryValue.name }}
+        </button>
       </div>
       <div class="sort__list">
-        <button type="button" class="button--select sort">최신순</button>
+        <button type="button" class="button--select sort" @click="openSortingSelect">
+          {{ selectSortingValue.name }}
+        </button>
       </div>
     </div>
 
@@ -187,45 +191,36 @@
       </li>
     </ul>
   </div>
-
-  <!-- selectdialog -->
-  <div class="modal-container select--dialog" style="display: none">
-    <div class="modal" tabindex="-1" role="dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <p class="modal-title">카테고리 선택</p>
-          <button type="button" class="button-icon button--close" role="link">
-            <span>닫기</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <ul class="list-wrap">
-            <li class="item">
-              <button type="button" class="button">전체</button>
-            </li>
-            <li class="item">
-              <button type="button" class="button">인기글</button>
-            </li>
-            <li class="item">
-              <button type="button" class="button">내지역</button>
-            </li>
-            <li class="item">
-              <button type="button" class="button">구인구직</button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+  <SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
+    @close="closeSelect" @select:value="selectedValue" />
 </template>
 
 <script setup>
 // import TheFooter from '@/components/layouts/TheFooter.vue';
 import { nextTick, onMounted, ref } from 'vue';
-
+import SelectDialog from '@/components/SelectDialog.vue';
 const searchInput = ref('');
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
+const selectTitle = ref('');
+const selectList = ref('');
+const isCategorySelectClicked = ref(false);
+const isSortingSelectClicked = ref(false);
+const selectCategoryValue = ref({ name: '전체', code: 'all' });
+const selectSortingValue = ref({ name: '최신순', code: 'recent' });
+const sortingList = [
+  { name: '최신순', code: 'recent' },
+  { name: '좋아요순', code: 'like' },
+  { name: '조회순', code: 'view' },
+  { name: '댓글순', code: 'comment' },
+];
+const categoryList = [
+  { name: '전체', code: 'all' },
+  { name: '워킹홀리데이', code: 'workingholiday' },
+  { name: '영주권', code: 'greencard' },
+  { name: '소통', code: 'communication' },
+  { name: '질문/답변', code: 'qanda' },
+];
 
 let menus = [
   { label: '최신글', active: ref(true) },
@@ -248,10 +243,45 @@ const selectMenu = selectedMenu => {
 // 	console.log('callSearchApi');
 // };
 
+const openCategorySelect = () => {
+  nextTick(() => {
+    selectTitle.value = '카테고리 선택';
+    selectList.value = categoryList;
+    isCategorySelectClicked.value = true;
+  });
+};
+
+const openSortingSelect = () => {
+  nextTick(() => {
+    selectTitle.value = '정렬 기준 선택';
+    selectList.value = sortingList;
+    isSortingSelectClicked.value = true;
+  });
+};
+
 const updateMenuBar = () => {
   const activeButton = document.querySelector('.menu__list.active .button');
   menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
   menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
+};
+
+const selectedValue = value => {
+  if (categoryList.some(c => c.code === value.code)) {
+    selectCategoryValue.value = value;
+  } else if (sortingList.some(s => s.code === value.code)) {
+    selectSortingValue.value = value;
+  }
+};
+
+const closeSelect = () => {
+  isCategorySelectClicked.value = false;
+  isSortingSelectClicked.value = false;
+  inquireBoardList(selectCategoryValue.value, selectSortingValue.value);
+};
+
+const inquireBoardList = (category, sorting) => {
+  console.log(category, sorting);
+  console.log('inquireBoardList');
 };
 
 onMounted(() => {
