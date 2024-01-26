@@ -15,6 +15,9 @@
         </div>
       </div> -->
       <div class="input-wrap">
+        <p class="logo-wrap">
+          <img src="@/assets/images/icon-komeet.png" alt="ko-meet" />
+        </p>
         <div class="input__inner">
           <button class="button button--search" role="link">
             <span class="blind">관심 있는 글 검색</span>
@@ -44,14 +47,27 @@
       </div> -->
     </div>
     <div class="search-result-wrap">
-      <ul>
-        <li>
-          <button type="button" class="button"><em>최근검색어</em></button>
-          <button type="button" class="button button--del"><span>삭제</span></button>
+      <ul class="search-result">
+        <li class="item">
+          <button type="button" class="button button--result-recently"><em>최근검색기록</em></button>
+          <p class="item-fnc">
+            <button type="button" class="button button--del"><span class="blind">삭제</span></button>
+          </p>
         </li>
-        <li>
-          <button type="button" class="button"><em>최근검색어</em></button>
-          <button type="button" class="button button--del"><span>삭제</span></button>
+        <li class="item">
+          <button type="button" class="button button--result-recently"><em>최근검색기록</em></button>
+          <p class="item-fnc">
+            <button type="button" class="button button--del"><span class="blind">삭제</span></button>
+          </p>
+        </li>
+        <li class="item">
+          <button type="button" class="button button--result"><em>검색결과</em></button>
+        </li>
+        <li class="item">
+          <button type="button" class="button button--result"><em>검색결과</em></button>
+        </li>
+        <li class="item">
+          <button type="button" class="button button--result"><em>검색결과</em></button>
         </li>
       </ul>
     </div>
