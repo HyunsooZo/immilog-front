@@ -1,9 +1,7 @@
 <template>
 	<main>
-		<div id="app">
-			<router-view />
-			<TheFooter v-if="!hideFooter" />
-		</div>
+		<router-view />
+		<TheFooter v-if="!hideFooter" />
 	</main>
 </template>
 
