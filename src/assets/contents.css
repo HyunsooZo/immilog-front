@@ -996,7 +996,7 @@ color: #ed1651;
     border-bottom: 1px solid #e9e9e9;
 }
 .list-wrap .item {
-    padding: 10px 20px;
+    padding: 1.5rem 2rem;
     border-bottom: 1px solid #e9e9e9;
     background: #fff;
 }
@@ -1016,6 +1016,9 @@ color: #ed1651;
 .list-wrap.reply .re--reply .item:last-child {
     border-bottom: 1px solid #e9e9e9;
 }
+.list-wrap.reply .re--reply .item__more .more--reply {
+    font-size: 1.4rem;
+}
 .list-wrap.reply .re--reply .item__more .more--reply::after {
     content: '';
     display: inline-block;
@@ -1031,7 +1034,7 @@ color: #ed1651;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
 }
 .list-wrap .item .info__wrap .item__pic {
     overflow: hidden;
@@ -1083,7 +1086,7 @@ color: #ed1651;
     text-align: left;
 }
 .list-wrap .item .text__wrap [class*=list__item] .title {
-    padding-bottom: 4px;
+    padding-bottom: 0.8rem;
 }
 .list-wrap .item .text__wrap [class*=list__item] .text {
     line-height: 1.7rem;
@@ -1123,7 +1126,7 @@ color: #ed1651;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 8px 0 0;
+    margin: 1rem 0 0;
 }
 .list-wrap .item .util__wrap [class*=list__item],
 .list-wrap .item .util__wrap .item-fnc [class*=list__item] {
@@ -1145,6 +1148,7 @@ color: #ed1651;
 }
 .list-wrap .item .util__wrap .item-fnc [class*=list__item] .item__count {
     display: inline-block;
+    padding-left: 0.2rem;
     line-height: 1.6rem;
 }
 .list-wrap .item .util__wrap .item-fnc [class*=list__item].read::before {
