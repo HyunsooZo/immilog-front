@@ -74,7 +74,13 @@
 		<!-- 댓글 기능버튼 -->
 		<div class="flexbox-wrap border--bot">
 			<div class="sort__list">
-				<button type="button" class="button--select sort">최신순</button>
+				<button
+					type="button"
+					class="button--select sort"
+					@click="openSortingSelect"
+				>
+					{{ selectSortingValue.name }}
+				</button>
 			</div>
 			<div class="sort__list">
 				<button type="button" class="button--icon last-reply">
@@ -117,7 +123,8 @@
 					</div>
 					<div class="item-fnc">
 						<button type="button" class="list__item_button more">
-							<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
+							<i class="blind">더보기</i
+							><!-- //차단하기, 대화하기.. -->
 						</button>
 					</div>
 				</div>
@@ -129,7 +136,10 @@
 					<div class="info__wrap">
 						<div class="item-fnc">
 							<div class="list__item">
-								<button type="button" class="list__item_button user user--author">
+								<button
+									type="button"
+									class="list__item_button user user--author"
+								>
 									<!-- //원글작성자 댓글 .user--author -->
 									<em>원글작성자 대댓글</em>
 									<strong>닉네임</strong>
@@ -156,7 +166,8 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i
+								><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
@@ -192,7 +203,8 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i
+								><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
@@ -207,8 +219,39 @@
 			</div>
 		</div>
 	</div>
+	<SelectDialog
+		v-if="isSortingSelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 </template>
 
 <script setup>
 import TheHeader from '@/components/layouts/TheHeader.vue';
+import SelectDialog from '@/components/SelectDialog.vue';
+import { ref } from 'vue';
+
+const selectTitle = ref('정렬 방식 선택');
+const isSortingSelectClicked = ref(false);
+const selectSortingValue = ref({ name: '최신순', code: 'recent' });
+const selectList = [
+	{ name: '최신순', code: 'recent' },
+	{ name: '좋아요순', code: 'like' },
+	{ name: '조회순', code: 'view' },
+	{ name: '댓글순', code: 'comment' },
+];
+
+const selectedValue = value => {
+	selectSortingValue.value = value;
+	//정렬 변경
+};
+
+const openSortingSelect = () => {
+	isSortingSelectClicked.value = true;
+};
+const closeSelect = () => {
+	isSortingSelectClicked.value = false;
+};
 </script>
