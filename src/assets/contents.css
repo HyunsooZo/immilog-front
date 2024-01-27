@@ -436,6 +436,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     scroll-snap-type: x mandatory;
     scroll-snap-stop: normal;
     scroll-behavior: smooth;
+    border-bottom: 1px solid #e1e1e1;
 }
 .sub-menu-wrap::-webkit-scrollbar {
     display: none;
