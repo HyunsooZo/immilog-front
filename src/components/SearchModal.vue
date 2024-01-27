@@ -14,16 +14,36 @@
 								<span class="blind">관심 있는 글 검색</span>
 							</button>
 							<div class="input__inner-item">
-								<input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
-									placeholder="검색어를 입력 후 엔터를 눌러주세요" autocomplete="off" @keyup.enter="callSearchApi" />
-								<button v-if="searchInput !== ''" type="button" class="input__button-remove" title="텍스트삭제"
-									@click="searchInput = ''"></button>
+								<input
+									v-model="searchInput"
+									type="search"
+									id="inputSrch"
+									class="input__element input__element--search"
+									placeholder="검색어를 입력 후 엔터를 눌러주세요"
+									autocomplete="off"
+									@keyup.enter="callSearchApi"
+								/>
+								<button
+									v-if="searchInput !== ''"
+									type="button"
+									class="input__button-remove"
+									title="텍스트삭제"
+									@click="initializeSearchInput"
+								></button>
 							</div>
-							<button class="button button--back" role="link" @click="closeSearchModal">
+							<button
+								class="button button--back"
+								role="link"
+								@click="closeSearchModal"
+							>
 								<span class="blind">취소</span>
 							</button>
 						</div>
-						<button type="button" class="button-icon button--notice new" role="link">
+						<button
+							type="button"
+							class="button-icon button--notice new"
+							role="link"
+						>
 							<span>알림</span>
 						</button>
 					</div>
@@ -31,18 +51,33 @@
 				<!-- 검색결과 -->
 				<div class="search-result-wrap">
 					<ul class="search-result">
-						<li v-for="(item, index) in filteredSearchHistory.slice(0, 20)" :key="'history-' + index" class="item">
-							<button type="button" class="button button--result-recently" @click="reCallSearchApi(result)">
+						<li
+							v-for="(item, index) in filteredSearchHistory.slice(0, 20)"
+							:key="'history-' + index"
+							class="item"
+						>
+							<button
+								type="button"
+								class="button button--result-recently"
+								@click="reCallSearchApi(item)"
+							>
 								<em>{{ item }}</em>
 							</button>
 							<p class="item-fnc">
-								<button type="button" class="button button--del" @click="removeSearchHistory(index)">
+								<button
+									type="button"
+									class="button button--del"
+									@click="removeSearchHistory(index)"
+								>
 									<span class="blind">삭제</span>
 								</button>
 							</p>
 						</li>
-						<li v-for="(result, resultIndex) in filteredSearchResult.slice(0, 20)" :key="'result-' + resultIndex"
-							class="item">
+						<li
+							v-for="(result, resultIndex) in filteredSearchResult.slice(0, 20)"
+							:key="'result-' + resultIndex"
+							class="item"
+						>
 							<button type="button" class="button button--result">
 								<em>{{ result }}</em>
 							</button>
@@ -74,9 +109,8 @@ const callSearchApi = () => {
 	searchApiCalled.value = true;
 };
 
-const reCallSearchApi = result => {
-	searchInput.value = result;
-	console.log(result);
+const reCallSearchApi = item => {
+	searchInput.value = item;
 	searchApiCalled.value = true;
 	callSearchApi();
 };
@@ -84,21 +118,15 @@ const reCallSearchApi = result => {
 const stackSearchHistory = () => {
 	if (!searchInput.value) return;
 
-	// 로컬 스토리지에서 이전 검색 기록 불러오기
 	let storedHistory = localStorage.getItem('searchInputs');
-	if (!storedHistory) {
-		storedHistory = [];
-	} else {
-		storedHistory = JSON.parse(storedHistory);
-	}
+	storedHistory = storedHistory ? JSON.parse(storedHistory) : [];
 
-	// 새 검색어 추가
-	storedHistory.push(searchInput.value);
+	// 새 검색어를 배열의 맨 앞에 추가
+	storedHistory.unshift(searchInput.value);
 
-	// 로컬 스토리지에 저장
+	storedHistory = [...new Set(storedHistory)];
+
 	localStorage.setItem('searchInputs', JSON.stringify(storedHistory));
-
-	// 검색 기록 업데이트
 	searchHistory.value = storedHistory;
 };
 
@@ -108,6 +136,11 @@ const removeSearchHistory = index => {
 
 	// 로컬 스토리지 업데이트
 	localStorage.setItem('searchInputs', JSON.stringify(searchHistory.value));
+};
+
+const initializeSearchInput = () => {
+	searchInput.value = '';
+	searchApiCalled.value = false;
 };
 
 onMounted(() => {
