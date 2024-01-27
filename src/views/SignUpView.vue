@@ -221,7 +221,7 @@ import TheTopBox from '@/components/TheTopBox.vue';
 import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
 import { useLocationStore } from '@/stores/location';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
-
+import { useRouter } from 'vue-router';
 const imagePreview = ref('');
 const emailRegister = ref('');
 const userNickName = ref('');
@@ -234,12 +234,13 @@ const { sendRequest } = useAxios();
 const imageUrl = ref('');
 const imageFile = ref(null);
 const isLoading = ref(false);
-const isNickNameValid = ref(null);
+const isNickNameValid = ref(false);
 const alertValue = ref(false);
 const alertText = ref('');
 const nickNameCheckDone = ref(false);
 const passwordValidation = ref(false);
 const passwordMatch = ref(false);
+const router = useRouter();
 
 const isValidEmail = computed(() => {
 	// 간단한 이메일 형식 체크 정규 표현식
@@ -340,6 +341,7 @@ const register = async () => {
 			if (status === 201) {
 				console.log(data.data);
 				console.dir(data.data);
+				router.push('/email-verification');
 			} else {
 				openAlert('회원가입에 실패했습니다. 다시 시도해주세요.');
 				returnSubmitValues();
@@ -421,7 +423,7 @@ const checkNickName = async () => {
 			`/users/nicknames?nickname=${userNickName.value}`,
 		);
 		if (status === 200) {
-			isNickNameValid.value = data.data;
+			isNickNameValid.value = data.data ? true : false;
 			nickNameCheckDone.value = true;
 		}
 	} catch (error) {
@@ -464,12 +466,4 @@ watch(
 		nickNameCheckDone.value = false;
 	},
 );
-</script>
-
-<script>
-export default {
-	data() {
-		return { hideFooter: true, hideHeader: true };
-	},
-};
 </script>

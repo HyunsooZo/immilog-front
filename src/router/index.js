@@ -6,6 +6,7 @@ import MyPageView from '@/views/MyPageView.vue';
 import JobBoardView from '@/views/JobBoardView.vue';
 import ChatView from '@/views/ChatView.vue';
 import BoardView from '@/views/BoardView.vue';
+import EmailVerificationView from '@/views/EmailVerificationView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,11 +15,13 @@ const router = createRouter({
 			path: '/sign-up',
 			name: 'SignUp',
 			component: SignUpView,
+			meta: { hideFooter: true },
 		},
 		{
 			path: '/sign-in',
 			name: 'SignIn',
 			component: SignInView,
+			meta: { hideFooter: true },
 		},
 		{
 			path: '/',
@@ -44,6 +47,11 @@ const router = createRouter({
 			path: '/board',
 			name: 'Board',
 			component: BoardView,
+		},
+		{
+			path: '/email-verification',
+			name: 'EmailVerification',
+			component: EmailVerificationView,
 		},
 	],
 });
