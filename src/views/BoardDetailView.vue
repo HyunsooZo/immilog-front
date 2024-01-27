@@ -77,7 +77,7 @@
 				<button type="button" class="button--select sort">최신순</button>
 			</div>
 			<div class="sort__list">
-				<button type="button" class="button--icon last">
+				<button type="button" class="button--icon last-reply">
 					마지막 댓글로 이동
 				</button>
 			</div>
@@ -118,8 +118,7 @@
 					</div>
 					<div class="item-fnc">
 						<button type="button" class="list__item_button more">
-							<i class="blind">더보기</i
-							><!-- //차단하기, 대화하기.. -->
+							<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 						</button>
 					</div>
 				</div>
@@ -131,10 +130,7 @@
 					<div class="info__wrap">
 						<div class="item-fnc">
 							<div class="list__item">
-								<button
-									type="button"
-									class="list__item_button user user--author"
-								>
+								<button type="button" class="list__item_button user user--author">
 									<!-- //원글작성자 댓글 .user--author -->
 									<em>원글작성자 대댓글</em>
 									<strong>닉네임</strong>
@@ -161,8 +157,7 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i
-								><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
@@ -198,8 +193,7 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i
-								><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
