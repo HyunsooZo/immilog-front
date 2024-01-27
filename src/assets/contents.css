@@ -233,7 +233,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     flex: 1;
     height: 100%;
     text-align: left;
-    line-height: 38px;
+    line-height: 40px;
     color: #999;
 }
 .search-wrap .input__inner-item {
@@ -1087,6 +1087,7 @@ color: #ed1651;
 }
 .list-wrap .item .text__wrap [class*=list__item] .text {
     line-height: 1.7rem;
+    font-size: 1.4rem;
 }
 .list-wrap .item .text__wrap [class*=list__item].text-link .title {
     overflow: hidden;
