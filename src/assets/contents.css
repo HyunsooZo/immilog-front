@@ -1,4 +1,5 @@
-@charset "UTF-8"; /* #3f51b5 #00bcd4 */
+@charset "UTF-8";
+/* #3f51b5 #00bcd4 */
 /* class
 구조 a-a > a__a > a__a_a
 상태 a--on
@@ -6,6 +7,55 @@
 background: rgb(63,81,181);
 background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%);
 */
+/* document.querySelector('path').getTotalLength(); */
+.svg--circle {
+    width: 100px;
+    height: 100px;
+    stroke-dasharray: 497px;/* path 전체 길이 값 :여러 값을 적으면 점선 */
+    stroke-dashoffset: 100;/* path의 시작점 */
+    transform: rotate(-90deg);/* 시작지점 */
+    animation: mvCircle 5s linear infinite;/* alternate */
+    fill: #fff;
+}
+@keyframes mvCircle {
+    0%   {stroke-dashoffset: 497px;}
+    50%  {stroke-dashoffset: 0;}
+    100% {stroke-dashoffset: -497px;}
+}
+.svg--logo {
+    font-family: 'roboto';
+    font-size: 100px;
+    font-weight: 500;
+    width: 100%;
+    height: 100%;
+    animation: logoStroke 5s linear infinite;
+    fill: rgba(63, 81, 181, 1);
+}
+@keyframes logoStroke {
+  0% {
+    stroke-dashoffset: 25%;
+    stroke-dasharray: 0 50%;/* 점선사이 공간의 길이 */
+    fill: rgba(63, 81, 181, 0);
+    stroke: rgba(63, 81, 181, 1);
+    stroke-width: 2;
+  }
+  40% {
+    fill: rgba(63, 81, 181, 0);
+    stroke: rgba(63, 81, 181, 1);
+  }
+  60% {
+    fill: rgba(63, 81, 181, 0);
+    stroke: rgba(63, 81, 181, 1);
+  }
+  80% {
+    stroke-dashoffset: -25%;
+    stroke-dasharray: 50% 0;
+    fill: rgba(63, 81, 181, 1);
+    stroke: rgba(63, 81, 181, 0);
+    stroke-width: 0;
+  }
+}
+/*  */
 .blind {
     overflow: hidden;
     position: absolute;
@@ -30,6 +80,9 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 }
 .point-color__2 {
     color: #00bcd4;
+}
+.point-color__3 {
+    color: #ed1651;
 }
 
 #app {
@@ -146,7 +199,44 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 .footer .util-item-wrap .util__item .item.my svg {
     width: 23px;
 }
-
+/* 완료 */
+.msg-wrap {
+    padding: 8rem 2rem 0;
+    text-align: center;
+}
+.msg-wrap .item__icon {
+    display: inline-block;
+    margin: 0 auto 4rem;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid #666;
+}
+.msg-wrap .item__icon.item__icon--check {
+    background: url("@/assets/images/icon-check.gif") no-repeat 50% center / 100% auto;
+}
+.msg-wrap .item__icon.item__icon--error {
+    background: url("@/assets/images/icon-error.gif") no-repeat 50% center / 100% auto;
+}
+.msg-wrap .item__icon.item__icon--warning {
+    background: url("@/assets/images/icon-warning.gif") no-repeat 50% center / 100% auto;
+}
+.msg-wrap .item__msg {
+    font-size: 2rem;
+    color: #333;
+}
+.msg-wrap .item__icon--check + .item__msg em {
+    color: #3f51b5;
+}
+.msg-wrap .item__icon--error + .item__msg em {
+    color: #ed1651;
+}
+.msg-wrap .item__icon--warning + .item__msg em {
+    color: #00bcd4;
+}
+.msg-wrap .item__description {
+    margin-top: 0.8rem;
+}
 /* 검색 */
 .search-wrap {
     padding: 1.4rem 0 1rem;
