@@ -452,6 +452,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 }
 .sub-menu-wrap .sub-menu__list .button {
     padding: 6px 10px;
+    line-height: 1.4rem;
     background: #e1e1e1;
     border-radius: 20px;
 }
@@ -486,7 +487,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     display: inline-block;
     padding: 6px;
     font-size: 1.4rem;
-    line-height: 1.2;
+    line-height: 1.6rem;
     color: #333;
 }
 .button.button--primary {
