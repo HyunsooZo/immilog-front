@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-const { alertValue, alertText } = defineProps(['alertValue', 'alertText']);
+const { alertText } = defineProps(['alertText']);
 
 const emits = defineEmits(['update:alertValue']);
 
