@@ -1,6 +1,6 @@
 <template>
 	<!-- searchdialog -->
-	<div class="modal search--dialog">
+	<div class="modal modal--full search--dialog">
 		<div class="modal-content">
 			<div class="modal-body">
 				<!-- 검색 -->
@@ -14,36 +14,16 @@
 								<span class="blind">관심 있는 글 검색</span>
 							</button>
 							<div class="input__inner-item">
-								<input
-									v-model="searchInput"
-									type="search"
-									id="inputSrch"
-									class="input__element input__element--search"
-									placeholder="검색어를 입력 후 엔터를 눌러주세요"
-									autocomplete="off"
-									@keyup.enter="callSearchApi"
-								/>
-								<button
-									v-if="searchInput !== ''"
-									type="button"
-									class="input__button-remove"
-									title="텍스트삭제"
-									@click="initializeSearchInput"
-								></button>
+								<input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
+									placeholder="검색어를 입력 후 엔터를 눌러주세요" autocomplete="off" @keyup.enter="callSearchApi" />
+								<button v-if="searchInput !== ''" type="button" class="input__button-remove" title="텍스트삭제"
+									@click="initializeSearchInput"></button>
 							</div>
-							<button
-								class="button button--back"
-								role="link"
-								@click="closeSearchModal"
-							>
+							<button class="button button--back" role="link" @click="closeSearchModal">
 								<span class="blind">취소</span>
 							</button>
 						</div>
-						<button
-							type="button"
-							class="button-icon button--notice new"
-							role="link"
-						>
+						<button type="button" class="button-icon button--notice new" role="link">
 							<span>알림</span>
 						</button>
 					</div>
@@ -51,33 +31,18 @@
 				<!-- 검색결과 -->
 				<div class="search-result-wrap">
 					<ul class="search-result">
-						<li
-							v-for="(item, index) in filteredSearchHistory.slice(0, 20)"
-							:key="'history-' + index"
-							class="item"
-						>
-							<button
-								type="button"
-								class="button button--result-recently"
-								@click="reCallSearchApi(item)"
-							>
+						<li v-for="(item, index) in filteredSearchHistory.slice(0, 20)" :key="'history-' + index" class="item">
+							<button type="button" class="button button--result-recently" @click="reCallSearchApi(item)">
 								<em>{{ item }}</em>
 							</button>
 							<p class="item-fnc">
-								<button
-									type="button"
-									class="button button--del"
-									@click="removeSearchHistory(index)"
-								>
+								<button type="button" class="button button--del" @click="removeSearchHistory(index)">
 									<span class="blind">삭제</span>
 								</button>
 							</p>
 						</li>
-						<li
-							v-for="(result, resultIndex) in filteredSearchResult.slice(0, 20)"
-							:key="'result-' + resultIndex"
-							class="item"
-						>
+						<li v-for="(result, resultIndex) in filteredSearchResult.slice(0, 20)" :key="'result-' + resultIndex"
+							class="item">
 							<button type="button" class="button button--result">
 								<em>{{ result }}</em>
 							</button>

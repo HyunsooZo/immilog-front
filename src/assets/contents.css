@@ -701,7 +701,26 @@ strong + .button-text {
 .modal-footer .button-wrap .button.button--cancle {
     flex: 1;
 }
-
+/* full modal */
+.modal.modal--full::before {
+    content: none;
+}
+.modal.modal--full .modal-content {
+    position: inherit;
+    top: auto;
+    left: auto;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    border-radius: 0;
+    transform: inherit;
+}
+.modal.modal--full .modal-body {
+    max-height: 100vh;
+    margin: 0;
+    padding: 0 0 20px;
+}
+/* select dialog */
 .select--dialog .modal-content {
     top: auto;
     left: 0;
@@ -718,25 +737,7 @@ strong + .button-text {
 .select--dialog .modal-body .list-wrap .item:last-child {
     border-bottom: none;
 }
-
-.search--dialog.modal::before {
-    content: none;
-}
-.search--dialog .modal-content {
-    position: inherit;
-    top: auto;
-    left: auto;
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 100%;
-    border-radius: 0;
-    transform: inherit;
-}
-.search--dialog .modal-body {
-    max-height: 100vh;
-    margin: 0;
-    padding: 0 0 20px;
-}
+/* search dialog */
 .search--dialog .modal-body .search-wrap {
     position: sticky;
     top: 0;
