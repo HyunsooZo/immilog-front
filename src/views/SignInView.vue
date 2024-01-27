@@ -147,7 +147,9 @@ const signIn = async (latitude, longitude) => {
 			localStorage.setItem('accessToken', data.data.accessToken);
 		} else {
 			password.value = '';
-			openAlert('이메일과 비밀번호를 확인해 주세요.');
+			openAlert(
+				'로그인에 실패했습니다. <br/> 이메일과 비밀번호를 확인해 주세요.',
+			);
 		}
 	} catch (error) {
 		console.log(error);

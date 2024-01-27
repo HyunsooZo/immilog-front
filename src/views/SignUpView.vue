@@ -144,28 +144,19 @@
 					</div>
 				</div>
 				<!-- 에러 메시지 -->
-				<p
-					v-if="submitted && !passwordValidation"
-					class="input__error"
-					aria-live="assertive"
-				>
-					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
-				</p>
 
 				<!-- input__wrap -->
-				<div class="input-wrap" aria-label="required">
-					<em class="input__title">비밀번호 확인</em>
-					<div class="input__wrap underline-type">
-						<div class="input__item">
-							<div class="input__item_inner">
-								<input
-									v-model="userPasswordConfirm"
-									type="password"
-									class="input__element"
-									placeholder="비밀번호 확인"
-									required
-								/>
-							</div>
+
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input
+								v-model="userPasswordConfirm"
+								type="password"
+								class="input__element"
+								placeholder="비밀번호 확인"
+								required
+							/>
 						</div>
 					</div>
 				</div>
@@ -177,11 +168,18 @@
 				>
 					비밀번호가 일치하지 않습니다.
 				</p>
+				<p
+					v-if="submitted && !passwordValidation"
+					class="input__error"
+					aria-live="assertive"
+				>
+					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
+				</p>
 			</div>
 
 			<!-- country -->
 			<div class="input-wrap" aria-label="required">
-				<em class="input__title">지역 확인</em>
+				<em class="input__title">접속 국가</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
@@ -222,6 +220,7 @@ import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
 import { useLocationStore } from '@/stores/location';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import { useRouter } from 'vue-router';
+
 const imagePreview = ref('');
 const emailRegister = ref('');
 const userNickName = ref('');
@@ -316,6 +315,9 @@ const register = async () => {
 	if (!passwordMatch.value || !passwordValidation.value) {
 		return;
 	}
+	if (!isNickNameValid.value) {
+		openAlert('닉네임 중복체크를 해주세요.');
+	}
 	if (
 		emailRegister.value &&
 		userNickName.value &&
@@ -323,7 +325,7 @@ const register = async () => {
 		userPasswordConfirm.value &&
 		passwordValidation.value &&
 		passwordMatch.value &&
-		isNickNameValid
+		isNickNameValid.value
 	) {
 		try {
 			isLoading.value = true;
@@ -343,7 +345,7 @@ const register = async () => {
 				console.dir(data.data);
 				router.push('/email-verification');
 			} else {
-				openAlert('회원가입에 실패했습니다. 다시 시도해주세요.');
+				openAlert(data.message);
 				returnSubmitValues();
 			}
 		} catch (error) {
@@ -352,6 +354,7 @@ const register = async () => {
 		}
 	} else {
 		returnSubmitValues();
+
 		return;
 	}
 };
