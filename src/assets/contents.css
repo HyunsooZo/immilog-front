@@ -431,7 +431,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 
 /* sub menu */
 .sub-menu-wrap {
-    padding: 15px 16px;
+    padding: 1.5rem 0;
     overflow: auto hidden;
     scroll-snap-type: x mandatory;
     scroll-snap-stop: normal;
@@ -442,8 +442,9 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     display: none;
 }
 .sub-menu-wrap .sub-menu__inner {
-    display: flex;
+    display: inline-block;
     width: max-content;
+    padding: 0 1.6rem;
 }
 .sub-menu-wrap .sub-menu__list {
     display: inline-flex;
