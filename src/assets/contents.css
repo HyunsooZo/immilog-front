@@ -1001,13 +1001,13 @@ color: #ed1651;
     background: #fff;
 }
 .list-wrap.reply .item .info__wrap {
-    margin-bottom: 4px;
+    margin-bottom: 0.6rem;
 }
 .list-wrap.reply .item .util__wrap {
-    margin-top: 4px;
+    margin-top: 0.6rem;
 }
 .list-wrap.reply .re--reply  .item {
-    padding: 10px 20px 10px 35px;
+    padding-left: 3.5rem;
     border-bottom: none;
 }
 .list-wrap.reply .re--reply .item:not(:last-child) {
