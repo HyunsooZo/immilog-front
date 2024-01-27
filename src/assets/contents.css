@@ -446,7 +446,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     width: max-content;
 }
 .sub-menu-wrap .sub-menu__list {
-    /* display: inline-flex; */
+    display: inline-flex;
     margin: 0 4px;
 }
 .sub-menu-wrap .sub-menu__list .button {
