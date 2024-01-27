@@ -4,7 +4,7 @@
 	<div class="search-wrap">
 		<div class="input-wrap">
 			<p class="logo-wrap">
-				<img src="@/assets/images/icon-komeet.png" alt="ko-meet" @click="onHome" />
+				<img src="@/assets/images/icon-logo.png" alt="ko-meet" @click="onHome" />
 			</p>
 			<div class="input__inner">
 				<button class="button button--search" role="link" @click="openSearchModal">
