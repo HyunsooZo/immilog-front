@@ -108,8 +108,7 @@
 							<span class="item__count">10</span>
 						</button>
 						<button type="button" class="list__item cmt">
-							<i class="blind">댓글</i>
-							<span class="item__count">10</span>
+							<span class="item__count">대댓글</span>
 						</button>
 						<p class="list__item past">
 							<i class="blind">작성시간</i>
@@ -199,6 +198,12 @@
 					</div>
 				</div>
 				<!-- //.item -->
+				<!-- n개 이상 대댓글 더보기 -->
+				<div class="item item__more">
+					<button type="button" class="list__item_button more--reply">
+						<span>대댓글 <em>n</em>개 더보기</span>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
