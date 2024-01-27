@@ -74,11 +74,7 @@
 		<!-- 댓글 기능버튼 -->
 		<div class="flexbox-wrap border--bot">
 			<div class="sort__list">
-				<button
-					type="button"
-					class="button--select sort"
-					@click="openSortingSelect"
-				>
+				<button type="button" class="button--select sort" @click="openSortingSelect">
 					{{ selectSortingValue.name }}
 				</button>
 			</div>
@@ -123,8 +119,7 @@
 					</div>
 					<div class="item-fnc">
 						<button type="button" class="list__item_button more">
-							<i class="blind">더보기</i
-							><!-- //차단하기, 대화하기.. -->
+							<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 						</button>
 					</div>
 				</div>
@@ -136,13 +131,10 @@
 					<div class="info__wrap">
 						<div class="item-fnc">
 							<div class="list__item">
-								<button
-									type="button"
-									class="list__item_button user user--author"
-								>
+								<button type="button" class="list__item_button user user--author">
 									<!-- //원글작성자 댓글 .user--author -->
 									<em>원글작성자 대댓글</em>
-									<strong>닉네임</strong>
+									<strong>원글작성자 닉네임</strong>
 								</button>
 							</div>
 						</div>
@@ -166,8 +158,7 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i
-								><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
@@ -203,8 +194,7 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i
-								><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
@@ -219,13 +209,8 @@
 			</div>
 		</div>
 	</div>
-	<SelectDialog
-		v-if="isSortingSelectClicked"
-		:title="selectTitle"
-		:list="selectList"
-		@close="closeSelect"
-		@select:value="selectedValue"
-	/>
+	<SelectDialog v-if="isSortingSelectClicked" :title="selectTitle" :list="selectList" @close="closeSelect"
+		@select:value="selectedValue" />
 </template>
 
 <script setup>
