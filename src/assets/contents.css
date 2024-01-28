@@ -284,6 +284,9 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     width: 23px;
 }
 /* 완료 */
+.msg-wrap + .button-wrap {
+    margin: 5rem 2rem 0;
+}
 .msg-wrap {
     padding: 8rem 2rem 0;
     text-align: center;
@@ -650,7 +653,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 /* button */
 .button-wrap {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     margin:24px 0;
 }
 .button-wrap.link-type {
@@ -767,6 +770,12 @@ strong + .button-text {
 }
 .button-wrap .button.button--disabled {
     background: #ced3d9;
+}
+.button-wrap .button.button--primary {
+    flex: inherit;
+    min-width: 100px;
+    background: #fff;
+    color: #333;
 }
 .button--icon, .button--select {
     position: relative;

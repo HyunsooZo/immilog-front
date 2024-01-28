@@ -32,6 +32,10 @@
 			</p>
 		</div>
 
+		<div class="button-wrap">
+			<button class="button button--primary" role="link">확인</button>
+		</div>
+
 	</div>
 </template>
 
