@@ -63,7 +63,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     100% {stroke-dashoffset: 0;}
 }
 .svg--logo {
-    font-family: 'LeckerliOne-Regular', 'roboto';
+    font-family: 'LeckerliOne', 'roboto';
     font-size: 40px;
     font-weight: 500;
     width: 100%;
