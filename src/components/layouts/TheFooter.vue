@@ -6,7 +6,7 @@
 			<li v-for="(item, index) in menuItems" :key="index" class="util__item">
 				<button type="button" :class="{ active: activeItem === index, [item.styleClass]: true }"
 					@click="onMenuItemClick(index)">
-					<svg xmlns="http://www.w3.org/2000/svg" :width="16" :height="16" :viewBox="item.viewBox" aria-hidden="true">
+					<svg :width="16" :height="16" :viewBox="item.viewBox" aria-hidden="true">
 						<path v-for="(path, pathIndex) in item.paths" :key="pathIndex" :d="path" />
 					</svg>
 					<span>{{ item.label }}</span>

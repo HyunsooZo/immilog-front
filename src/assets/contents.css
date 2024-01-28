@@ -7,47 +7,84 @@
 background: rgb(63,81,181);
 background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%);
 */
-/* document.querySelector('path').getTotalLength(); */
-.svg--circle {
-    width: 100px;
-    height: 100px;
+.svg--item-wrap {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+.svg--item-wrap svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    fill: transparent;
+    stroke-width: 6;
+}
+/* viewBox="min-x, min-y, width, height" */
+/* document.querySelector('.svg--*** path').getTotalLength(); */
+.svg--item-wrap .svg--circle {
     stroke-dasharray: 497px;/* path 전체 길이 값 :여러 값을 적으면 점선 */
     stroke-dashoffset: 100;/* path의 시작점 */
     transform: rotate(-90deg);/* 시작지점 */
-    animation: mvCircle 5s linear infinite;/* alternate */
-    fill: #fff;
+    animation: mvCircle 3s linear infinite;/* alternate */
+    animation-fill-mode: forwards;
+    stroke: #666;
+    stroke-width: 4;
 }
 @keyframes mvCircle {
     0%   {stroke-dashoffset: 497px;}
-    50%  {stroke-dashoffset: 0;}
-    100% {stroke-dashoffset: -497px;}
+    /* 50%  {stroke-dashoffset: 0;} */
+    /* 100% {stroke-dashoffset: -497px;} */
+    33%  {stroke-dashoffset: 0;}
+    100% {stroke-dashoffset: 0;}
+}
+.svg--item-wrap .svg--check {
+    stroke: #3f51b5;
+}
+.svg--item-wrap .svg--error {
+    stroke: #ed1651;
+}
+.svg--item-wrap .svg--warning {
+    stroke: #00bcd4;
+}
+.svg--item-wrap .svg--check,
+.svg--item-wrap .svg--error,
+.svg--item-wrap .svg--warning {
+    stroke-dasharray: 150px;/* path 전체 길이 값 :여러 값이면 점선 */
+    stroke-dashoffset: 100;/* path의 시작점 */
+    animation: mvCheck 3s linear infinite;/* infinite */
+    animation-fill-mode: forwards;
+}
+@keyframes mvCheck {
+    0%   {stroke-dashoffset: 150px;}
+    33%  {stroke-dashoffset: 150px;}
+    67%  {stroke-dashoffset: 0;}
+    100% {stroke-dashoffset: 0;}
 }
 .svg--logo {
-    font-family: 'roboto';
-    font-size: 100px;
+    font-family: 'Leckerli One', 'roboto';
+    font-size: 40px;
     font-weight: 500;
     width: 100%;
     height: 100%;
-    animation: logoStroke 5s linear infinite;
+    animation: textStroke 5s linear infinite;
+    animation-fill-mode: forwards;
     fill: rgba(63, 81, 181, 1);
 }
-@keyframes logoStroke {
+@keyframes textStroke {
   0% {
-    stroke-dashoffset: 25%;
+    stroke-dashoffset: 25%;/* path의 시작점 */
     stroke-dasharray: 0 50%;/* 점선사이 공간의 길이 */
     fill: rgba(63, 81, 181, 0);
     stroke: rgba(63, 81, 181, 1);
     stroke-width: 2;
   }
-  40% {
-    fill: rgba(63, 81, 181, 0);
-    stroke: rgba(63, 81, 181, 1);
-  }
   60% {
     fill: rgba(63, 81, 181, 0);
     stroke: rgba(63, 81, 181, 1);
   }
-  80% {
+  100% {
     stroke-dashoffset: -25%;
     stroke-dasharray: 50% 0;
     fill: rgba(63, 81, 181, 1);
@@ -207,23 +244,22 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 .msg-wrap .item__icon {
     display: inline-block;
     margin: 0 auto 4rem;
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 2px solid #666;
 }
-.msg-wrap .item__icon.item__icon--check {
-    background: url("@/assets/images/icon-check.gif") no-repeat 50% center / 100% auto;
+.msg-wrap .item__icon .svg--item-wrap [class^=svg--] {
+    display: none;
 }
-.msg-wrap .item__icon.item__icon--error {
-    background: url("@/assets/images/icon-error.gif") no-repeat 50% center / 100% auto;
-}
-.msg-wrap .item__icon.item__icon--warning {
-    background: url("@/assets/images/icon-warning.gif") no-repeat 50% center / 100% auto;
+.msg-wrap .item__icon .svg--item-wrap .svg--circle,
+.msg-wrap .item__icon.item__icon--check .svg--item-wrap .svg--check,
+.msg-wrap .item__icon.item__icon--error .svg--item-wrap .svg--error,
+.msg-wrap .item__icon.item__icon--warning .svg--item-wrap .svg--warning {
+    display: block;
 }
 .msg-wrap .item__msg {
     font-size: 2rem;
     color: #333;
+}
+.msg-wrap .item__msg em {
+    font-weight: 500;
 }
 .msg-wrap .item__icon--check + .item__msg em {
     color: #3f51b5;
