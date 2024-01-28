@@ -1,7 +1,7 @@
 <template>
 	<div class="content">
 		<div class="msg-wrap">
-			<i class="item__icon item__icon--check">
+			<i class="item__icon item__icon--error">
 				<!-- //완료 .item__icon--check / 취소 .item__icon--error / 알림 .item__icon--warning -->
 				<div class="svg--item-wrap">
 					<svg class="svg--circle" viewBox="0 0 168 168">
