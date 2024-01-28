@@ -315,8 +315,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     padding: 10px 0;
 }
 .search-wrap .logo-wrap img {
-    background: linear-gradient(45deg, #3f51b5 25%, #00bcd4 50%, #3f51b5 75%, #001586 100%);
-    /* background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #23a6d5, #e73c7e); */
+    background: linear-gradient(45deg, #3f51b5 50%, #00bcd4 70%, #3f51b5 100%);
 	background-size: 200% auto;
 	animation: animateLogo 5s linear infinite;
 }
