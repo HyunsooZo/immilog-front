@@ -1,6 +1,6 @@
 <template>
 	<div class="content">
-		<div class="splash">
+		<div class="splash"><!-- //.color--bg -->
 			<div class="svg--wrap">
 				<link href="https://fonts.googleapis.com/css?family=Leckerli+One" rel="stylesheet">
 				<svg class="svg--logo" viewBox="0 0 350 100">
