@@ -53,10 +53,10 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 .svg--item-wrap .svg--warning {
     stroke-dasharray: 150px;/* path 전체 길이 값 :여러 값이면 점선 */
     stroke-dashoffset: 100;/* path의 시작점 */
-    animation: mvCheck 3s linear infinite;/* infinite */
+    animation: mvItem 3s linear infinite;/* infinite */
     animation-fill-mode: forwards;
 }
-@keyframes mvCheck {
+@keyframes mvItem {
     0%   {stroke-dashoffset: 150px;}
     33%  {stroke-dashoffset: 150px;}
     67%  {stroke-dashoffset: 0;}
@@ -188,15 +188,15 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 }
 .header h1 em {
     color: #333;
-    background: linear-gradient(45deg, #3f51b5 25%, #00bcd4 50%, #3f51b5 75%, #001586 100%);
+    background: linear-gradient(45deg, #3f51b5 50%, #00bcd4 70%, #3f51b5 100%);
     background-size: 200% auto;
     background-clip: text;
     text-fill-color: transparent;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: animateBg 5s linear infinite;
+    animation: animateLogo 5s linear infinite;
 }
-@keyframes animateBg {
+@keyframes animateLogo {
     to {
         background-position: 200% center;
     }
@@ -318,7 +318,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     background: linear-gradient(45deg, #3f51b5 25%, #00bcd4 50%, #3f51b5 75%, #001586 100%);
     /* background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #23a6d5, #e73c7e); */
 	background-size: 200% auto;
-	animation: animateBg 5s linear infinite;
+	animation: animateLogo 5s linear infinite;
 }
 .search-wrap .input-wrap {
     display: flex;
