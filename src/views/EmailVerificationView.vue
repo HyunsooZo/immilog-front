@@ -22,7 +22,9 @@
 				</div>
 			</i>
 			<p class="item__msg"><em>회원가입이 완료</em> 되었습니다.</p>
-			<p class="item__description">가입한 이메일에서 인증 확인 후 완료 됩니다.</p>
+			<p class="item__description">
+				가입한 이메일에서 인증 확인 후 완료 됩니다.
+			</p>
 		</div>
 
 	</div>
