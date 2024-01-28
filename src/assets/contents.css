@@ -74,7 +74,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
 }
 @keyframes textStroke {
   0% {
-    stroke-dashoffset: 25%;/* path의 시작점 */
+    stroke-dashoffset: 0%;/* path의 시작점 */
     stroke-dasharray: 0 50%;/* 점선사이 공간의 길이 */
     fill: rgba(63, 81, 181, 0);
     stroke: rgba(63, 81, 181, 1);
@@ -85,7 +85,7 @@ background: linear-gradient(45deg, rgba(63,81,181,1) 0%, rgba(0,188,212,1) 100%)
     stroke: rgba(63, 81, 181, 1);
   }
   67% {
-    stroke-dashoffset: -25%;
+    stroke-dashoffset: -0%;
     stroke-dasharray: 50% 0;
     fill: rgba(63, 81, 181, 1);
     stroke: rgba(63, 81, 181, 0);
