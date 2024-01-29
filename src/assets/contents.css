@@ -55,6 +55,7 @@ strong + .button-text {
 }
 .button-text {
     display: inline-block;
+    font-size: 1.4rem;
 }
 .button-text::after {
     content: '';
@@ -927,9 +928,6 @@ color: #ed1651;
 }
 .list-wrap.reply .re--reply .item:last-child {
     border-bottom-color: #e9e9e9;
-}
-.list-wrap.reply .re--reply .item__more .button-text {
-    font-size: 1.4rem;
 }
 /* 작성자정보 */
 .list-wrap .item .info__wrap {
