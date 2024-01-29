@@ -29,7 +29,12 @@
 
 		<!-- 목록 -->
 		<!-- <BoardContent /> -->
-		<DummyBoard />
+		<div class="list-wrap">
+			<p class="list__title">
+				<span> 카테고리 </span>
+			</p>
+			<DummyBoard />
+		</div>
 	</div>
 </template>
 
