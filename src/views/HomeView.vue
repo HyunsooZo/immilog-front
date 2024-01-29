@@ -54,7 +54,16 @@
 		<!-- sub menu -->
 		<CountryList />
 		<!-- 목록 -->
-		<BoardContent />
+		<div class="list-wrap">
+			<p class="list__title">
+				<span>{{ selectCategoryValue.name }} </span>
+			</p>
+			<BoardContent
+				v-for="(item, index) in state.posts"
+				:key="index"
+				:post="item"
+			/>
+		</div>
 	</div>
 
 	<SelectDialog
@@ -71,8 +80,9 @@
 import { nextTick, onMounted, ref } from 'vue';
 import SelectDialog from '@/components/SelectDialog.vue';
 import SearchBar from '@/components/SearchBar.vue';
-import BoardContent from '@/components/BoardContent.vue';
 import CountryList from '@/components/CountryList.vue';
+import BoardContent from '@/components/BoardContent.vue';
+import useAxios from '@/composables/useAxios.js';
 
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
@@ -82,6 +92,7 @@ const isCategorySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
 const selectCategoryValue = ref({ name: '전체', code: 'all' });
 const selectSortingValue = ref({ name: '최신순', code: 'recent' });
+const { sendRequest } = useAxios();
 const sortingList = [
 	{ name: '최신순', code: 'recent' },
 	{ name: '좋아요순', code: 'like' },
@@ -101,6 +112,12 @@ let menus = [
 	{ label: '인기글', active: ref(false) },
 ];
 
+const state = ref({
+	posts: [],
+	pagination: {},
+	loading: false,
+});
+
 const selectMenu = selectedMenu => {
 	selectedMenu.active.value = true;
 	menus
@@ -112,10 +129,6 @@ const selectMenu = selectedMenu => {
 		updateMenuBar();
 	});
 };
-
-// const callSearchApi = () => {
-// 	console.log('callSearchApi');
-// };
 
 const openCategorySelect = () => {
 	nextTick(() => {
@@ -158,7 +171,34 @@ const inquireBoardList = (category, sorting) => {
 	console.log('inquireBoardList');
 };
 
+// const loadMoreData = () => {
+// 	if (!state.value.pagination.last && !state.value.loading) {
+// 		state.value.loading = true;
+// 		const nextPage = state.value.pagination.number + 1;
+// 		fetchBoardList(nextPage);
+// 	}
+// };
+
+const fetchBoardList = async nextPage => {
+	state.value.loading = true;
+	try {
+		const { status, data } = await sendRequest(
+			'get',
+			`/posts?country=${'ALL'}&sortingMethod=${'CREATED_DATE'}&isPublic=${'Y'}&page=${nextPage}`,
+		);
+		if (status === 200) {
+			state.value.posts = data.data.content;
+			state.value.pagination = data.data.pageable;
+		}
+	} catch (error) {
+		console.log(error);
+	} finally {
+		state.value.loading = false;
+	}
+};
+
 onMounted(() => {
 	updateMenuBar();
+	fetchBoardList(0);
 });
 </script>
