@@ -63,6 +63,7 @@
 				:key="index"
 				:post="item"
 			/>
+			<DummyBoard />
 		</div>
 	</div>
 
@@ -83,6 +84,7 @@ import SearchBar from '@/components/SearchBar.vue';
 import CountryList from '@/components/CountryList.vue';
 import BoardContent from '@/components/BoardContent.vue';
 import useAxios from '@/composables/useAxios.js';
+import DummyBoard from '@/components/DummyBoard.vue';
 
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
