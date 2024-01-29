@@ -37,6 +37,8 @@
 						<span>설정 > 비밀번호 변경, 차단사용자 목록 차단/해제</span>
 					</button>
 				</li>
+			</ul>
+			<ul>
 				<li class="item">
 					<button type="button" class="button button-text">
 						<span>공지사항</span>
