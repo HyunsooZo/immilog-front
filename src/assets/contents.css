@@ -563,12 +563,14 @@ strong + .button-text {
 .modal-header {
     display: flex;
     align-items: center;
+    min-height: 5rem;
     border-bottom: 1px solid #e5e5e5;
 }
 .modal-header .modal-title {
     flex: 1;
     padding: 0 0 0 1.5rem;
     font-size: 1.4rem;
+    font-weight: 500;
 }
 .modal-header .button-icon {
     padding: 1rem;
@@ -577,7 +579,7 @@ strong + .button-text {
     overflow-y: auto;
     max-height: 35rem;
     margin: 2rem 0;
-    padding: 0 15px;
+    padding: 0 1.5rem;
 }
 .modal-footer .button-wrap {
     margin: 0 1.2rem 1.5rem;
@@ -617,11 +619,12 @@ strong + .button-text {
     bottom: 0;
     min-width: 100%;
     max-width: 100%;
-    max-height: calc(100% - 10rem);
-    border-radius: 8px 8px 0 0;
+    max-height: calc(100% - 5rem);
+    border-radius: 1.5rem 1.5rem 0 0;
     transform: none;
 }
 .select--dialog .modal-body {
+    max-height: 25rem;
     margin: 0;
 }
 .select--dialog .modal-body .list-wrap .item:last-child {
