@@ -1,77 +1,128 @@
 <template>
-	<div class="list-wrap">
-		<p class="list__title">
-			<span>카테고리</span>
-		</p>
-		<div class="item">
-			<div class="info__wrap">
-				<div class="item__pic">
-					<img src="" alt="" />
-				</div>
-				<div class="item-fnc">
-					<div class="list__item">
-						<button type="button" class="list__item_button ctg">
-							<em>국가</em>
-							<em>지역</em>
-							<strong>카테고리</strong>
-						</button>
-					</div>
-					<div class="list__item">
-						<button type="button" class="list__item_button user">
-							<em>작성자</em>
-							<strong>닉네임</strong>
-						</button>
-					</div>
-				</div>
+	<div class="item">
+		<div class="info__wrap">
+			<div class="item__pic">
+				<img src="" alt="" />
 			</div>
-			<div class="text__wrap">
-				<button type="button" class="list__item_button" @click="onBoardDetail(1)">
-					<p class="title">
-						글제목 글제목 글제목 글제목 글제목 글제목 글제목 글제목 글제목
-					</p>
-					<p class="text">
-						내용미리보기 내용미리보기 내용미리보기 내용미리보기 내용미리보기
-						내용미리보기 내용미리보기 내용미리보기 내용미리보기 내용미리보기 내용미리보기 내용미리보기
-					</p>
-				</button>
-			</div>
-			<div class="util__wrap">
-				<div class="item-fnc">
-					<p class="list__item read">
-						<i class="blind">조회수</i>
-						<span class="item__count">10</span>
-					</p>
-					<button type="button" class="list__item_button like active">
-						<!-- //활성화 .active -->
-						<i class="blind">좋아요</i>
-						<span class="item__count">10</span>
+			<div class="item-fnc">
+				<div class="list__item">
+					<button type="button" class="list__item_button ctg">
+						<em>{{ post.country }}</em>
+						<em>{{ post.region }}</em>
+						<strong>{{ post.category }}</strong>
 					</button>
-					<p class="list__item cmt">
-						<i class="blind">댓글</i>
-						<span class="item__count">10</span>
-					</p>
 				</div>
-				<div class="item-fnc">
-					<p class="list__item past">
-						<i class="blind">작성시간</i>
-						<span class="item__count">10시간 전</span>
-					</p>
-					<button type="button" class="list__item_button mark active">
-						<!-- //활성화 .active -->
-						<i class="blind">북마크</i>
+				<div class="list__item">
+					<button type="button" class="list__item_button user">
+						<em>작성자</em>
+						<strong>{{ post.userNickName }}</strong>
 					</button>
 				</div>
 			</div>
 		</div>
-		<!-- //.item -->
+		<div class="text__wrap">
+			<button
+				type="button"
+				class="list__item_button"
+				@click="onBoardDetail(post.seq)"
+			>
+				<p class="title">{{ post.title }}</p>
+				<p class="text">{{ post.content }}</p>
+			</button>
+		</div>
+		<div class="util__wrap">
+			<div class="item-fnc">
+				<p class="list__item read">
+					<i class="blind">조회수</i>
+					<span class="item__count">{{ post.viewCount }}</span>
+				</p>
+				<button type="button" class="list__item_button like active">
+					<!-- //활성화 .active -->
+					<i class="blind">좋아요</i>
+					<span class="item__count">{{ post.likeCount }}</span>
+				</button>
+				<p class="list__item cmt">
+					<i class="blind">댓글</i>
+					<span class="item__count">{{ post.comments.length }}</span>
+				</p>
+			</div>
+			<div class="item-fnc">
+				<p class="list__item past">
+					<i class="blind">작성시간</i>
+					<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
+				</p>
+				<button type="button" class="list__item_button mark active">
+					<!-- //활성화 .active -->
+					<i class="blind">북마크</i>
+				</button>
+			</div>
+		</div>
 	</div>
+	<!-- //.item -->
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
 const router = useRouter();
 
+defineProps({
+	post: {
+		type: Object,
+		default: () => ({
+			seq: 0,
+			title: '',
+			content: '',
+			userSeq: 0,
+			userProfileUrl: '',
+			userNickName: '',
+			comments: [],
+			viewCount: 0,
+			likeCount: 0,
+			tags: [],
+			attachments: [],
+			likeUsers: [],
+			isPublic: '',
+			country: '',
+			region: '',
+			status: '',
+			category: '',
+			createdAt: '',
+		}),
+	},
+});
+
 const onBoardDetail = id => {
 	router.push(`/board/${id}`);
+};
+
+const timeCalculation = localTime => {
+	// LocalDateTime 문자열을 JavaScript Date 객체로 변환
+	const postDate = new Date(localTime);
+	const now = new Date();
+	const diff = now.getTime() - postDate.getTime();
+
+	// 시간 차이를 분 단위로 변환
+	const diffMinutes = Math.floor(diff / (1000 * 60));
+
+	if (diffMinutes < 10) {
+		return '방금 전';
+	} else if (diffMinutes < 60) {
+		return `${Math.ceil(diffMinutes / 10) * 10}분 전`;
+	}
+
+	// 시간 차이를 시간 단위로 변환
+	const diffHours = Math.floor(diffMinutes / 60);
+	if (diffHours < 24) {
+		return `${diffHours}시간 전`;
+	}
+
+	// 하루 이상 차이 나는 경우 날짜 포맷으로 반환
+	return postDate.toLocaleString('ko-KR', {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
+	});
 };
 </script>
