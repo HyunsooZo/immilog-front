@@ -29,7 +29,7 @@
 			</div>
 
 			<div class="button-wrap link-type">
-				<button type="button" class="button-text point-color">
+				<button type="button" class="button-text link--type">
 					<span>비밀번호 재설정</span>
 				</button>
 			</div>
@@ -71,7 +71,7 @@
 			<ul>
 				<li>
 					<strong>회원이 아닌 경우</strong>
-					<button type="button" class="button-text point-color" @click="onSignUp">
+					<button type="button" class="button-text link--type" @click="onSignUp">
 						<span>가입하기</span>
 					</button>
 				</li>
