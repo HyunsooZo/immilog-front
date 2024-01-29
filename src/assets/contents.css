@@ -1132,6 +1132,13 @@ color: #ed1651;
     right: 1rem;
     transform: translateY(-50%);
 }
+.list-wrap.list--link li.item .button-text svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-right: .4rem;
+    fill: #666;
+    vertical-align: -2px;
+}
 
 /* 완료 */
 .msg-wrap {
