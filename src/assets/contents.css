@@ -359,6 +359,9 @@ strong + .button-text {
     height: 100%;
     text-align: left;
     line-height: 4rem;
+    color: #333;
+}
+.search-wrap .button--search span {
     color: #999;
 }
 .search-wrap .input__button-remove {
