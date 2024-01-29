@@ -25,7 +25,7 @@
 				</div>
 			</div>
 			<div class="text__wrap">
-				<button type="button" class="list__item_button text-link" @click="onBoardDetail(1)">
+				<button type="button" class="list__item_button" @click="onBoardDetail(1)">
 					<p class="title">
 						글제목 글제목 글제목 글제목 글제목 글제목 글제목 글제목 글제목
 					</p>
