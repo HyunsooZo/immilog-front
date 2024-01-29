@@ -19,7 +19,7 @@ body {position: relative; width: 100%; min-height: 100vh; height: 100%; line-hei
 *, *:before, *:after, *:focus {box-sizing: inherit; outline: none;}
 img {width: 100%; vertical-align: top;}
 ol, ul, li {list-style: none;}
-textarea {resize: none; width: 100%; border: none; background: transparent;}
+textarea {resize: none; width: 100%; padding: 0; border: none; background: transparent;}
 input {padding: 0; font-size: 1.4rem; appearance: none; border: 0; border-radius: 0; cursor: pointer; background: transparent;}
 input[type="checkbox"], input[type="radio"] {opacity: 0;}
 input:-webkit-autofill {-webkit-box-shadow: 0 0 0 1000px white inset;}
