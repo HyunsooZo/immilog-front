@@ -2,7 +2,7 @@
 	<div class="item">
 		<div class="info__wrap">
 			<div class="item__pic">
-				<img src="" alt="" />
+				<img :src="post.userProfileUrl" alt="" />
 			</div>
 			<div class="item-fnc">
 				<div class="list__item">
