@@ -787,7 +787,8 @@ color: #ed1651;
 	background: transparent;
 }
 /* disabled */
-.input__wrap.underline-type .input__element:disabled {
+.input__wrap.underline-type .input__element:disabled,
+.input__wrap.underline-type .input__element:disabled::placeholder  {
     color: #333;
 }
 /* input 포커스 */
