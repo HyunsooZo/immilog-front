@@ -28,11 +28,13 @@
 		</div>
 
 		<!-- 목록 -->
-		<BoardContent />
+		<!-- <BoardContent /> -->
+		<DummyBoard />
 	</div>
 </template>
 
 <script setup>
 import SearchBar from '@/components/SearchBar.vue';
-import BoardContent from '@/components/BoardContent.vue';
+// import BoardContent from '@/components/BoardContent.vue';
+import DummyBoard from '@/components/DummyBoard.vue';
 </script>

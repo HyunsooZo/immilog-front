@@ -52,7 +52,7 @@
 			</div>
 		</div>
 		<!-- sub menu -->
-		<CountryList />
+		<CountryList @select:country="setCountry" />
 		<!-- 목록 -->
 		<div class="list-wrap">
 			<p class="list__title">
@@ -63,6 +63,7 @@
 				:key="index"
 				:post="item"
 			/>
+			<DummyBoard />
 		</div>
 	</div>
 
@@ -77,12 +78,13 @@
 
 <script setup>
 // import TheFooter from '@/components/layouts/TheFooter.vue';
-import { nextTick, onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import SelectDialog from '@/components/SelectDialog.vue';
 import SearchBar from '@/components/SearchBar.vue';
 import CountryList from '@/components/CountryList.vue';
 import BoardContent from '@/components/BoardContent.vue';
 import useAxios from '@/composables/useAxios.js';
+import DummyBoard from '@/components/DummyBoard.vue';
 
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
@@ -92,12 +94,14 @@ const isCategorySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
 const selectCategoryValue = ref({ name: '전체', code: 'all' });
 const selectSortingValue = ref({ name: '최신순', code: 'recent' });
+const selectCountry = ref({ name: '전체', code: 'all' });
+const currentPage = ref(0);
 const { sendRequest } = useAxios();
 const sortingList = [
-	{ name: '최신순', code: 'recent' },
-	{ name: '좋아요순', code: 'like' },
-	{ name: '조회순', code: 'view' },
-	{ name: '댓글순', code: 'comment' },
+	{ name: '최신순', code: 'CREATED_DATE' },
+	{ name: '좋아요순', code: 'LIKE_COUNT' },
+	{ name: '조회순', code: 'VIEW_COUNT' },
+	{ name: '댓글순', code: 'COMMENT_COUNT' },
 ];
 const categoryList = [
 	{ name: '전체', code: 'all' },
@@ -179,12 +183,12 @@ const inquireBoardList = (category, sorting) => {
 // 	}
 // };
 
-const fetchBoardList = async nextPage => {
+const fetchBoardList = async (sortingMethod, nextPage) => {
 	state.value.loading = true;
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/posts?country=${'ALL'}&sortingMethod=${'CREATED_DATE'}&isPublic=${'Y'}&page=${nextPage}`,
+			`/posts?country=${selectCountry.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'Y'}&page=${nextPage}`,
 		);
 		if (status === 200) {
 			state.value.posts = data.data.content;
@@ -197,8 +201,17 @@ const fetchBoardList = async nextPage => {
 	}
 };
 
+const setCountry = country => {
+	selectCountry.value = country;
+};
+
+watch(
+	[selectSortingValue, selectCountry, selectCategoryValue],
+	fetchBoardList(selectCategoryValue.value, currentPage.value),
+);
+
 onMounted(() => {
 	updateMenuBar();
-	fetchBoardList(0);
+	fetchBoardList('CREATED_DATE', 0);
 });
 </script>
