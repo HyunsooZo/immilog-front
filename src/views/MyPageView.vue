@@ -24,7 +24,7 @@
 			<ul>
 				<li class="item">
 					<button type="button" class="button button-text">
-						<span>작성 글</span>
+						<span>작성글</span>
 					</button>
 				</li>
 				<li class="item">
@@ -44,7 +44,7 @@
 				</li>
 				<li class="item">
 					<button type="button" class="button button-text">
-						<span>고객센터 > 이메일보내기(가입정보 포함)</span>
+						<span>고객센터 > 이메일보내기(가입, 디바이스 정보 포함)</span>
 					</button>
 				</li>
 			</ul>
