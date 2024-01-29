@@ -881,7 +881,7 @@ color: #ed1651;
 .login-group-wrap [class^=title] span {
     position: relative;
     padding: 0 .6rem;
-    background: #fff;
+    background: #fcfcfc;
     z-index: 1;
 }
 .login-group-wrap .login-group {
