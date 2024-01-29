@@ -20,7 +20,7 @@
 			</div>
 		</div>
 		<!--  -->
-		<div class="list-wrap link--list">
+		<div class="list-wrap list--link">
 			<ul>
 				<li class="item">
 					<button type="button" class="button button-text">
