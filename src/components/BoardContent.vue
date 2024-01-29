@@ -36,7 +36,11 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ post.viewCount }}</span>
 				</p>
-				<button type="button" class="list__item_button like active">
+				<button
+					type="button"
+					class="list__item_button like active"
+					@click="likeApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count">{{ post.likeCount }}</span>
@@ -63,9 +67,13 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-const router = useRouter();
+import useAxios from '@/composables/useAxios';
+import { toRefs } from 'vue';
 
-defineProps({
+const { likeCount } = toRefs(props);
+const { sendRequest } = useAxios();
+const router = useRouter();
+const props = defineProps({
 	post: {
 		type: Object,
 		default: () => ({
@@ -124,5 +132,20 @@ const timeCalculation = localTime => {
 		hour: '2-digit',
 		minute: '2-digit',
 	});
+};
+
+const likeApi = async () => {
+	try {
+		const { status } = await sendRequest(
+			'patch',
+			`/posts/${likeCount.value}/like`,
+		);
+
+		if (status === 200) {
+			likeCount.value = likeCount.value + 1;
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
 </script>
