@@ -20,7 +20,7 @@ body {position: relative; width: 100%; min-height: 100vh; height: 100%; line-hei
 img {width: 100%; vertical-align: top;}
 ol, ul, li {list-style: none;}
 textarea {resize: none;}
-input {padding: 0; font-size: 1.4rem; appearance: none; border: 0; border-radius: 0px; cursor: pointer;}
+input {padding: 0; font-size: 1.4rem; appearance: none; border: 0; border-radius: 0px; cursor: pointer; background: transparent;}
 input[type="checkbox"], input[type="radio"] {opacity: 0;}
 input:-webkit-autofill {-webkit-box-shadow: 0 0 0 1000px white inset;}
 input::-webkit-search-cancel-button {display: none;}
