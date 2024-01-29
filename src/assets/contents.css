@@ -9,7 +9,7 @@
     min-height: 100%;
     padding: 0 0 constant(safe-area-inset-bottom);
     padding: 0 0 env(safe-area-inset-bottom);
-    background: #fcfcfc;
+    background: #f6f6f6;
 }
 .content {
     margin-bottom: 5rem;
@@ -67,9 +67,6 @@ strong + .button-text {
     background-size: 100%;
     vertical-align: -1px;
 }
-.button-text.point-color::after {
-    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(63 81 181)' xmlns='http://www.w3.org/2000/svg'><path d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/></svg>");
-}
 .button-text.link--type {
     font-weight: 500;
     color: #666;
@@ -101,7 +98,7 @@ strong + .button-text {
 .button-icon.button--notice.new::before {
     content: '';
     position: absolute;
-    top: 1.1rem;
+    top: 1rem;
     right: .9rem;
     width: .5rem;
     height: .5rem;
@@ -1121,7 +1118,7 @@ color: #ed1651;
 /* 마이페이지 */
 .list-wrap.personal .item {
     padding: 3rem 2rem;
-    background: #e9e9e9;
+    background: #e5e2e2;
 }
 .list-wrap.personal .item .info__wrap {
     margin: 0;
