@@ -9,14 +9,7 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input
-								v-model="email"
-								type="text"
-								class="input__element"
-								placeholder="이메일"
-								id="inputEmail"
-								required
-							/>
+							<input v-model="email" type="text" class="input__element" placeholder="이메일" id="inputEmail" required />
 						</div>
 					</div>
 				</div>
@@ -28,73 +21,65 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input
-								v-model="password"
-								type="password"
-								class="input__element"
-								placeholder="비밀번호"
-								id="inputPassword"
-								required
-							/>
+							<input v-model="password" type="password" class="input__element" placeholder="비밀번호" id="inputPassword"
+								required />
 						</div>
 					</div>
 				</div>
 			</div>
 
 			<div class="button-wrap link-type">
-				<router-link to="/" class="button-text point-color">
+				<button type="button" class="button-text point-color">
 					<span>비밀번호 재설정</span>
-				</router-link>
+				</button>
 			</div>
 
 			<div class="button-wrap">
-				<button
-					@click="getCoordinate"
-					:class="{
-						'button button--positive': isValidLogin && !isLoading,
-						'button button--disabled': !isValidLogin || isLoading,
-					}"
-					role="link"
-					id="loginBtn"
-				>
-					로그인</button
-				><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
+				<button @click="getCoordinate" :class="{
+					'button button--positive': isValidLogin && !isLoading,
+					'button button--disabled': !isValidLogin || isLoading,
+				}" role="link" id="loginBtn">
+					로그인</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 		</div>
 
 		<!-- login -->
-		<div class="container">
-			<p class="title--small center">or login with</p>
-			<div class="login-group">
-				<button type="button" class="button-icon button--login-google">
-					<span>구글 로그인</span>
-				</button>
-				<button type="button" class="button-icon button--login-kakao">
-					<span>카카오톡 로그인</span>
-				</button>
-				<button type="button" class="button-icon button--login-naver">
-					<span>네이버 로그인</span>
-				</button>
+		<div class="login-group-wrap">
+			<div class="title--small center">
+				<span>or login with</span>
 			</div>
+			<ul class="login-group">
+				<li class="item">
+					<button type="button" class="button-icon button--login-google">
+						<span>구글 로그인</span>
+					</button>
+				</li>
+				<li class="item">
+					<button type="button" class="button-icon button--login-kakao">
+						<span>카카오톡 로그인</span>
+					</button>
+				</li>
+				<li class="item">
+					<button type="button" class="button-icon button--login-naver">
+						<span>네이버 로그인</span>
+					</button>
+				</li>
+			</ul>
 		</div>
 
 		<div class="container">
 			<ul>
 				<li>
 					<strong>회원이 아닌 경우</strong>
-					<router-link to="/" class="button-text point-color" @click="onSignUp">
+					<button type="button" class="button-text point-color" @click="onSignUp">
 						<span>가입하기</span>
-					</router-link>
+					</button>
 				</li>
 			</ul>
 		</div>
 	</div>
 	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert
-			:alertValue="alertValue"
-			:alertText="alertText"
-			@update:alertValue="closeAlert"
-		/>
+		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
 	</teleport>
 </template>
 
