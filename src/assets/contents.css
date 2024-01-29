@@ -1095,7 +1095,7 @@ color: #ed1651;
     width: 5rem;
     height: 5rem;
     margin-right: .8rem;
-    border-color: #fff;
+    border-color: #999;
 }
 .list-wrap.personal .item .info__wrap.button-text::after {
     margin: auto 0 9px 6px;
@@ -1110,8 +1110,7 @@ color: #ed1651;
     color: #333;
 }
 .list-wrap.personal .item .info__wrap [class^=list__item] * + *::before {
-    height: 1rem;
-    background: #fff;
+    background: #999;
 }
 /*  */
 .list-wrap.list--link {
