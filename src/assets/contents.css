@@ -1266,9 +1266,6 @@ color: #ed1651;
 .post-wrap .post__wrap .text__area {
     color: #666;
 }
-.post-wrap .post__wrap .text__area:focus {
-    outline: -webkit-focus-ring-color auto .1rem;
-}
 .post-wrap .post__wrap .attach-file-view {
     margin-top: 2rem;
     font-size: 0;
