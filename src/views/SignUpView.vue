@@ -77,7 +77,7 @@
 			<div class="input-wrap">
 				<em class="input__title">프로필 사진</em>
 				<!-- input__wrap -->
-				<div class="input__wrap filepreview-type">
+				<div class="input__wrap attach-file-wrap">
 					<div class="input__item">
 						<div class="input__item_inner">
 							<div class="input__file">
@@ -136,10 +136,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- 에러 메시지 -->
-
 				<!-- input__wrap -->
-
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">

@@ -7,46 +7,25 @@
 			<!-- tab button -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li
-						v-for="(menu, index) in menus"
-						:key="index"
-						:class="{ active: menu.active.value }"
-						class="menu__list"
-					>
-						<button
-							@click="selectMenu(menu)"
-							type="button"
-							class="button"
-							:aria-selected="menu.active.value.toString()"
-						>
+					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
+						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span
-					class="menu__bar"
-					:style="{ left: menuBarLeft, width: menuBarWidth }"
-				></span>
+				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
 			</div>
 		</div>
 
-		<!--  -->
+		<!-- 카테고리 정렬 -->
 		<div class="flexbox-wrap border--bot">
 			<div class="category__list">
-				<button
-					type="button"
-					class="button--select"
-					@click="openCategorySelect"
-				>
+				<button type="button" class="button--select" @click="openCategorySelect">
 					{{ selectCategoryValue.name }}
 				</button>
 			</div>
 			<div class="sort__list">
-				<button
-					type="button"
-					class="button--select sort"
-					@click="openSortingSelect"
-				>
+				<button type="button" class="button--select sort" @click="openSortingSelect">
 					{{ selectSortingValue.name }}
 				</button>
 			</div>
@@ -55,33 +34,23 @@
 		<CountryList @select:country="setCountry" />
 		<!-- 목록 -->
 		<div class="list-wrap">
-			<p class="list__title">
-				<span>{{ selectCategoryValue.name }} </span>
-			</p>
-			<BoardContent
-				v-for="(item, index) in state.posts"
-				:key="index"
-				:post="item"
-			/>
+			<div class="list__title">
+				<span class="title">{{ selectCategoryValue.name }} </span>
+			</div>
+			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
 			<DummyBoard />
 		</div>
 	</div>
-
-	<SelectDialog
-		v-if="isCategorySelectClicked || isSortingSelectClicked"
-		:title="selectTitle"
-		:list="selectList"
-		@close="closeSelect"
-		@select:value="selectedValue"
-	/>
+	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
+		@close="closeSelect" @select:value="selectedValue" />
 </template>
 
 <script setup>
 // import TheFooter from '@/components/layouts/TheFooter.vue';
 import { nextTick, onMounted, ref, watch } from 'vue';
-import SelectDialog from '@/components/SelectDialog.vue';
-import SearchBar from '@/components/SearchBar.vue';
-import CountryList from '@/components/CountryList.vue';
+import SearchBar from '@/components/SearchBar.vue'; // .search-wrap
+import SelectDialog from '@/components/SelectDialog.vue'; // .select--dialog
+import CountryList from '@/components/CountryList.vue'; // .sub-menu-wrap
 import BoardContent from '@/components/BoardContent.vue';
 import useAxios from '@/composables/useAxios.js';
 import DummyBoard from '@/components/DummyBoard.vue';
