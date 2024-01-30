@@ -45,7 +45,7 @@
 									<div class="attach-file-view">
 										<div class="file">
 											<div class="file-display">
-												<img src="@/assets/images/icon-google-480.png" alt="preview" style="width: 100px;">
+												<img src="@/assets/images/icon-google-480.png" alt="preview">
 												<button type="button" class="button--del"><span class="blind">삭제</span></button>
 											</div>
 											<div class="input__wrap underline-type">
@@ -59,7 +59,7 @@
 										</div><!-- //loop -->
 										<div class="file">
 											<div class="file-display">
-												<img src="@/assets/images/icon-google-480.png" alt="preview" style="width: 200px;">
+												<img src="@/assets/images/icon-google-480.png" alt="preview" style="width: 150px;">
 												<button type="button" class="button--del"><span class="blind">삭제</span></button>
 											</div>
 											<div class="input__wrap underline-type">
