@@ -1154,6 +1154,7 @@ color: #ed1651;
 }
 .list-wrap.list--link ul {
     border-bottom: 1px solid #e9e9e9;
+    background: #fff;
 }
 .list-wrap.list--link ul + ul {
     margin-top: 1rem;
