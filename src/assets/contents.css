@@ -642,9 +642,12 @@ strong + .button-text {
     transform: inherit;
 }
 .modal.modal--full .modal-body {
-    max-height: calc(100vh - 5rem);
+    max-height: 100vh;
     margin: 0;
     padding: 0;
+}
+.modal.modal--full .modal-header + .modal-body {
+    max-height: calc(100vh - 5rem);
 }
 /* select dialog */
 .select--dialog .modal-content {
