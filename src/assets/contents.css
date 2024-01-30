@@ -148,6 +148,7 @@ strong + .button-text {
 .button-icon.button--post svg {
     width: 1.8rem;
     height: 1.8rem;
+    fill: rgb(51, 51, 51);
 }
     /* block button */
 .button-wrap .button {
@@ -204,6 +205,10 @@ strong + .button-text {
 }
 .button--select.sort::after {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(51 51 51)' xmlns='http://www.w3.org/2000/svg'><path d='M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293V2.5zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z'/></svg>");
+}
+.button--icon.last-reply {
+    font-size: 1.2rem;
+    line-height: 1.8rem;
 }
 .button--icon.last-reply::after {
     left: .5rem;
@@ -1047,7 +1052,7 @@ color: #ed1651;
 .list-wrap .item .tag-wrap {
     margin: 1.5rem -.2rem;
 }
-.list-wrap .item .tag-wrap .button--hash {
+.tag-wrap [class*=--hash] {
     position: relative;
     margin: 0 .2rem;
     padding: .2rem .2rem;
@@ -1055,7 +1060,7 @@ color: #ed1651;
     font-size: 1.2rem;
     color: #00bcd4;
 }
-.list-wrap .item .tag-wrap .button--hash::before {
+.tag-wrap [class*=--hash]::before {
     content: '#';
 }
 /* 기능버튼, 글정보 */
@@ -1217,9 +1222,7 @@ color: #ed1651;
 /* 글쓰기 */
 .post-wrap .post__wrap {
     margin: 2.4rem 2rem 0;
-}
-.post-wrap .post__wrap .input__item_inner {
-    border-color: #e9e9e9;
+    padding-bottom: 5rem;
 }
 .post-wrap .post__wrap .post__title .input__item_inner {
     border-color: #ccc;
@@ -1261,7 +1264,7 @@ color: #ed1651;
     width: 2rem;
     height: 2rem;
     border-radius: .2rem;
-    background-color: #333;
+    background-color: rgba(51, 51, 51, .8);
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(255 255 255)' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z' clip-rule='evenodd'/></svg>");
     background-repeat: no-repeat;
     background-position: 50% center;
@@ -1277,11 +1280,23 @@ color: #ed1651;
     font-size: 1.2rem;
     color: #999;
 }
+.post-wrap .post__wrap .attach-file-view .input__item_inner {
+    border: none;
+}
+.post-wrap .post__wrap .tag-wrap {
+    margin: 2rem 0;
+    padding: 1rem;
+    border: 1px solid #e9e9e9;
+    border-radius: .6rem;
+}
 .post-wrap .util__wrap {
+    position: fixed;
+    bottom: 0;
     display: flex;
-    margin-top: 2rem;
-    padding: 1rem 1.5rem;
+    width: 100%;
+    padding: .8rem 1.5rem;
     border-top: 1px solid #ccc;
+    background: #fff;
 }
 .post-wrap .util__wrap .item-fnc + .item-fnc {
     margin-left: .6rem;

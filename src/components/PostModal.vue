@@ -69,6 +69,15 @@
 										</div>
 									</div><!-- //loop -->
 								</div>
+								<!-- hashtag -->
+								<div class="tag-wrap">
+									<div class="tag__inner">
+										<div class="tag__item">
+											<span class="item--hash">해시태그</span>
+											<button type="button" class="button--hash">해시태그</button>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
