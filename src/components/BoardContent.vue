@@ -38,12 +38,13 @@
 				</p>
 				<button
 					type="button"
-					class="list__item_button like active"
+					class="list__item_button like"
+					:class="{ active: isLiked }"
 					@click="likeApi"
 				>
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
-					<span class="item__count">{{ post.likeCount }}</span>
+					<span class="item__count"> {{ likes }}</span>
 				</button>
 				<p class="list__item cmt">
 					<i class="blind">댓글</i>
@@ -68,14 +69,17 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios';
-import { toRefs } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
+import { useUserInfoStore } from '@/stores/userInfo';
 
-const { likeCount } = toRefs(props);
+const userInfo = useUserInfoStore();
 const { sendRequest } = useAxios();
+
 const router = useRouter();
 const props = defineProps({
 	post: {
 		type: Object,
+		required: true,
 		default: () => ({
 			seq: 0,
 			title: '',
@@ -98,6 +102,9 @@ const props = defineProps({
 		}),
 	},
 });
+
+const likes = ref(props.post.likeCount);
+const isLiked = ref(props.post.likeUsers.includes(userInfo.userSeq));
 
 const onBoardDetail = id => {
 	router.push(`/board/${id}`);
@@ -134,16 +141,36 @@ const timeCalculation = localTime => {
 	});
 };
 
-const likeApi = async () => {
-	try {
-		const { status } = await sendRequest(
-			'patch',
-			`/posts/${likeCount.value}/like`,
-		);
-
-		if (status === 200) {
-			likeCount.value = likeCount.value + 1;
+watchEffect(likeUsers => {
+	let liked = false; // 기본값을 false로 설정
+	props.post.likeUsers.forEach(user => {
+		if (user.seq === userInfo.userSeq) {
+			liked = true; // 사용자가 좋아요를 누른 경우 true로 설정
 		}
+	});
+	likeUsers.value = props.post.likeUsers;
+	isLiked.value = liked; // 최종 결과를 isLiked에 할당
+});
+
+const likeApi = async () => {
+	const token = localStorage.getItem('accessToken');
+	if (!token) {
+		router.push('/sign-in');
+		return;
+	}
+	if (isLiked.value) {
+		likes.value--;
+	} else {
+		likes.value++;
+	}
+	isLiked.value = !isLiked.value;
+
+	try {
+		await sendRequest(
+			'patch',
+			`/posts/${props.post.seq}/like`,
+			`Bearer ${token}`,
+		);
 	} catch (error) {
 		console.log(error);
 	}

@@ -4,11 +4,15 @@ import axios from 'axios';
 export default function useAxios() {
 	axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
-	const sendRequest = async (method, url, request = null) => {
+	const sendRequest = async (method, url, header, request = null) => {
 		try {
 			const config = {
 				method,
 				url,
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: header,
+				},
 			};
 
 			if (method.toLowerCase() === 'get') {

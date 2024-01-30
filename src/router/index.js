@@ -6,8 +6,8 @@ import MyPageView from '@/views/MyPageView.vue';
 import JobBoardView from '@/views/JobBoardView.vue';
 import ChatView from '@/views/ChatView.vue';
 import BoardView from '@/views/BoardView.vue';
-import EmailVerificationView from '@/views/EmailVerificationView.vue';
 import BoardDetailView from '@/views/BoardDetailView.vue';
+import ResultViewVue from '@/views/ResultView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,9 +55,9 @@ const router = createRouter({
 			component: BoardDetailView,
 		},
 		{
-			path: '/email-verification',
-			name: 'EmailVerification',
-			component: EmailVerificationView,
+			path: '/result',
+			name: 'Result',
+			component: ResultViewVue,
 		},
 	],
 });

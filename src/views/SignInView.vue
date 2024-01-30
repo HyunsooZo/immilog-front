@@ -114,7 +114,7 @@
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import useAxios from '@/composables/useAxios.js';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useLocationStore } from '@/stores/location.js';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
@@ -157,6 +157,7 @@ const signIn = async (latitude, longitude) => {
 				data.data.isLocationMatch,
 			);
 			localStorage.setItem('accessToken', data.data.accessToken);
+			router.push({ name: 'Home' });
 		} else {
 			password.value = '';
 			openAlert(
@@ -224,12 +225,10 @@ const openAlert = content => {
 const closeAlert = () => {
 	alertValue.value = false;
 };
-</script>
 
-<script>
-export default {
-	data() {
-		return { hideFooter: true, hideHeader: true };
-	},
-};
+onMounted(() => {
+	if (localStorage.getItem('accessToken')) {
+		router.push({ name: 'Home' });
+	}
+});
 </script>
