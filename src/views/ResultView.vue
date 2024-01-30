@@ -52,7 +52,7 @@ const onLogin = () => {
 	router.push({ name: 'SignIn' });
 };
 
-defineProps({
+const { titleEmphasis, titleNormal, content } = defineProps({
 	titleEmphasis: {
 		type: String,
 	},
