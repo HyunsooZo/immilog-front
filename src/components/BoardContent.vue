@@ -69,7 +69,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios';
-import { computed, ref, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 
 const userInfo = useUserInfoStore();
@@ -166,11 +166,12 @@ const likeApi = async () => {
 	isLiked.value = !isLiked.value;
 
 	try {
-		await sendRequest(
-			'patch',
-			`/posts/${props.post.seq}/like`,
-			`Bearer ${token}`,
-		);
+		await sendRequest('patch', `/posts/${props.post.seq}/like`, {
+			header: {
+				contentType: 'application/json',
+				token: `Bearer ${token}`,
+			},
+		});
 	} catch (error) {
 		console.log(error);
 	}

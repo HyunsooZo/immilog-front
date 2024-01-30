@@ -4,18 +4,18 @@ import axios from 'axios';
 export default function useAxios() {
 	axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
-	const sendRequest = async (method, url, header, request = null) => {
+	const sendRequest = async (method, url, header, request) => {
 		try {
 			const config = {
 				method,
 				url,
 				headers: {
-					'Content-Type': 'application/json',
-					Authorization: header,
+					'Content-Type': header.contentType,
+					Authorization: header.token,
 				},
 			};
 
-			if (method.toLowerCase() === 'get') {
+			if (method.toLowerCase() === 'get' || method.toLowerCase() === 'delete') {
 				// GET 요청일 경우 데이터를 쿼리 파라미터로 붙임
 				config.params = request;
 			} else {

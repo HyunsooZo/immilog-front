@@ -281,12 +281,12 @@ const hostImage = async () => {
 		const { status, data } = await sendRequest(
 			'post',
 			'/images?imagePath=profile',
-			formData,
 			{
 				headers: {
-					'Content-Type': 'multipart/form-data',
+					contentType: 'multipart/form-data',
 				},
 			},
+			formData,
 		);
 		if (status === 200) {
 			imageUrl.value = data.data;
@@ -297,6 +297,10 @@ const hostImage = async () => {
 		console.log(error);
 	}
 };
+
+watch(imagePreview, () => {
+	hostImage();
+});
 
 const register = async () => {
 	submitted.value = true;
@@ -319,7 +323,6 @@ const register = async () => {
 	) {
 		try {
 			isLoading.value = true;
-			await hostImage();
 			const formData = {
 				email: emailRegister.value,
 				nickName: userNickName.value,
@@ -328,7 +331,16 @@ const register = async () => {
 				region: region.value,
 				profileImage: imageUrl.value,
 			};
-			const { status, data } = await sendRequest('post', '/users', formData);
+			const { status, data } = await sendRequest(
+				'post',
+				'/users',
+				{
+					headers: {
+						contentType: 'multipart/form-data',
+					},
+				},
+				formData,
+			);
 
 			if (status === 201) {
 				console.log(data.data);
@@ -395,6 +407,12 @@ const getCountry = async (latitude, longitude) => {
 		const { status, data } = await sendRequest(
 			'get',
 			`/locations?latitude=${latitude}&longitude=${longitude}`,
+			{
+				headers: {
+					contentType: 'multipart/form-data',
+				},
+			},
+			null,
 		);
 		if (status === 200) {
 			country.value = data.data.country;
@@ -414,6 +432,12 @@ const checkNickName = async () => {
 		const { status, data } = await sendRequest(
 			'get',
 			`/users/nicknames?nickname=${userNickName.value}`,
+			{
+				headers: {
+					contentType: 'multipart/form-data',
+				},
+			},
+			null,
 		);
 		if (status === 200) {
 			isNickNameValid.value = data.data ? true : false;
@@ -449,7 +473,15 @@ const returnSubmitValues = () => {
 };
 
 const onResult = () => {
-	router.push('/result');
+	router.push({
+		name: 'Result',
+		params: {
+			titleEmphasis: '입력하신 이메일로 회원가입 인증 이메일을 전송했습니다.',
+			titleNormal:
+				'이메일을 확인하여 회원가입 인증 후 서비스 이용이 가능합니다.',
+			content: '이메일 인증 후 로그인을 진행해주세요.',
+		},
+	});
 };
 
 onMounted(() => {

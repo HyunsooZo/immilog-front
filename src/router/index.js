@@ -58,6 +58,7 @@ const router = createRouter({
 			path: '/result',
 			name: 'Result',
 			component: ResultViewVue,
+			props: true,
 		},
 	],
 });
