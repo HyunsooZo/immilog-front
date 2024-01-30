@@ -130,6 +130,25 @@ strong + .button-text {
 .button-icon.button--login-kakao {
     background-image: url(@/assets/images/icon-kakao-480.png);
 }
+.button-icon.svg {
+    width: 3.2rem;
+    height: 3.2rem;
+    padding: .6rem;
+}
+.button-icon.svg::after {
+    content: none;
+}
+.button-icon.svg svg {
+    width: 2rem;
+    height: 2rem;
+}
+.button-icon.button--post::after {
+    content: none;
+}
+.button-icon.button--post svg {
+    width: 1.8rem;
+    height: 1.8rem;
+}
     /* block button */
 .button-wrap .button {
     flex: 1;
@@ -470,6 +489,7 @@ strong + .button-text {
 /* tab button */
 .menu-wrap {
     position: relative;
+    background: #fff;
 }
 .menu-wrap .menu__inner {
     display: flex;
@@ -906,10 +926,20 @@ color: #ed1651;
 }
 /* 목록 상단타이틀 */
 .list-wrap .list__title {
-    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
     font-size: 1.6rem;
     font-weight: 500;
     border-bottom: 1px solid #e9e9e9;
+}
+.list-wrap .list__title .title {
+    padding: 1rem 0;
+    line-height: 2rem;
+}
+.list-wrap .list__title .button--post {
+    margin-right: -10px;
 }
 /* 목록 */
 .list-wrap .item {
@@ -1252,9 +1282,6 @@ color: #ed1651;
     margin-top: 2rem;
     padding: 1rem 1.5rem;
     border-top: 1px solid #ccc;
-}
-.post-wrap .util__wrap .item-fnc .button {
-    line-height: 0;
 }
 .post-wrap .util__wrap .item-fnc + .item-fnc {
     margin-left: .6rem;
