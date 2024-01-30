@@ -83,7 +83,11 @@
 		</div>
 		<!-- 댓글 -->
 		<div class="list-wrap reply">
-			<div class="item">
+			<div class="item item--blind"><!-- //댓글 신고로 숨김처리 .item--blind -->
+				<!-- 댓글 신고로 숨김처리 시 대체 텍스트 -->
+				<div class="blind__text">
+					신고에 의해 숨김처리 되었습니다.
+				</div>
 				<div class="info__wrap">
 					<div class="item-fnc">
 						<div class="list__item">
