@@ -7,25 +7,46 @@
 			<!-- tab button -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
-						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
+					<li
+						v-for="(menu, index) in menus"
+						:key="index"
+						:class="{ active: menu.active.value }"
+						class="menu__list"
+					>
+						<button
+							@click="selectMenu(menu)"
+							type="button"
+							class="button"
+							:aria-selected="menu.active.value.toString()"
+						>
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
+				<span
+					class="menu__bar"
+					:style="{ left: menuBarLeft, width: menuBarWidth }"
+				></span>
 			</div>
 		</div>
 
 		<!-- 카테고리 정렬 -->
 		<div class="flexbox-wrap border--bot">
 			<div class="category__list">
-				<button type="button" class="button--select" @click="openCategorySelect">
+				<button
+					type="button"
+					class="button--select"
+					@click="openCategorySelect"
+				>
 					{{ selectCategoryValue.name }}
 				</button>
 			</div>
 			<div class="sort__list">
-				<button type="button" class="button--select sort" @click="openSortingSelect">
+				<button
+					type="button"
+					class="button--select sort"
+					@click="openSortingSelect"
+				>
 					{{ selectSortingValue.name }}
 				</button>
 			</div>
@@ -37,12 +58,21 @@
 			<div class="list__title">
 				<span class="title">{{ selectCategoryValue.name }} </span>
 			</div>
-			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
+			<BoardContent
+				v-for="(item, index) in state.posts"
+				:key="index"
+				:post="item"
+			/>
 			<DummyBoard />
 		</div>
 	</div>
-	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
-		@close="closeSelect" @select:value="selectedValue" />
+	<SelectDialog
+		v-if="isCategorySelectClicked || isSortingSelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 </template>
 
 <script setup>
@@ -158,6 +188,11 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 		const { status, data } = await sendRequest(
 			'get',
 			`/posts?country=${selectCountry.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'Y'}&page=${nextPage}`,
+			{
+				headers: {
+					contentType: 'multipart/form-data',
+				},
+			},
 		);
 		if (status === 200) {
 			state.value.posts = data.data.content;
@@ -181,6 +216,10 @@ watch(
 
 onMounted(() => {
 	updateMenuBar();
-	fetchBoardList('CREATED_DATE', 0);
+	fetchBoardList('CREATED_DATE', 0, {
+		headers: {
+			contentType: 'multipart/form-data',
+		},
+	});
 });
 </script>

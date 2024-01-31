@@ -58,7 +58,10 @@ const router = createRouter({
 			path: '/result',
 			name: 'Result',
 			component: ResultViewVue,
-			props: true,
+			props: route => ({
+				titleEmphasis: route.query.titleEmphasis,
+				content: route.query.content,
+			}),
 		},
 	],
 });
