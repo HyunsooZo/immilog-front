@@ -77,7 +77,7 @@
 
 <script setup>
 // import TheFooter from '@/components/layouts/TheFooter.vue';
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import SearchBar from '@/components/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/SelectDialog.vue'; // .select--dialog
 import CountryList from '@/components/CountryList.vue'; // .sub-menu-wrap
@@ -91,9 +91,9 @@ const selectTitle = ref('');
 const selectList = ref('');
 const isCategorySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
-const selectCategoryValue = ref({ name: '전체', code: 'all' });
-const selectSortingValue = ref({ name: '최신순', code: 'recent' });
-const selectCountry = ref({ name: '전체', code: 'all' });
+const selectCategoryValue = ref({ name: '전체', code: 'ALL' });
+const selectSortingValue = ref({ name: '최신순', code: 'CREATED_DATE' });
+const selectCountry = ref({ name: '전체', code: 'ALL' });
 const currentPage = ref(0);
 const { sendRequest } = useAxios();
 const sortingList = [
@@ -103,11 +103,11 @@ const sortingList = [
 	{ name: '댓글순', code: 'COMMENT_COUNT' },
 ];
 const categoryList = [
-	{ name: '전체', code: 'all' },
-	{ name: '워킹홀리데이', code: 'workingholiday' },
-	{ name: '영주권', code: 'greencard' },
-	{ name: '소통', code: 'communication' },
-	{ name: '질문/답변', code: 'qanda' },
+	{ name: '전체', code: 'ALL' },
+	{ name: '워킹홀리데이', code: 'WORKING_HOLIDAY' },
+	{ name: '영주권', code: 'GREEN_CARD' },
+	{ name: '소통', code: 'COMMUNICATION' },
+	{ name: '질문/답변', code: 'QNA' },
 ];
 
 let menus = [
@@ -161,17 +161,13 @@ const selectedValue = value => {
 	} else if (sortingList.some(s => s.code === value.code)) {
 		selectSortingValue.value = value;
 	}
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
 const closeSelect = () => {
 	isCategorySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
-	inquireBoardList(selectCategoryValue.value, selectSortingValue.value);
-};
-
-const inquireBoardList = (category, sorting) => {
-	console.log(category, sorting);
-	console.log('inquireBoardList');
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
 // const loadMoreData = () => {
@@ -187,7 +183,12 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/posts?country=${selectCountry.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'Y'}&page=${nextPage}`,
+			`/posts
+			?country=${selectCountry.value.code.toUpperCase()}&
+			sortingMethod=${sortingMethod}&
+			isPublic=${'Y'}&
+			category=${selectCategoryValue.value.code}&
+			page=${nextPage}`,
 			{
 				headers: {
 					contentType: 'multipart/form-data',
@@ -205,21 +206,13 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	}
 };
 
-const setCountry = country => {
-	selectCountry.value = country;
+const setCountry = value => {
+	selectCountry.value = value;
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
-
-watch(
-	[selectSortingValue, selectCountry, selectCategoryValue],
-	fetchBoardList(selectCategoryValue.value, currentPage.value),
-);
 
 onMounted(() => {
 	updateMenuBar();
-	fetchBoardList('CREATED_DATE', 0, {
-		headers: {
-			contentType: 'multipart/form-data',
-		},
-	});
+	fetchBoardList('CREATED_DATE', 0);
 });
 </script>
