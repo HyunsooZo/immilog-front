@@ -6,10 +6,10 @@
 			<div class="list__title">
 				<span class="title">카테고리</span>
 			</div>
-			<div v-for="(post, index) in posts" :key="index" class="item">
+			<div class="item">
 				<div class="info__wrap">
 					<div class="item__pic">
-						<img :src="post.imageSrc" alt="post image" />
+						<img :src="post.userProfile" alt="post image" />
 					</div>
 					<div class="item-fnc">
 						<div class="list__item">
@@ -21,7 +21,7 @@
 						<div class="list__item">
 							<button type="button" class="list__item_button user">
 								<em>작성자</em>
-								<strong>{{ post.author }}</strong>
+								<strong>{{ post.userNickname }}</strong>
 							</button>
 						</div>
 					</div>
@@ -35,7 +35,12 @@
 				<div class="tag-wrap">
 					<div class="tag__inner">
 						<div class="tag__item">
-							<button v-for="tag in post.tags" :key="tag" type="button" class="button button--hash">
+							<button
+								v-for="tag in post.tags"
+								:key="tag"
+								type="button"
+								class="button button--hash"
+							>
 								<em>{{ tag }}</em>
 							</button>
 						</div>
@@ -43,18 +48,23 @@
 				</div>
 				<div class="util__wrap">
 					<div class="item-fnc">
-						<button type="button" class="list__item_button like" :class="{ active: post.isLiked }">
+						<button
+							type="button"
+							class="list__item_button like"
+							:class="{ active: isLiked }"
+							@click="likeApi"
+						>
 							<i class="blind">좋아요</i>
-							<span class="item__count">{{ post.likes }}</span>
+							<span class="item__count">{{ post.likeCount }}</span>
 						</button>
 						<button type="button" class="list__item cmt">
 							<i class="blind">댓글</i>
-							<span class="item__count">{{ post.comments }}</span>
+							<span class="item__count">{{ post.comments.length }}</span>
 						</button>
 						<p class="list__item past">
 							<i class="blind">작성시간</i>
 							<span class="item__count">{{
-								timeCalculation(post.timeAgo)
+								timeCalculation(post.createdAt)
 							}}</span>
 						</p>
 					</div>
@@ -71,7 +81,11 @@
 		<!-- 댓글 기능버튼 -->
 		<div class="flexbox-wrap border--bot">
 			<div class="sort__list">
-				<button type="button" class="button--select sort" @click="openSortingSelect">
+				<button
+					type="button"
+					class="button--select sort"
+					@click="openSortingSelect"
+				>
 					{{ selectSortingValue.name }}
 				</button>
 			</div>
@@ -83,11 +97,10 @@
 		</div>
 		<!-- 댓글 -->
 		<div class="list-wrap reply">
-			<div class="item item--blind"><!-- //댓글 신고로 숨김처리 .item--blind -->
+			<div class="item item--blind">
+				<!-- //댓글 신고로 숨김처리 .item--blind -->
 				<!-- 댓글 신고로 숨김처리 시 대체 텍스트 -->
-				<div class="blind__text">
-					신고에 의해 숨김처리 되었습니다.
-				</div>
+				<div class="blind__text">신고에 의해 숨김처리 되었습니다.</div>
 				<div class="info__wrap">
 					<div class="item-fnc">
 						<div class="list__item">
@@ -120,7 +133,8 @@
 					</div>
 					<div class="item-fnc">
 						<button type="button" class="list__item_button more">
-							<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
+							<i class="blind">더보기</i
+							><!-- //차단하기, 대화하기.. -->
 						</button>
 					</div>
 				</div>
@@ -132,7 +146,10 @@
 					<div class="info__wrap">
 						<div class="item-fnc">
 							<div class="list__item">
-								<button type="button" class="list__item_button user user--author">
+								<button
+									type="button"
+									class="list__item_button user user--author"
+								>
 									<!-- //원글작성자 댓글 .user--author -->
 									<em>원글작성자 대댓글</em>
 									<strong>원글작성자 닉네임</strong>
@@ -159,7 +176,8 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i
+								><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
@@ -195,7 +213,8 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i
+								><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
@@ -210,29 +229,50 @@
 			</div>
 		</div>
 	</div>
-	<SelectDialog v-if="isSortingSelectClicked" :title="selectTitle" :list="selectList" @close="closeSelect"
-		@select:value="selectedValue" />
+	<SelectDialog
+		v-if="isSortingSelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 </template>
 
 <script setup>
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import SelectDialog from '@/components/SelectDialog.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useUserInfoStore } from '@/stores/userInfo';
+import { useRouter } from 'vue-router';
+import useAxios from '@/composables/useAxios.js';
 
-//테스트
-const posts = ref([
-	{
-		id: 1,
-		imageSrc: 'https://picsum.photos/200/300',
-		country: '한국',
-		category: '카테고리',
-		title: '테스트 글제목',
-		content: '테스트 글내용',
-		likes: 3,
-		comments: 2,
-		timeAgo: '2024-01-28',
-	},
-]);
+const sendRequest = useAxios();
+const router = useRouter();
+const props = defineProps({
+	seq: Number,
+});
+const post = ref({
+	seq: 0,
+	title: '',
+	content: '',
+	userNickname: '',
+	userSeq: 0,
+	userProfile: '',
+	comments: [],
+	viewCount: 0,
+	likeCount: 0,
+	tags: [],
+	attachments: [],
+	country: '',
+	region: '',
+	category: '',
+	status: '',
+	createdAt: '',
+});
+const userInfo = useUserInfoStore();
+const likes = ref(post.value.likeCount);
+const isLiked = ref(post.value.likeUsers.includes(userInfo.userSeq));
+const postSeq = ref(props.seq);
 const selectTitle = ref('정렬 방식 선택');
 const isSortingSelectClicked = ref(false);
 const selectSortingValue = ref({ name: '최신순', code: 'recent' });
@@ -285,4 +325,52 @@ const timeCalculation = localTime => {
 		minute: '2-digit',
 	});
 };
+
+const likeApi = async () => {
+	const token = localStorage.getItem('accessToken');
+	if (!token) {
+		router.push('/sign-in');
+		return;
+	}
+	if (isLiked.value) {
+		likes.value--;
+	} else {
+		likes.value++;
+	}
+	isLiked.value = !isLiked.value;
+
+	try {
+		await sendRequest('patch', `/posts/${post.value.seq}/like`, {
+			header: {
+				contentType: 'application/json',
+				token: `Bearer ${token}`,
+			},
+		});
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const detailBoard = async () => {
+	try {
+		const { status, data } = await sendRequest(
+			'get',
+			`/posts/${postSeq.value}`,
+			{
+				header: {
+					contentType: 'application/json',
+				},
+			},
+		);
+		if (status === 200) {
+			post.value = data.data;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+onMounted(() => {
+	detailBoard();
+});
 </script>

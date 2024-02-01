@@ -53,6 +53,7 @@ const router = createRouter({
 			path: '/board/:id',
 			name: 'BoardDetail',
 			component: BoardDetailView,
+			props: true,
 		},
 		{
 			path: '/result',

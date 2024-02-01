@@ -68,7 +68,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import useAxios from '@/composables/useAxios';
+import useAxios from '@/composables/useAxios.js';
 import { ref, watchEffect } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 
@@ -106,8 +106,9 @@ const props = defineProps({
 const likes = ref(props.post.likeCount);
 const isLiked = ref(props.post.likeUsers.includes(userInfo.userSeq));
 
-const onBoardDetail = id => {
-	router.push(`/board/${id}`);
+const onBoardDetail = () => {
+	increaseViewCount();
+	router.push(`/board/${props.post.seq}`);
 };
 
 const timeCalculation = localTime => {
@@ -170,6 +171,18 @@ const likeApi = async () => {
 			header: {
 				contentType: 'application/json',
 				token: `Bearer ${token}`,
+			},
+		});
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const increaseViewCount = async () => {
+	try {
+		await sendRequest('patch', `/posts/${props.post.seq}/view`, {
+			header: {
+				contentType: 'application/json',
 			},
 		});
 	} catch (error) {
