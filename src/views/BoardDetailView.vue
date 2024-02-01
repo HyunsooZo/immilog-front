@@ -4,7 +4,7 @@
 		<!-- 글 상세 -->
 		<div class="list-wrap">
 			<div class="list__title">
-				<span class="title">카테고리</span>
+				<span class="title">{{ post.category }}</span>
 			</div>
 			<div class="item">
 				<div class="info__wrap">
@@ -81,16 +81,7 @@
 		<!-- 댓글 기능버튼 -->
 		<div class="flexbox-wrap border--bot">
 			<div class="sort__list">
-				<button
-					type="button"
-					class="button--select sort"
-					@click="openSortingSelect"
-				>
-					{{ selectSortingValue.name }}
-				</button>
-			</div>
-			<div class="sort__list">
-				<button type="button" class="button--icon last-reply">
+				<button type="button" class="button--icon last-reply" @click="goToDown">
 					마지막 댓글로 이동
 				</button>
 			</div>
@@ -243,14 +234,13 @@ import TheHeader from '@/components/layouts/TheHeader.vue';
 import SelectDialog from '@/components/SelectDialog.vue';
 import { onMounted, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
 
-const sendRequest = useAxios();
+const { sendRequest } = useAxios();
 const router = useRouter();
-const props = defineProps({
-	seq: Number,
-});
+const route = useRoute();
+const postSeq = route.params.postId;
 const post = ref({
 	seq: 0,
 	title: '',
@@ -271,29 +261,7 @@ const post = ref({
 });
 const userInfo = useUserInfoStore();
 const likes = ref(post.value.likeCount);
-const isLiked = ref(post.value.likeUsers.includes(userInfo.userSeq));
-const postSeq = ref(props.seq);
-const selectTitle = ref('정렬 방식 선택');
-const isSortingSelectClicked = ref(false);
-const selectSortingValue = ref({ name: '최신순', code: 'recent' });
-const selectList = [
-	{ name: '최신순', code: 'recent' },
-	{ name: '좋아요순', code: 'like' },
-	{ name: '조회순', code: 'view' },
-	{ name: '댓글순', code: 'comment' },
-];
-
-const selectedValue = value => {
-	selectSortingValue.value = value;
-	//정렬 변경
-};
-
-const openSortingSelect = () => {
-	isSortingSelectClicked.value = true;
-};
-const closeSelect = () => {
-	isSortingSelectClicked.value = false;
-};
+const isLiked = ref(false);
 
 const timeCalculation = localTime => {
 	// LocalDateTime 문자열을 JavaScript Date 객체로 변환
@@ -340,7 +308,7 @@ const likeApi = async () => {
 	isLiked.value = !isLiked.value;
 
 	try {
-		await sendRequest('patch', `/posts/${post.value.seq}/like`, {
+		await sendRequest('patch', `/posts/${postSeq}/like`, {
 			header: {
 				contentType: 'application/json',
 				token: `Bearer ${token}`,
@@ -355,7 +323,7 @@ const detailBoard = async () => {
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/posts/${postSeq.value}`,
+			`/posts/${route.params.postId}`,
 			{
 				header: {
 					contentType: 'application/json',
@@ -364,10 +332,15 @@ const detailBoard = async () => {
 		);
 		if (status === 200) {
 			post.value = data.data;
+			isLiked.value = data.data.likeUsers.some(user => user.seq === 1);
 		}
 	} catch (error) {
 		console.log(error);
 	}
+};
+
+const goToDown = () => {
+	window.scrollTo(0, document.body.scrollHeight);
 };
 
 onMounted(() => {

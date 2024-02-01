@@ -50,7 +50,7 @@ const router = createRouter({
 			component: BoardView,
 		},
 		{
-			path: '/board/:id',
+			path: '/board/:postId',
 			name: 'BoardDetail',
 			component: BoardDetailView,
 			props: true,
