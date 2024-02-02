@@ -112,14 +112,11 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 import useAxios from '@/composables/useAxios.js';
 import { computed, onMounted, ref } from 'vue';
 import { useLocationStore } from '@/stores/location.js';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
-
-axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
 const email = ref('');
 const password = ref('');
