@@ -52,7 +52,7 @@
 		<!-- <BoardContent /> -->
 		<div class="list-wrap">
 			<div class="list__title">
-				<span class="title">카테고리</span>
+				<span class="title">{{ selectCategoryValue.name }}</span>
 				<!-- 글쓰기버튼 -->
 				<button
 					type="button"
