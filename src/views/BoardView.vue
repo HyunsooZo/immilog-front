@@ -70,7 +70,6 @@
 					<span class="blind">글쓰기</span>
 				</button>
 			</div>
-			<DummyBoard />
 		</div>
 	</div>
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
@@ -89,7 +88,6 @@ import SearchBar from '@/components/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/SelectDialog.vue'; // .select--dialog
 import useAxios from '@/composables/useAxios.js';
 import PostModal from '@/components/PostModal.vue'; // .post--dialog
-import DummyBoard from '@/components/DummyBoard.vue';
 
 // .menu-wrap
 const menuBarLeft = ref('0px');
@@ -215,10 +213,6 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	} finally {
 		state.value.loading = false;
 	}
-};
-
-const setCountry = country => {
-	selectCountry.value = country;
 };
 
 watch(
