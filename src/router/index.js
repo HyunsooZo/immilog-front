@@ -50,15 +50,19 @@ const router = createRouter({
 			component: BoardView,
 		},
 		{
-			path: '/board/:id',
+			path: '/board/:postId',
 			name: 'BoardDetail',
 			component: BoardDetailView,
+			props: true,
 		},
 		{
 			path: '/result',
 			name: 'Result',
 			component: ResultViewVue,
-			props: true,
+			props: route => ({
+				titleEmphasis: route.query.titleEmphasis,
+				content: route.query.content,
+			}),
 		},
 	],
 });

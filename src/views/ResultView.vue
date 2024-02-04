@@ -28,11 +28,9 @@
 				</div>
 			</i>
 			<p class="item__msg">
-				<em>{{ titleEmphasis }}</em> {{ titleNormal }}
+				<em>{{ titleEmphasis }}</em>
 			</p>
-			<p class="item__description">
-				{{ content }}
-			</p>
+			<p class="item__description" div v-html="content"></p>
 		</div>
 
 		<div class="button-wrap">
@@ -51,8 +49,7 @@ const router = useRouter();
 const onLogin = () => {
 	router.push({ name: 'SignIn' });
 };
-
-const { titleEmphasis, titleNormal, content } = defineProps({
+defineProps({
 	titleEmphasis: {
 		type: String,
 	},
@@ -64,5 +61,3 @@ const { titleEmphasis, titleNormal, content } = defineProps({
 	},
 });
 </script>
-
-<style lang="scss" scoped></style>

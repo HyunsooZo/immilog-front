@@ -9,7 +9,14 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="email" type="text" class="input__element" placeholder="이메일" id="inputEmail" required />
+							<input
+								v-model="email"
+								type="text"
+								class="input__element"
+								placeholder="이메일"
+								id="inputEmail"
+								required
+							/>
 						</div>
 					</div>
 				</div>
@@ -21,8 +28,14 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="password" type="password" class="input__element" placeholder="비밀번호" id="inputPassword"
-								required />
+							<input
+								v-model="password"
+								type="password"
+								class="input__element"
+								placeholder="비밀번호"
+								id="inputPassword"
+								required
+							/>
 						</div>
 					</div>
 				</div>
@@ -35,11 +48,17 @@
 			</div>
 
 			<div class="button-wrap">
-				<button @click="getCoordinate" :class="{
-					'button button--positive': isValidLogin && !isLoading,
-					'button button--disabled': !isValidLogin || isLoading,
-				}" role="link" id="loginBtn">
-					로그인</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
+				<button
+					@click="getCoordinate"
+					:class="{
+						'button button--positive': isValidLogin && !isLoading,
+						'button button--disabled': !isValidLogin || isLoading,
+					}"
+					role="link"
+					id="loginBtn"
+				>
+					로그인</button
+				><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 		</div>
 
@@ -71,7 +90,11 @@
 			<ul>
 				<li>
 					<strong>회원이 아닌 경우</strong>
-					<button type="button" class="button-text link--type" @click="onSignUp">
+					<button
+						type="button"
+						class="button-text link--type"
+						@click="onSignUp"
+					>
 						<span>가입하기</span>
 					</button>
 				</li>
@@ -79,20 +102,21 @@
 		</div>
 	</div>
 	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+		<CustomAlert
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
+		/>
 	</teleport>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 import useAxios from '@/composables/useAxios.js';
 import { computed, onMounted, ref } from 'vue';
 import { useLocationStore } from '@/stores/location.js';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
-
-axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
 const email = ref('');
 const password = ref('');
@@ -111,12 +135,21 @@ const onSignUp = () => {
 
 const signIn = async (latitude, longitude) => {
 	try {
-		const { status, data } = await sendRequest('post', '/users/sign-in', {
-			email: email.value,
-			password: password.value,
-			latitude: latitude,
-			longitude: longitude,
-		});
+		const { status, data } = await sendRequest(
+			'post',
+			'/users/sign-in',
+			{
+				headers: {
+					contentType: 'multipart/form-data',
+				},
+			},
+			{
+				email: email.value,
+				password: password.value,
+				latitude: latitude,
+				longitude: longitude,
+			},
+		);
 
 		if (status === 200) {
 			console.log(data.data);

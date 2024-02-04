@@ -7,25 +7,46 @@
 			<!-- tab button -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
-						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
+					<li
+						v-for="(menu, index) in menus"
+						:key="index"
+						:class="{ active: menu.active.value }"
+						class="menu__list"
+					>
+						<button
+							@click="selectMenu(menu)"
+							type="button"
+							class="button"
+							:aria-selected="menu.active.value.toString()"
+						>
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
+				<span
+					class="menu__bar"
+					:style="{ left: menuBarLeft, width: menuBarWidth }"
+				></span>
 			</div>
 		</div>
 
 		<!-- 카테고리 정렬 -->
 		<div class="flexbox-wrap border--bot">
 			<div class="category__list">
-				<button type="button" class="button--select" @click="openCategorySelect">
+				<button
+					type="button"
+					class="button--select"
+					@click="openCategorySelect"
+				>
 					{{ selectCategoryValue.name }}
 				</button>
 			</div>
 			<div class="sort__list">
-				<button type="button" class="button--select sort" @click="openSortingSelect">
+				<button
+					type="button"
+					class="button--select sort"
+					@click="openSortingSelect"
+				>
 					{{ selectSortingValue.name }}
 				</button>
 			</div>
@@ -37,23 +58,30 @@
 			<div class="list__title">
 				<span class="title">{{ selectCategoryValue.name }} </span>
 			</div>
-			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
-			<DummyBoard />
+			<BoardContent
+				v-for="(item, index) in state.posts"
+				:key="index"
+				:post="item"
+			/>
 		</div>
 	</div>
-	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
-		@close="closeSelect" @select:value="selectedValue" />
+	<SelectDialog
+		v-if="isCategorySelectClicked || isSortingSelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 </template>
 
 <script setup>
 // import TheFooter from '@/components/layouts/TheFooter.vue';
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import SearchBar from '@/components/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/SelectDialog.vue'; // .select--dialog
 import CountryList from '@/components/CountryList.vue'; // .sub-menu-wrap
 import BoardContent from '@/components/BoardContent.vue';
 import useAxios from '@/composables/useAxios.js';
-import DummyBoard from '@/components/DummyBoard.vue';
 
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
@@ -61,9 +89,9 @@ const selectTitle = ref('');
 const selectList = ref('');
 const isCategorySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
-const selectCategoryValue = ref({ name: '전체', code: 'all' });
-const selectSortingValue = ref({ name: '최신순', code: 'recent' });
-const selectCountry = ref({ name: '전체', code: 'all' });
+const selectCategoryValue = ref({ name: '전체', code: 'ALL' });
+const selectSortingValue = ref({ name: '최신순', code: 'CREATED_DATE' });
+const selectCountry = ref({ name: '전체', code: 'ALL' });
 const currentPage = ref(0);
 const { sendRequest } = useAxios();
 const sortingList = [
@@ -73,11 +101,11 @@ const sortingList = [
 	{ name: '댓글순', code: 'COMMENT_COUNT' },
 ];
 const categoryList = [
-	{ name: '전체', code: 'all' },
-	{ name: '워킹홀리데이', code: 'workingholiday' },
-	{ name: '영주권', code: 'greencard' },
-	{ name: '소통', code: 'communication' },
-	{ name: '질문/답변', code: 'qanda' },
+	{ name: '전체', code: 'ALL' },
+	{ name: '워킹홀리데이', code: 'WORKING_HOLIDAY' },
+	{ name: '영주권', code: 'GREEN_CARD' },
+	{ name: '소통', code: 'COMMUNICATION' },
+	{ name: '질문/답변', code: 'QNA' },
 ];
 
 let menus = [
@@ -131,17 +159,13 @@ const selectedValue = value => {
 	} else if (sortingList.some(s => s.code === value.code)) {
 		selectSortingValue.value = value;
 	}
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
 const closeSelect = () => {
 	isCategorySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
-	inquireBoardList(selectCategoryValue.value, selectSortingValue.value);
-};
-
-const inquireBoardList = (category, sorting) => {
-	console.log(category, sorting);
-	console.log('inquireBoardList');
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
 // const loadMoreData = () => {
@@ -157,7 +181,17 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/posts?country=${selectCountry.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'Y'}&page=${nextPage}`,
+			`/posts
+			?country=${selectCountry.value.code.toUpperCase()}&
+			sortingMethod=${sortingMethod}&
+			isPublic=${'Y'}&
+			category=${selectCategoryValue.value.code}&
+			page=${nextPage}`,
+			{
+				headers: {
+					contentType: 'multipart/form-data',
+				},
+			},
 		);
 		if (status === 200) {
 			state.value.posts = data.data.content;
@@ -170,14 +204,10 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	}
 };
 
-const setCountry = country => {
-	selectCountry.value = country;
+const setCountry = value => {
+	selectCountry.value = value;
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
-
-watch(
-	[selectSortingValue, selectCountry, selectCategoryValue],
-	fetchBoardList(selectCategoryValue.value, currentPage.value),
-);
 
 onMounted(() => {
 	updateMenuBar();

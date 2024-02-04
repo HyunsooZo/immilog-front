@@ -7,11 +7,7 @@
 				:key="index"
 				:class="{ active: isActiveRegion(region.name) }"
 			>
-				<button
-					type="button"
-					class="button"
-					@click="setActiveRegion(region.name)"
-				>
+				<button type="button" class="button" @click="setActiveRegion(region)">
 					{{ region.name }}
 				</button>
 			</li>
@@ -60,10 +56,10 @@ const isActiveRegion = name => {
 const emit = defineEmits(['select:country']);
 
 // 활성화된 지역을 설정하는 함수
-const setActiveRegion = name => {
-	const index = regions.value.findIndex(region => region.name === name);
+const setActiveRegion = item => {
+	const index = regions.value.findIndex(region => region.name === item.name);
 	activeRegionIndex.value = index;
 	selectedCountry.value = regions.value[index].code;
-	emit('select:country', selectedCountry.value);
+	emit('select:country', item);
 };
 </script>

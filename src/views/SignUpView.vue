@@ -475,11 +475,10 @@ const returnSubmitValues = () => {
 const onResult = () => {
 	router.push({
 		name: 'Result',
-		params: {
-			titleEmphasis: '입력하신 이메일로 회원가입 인증 이메일을 전송했습니다.',
-			titleNormal:
-				'이메일을 확인하여 회원가입 인증 후 서비스 이용이 가능합니다.',
-			content: '이메일 인증 후 로그인을 진행해주세요.',
+		query: {
+			titleEmphasis: '회원가입 인증 이메일을 전송했습니다.',
+			content:
+				'입력하신 이메일을 통하여 <br>이메일 인증을 완료하신 후 <br>아래 버튼을 눌러 로그인을 진행해주세요.',
 		},
 	});
 };
