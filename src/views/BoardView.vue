@@ -70,6 +70,13 @@
 					<span class="blind">글쓰기</span>
 				</button>
 			</div>
+			<div>
+				<BoardContent
+					v-for="(item, index) in state.posts"
+					:key="index"
+					:post="item"
+				/>
+			</div>
 		</div>
 	</div>
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
@@ -88,6 +95,7 @@ import SearchBar from '@/components/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/SelectDialog.vue'; // .select--dialog
 import useAxios from '@/composables/useAxios.js';
 import PostModal from '@/components/PostModal.vue'; // .post--dialog
+import BoardContent from '@/components/BoardContent.vue';
 
 // .menu-wrap
 const menuBarLeft = ref('0px');
@@ -116,7 +124,6 @@ const updateMenuBar = () => {
 	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
 
-const selectCountry = ref({ name: '전체', code: 'all' });
 const selectTitle = ref('');
 const selectList = ref('');
 const currentPage = ref(0);
@@ -197,7 +204,7 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/posts?country=${selectCountry.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'Y'}&page=${nextPage}`,
+			`/posts?country=SOUTH_KOREA&category=${selectCategoryValue.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'Y'}&page=${nextPage}`,
 			{
 				headers: {
 					contentType: 'multipart/form-data',
@@ -216,7 +223,7 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 };
 
 watch(
-	[selectSortingValue, selectCountry, selectCategoryValue],
+	[selectSortingValue, selectCategoryValue],
 	fetchBoardList(selectCategoryValue.value, currentPage.value),
 );
 
