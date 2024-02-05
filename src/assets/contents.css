@@ -931,7 +931,7 @@ color: #ed1651;
     margin: 0 1rem 0 0;
 }
 .sort__list {
-    margin: 0 1rem;
+    margin: 0 1rem 0 auto;
 }
 /* 목록 상단타이틀 */
 .list-wrap .list__title {
