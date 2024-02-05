@@ -23,7 +23,8 @@ textarea {resize: none; width: 100%; padding: 0; border: none; background: trans
 select {width: 100%; border: 0; border-radius: 0; -webkit-appearance: none; -moz-appearance: none; appearance: none;}
 input {padding: 0; font-size: 1.4rem; appearance: none; border: 0; border-radius: 0; cursor: pointer; background: transparent;}
 input[type="checkbox"], input[type="radio"] {opacity: 0;}
-input:-webkit-autofill {-webkit-box-shadow: 0 0 0 1000px white inset;}
+input:-webkit-autofill {-webkit-box-shadow: 0 0 0 1000px transparent inset; -webkit-text-fill-color: #333 !important;}
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {transition: background-color 5000s ease-in-out 0s; -webkit-transition-delay: 9999s; transition-delay: 9999s;}
 input::-webkit-search-cancel-button {display: none;}
 input::placeholder {font: inherit; color: #999;}
 button {margin: 0; padding: 0; border: 0; background: 0; -webkit-appearance: none; outline: none; color: #333; letter-spacing: -.5px;}

@@ -8,14 +8,12 @@
 				<div class="list__item">
 					<button type="button" class="list__item_button ctg">
 						<em>{{ post.country }}</em>
-						<em>{{ post.region }}</em>
 						<strong>{{ post.category }}</strong>
 					</button>
 				</div>
 				<div class="list__item">
 					<button type="button" class="list__item_button user">
-						<em>작성자</em>
-						<strong>{{ post.userNickName }}</strong>
+						<strong>{{ post.userNickName }} ({{ post.region }})</strong>
 					</button>
 				</div>
 			</div>

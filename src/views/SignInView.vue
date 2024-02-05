@@ -1,4 +1,6 @@
 <template>
+	<LoadingModal v-if="isLoading" />
+
 	<div class="content">
 		<!-- 로그인 -->
 		<div class="container">
@@ -117,6 +119,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useLocationStore } from '@/stores/location.js';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
+import LoadingModal from '@/components/LoadingModal.vue';
 
 const email = ref('');
 const password = ref('');
@@ -174,7 +177,7 @@ const signIn = async (latitude, longitude) => {
 		console.log(error);
 		openAlert('서버와의 통신에 실패했습니다.');
 	} finally {
-		isLoading.value = false;
+		offLoading();
 	}
 };
 
@@ -189,7 +192,7 @@ const errorCallback = error => {
 };
 
 const getCoordinate = async () => {
-	isLoading.value = true;
+	onLoading();
 	try {
 		if (lat && lon) {
 			signIn(lat, lon);
@@ -230,6 +233,14 @@ const openAlert = content => {
 
 const closeAlert = () => {
 	alertValue.value = false;
+};
+
+const onLoading = () => {
+	isLoading.value = true;
+};
+
+const offLoading = () => {
+	isLoading.value = false;
 };
 
 onMounted(() => {
