@@ -199,7 +199,7 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 		const { status, data } = await sendRequest(
 			'get',
 			`/posts
-			?country=${selectCountry.value.code.toUpperCase()}&
+			?country=${selectCountry.value.name}&
 			sortingMethod=${sortingMethod}&
 			isPublic=${'Y'}&
 			category=${selectCategoryValue.value.code}&

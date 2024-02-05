@@ -159,6 +159,7 @@ const signIn = async (latitude, longitude) => {
 			console.dir(data.data);
 			useUserInfoStore().setUserInfo(
 				data.data.accessToken,
+				data.data.refreshToken,
 				data.data.nickname,
 				data.data.email,
 				data.data.country,
@@ -166,6 +167,7 @@ const signIn = async (latitude, longitude) => {
 				data.data.isLocationMatch,
 			);
 			localStorage.setItem('accessToken', data.data.accessToken);
+			localStorage.setItem('refreshToken', data.data.refreshToken);
 			router.push({ name: 'Home' });
 		} else {
 			password.value = '';

@@ -11,7 +11,7 @@ export default function useAxios() {
 				url,
 				headers: {
 					'Content-Type': header.contentType,
-					Authorization: header.token,
+					Authorization: localStorage.getItem('accessToken') || '',
 				},
 			};
 
