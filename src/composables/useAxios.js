@@ -2,6 +2,9 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const onLogin = () => {
+	router.push({ name: 'SignIn' });
+};
 export default function useAxios() {
 	axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
@@ -11,9 +14,9 @@ export default function useAxios() {
 				method,
 				url,
 				headers: {
-					'Content-Type': 'application/json', // 기본 Content-Type 설정
-					Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
-					...headers, // 추가적인 헤더
+					Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`, // 기본 Authorization 설정
+					'Content-Type': 'application/json',
+					...headers,
 				},
 				...(method.toLowerCase() === 'get' || method.toLowerCase() === 'delete'
 					? { params: data }
@@ -57,11 +60,13 @@ export default function useAxios() {
 		if (refreshResponse.status === 200) {
 			localStorage.setItem('accessToken', refreshResponse.data.data);
 		} else {
-			router.push('/sign-in');
+			onLogin();
 		}
 	};
 
 	return {
 		sendRequest,
+		refreshAccessToken,
+		onLogin,
 	};
 }

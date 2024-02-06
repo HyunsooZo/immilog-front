@@ -136,6 +136,49 @@ const onSignUp = () => {
 	router.push({ name: 'SignUp' });
 };
 
+const getUserInfo = async (latitude, longitude) => {
+	try {
+		const { status, data } = await sendRequest(
+			'get',
+			`/auth/user?latitude=${latitude}&longitude=${longitude}`,
+			{
+				headers: {
+					contentType: 'multipart/form-data',
+					AUTHORIZATION: `Bearer ${localStorage.getItem('accessToken')}`,
+				},
+			},
+		);
+		if (status === 200) {
+			useUserInfoStore().setUserInfo(
+				data.data.accessToken,
+				data.data.refreshToken,
+				data.data.nickname,
+				data.data.email,
+				data.data.country,
+				data.data.userProfileUrl,
+				data.data.isLocationMatch,
+			);
+		} else if (status === 401) {
+			await refreshToken();
+			getUserInfo();
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const refreshToken = async () => {
+	try {
+		const { status, data } = await sendRequest('post', '/auth/refresh');
+		if (status === 200) {
+			useUserInfoStore().setAccessToken(data.data.accessToken);
+			localStorage.setItem('accessToken', data.data.accessToken);
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 const signIn = async (latitude, longitude) => {
 	try {
 		const { status, data } = await sendRequest(
@@ -210,6 +253,8 @@ const getCoordinate = async () => {
 							position.coords.latitude,
 							position.coords.longitude,
 						);
+						localStorage.setItem('latitude', position.coords.latitude);
+						localStorage.setItem('longitude', position.coords.longitude);
 					},
 					errorCallback,
 					options,
@@ -245,8 +290,16 @@ const offLoading = () => {
 	isLoading.value = false;
 };
 
-onMounted(() => {
-	if (localStorage.getItem('accessToken')) {
+onMounted(async () => {
+	if (localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
+		useLocationStore().setLocation(
+			Number(localStorage.getItem('latitude')),
+			Number(localStorage.getItem('longitude')),
+		);
+	} else {
+		await getCoordinate();
+	}
+	if (localStorage.getItem('accessToken') && getUserInfo) {
 		router.push({ name: 'Home' });
 	}
 });

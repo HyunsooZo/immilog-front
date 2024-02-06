@@ -207,6 +207,7 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 			{
 				headers: {
 					contentType: 'multipart/form-data',
+					
 				},
 			},
 		);

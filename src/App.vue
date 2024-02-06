@@ -43,6 +43,8 @@ const getUserInfo = async (latitude, longitude) => {
 		} else if (status === 401) {
 			await refreshToken();
 			getUserInfo();
+		} else if (status === 400) {
+			route.push('/sign-in');
 		}
 	} catch (error) {
 		console.log(error);
@@ -75,6 +77,8 @@ const getCoordinate = () => {
 							position => {
 								latitude.value = position.coords.latitude;
 								longitude.value = position.coords.longitude;
+								localStorage.setItem('latitude', position.coords.latitude);
+								localStorage.setItem('longitude', position.coords.longitude);
 								resolve();
 							},
 							error => {
@@ -98,9 +102,16 @@ const getCoordinate = () => {
 };
 
 onMounted(async () => {
-	await getCoordinate();
-	nextTick(() => {
-		getUserInfo(latitude.value, longitude.value);
-	});
+	if (!localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
+		await getCoordinate();
+		nextTick(() => {
+			getUserInfo(latitude.value, longitude.value);
+		});
+	} else {
+		getUserInfo(
+			localStorage.getItem('latitude'),
+			localStorage.getItem('longitude'),
+		);
+	}
 });
 </script>

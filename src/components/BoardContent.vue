@@ -166,9 +166,8 @@ const likeApi = async () => {
 
 	try {
 		await sendRequest('patch', `/posts/${props.post.seq}/like`, {
-			header: {
-				contentType: 'application/json',
-				token: `Bearer ${token}`,
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			},
 		});
 	} catch (error) {
@@ -179,8 +178,8 @@ const likeApi = async () => {
 const increaseViewCount = async () => {
 	try {
 		await sendRequest('patch', `/posts/${props.post.seq}/view`, {
-			header: {
-				contentType: 'application/json',
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			},
 		});
 	} catch (error) {
