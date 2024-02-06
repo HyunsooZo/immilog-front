@@ -1,36 +1,63 @@
-// useAxios.js
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 export default function useAxios() {
 	axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
-	const sendRequest = async (method, url, header, request) => {
+	const sendRequest = async (method, url, headers = {}, data = {}) => {
 		try {
 			const config = {
 				method,
 				url,
 				headers: {
-					'Content-Type': header.contentType,
-					Authorization: localStorage.getItem('accessToken') || '',
+					'Content-Type': 'application/json', // 기본 Content-Type 설정
+					Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`,
+					...headers, // 추가적인 헤더
 				},
+				...(method.toLowerCase() === 'get' || method.toLowerCase() === 'delete'
+					? { params: data }
+					: { data }),
 			};
 
-			if (method.toLowerCase() === 'get' || method.toLowerCase() === 'delete') {
-				// GET 요청일 경우 데이터를 쿼리 파라미터로 붙임
-				config.params = request;
-			} else {
-				// GET 이외의 요청일 경우 데이터를 바디에 포함
-				config.data = request;
+			const response = await axios(config);
+			if (response.status === 401) {
+				await refreshAccessToken();
+				config.headers.Authorization = `Bearer ${
+					localStorage.getItem('accessToken') || ''
+				}`;
+				return sendRequest(method, url, headers, data); // 재요청
 			}
 
-			const { status, data } = await axios(config);
-
-			return { status, data };
+			return { status: response.status, data: response.data };
 		} catch (error) {
+			if (error.response && error.response.status === 401) {
+				// 401 Unauthorized 처리
+				await refreshAccessToken();
+				return sendRequest(method, url, headers, data); // 재요청
+			}
+
 			return {
-				status: error.response.status || 500,
-				error: error.response.data || 'Internal Server Error',
+				status: error.response?.status || 500,
+				error: error.response?.data || 'Internal Server Error',
 			};
+		}
+	};
+
+	const refreshAccessToken = async () => {
+		const refreshToken = localStorage.getItem('refreshToken');
+		const refreshResponse = await axios.get(
+			'/auth/refresh?token=' + refreshToken,
+			null,
+			{
+				headers: { 'Content-Type': 'application/json' },
+			},
+		);
+
+		if (refreshResponse.status === 200) {
+			localStorage.setItem('accessToken', refreshResponse.data.data);
+		} else {
+			router.push('/sign-in');
 		}
 	};
 
