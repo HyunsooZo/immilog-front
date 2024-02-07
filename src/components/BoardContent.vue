@@ -68,9 +68,7 @@
 import { useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
 import { onMounted, ref, watchEffect } from 'vue';
-import { useUserInfoStore } from '@/stores/userInfo';
 
-const userInfo = useUserInfoStore();
 const { sendRequest } = useAxios();
 
 const router = useRouter();
@@ -139,15 +137,8 @@ const timeCalculation = localTime => {
 	});
 };
 
-watchEffect(likeUsers => {
-	let liked = false; // 기본값을 false로 설정
-	props.post.likeUsers.forEach(user => {
-		if (user.seq === userInfo.userSeq) {
-			liked = true; // 사용자가 좋아요를 누른 경우 true로 설정
-		}
-	});
-	likeUsers.value = props.post.likeUsers;
-	isLiked.value = liked; // 최종 결과를 isLiked에 할당
+watchEffect(() => {
+	isLiked.value = props.post.likeUsers.includes(props.post.userSeq);
 });
 
 const likeApi = async () => {
