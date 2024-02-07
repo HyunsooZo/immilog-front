@@ -104,7 +104,7 @@ const props = defineProps({
 const likes = ref(props.post.likeCount);
 const likeUsers = ref(props.post.likeUsers);
 const userSeq = ref(userInfo.userSeq);
-const isLiked = ref(false);
+const isLiked = ref(likeUsers.value.includes(userSeq.value));
 
 const onBoardDetail = () => {
 	increaseViewCount();
