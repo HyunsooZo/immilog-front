@@ -102,7 +102,7 @@ const props = defineProps({
 });
 
 const likes = ref(props.post.likeCount);
-const isLiked = ref(false);
+const isLiked = ref();
 const onBoardDetail = () => {
 	increaseViewCount();
 	router.push(`/board/${props.post.seq}`);
