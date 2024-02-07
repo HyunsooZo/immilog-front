@@ -67,7 +67,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
-import { onMounted, ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 
 const { sendRequest } = useAxios();
 
@@ -100,7 +100,10 @@ const props = defineProps({
 });
 
 const likes = ref(props.post.likeCount);
-const isLiked = ref();
+const likeUsers = ref(props.post.likeUsers);
+const userSeq = ref(props.post.userSeq);
+const isLiked = ref(likeUsers.value.includes(userSeq.value));
+
 const onBoardDetail = () => {
 	increaseViewCount();
 	router.push(`/board/${props.post.seq}`);
@@ -137,23 +140,13 @@ const timeCalculation = localTime => {
 	});
 };
 
-watchEffect(() => {
-	isLiked.value = props.post.likeUsers.includes(props.post.userSeq);
-});
-
 const likeApi = async () => {
 	const token = localStorage.getItem('accessToken');
 	if (!token) {
 		router.push('/sign-in');
 		return;
 	}
-	if (isLiked.value) {
-		likes.value--;
-	} else {
-		likes.value++;
-	}
-	isLiked.value = !isLiked.value;
-
+	changeLike();
 	try {
 		await sendRequest('patch', `/posts/${props.post.seq}/like`, {
 			headers: {
@@ -177,7 +170,18 @@ const increaseViewCount = async () => {
 	}
 };
 
-onMounted(() => {
-	isLiked.value = props.post.likeUsers.includes(props.post.userSeq);
-});
+const changeLike = () => {
+	if (isLiked.value) {
+		const index = likeUsers.value.indexOf(userSeq.value);
+		if (index !== -1) {
+			likeUsers.value.splice(index, 1);
+		}
+		likes.value--;
+	} else {
+		likeUsers.value.push(userSeq.value);
+		likes.value++;
+	}
+
+	isLiked.value = likeUsers.value.includes(userSeq.value);
+};
 </script>
