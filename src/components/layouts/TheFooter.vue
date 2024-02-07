@@ -31,7 +31,6 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { menuStore } from '@/stores/menu.js';
 const router = useRouter();
 
 const menuItems = [
@@ -86,27 +85,21 @@ const onMenuItemClick = index => {
 	switch (index) {
 		case 0:
 			router.push('/');
-			activeItem.value = index;
 			break;
 		case 1:
 			router.push('/board');
-			activeItem.value = index;
 			break;
 		case 2:
 			router.push('/chat');
-			activeItem.value = index;
 			break;
 		case 3:
 			router.push('/job-board');
-			activeItem.value = index;
 			break;
 		case 4:
 			router.push('/my-page');
-			activeItem.value = index;
 			break;
 		default:
 	}
-	menuStore().serMenu(index);
-	activeItem.value = menuStore.menu;
+	activeItem.value = index;
 };
 </script>
