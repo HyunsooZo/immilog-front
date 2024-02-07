@@ -105,7 +105,7 @@ const likes = ref(props.post.likeCount);
 const likeUsers = ref(props.post.likeUsers);
 const userSeq = ref(userInfo.userSeq);
 const isLiked = computed(() => {
-	return userInfo.likeUsers.includes(userSeq.value);
+	return likeUsers.value.includes(userSeq.value);
 });
 
 const onBoardDetail = () => {
