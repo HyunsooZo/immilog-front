@@ -11,6 +11,7 @@ import { useRoute } from 'vue-router';
 import TheFooter from './components/layouts/TheFooter.vue';
 import useAxios from './composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo.js';
+import { menuStore } from '@/stores/menu.js';
 
 const { sendRequest } = useAxios();
 const route = useRoute();
@@ -113,5 +114,6 @@ onMounted(async () => {
 			localStorage.getItem('longitude'),
 		);
 	}
-});
+},
+);
 </script>

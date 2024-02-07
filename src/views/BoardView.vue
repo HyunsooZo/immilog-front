@@ -96,6 +96,10 @@ import SelectDialog from '@/components/SelectDialog.vue'; // .select--dialog
 import useAxios from '@/composables/useAxios.js';
 import PostModal from '@/components/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/BoardContent.vue';
+import { useUserInfoStore } from '@/stores/userInfo.js';
+
+/* 사용자 정보 Store */
+const userInfo = useUserInfoStore();
 
 // .menu-wrap
 const menuBarLeft = ref('0px');
@@ -204,10 +208,12 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/posts?country=SOUTH_KOREA&category=${selectCategoryValue.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'Y'}&page=${nextPage}`,
+			`/posts?country=${
+				userInfo.userCountry
+			}&category=${selectCategoryValue.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'Y'}&page=${nextPage}`,
 			{
 				headers: {
-					contentType: 'multipart/form-data',
+					contentType: 'multipart/application/json',
 				},
 			},
 		);
@@ -225,6 +231,13 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 watch(
 	[selectSortingValue, selectCategoryValue],
 	fetchBoardList(selectCategoryValue.value, currentPage.value),
+);
+
+watch(
+	() => userInfo.userCountry,
+	() => {
+		fetchBoardList(selectCategoryValue.value, currentPage.value);
+	},
 );
 
 onMounted(() => {

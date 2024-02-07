@@ -4,10 +4,22 @@
 		<ul class="util-item-wrap">
 			<!-- 사용할 아이콘 목록 -->
 			<li v-for="(item, index) in menuItems" :key="index" class="util__item">
-				<button type="button" :class="{ active: activeItem === index, [item.styleClass]: true }"
-					@click="onMenuItemClick(index)">
-					<svg :width="16" :height="16" :viewBox="item.viewBox" aria-hidden="true">
-						<path v-for="(path, pathIndex) in item.paths" :key="pathIndex" :d="path" />
+				<button
+					type="button"
+					:class="{ active: activeItem === index, [item.styleClass]: true }"
+					@click="onMenuItemClick(index)"
+				>
+					<svg
+						:width="16"
+						:height="16"
+						:viewBox="item.viewBox"
+						aria-hidden="true"
+					>
+						<path
+							v-for="(path, pathIndex) in item.paths"
+							:key="pathIndex"
+							:d="path"
+						/>
 					</svg>
 					<span>{{ item.label }}</span>
 				</button>
@@ -19,6 +31,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { menuStore } from '@/stores/menu.js';
 const router = useRouter();
 
 const menuItems = [
@@ -93,5 +106,7 @@ const onMenuItemClick = index => {
 			break;
 		default:
 	}
+	menuStore().serMenu(index);
+	activeItem.value = menuStore.menu;
 };
 </script>
