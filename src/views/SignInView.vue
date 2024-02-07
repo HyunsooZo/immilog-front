@@ -150,6 +150,7 @@ const getUserInfo = async (latitude, longitude) => {
 		);
 		if (status === 200) {
 			useUserInfoStore().setUserInfo(
+				data.data.userSeq,
 				data.data.accessToken,
 				data.data.refreshToken,
 				data.data.nickname,
@@ -201,6 +202,7 @@ const signIn = async (latitude, longitude) => {
 			console.log(data.data);
 			console.dir(data.data);
 			useUserInfoStore().setUserInfo(
+				data.data.userSeq,
 				data.data.accessToken,
 				data.data.refreshToken,
 				data.data.nickname,
