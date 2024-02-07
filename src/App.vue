@@ -32,7 +32,7 @@ const getUserInfo = async (latitude, longitude) => {
 		);
 		if (status === 200) {
 			useUserInfoStore().setUserInfo(
-				data.data.seq,
+				data.data.userSeq,
 				data.data.accessToken,
 				data.data.refreshToken,
 				data.data.nickname,
