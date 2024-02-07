@@ -11,7 +11,6 @@ import { useRoute } from 'vue-router';
 import TheFooter from './components/layouts/TheFooter.vue';
 import useAxios from './composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo.js';
-import { menuStore } from '@/stores/menu.js';
 
 const { sendRequest } = useAxios();
 const route = useRoute();
@@ -33,6 +32,7 @@ const getUserInfo = async (latitude, longitude) => {
 		);
 		if (status === 200) {
 			useUserInfoStore().setUserInfo(
+				data.data.userSeq,
 				data.data.accessToken,
 				data.data.refreshToken,
 				data.data.nickname,
@@ -114,6 +114,5 @@ onMounted(async () => {
 			localStorage.getItem('longitude'),
 		);
 	}
-},
-);
+});
 </script>

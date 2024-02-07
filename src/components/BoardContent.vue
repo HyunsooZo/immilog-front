@@ -68,6 +68,7 @@
 import { useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
 import { onMounted, ref } from 'vue';
+import { useUserInfoStore } from '@/stores/userInfo';
 
 const { sendRequest } = useAxios();
 
@@ -101,7 +102,7 @@ const props = defineProps({
 
 const likes = ref(props.post.likeCount);
 const likeUsers = ref(props.post.likeUsers);
-const userSeq = ref(props.post.userSeq);
+const userSeq = ref(useUserInfoStore.getItem(''));
 const isLiked = ref(false);
 
 const onBoardDetail = () => {
