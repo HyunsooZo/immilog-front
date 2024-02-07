@@ -102,10 +102,7 @@ const props = defineProps({
 });
 
 const likes = ref(props.post.likeCount);
-const isLiked = ref(null);
-const isIncluded = () => {
-	return props.post.likeUsers.includes(props.post.userSeq);
-};
+const isLiked = ref(false);
 const onBoardDetail = () => {
 	increaseViewCount();
 	router.push(`/board/${props.post.seq}`);
@@ -190,6 +187,6 @@ const increaseViewCount = async () => {
 };
 
 onMounted(() => {
-	isLiked.value = isIncluded();
+	isLiked.value = props.post.likeUsers.includes(props.post.userSeq);
 });
 </script>
