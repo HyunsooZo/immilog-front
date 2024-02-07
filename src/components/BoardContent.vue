@@ -67,7 +67,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const { sendRequest } = useAxios();
 
@@ -102,7 +102,7 @@ const props = defineProps({
 const likes = ref(props.post.likeCount);
 const likeUsers = ref(props.post.likeUsers);
 const userSeq = ref(props.post.userSeq);
-const isLiked = ref(likeUsers.value.includes(userSeq.value));
+const isLiked = ref(false);
 
 const onBoardDetail = () => {
 	increaseViewCount();
@@ -184,4 +184,8 @@ const changeLike = () => {
 
 	isLiked.value = likeUsers.value.includes(userSeq.value);
 };
+
+onMounted(() => {
+	isLiked.value = likeUsers.value.includes(userSeq.value);
+});
 </script>
