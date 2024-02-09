@@ -32,6 +32,19 @@
 						<p class="text">{{ post.content }}</p>
 					</div>
 				</div>
+				<!-- file preview -->
+				<div class="attach-file-view">
+					<div
+						v-for="(image, index) in post.attachments"
+						:key="index"
+						class="file"
+					>
+						<div class="file-display">
+							<img :src="image" alt="preview" />
+						</div>
+					</div>
+					<!-- //loop -->
+				</div>
 				<div class="tag-wrap">
 					<div class="tag__inner">
 						<div class="tag__item">
@@ -233,7 +246,6 @@
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import SelectDialog from '@/components/SelectDialog.vue';
 import { onMounted, ref } from 'vue';
-import { useUserInfoStore } from '@/stores/userInfo';
 import { useRoute, useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
 
@@ -259,7 +271,6 @@ const post = ref({
 	status: '',
 	createdAt: '',
 });
-const userInfo = useUserInfoStore();
 const likes = ref(post.value.likeCount);
 const isLiked = ref(false);
 
