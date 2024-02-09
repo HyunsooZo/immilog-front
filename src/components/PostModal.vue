@@ -29,27 +29,30 @@
 							</button>
 						</div>
 					</div>
-					<div class="input__wrap">
-						<div class="input__item">
-							<input
-								v-model="privateYn"
-								type="radio"
-								class="input__radio"
-								id="N"
-								name="postSelect"
-								checked
-							/>
-							<label for="N" class="input__label">모든 국가에 공개</label>
-						</div>
-						<div class="input__item">
-							<input
-								v-model="privateYn"
-								type="radio"
-								class="input__radio"
-								id="Y"
-								name="postSelect"
-							/>
-							<label for="Y" class="input__label">내 국가에만 공개</label>
+					<!-- 공개 권한 선택 -->
+					<div class="input-wrap">
+						<div class="input__wrap radio-type">
+							<div class="input__item">
+								<input
+									v-model="privateYn"
+									type="radio"
+									class="input__radio"
+									id="N"
+									name="postSelect"
+									checked
+								/>
+								<label for="N" class="input__label">모든 국가</label>
+							</div>
+							<div class="input__item">
+								<input
+									v-model="privateYn"
+									type="radio"
+									class="input__radio"
+									id="Y"
+									name="postSelect"
+								/>
+								<label for="Y" class="input__label">내 국가만</label>
+							</div>
 						</div>
 					</div>
 					<!-- post -->
@@ -149,8 +152,13 @@
 										<!-- tag__item -->
 										<div class="tag__item">
 											<span class="item--hash" v-for="tag in tags" :key="tag">
-												{{ tag }}</span
-											>
+												<em>{{ tag }}</em>
+												<button
+													type="button"
+													class="input__button-remove"
+													title="텍스트삭제"
+												></button>
+											</span>
 										</div>
 									</div>
 								</div>
