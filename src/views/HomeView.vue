@@ -237,6 +237,7 @@ const openPostModal = () => {
 };
 const closePostModal = () => {
 	onPostModal.value = false;
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
 onMounted(() => {
