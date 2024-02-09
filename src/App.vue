@@ -59,12 +59,10 @@ const refreshToken = async () => {
 		if (status === 200) {
 			useUserInfoStore().setAccessToken(data.data.accessToken);
 			localStorage.setItem('accessToken', data.data.accessToken);
-		} else if (status === 404) {
-			localStorage.clear();
-			router.push('/sign-in');
 		}
 	} catch (error) {
-		console.log(error);
+		localStorage.clear();
+		router.push('/sign-in');
 	}
 };
 
