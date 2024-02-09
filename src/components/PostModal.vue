@@ -405,7 +405,7 @@ const postUpload = async () => {
 			},
 			requstForm,
 		);
-		if (status === 200) {
+		if (status === 201) {
 			openAlert('게시글이 등록되었습니다.');
 			closeModal();
 		}
