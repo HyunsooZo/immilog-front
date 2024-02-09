@@ -7,14 +7,14 @@
 
 <script setup>
 import { computed, nextTick, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import TheFooter from './components/layouts/TheFooter.vue';
 import useAxios from './composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo.js';
-import router from './router';
 
 const { sendRequest } = useAxios();
 const route = useRoute();
+const router = useRouter();
 const hideFooter = computed(() => route.meta.hideFooter);
 const latitude = ref(0);
 const longitude = ref(0);
