@@ -56,8 +56,8 @@ const getUserInfo = async (latitude, longitude) => {
 const refreshToken = async () => {
 	try {
 		const { status, data } = await sendRequest(
-			'post',
-			'/auth/refresh?token' + localStorage.getItem('refreshToken'),
+			'get',
+			'/auth/refresh?token=' + localStorage.getItem('refreshToken'),
 		);
 		if (status === 200) {
 			useUserInfoStore().setAccessToken(data.data.accessToken);

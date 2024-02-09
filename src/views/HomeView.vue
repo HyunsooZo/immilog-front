@@ -102,6 +102,8 @@ import PostModal from '@/components/PostModal.vue';
 
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
+
+/* select variable & methods start */
 const selectTitle = ref('');
 const selectList = ref('');
 const isCategorySelectClicked = ref(false);
@@ -109,8 +111,6 @@ const isSortingSelectClicked = ref(false);
 const selectCategoryValue = ref({ name: '전체', code: 'ALL' });
 const selectSortingValue = ref({ name: '최신순', code: 'CREATED_DATE' });
 const selectCountry = ref({ name: '전체', code: 'ALL' });
-const currentPage = ref(0);
-const { sendRequest } = useAxios();
 const sortingList = [
 	{ name: '최신순', code: 'CREATED_DATE' },
 	{ name: '좋아요순', code: 'LIKE_COUNT' },
@@ -124,17 +124,6 @@ const categoryList = [
 	{ name: '소통', code: 'COMMUNICATION' },
 	{ name: '질문/답변', code: 'QNA' },
 ];
-
-let menus = [
-	{ label: '최신글', active: ref(true) },
-	{ label: '인기글', active: ref(false) },
-];
-
-const state = ref({
-	posts: [],
-	pagination: {},
-	loading: false,
-});
 
 const selectMenu = selectedMenu => {
 	selectedMenu.active.value = true;
@@ -164,12 +153,6 @@ const openSortingSelect = () => {
 	});
 };
 
-const updateMenuBar = () => {
-	const activeButton = document.querySelector('.menu__list.active .button');
-	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
-	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
-};
-
 const selectedValue = value => {
 	if (categoryList.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
@@ -183,6 +166,27 @@ const closeSelect = () => {
 	isCategorySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+};
+/* select end */
+
+const currentPage = ref(0);
+const { sendRequest } = useAxios();
+
+let menus = [
+	{ label: '최신글', active: ref(true) },
+	{ label: '인기글', active: ref(false) },
+];
+
+const state = ref({
+	posts: [],
+	pagination: {},
+	loading: false,
+});
+
+const updateMenuBar = () => {
+	const activeButton = document.querySelector('.menu__list.active .button');
+	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
+	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
 
 // const loadMoreData = () => {

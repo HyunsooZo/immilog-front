@@ -25,6 +25,29 @@
 							</button>
 						</div>
 					</div>
+					<div class="input__wrap">
+						<div class="input__item">
+							<input
+								v-model="privateYn"
+								type="radio"
+								class="input__radio"
+								id="N"
+								name="postSelect"
+								checked
+							/>
+							<label for="N" class="input__label">모든 국가에 공개</label>
+						</div>
+						<div class="input__item">
+							<input
+								v-model="privateYn"
+								type="radio"
+								class="input__radio"
+								id="Y"
+								name="postSelect"
+							/>
+							<label for="Y" class="input__label">내 국가에만 공개</label>
+						</div>
+					</div>
 					<!-- post -->
 					<div class="post__wrap">
 						<!-- title -->
@@ -33,6 +56,7 @@
 								<div class="input__item">
 									<div class="input__item_inner">
 										<input
+											v-model="title"
 											type="text"
 											class="input__element"
 											placeholder="제목을 입력해주세요."
@@ -54,71 +78,75 @@
 									autocomplete="off"
 									placeholder="다른 사용자로부터 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 될 수 있습니다."
 									data-autosuggest_is-input="true"
-									v-model="text"
+									v-model="content"
 									ref="textareaRef"
 									@input="adjustTextareaHeight"
 									rows="3"
 								></textarea>
 								<!-- file preview -->
 								<div class="attach-file-view">
-									<div class="file">
-										<div class="file-display">
-											<img
-												src="@/assets/images/icon-google-480.png"
-												alt="preview"
-											/>
-											<button type="button" class="button--del">
-												<span class="blind">삭제</span>
-											</button>
-										</div>
-										<div class="input__wrap underline-type">
-											<div class="input__item">
-												<div class="input__item_inner">
-													<input
-														type="text"
-														class="input__element"
-														placeholder="이미지에 대한 설명을 입력해주세요."
-														autocomplete="off"
-													/>
+									<div v-if="isImageUploaded">
+										<div
+											v-for="(image, index) in imagePreview"
+											:key="index"
+											class="file"
+										>
+											<div class="file-display">
+												<img :src="image" alt="preview" />
+												<button
+													type="button"
+													class="button--del"
+													@click="removeImage(index)"
+												>
+													<span class="blind">삭제</span>
+												</button>
+											</div>
+											<div class="input__wrap underline-type">
+												<div class="input__item">
+													<div class="input__item_inner">
+														<input
+															type="text"
+															class="input__element"
+															placeholder="이미지에 대한 설명을 입력해주세요."
+															autocomplete="off"
+														/>
+													</div>
 												</div>
 											</div>
 										</div>
+										<!-- //loop -->
 									</div>
-									<!-- //loop -->
-									<div class="file">
-										<div class="file-display">
-											<img
-												src="@/assets/images/icon-google-480.png"
-												alt="preview"
-												style="width: 150px"
-											/>
-											<button type="button" class="button--del">
-												<span class="blind">삭제</span>
-											</button>
-										</div>
-										<div class="input__wrap underline-type">
-											<div class="input__item">
-												<div class="input__item_inner">
-													<input
-														type="text"
-														class="input__element"
-														placeholder="이미지에 대한 설명을 입력해주세요."
-														autocomplete="off"
-													/>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- //loop -->
 								</div>
 								<!-- hashtag -->
 								<div class="tag-wrap">
 									<div class="tag__inner">
+										<div class="input-wrap">
+											<div class="input__wrap underline-type">
+												<div class="input__item">
+													<div class="input__item_inner">
+														<input
+															v-model="hashTag"
+															type="text"
+															class="input__element"
+															placeholder="해시태그를 입력 후 등록 버튼"
+															autocomplete="off"
+														/>
+													</div>
+												</div>
+												<button
+													type="button"
+													class="button button--primary"
+													@click="addTag"
+												>
+													<span>등록</span>
+												</button>
+											</div>
+										</div>
+										<!-- tag__item -->
 										<div class="tag__item">
-											<span class="item--hash">해시태그</span>
-											<button type="button" class="button--hash">
-												해시태그
-											</button>
+											<span class="item--hash" v-for="tag in tags" :key="tag">{{
+												tag
+											}}</span>
 										</div>
 									</div>
 								</div>
@@ -136,6 +164,7 @@
 										id="file-upload"
 										multiple="multiple"
 										accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff"
+										@change="previewImage"
 									/>
 									<label
 										for="file-upload"
@@ -171,13 +200,60 @@
 			</div>
 		</div>
 	</div>
+	<teleport to="#modal" v-if="alertValue">
+		<CustomAlert
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
+		/>
+	</teleport>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+// import useAxios from '@/composables/useAxios.js';
+
+// const { sendRequest } = useAxios();
+const alertValue = ref(false);
+const alertText = ref('');
+
+// radio value
+const privateYn = ref('');
+
+// title value
+const title = ref('');
+
+// content value
+const content = ref('');
+
+// tags
+const hashTag = ref('');
+const tags = ref([]);
+
+const isImageUploaded = computed(() => imagePreview.value.length > 0);
+
+const imageFile = ref(null);
+const imagePreview = ref([]);
+
+// preview image
+const previewImage = event => {
+	const input = event.target;
+	if (input.files && input.files[0]) {
+		const reader = new FileReader();
+		reader.onload = e => {
+			imagePreview.value.push(e.target.result);
+			imageFile.value.push(input.files[0]);
+		};
+		reader.readAsDataURL(input.files[0]);
+	}
+};
+
+// 미리보기 삭제
+const removeImage = index => {
+	imagePreview.value.splice(index, 1);
+};
 
 // textarea
-const text = ref('');
 const textareaRef = ref(null);
 const adjustTextareaHeight = () => {
 	const textarea = textareaRef.value;
@@ -187,9 +263,45 @@ const adjustTextareaHeight = () => {
 
 const emit = defineEmits(['onPostModal:value']);
 
+// close modal
 const closeModal = () => {
 	emit('onPostModal:value', false);
 };
 
-watch(text, adjustTextareaHeight);
+const addTag = () => {
+	tags.value.push(hashTag.value);
+	hashTag.value = '';
+};
+
+// image upload
+// const imageUpload = async () => {
+// 	try {
+// 		const formData = new FormData();
+// 		formData.append('multipartFile', imageFile.value);
+// 		const { status, data } = await sendRequest(
+// 			'post',
+// 			'/images?imagePath=content',
+// 			{
+// 				headers: {
+// 					contentType: 'multipart/form-data',
+// 				},
+// 			},
+// 			formData,
+// 		);
+// 		if (status === 200) {
+// 			attachments.value.push(data.data);
+// 		} else {
+// 			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+// 		}
+// 	} catch (error) {
+// 		console.log(error);
+// 	}
+// };
+
+// const openAlert = content => {
+// 	alertValue.value = true;
+// 	alertText.value = content;
+// };
+
+watch(content, adjustTextareaHeight);
 </script>
