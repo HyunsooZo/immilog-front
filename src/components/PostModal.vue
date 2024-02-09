@@ -20,8 +20,12 @@
 					<!-- selectbox -->
 					<div class="flexbox-wrap border--bot">
 						<div class="category__list">
-							<button type="button" class="button--select">
-								지역/구인구직
+							<button
+								type="button"
+								class="button--select"
+								@click="openCategorySelect"
+							>
+								{{ selectedCategory.name }}
 							</button>
 						</div>
 					</div>
@@ -144,9 +148,9 @@
 										</div>
 										<!-- tag__item -->
 										<div class="tag__item">
-											<span class="item--hash" v-for="tag in tags" :key="tag">{{
-												tag
-											}}</span>
+											<span class="item--hash" v-for="tag in tags" :key="tag">
+												{{ tag }}</span
+											>
 										</div>
 									</div>
 								</div>
@@ -200,25 +204,64 @@
 			</div>
 		</div>
 	</div>
-	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert
-			:alertValue="alertValue"
-			:alertText="alertText"
-			@update:alertValue="closeAlert"
-		/>
-	</teleport>
+	<CustomAlert
+		v-if="alertValue"
+		:alertValue="alertValue"
+		:alertText="alertText"
+		@update:alertValue="closeAlert"
+	/>
+	<SelectDialog
+		v-if="isCategorySelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 </template>
 
 <script setup>
 import { computed, ref, watch } from 'vue';
+import SelectDialog from './SelectDialog.vue';
+import CustomAlert from './modal/CustomAlert.vue';
 // import useAxios from '@/composables/useAxios.js';
+
+const isCategorySelectClicked = ref(false);
+const selectTitle = '카테고리 선택';
+const selectList = [
+	{ name: '워킹홀리데이', code: 'WORKING_HOLIDAY' },
+	{ name: '영주권', code: 'GREEN_CARD' },
+	{ name: '소통', code: 'COMMUNICATION' },
+	{ name: '질문/답변', code: 'QNA' },
+];
+
+const selectedCategory = ref({ name: '소통', code: 'COMMUNICATION' });
+const selectedValue = value => {
+	selectedCategory.value = value;
+};
+
+const openCategorySelect = () => {
+	isCategorySelectClicked.value = true;
+};
+
+const closeSelect = () => {
+	isCategorySelectClicked.value = false;
+};
 
 // const { sendRequest } = useAxios();
 const alertValue = ref(false);
 const alertText = ref('');
 
+const openAlert = content => {
+	alertValue.value = true;
+	alertText.value = content;
+};
+
+const closeAlert = () => {
+	alertValue.value = false;
+};
+
 // radio value
-const privateYn = ref('');
+const privateYn = ref('N');
 
 // title value
 const title = ref('');
@@ -238,6 +281,10 @@ const imagePreview = ref([]);
 // preview image
 const previewImage = event => {
 	const input = event.target;
+	if (imagePreview.value.length > 2) {
+		openAlert('이미지는 최대 3개까지만 등록이 가능합니다.');
+		return;
+	}
 	if (input.files && input.files[0]) {
 		const reader = new FileReader();
 		reader.onload = e => {
@@ -269,6 +316,10 @@ const closeModal = () => {
 };
 
 const addTag = () => {
+	if (tags.value.length > 7) {
+		openAlert('태그는 최대 8개까지만 등록이 가능합니다.');
+		return;
+	}
 	tags.value.push(hashTag.value);
 	hashTag.value = '';
 };
@@ -296,11 +347,6 @@ const addTag = () => {
 // 	} catch (error) {
 // 		console.log(error);
 // 	}
-// };
-
-// const openAlert = content => {
-// 	alertValue.value = true;
-// 	alertText.value = content;
 // };
 
 watch(content, adjustTextareaHeight);
