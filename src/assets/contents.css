@@ -324,25 +324,27 @@ strong + .button-text {
     align-items: center;
     width: 100%;
     padding: .6rem 0;
-    opacity: .6;
-}
-.footer .util-item-wrap .util__item .item.active {
-    opacity: 1;
 }
 .footer .util-item-wrap .util__item .item span {
     padding: .3rem 0 0;
     line-height: 1;
     font-size: 1rem;
-    color: #333;
+    color: #999;
 }
 .footer .util-item-wrap .util__item .item svg {
     display: inline-block;
     width: 2.1rem;
     height: 2.4rem;
-    fill: #333;
+    fill: #999;
 }
 .footer .util-item-wrap .util__item .item.my svg {
     width: 2.3rem;
+}
+.footer .util-item-wrap .util__item .item.active span {
+    color: #333;
+}
+.footer .util-item-wrap .util__item .item.active svg {
+    fill: #333;
 }
 
 /* sticky top */
