@@ -4,7 +4,7 @@
 			<div class="item__pic">
 				<img :src="post.userProfileUrl" alt="" />
 			</div>
-			<div class="item-fnc">
+			<div class="item__fnc">
 				<div class="list__item">
 					<button type="button" class="list__item_button ctg">
 						<em>{{ post.country }}</em>
@@ -21,12 +21,17 @@
 		</div>
 		<div class="text__wrap">
 			<button type="button" class="list__item_button" @click="onBoardDetail(post.seq)">
-				<p class="title">{{ post.title }}</p>
-				<p class="text">{{ post.content }}</p>
+				<div class="text__item">
+					<p class="title">{{ post.title }}</p>
+					<p class="text">{{ post.content }}</p>
+				</div>
+				<div class="thumb">
+					<img src="@/assets/images/email-icon-logo.png" alt="" />
+				</div>
 			</button>
 		</div>
 		<div class="util__wrap">
-			<div class="item-fnc">
+			<div class="item__fnc">
 				<p class="list__item read">
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ post.viewCount }}</span>
@@ -41,7 +46,7 @@
 					<span class="item__count">{{ post.comments.length }}</span>
 				</p>
 			</div>
-			<div class="item-fnc">
+			<div class="item__fnc">
 				<p class="list__item past">
 					<i class="blind">작성시간</i>
 					<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>

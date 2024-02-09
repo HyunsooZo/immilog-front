@@ -11,7 +11,7 @@
 					<div class="item__pic">
 						<img :src="post.userProfile" alt="post image" />
 					</div>
-					<div class="item-fnc">
+					<div class="item__fnc">
 						<div class="list__item">
 							<button type="button" class="list__item_button ctg">
 								<em>{{ post.country }}</em>
@@ -28,8 +28,10 @@
 				</div>
 				<div class="text__wrap">
 					<div class="list__item">
-						<p class="title">{{ post.title }}</p>
-						<p class="text">{{ post.content }}</p>
+						<div class="text__item">
+							<p class="title">{{ post.title }}</p>
+							<p class="text">{{ post.content }}</p>
+						</div>
 					</div>
 				</div>
 				<!-- file preview -->
@@ -50,7 +52,7 @@
 					</div>
 				</div>
 				<div class="util__wrap">
-					<div class="item-fnc">
+					<div class="item__fnc">
 						<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likeApi">
 							<i class="blind">좋아요</i>
 							<span class="item__count">{{ post.likeCount }}</span>
@@ -66,7 +68,7 @@
 							}}</span>
 						</p>
 					</div>
-					<div class="item-fnc">
+					<div class="item__fnc">
 						<button type="button" class="list__item_button share">
 							<i class="blind">공유하기</i>
 						</button>
@@ -91,7 +93,7 @@
 				<!-- 댓글 신고로 숨김처리 시 대체 텍스트 -->
 				<div class="blind__text">신고에 의해 숨김처리 되었습니다.</div>
 				<div class="info__wrap">
-					<div class="item-fnc">
+					<div class="item__fnc">
 						<div class="list__item">
 							<button type="button" class="list__item_button user">
 								<em>댓글작성자</em>
@@ -102,11 +104,13 @@
 				</div>
 				<div class="text__wrap">
 					<div class="list__item">
-						<p class="text">댓글내용</p>
+						<div class="text__item">
+							<p class="text">댓글내용</p>
+						</div>
 					</div>
 				</div>
 				<div class="util__wrap">
-					<div class="item-fnc">
+					<div class="item__fnc">
 						<button type="button" class="list__item_button like active">
 							<!-- //활성화 .active -->
 							<i class="blind">좋아요</i>
@@ -120,7 +124,7 @@
 							<span class="item__count">10시간 전</span>
 						</p>
 					</div>
-					<div class="item-fnc">
+					<div class="item__fnc">
 						<button type="button" class="list__item_button more">
 							<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 						</button>
@@ -132,7 +136,7 @@
 			<div class="re--reply">
 				<div class="item">
 					<div class="info__wrap">
-						<div class="item-fnc">
+						<div class="item__fnc">
 							<div class="list__item">
 								<button type="button" class="list__item_button user user--author">
 									<!-- //원글작성자 댓글 .user--author -->
@@ -144,11 +148,13 @@
 					</div>
 					<div class="text__wrap">
 						<div class="list__item">
-							<p class="text">대댓글내용</p>
+							<div class="text__item">
+								<p class="text">대댓글내용</p>
+							</div>
 						</div>
 					</div>
 					<div class="util__wrap">
-						<div class="item-fnc">
+						<div class="item__fnc">
 							<button type="button" class="list__item_button like active">
 								<!-- //활성화 .active -->
 								<i class="blind">좋아요</i>
@@ -159,7 +165,7 @@
 								<span class="item__count">10시간 전</span>
 							</p>
 						</div>
-						<div class="item-fnc">
+						<div class="item__fnc">
 							<button type="button" class="list__item_button more">
 								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 							</button>
@@ -169,7 +175,7 @@
 				<!-- //.item -->
 				<div class="item">
 					<div class="info__wrap">
-						<div class="item-fnc">
+						<div class="item__fnc">
 							<div class="list__item">
 								<button type="button" class="list__item_button user">
 									<em>대댓글작성자</em>
@@ -180,11 +186,13 @@
 					</div>
 					<div class="text__wrap">
 						<div class="list__item">
-							<p class="text">대댓글내용</p>
+							<div class="text__item">
+								<p class="text">대댓글내용</p>
+							</div>
 						</div>
 					</div>
 					<div class="util__wrap">
-						<div class="item-fnc">
+						<div class="item__fnc">
 							<button type="button" class="list__item_button like">
 								<!-- //활성화 .active -->
 								<i class="blind">좋아요</i>
@@ -195,7 +203,7 @@
 								<span class="item__count">10시간 전</span>
 							</p>
 						</div>
-						<div class="item-fnc">
+						<div class="item__fnc">
 							<button type="button" class="list__item_button more">
 								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 							</button>

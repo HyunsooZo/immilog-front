@@ -26,7 +26,7 @@
 							<button type="button" class="button button--result-recently" @click="reCallSearchApi(item)">
 								<em>{{ item }}</em>
 							</button>
-							<p class="item-fnc">
+							<p class="item__fnc">
 								<button type="button" class="button button--del" @click="removeSearchHistory(index)">
 									<span class="blind">삭제</span>
 								</button>

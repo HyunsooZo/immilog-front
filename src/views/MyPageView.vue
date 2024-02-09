@@ -7,7 +7,7 @@
 					<div class="item__pic">
 						<img src="" alt="" />
 					</div>
-					<div class="item-fnc">
+					<div class="item__fnc">
 						<div class="list__item">
 							<em>국가</em>
 							<em>지역</em>

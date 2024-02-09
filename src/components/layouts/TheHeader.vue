@@ -1,23 +1,13 @@
 <template>
 	<header class="header">
-		<div class="item-fnc">
-			<button
-				type="button"
-				class="button-icon button--back"
-				role="link"
-				@click="onBack"
-			>
+		<div class="item__fnc">
+			<button type="button" class="button-icon button--back" role="link" @click="onBack">
 				<span>이전화면</span>
 			</button>
 		</div>
 		<h1><em>KoMeet</em></h1>
-		<div class="item-fnc">
-			<button
-				type="button"
-				class="button-icon button--notice new"
-				role="link"
-				@click="onMenu"
-			>
+		<div class="item__fnc">
+			<button type="button" class="button-icon button--notice new" role="link" @click="onMenu">
 				<span>알림</span>
 			</button>
 			<!-- //새 알림 있는 경우 .new 추가 -->

@@ -95,7 +95,7 @@
 					<!--  -->
 					<div class="util__wrap">
 						<!-- 사진추가 -->
-						<div class="item-fnc">
+						<div class="item__fnc">
 							<div class="input__wrap attach-file-wrap">
 								<div class="input__file">
 									<input type="file" id="file-upload" multiple="multiple"
@@ -113,7 +113,7 @@
 							</div>
 						</div>
 						<!-- 해시태그 -->
-						<div class="item-fnc">
+						<div class="item__fnc">
 							<button type="button" class="button-icon svg" @click="hashTagAreaOpen">
 								<svg viewBox="0 0 16 16">
 									<path
