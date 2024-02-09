@@ -13,17 +13,14 @@
 				</div>
 				<div class="list__item">
 					<button type="button" class="list__item_button user">
-						<strong>{{ post.userNickName }} ({{ post.region }})</strong>
+						<em>{{ post.region }}</em>
+						<strong>{{ post.userNickName }}</strong>
 					</button>
 				</div>
 			</div>
 		</div>
 		<div class="text__wrap">
-			<button
-				type="button"
-				class="list__item_button"
-				@click="onBoardDetail(post.seq)"
-			>
+			<button type="button" class="list__item_button" @click="onBoardDetail(post.seq)">
 				<p class="title">{{ post.title }}</p>
 				<p class="text">{{ post.content }}</p>
 			</button>
@@ -34,12 +31,7 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ post.viewCount }}</span>
 				</p>
-				<button
-					type="button"
-					class="list__item_button like"
-					:class="{ active: isLiked }"
-					@click="likeApi"
-				>
+				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likeApi">
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count"> {{ likes }}</span>
