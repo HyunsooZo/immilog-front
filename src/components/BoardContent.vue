@@ -8,14 +8,12 @@
 				<div class="list__item">
 					<button type="button" class="list__item_button ctg">
 						<em>{{ post.country }}</em>
-						<em>{{ post.region }}</em>
 						<strong>{{ post.category }}</strong>
 					</button>
 				</div>
 				<div class="list__item">
 					<button type="button" class="list__item_button user">
-						<em>작성자</em>
-						<strong>{{ post.userNickName }}</strong>
+						<strong>{{ post.userNickName }} ({{ post.region }})</strong>
 					</button>
 				</div>
 			</div>
@@ -69,7 +67,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
-import { ref, watchEffect } from 'vue';
+import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 
 const userInfo = useUserInfoStore();
@@ -104,7 +102,11 @@ const props = defineProps({
 });
 
 const likes = ref(props.post.likeCount);
-const isLiked = ref(props.post.likeUsers.includes(userInfo.userSeq));
+const likeUsers = ref(props.post.likeUsers);
+const userSeq = ref(userInfo.userSeq);
+const isLiked = computed(() => {
+	return likeUsers.value.includes(userSeq.value);
+});
 
 const onBoardDetail = () => {
 	increaseViewCount();
@@ -142,35 +144,17 @@ const timeCalculation = localTime => {
 	});
 };
 
-watchEffect(likeUsers => {
-	let liked = false; // 기본값을 false로 설정
-	props.post.likeUsers.forEach(user => {
-		if (user.seq === userInfo.userSeq) {
-			liked = true; // 사용자가 좋아요를 누른 경우 true로 설정
-		}
-	});
-	likeUsers.value = props.post.likeUsers;
-	isLiked.value = liked; // 최종 결과를 isLiked에 할당
-});
-
 const likeApi = async () => {
 	const token = localStorage.getItem('accessToken');
 	if (!token) {
 		router.push('/sign-in');
 		return;
 	}
-	if (isLiked.value) {
-		likes.value--;
-	} else {
-		likes.value++;
-	}
-	isLiked.value = !isLiked.value;
-
+	changeLike();
 	try {
 		await sendRequest('patch', `/posts/${props.post.seq}/like`, {
-			header: {
-				contentType: 'application/json',
-				token: `Bearer ${token}`,
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			},
 		});
 	} catch (error) {
@@ -181,12 +165,25 @@ const likeApi = async () => {
 const increaseViewCount = async () => {
 	try {
 		await sendRequest('patch', `/posts/${props.post.seq}/view`, {
-			header: {
-				contentType: 'application/json',
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			},
 		});
 	} catch (error) {
 		console.log(error);
+	}
+};
+
+const changeLike = () => {
+	if (isLiked.value) {
+		const index = likeUsers.value.indexOf(userSeq.value);
+		if (index !== -1) {
+			likeUsers.value.splice(index, 1);
+		}
+		likes.value--;
+	} else {
+		likeUsers.value.push(userSeq.value);
+		likes.value++;
 	}
 };
 </script>

@@ -4,10 +4,22 @@
 		<ul class="util-item-wrap">
 			<!-- 사용할 아이콘 목록 -->
 			<li v-for="(item, index) in menuItems" :key="index" class="util__item">
-				<button type="button" :class="{ active: activeItem === index, [item.styleClass]: true }"
-					@click="onMenuItemClick(index)">
-					<svg :width="16" :height="16" :viewBox="item.viewBox" aria-hidden="true">
-						<path v-for="(path, pathIndex) in item.paths" :key="pathIndex" :d="path" />
+				<button
+					type="button"
+					:class="{ active: activeItem === index, [item.styleClass]: true }"
+					@click="onMenuItemClick(index)"
+				>
+					<svg
+						:width="16"
+						:height="16"
+						:viewBox="item.viewBox"
+						aria-hidden="true"
+					>
+						<path
+							v-for="(path, pathIndex) in item.paths"
+							:key="pathIndex"
+							:d="path"
+						/>
 					</svg>
 					<span>{{ item.label }}</span>
 				</button>
@@ -73,25 +85,21 @@ const onMenuItemClick = index => {
 	switch (index) {
 		case 0:
 			router.push('/');
-			activeItem.value = index;
 			break;
 		case 1:
 			router.push('/board');
-			activeItem.value = index;
 			break;
 		case 2:
 			router.push('/chat');
-			activeItem.value = index;
 			break;
 		case 3:
 			router.push('/job-board');
-			activeItem.value = index;
 			break;
 		case 4:
 			router.push('/my-page');
-			activeItem.value = index;
 			break;
 		default:
 	}
+	activeItem.value = index;
 };
 </script>

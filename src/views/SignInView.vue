@@ -1,4 +1,6 @@
 <template>
+	<LoadingModal v-if="isLoading" />
+
 	<div class="content">
 		<!-- 로그인 -->
 		<div class="container">
@@ -117,6 +119,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useLocationStore } from '@/stores/location.js';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
+import LoadingModal from '@/components/LoadingModal.vue';
 
 const email = ref('');
 const password = ref('');
@@ -133,7 +136,52 @@ const onSignUp = () => {
 	router.push({ name: 'SignUp' });
 };
 
+const getUserInfo = async (latitude, longitude) => {
+	try {
+		const { status, data } = await sendRequest(
+			'get',
+			`/auth/user?latitude=${latitude}&longitude=${longitude}`,
+			{
+				headers: {
+					contentType: 'multipart/form-data',
+					AUTHORIZATION: `Bearer ${localStorage.getItem('accessToken')}`,
+				},
+			},
+		);
+		if (status === 200) {
+			useUserInfoStore().setUserInfo(
+				data.data.userSeq,
+				data.data.accessToken,
+				data.data.refreshToken,
+				data.data.nickname,
+				data.data.email,
+				data.data.country,
+				data.data.userProfileUrl,
+				data.data.isLocationMatch,
+			);
+		} else if (status === 401) {
+			await refreshToken();
+			getUserInfo();
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const refreshToken = async () => {
+	try {
+		const { status, data } = await sendRequest('post', '/auth/refresh');
+		if (status === 200) {
+			useUserInfoStore().setAccessToken(data.data.accessToken);
+			localStorage.setItem('accessToken', data.data.accessToken);
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 const signIn = async (latitude, longitude) => {
+	onLoading();
 	try {
 		const { status, data } = await sendRequest(
 			'post',
@@ -155,7 +203,9 @@ const signIn = async (latitude, longitude) => {
 			console.log(data.data);
 			console.dir(data.data);
 			useUserInfoStore().setUserInfo(
+				data.data.userSeq,
 				data.data.accessToken,
+				data.data.refreshToken,
 				data.data.nickname,
 				data.data.email,
 				data.data.country,
@@ -163,6 +213,7 @@ const signIn = async (latitude, longitude) => {
 				data.data.isLocationMatch,
 			);
 			localStorage.setItem('accessToken', data.data.accessToken);
+			localStorage.setItem('refreshToken', data.data.refreshToken);
 			router.push({ name: 'Home' });
 		} else {
 			password.value = '';
@@ -174,7 +225,7 @@ const signIn = async (latitude, longitude) => {
 		console.log(error);
 		openAlert('서버와의 통신에 실패했습니다.');
 	} finally {
-		isLoading.value = false;
+		offLoading();
 	}
 };
 
@@ -189,7 +240,6 @@ const errorCallback = error => {
 };
 
 const getCoordinate = async () => {
-	isLoading.value = true;
 	try {
 		if (lat && lon) {
 			signIn(lat, lon);
@@ -205,6 +255,8 @@ const getCoordinate = async () => {
 							position.coords.latitude,
 							position.coords.longitude,
 						);
+						localStorage.setItem('latitude', position.coords.latitude);
+						localStorage.setItem('longitude', position.coords.longitude);
 					},
 					errorCallback,
 					options,
@@ -232,8 +284,24 @@ const closeAlert = () => {
 	alertValue.value = false;
 };
 
-onMounted(() => {
-	if (localStorage.getItem('accessToken')) {
+const onLoading = () => {
+	isLoading.value = true;
+};
+
+const offLoading = () => {
+	isLoading.value = false;
+};
+
+onMounted(async () => {
+	if (localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
+		useLocationStore().setLocation(
+			Number(localStorage.getItem('latitude')),
+			Number(localStorage.getItem('longitude')),
+		);
+	} else {
+		await getCoordinate();
+	}
+	if (localStorage.getItem('accessToken') && getUserInfo) {
 		router.push({ name: 'Home' });
 	}
 });

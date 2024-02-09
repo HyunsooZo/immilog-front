@@ -3,7 +3,9 @@ import { defineStore } from 'pinia';
 export const useUserInfoStore = defineStore({
 	id: 'userInfo',
 	state: () => ({
-		token: null,
+		userSeq: null,
+		accessToken: null,
+		refreshToken: null,
 		userNickname: null,
 		userEmail: null,
 		userCountry: null,
@@ -11,8 +13,19 @@ export const useUserInfoStore = defineStore({
 		isLocationMatch: false,
 	}),
 	actions: {
-		setUserInfo(token, nickname, email, country, userProfile, isLocationMatch) {
-			this.token = token;
+		setUserInfo(
+			userSeq,
+			accessToken,
+			refreshToken,
+			nickname,
+			email,
+			country,
+			userProfile,
+			isLocationMatch,
+		) {
+			this.userSeq = userSeq;
+			this.accessToken = accessToken;
+			this.refreshToken = refreshToken;
 			this.userNickname = nickname;
 			this.userEmail = email;
 			this.userCountry = country;
