@@ -865,11 +865,11 @@ color: #ed1651;
     clip: rect(0,0,0,0);
     border: 0;
 }
-.attach-file-wrap .file-display {
+.attach-file-wrap .item__display {
     position: relative;
     margin-left: 1.5rem;
 }
-.attach-file-wrap .file-display img {
+.attach-file-wrap .item__display img {
     width: 3.4rem;
     height: 3.4rem;
     border: 1px solid #e9e9e9;
@@ -877,7 +877,7 @@ color: #ed1651;
     vertical-align: top;
     object-fit: cover;
 }
-.attach-file-wrap .file-display .button--del {
+.attach-file-wrap .item__display .button--del {
     display: none;
     width: 2rem;
     height: 2rem;
@@ -885,7 +885,7 @@ color: #ed1651;
     border-radius: .4rem;
     font-size: 0;
 }
-.attach-file-wrap .file-display .button--del::after {
+.attach-file-wrap .item__display .button--del::after {
     content: '';
     display: inline-block;
     width: 1.8rem;
@@ -894,7 +894,7 @@ color: #ed1651;
     background-repeat: no-repeat;
     background-size: 100%;
 }
-.attach-file-wrap .file-display img + .button--del {
+.attach-file-wrap .item__display img + .button--del {
     display: inline-block;
 }
 
@@ -1104,13 +1104,13 @@ color: #ed1651;
     max-height: 3.4rem;
 }
 /* 해시태그 */
-.list-wrap .item .tag-wrap {
+.list-wrap .item .tag__wrap {
     margin: 1.5rem -.2rem;
 }
-.tag-wrap .tag__item {
+.tag__wrap .tag__item {
     overflow-wrap: break-word;
 }
-.tag-wrap [class*=--hash] {
+.tag__wrap [class*=--hash] {
     position: relative;
     margin: 0 .2rem;
     padding: .2rem .2rem;
@@ -1119,7 +1119,7 @@ color: #ed1651;
     color: #00bcd4;
     white-space: nowrap;
 }
-.tag-wrap [class*=--hash]::before {
+.tag__wrap [class*=--hash]::before {
     content: '#';
 }
 /* 기능버튼, 글정보 */
@@ -1291,31 +1291,25 @@ color: #ed1651;
 .post__wrap .post__content {
     margin-top: 2rem;
 }
-.post__wrap .user {
-    display: inline-block;
-    position: relative;
-    color: #999;
-    font-size: 1.2rem;
-}
 .post__wrap .post {
     margin-top: 1rem;
 }
 .post__wrap .text__area {
     color: #666;
 }
-.attach-file-view {
+.attachments__wrap {
     margin-top: 2rem;
     font-size: 0;
 }
-.attach-file-view .file-display {
+.attachments__wrap .item__display {
     position: relative;
     overflow: hidden;
     display: inline-block;
 }
-.attach-file-view .file + .file {
+.attachments__wrap .attachments__item + .attachments__item {
     margin-top: 1.5rem;
 }
-.file-display .button--del {
+.item__display .button--del {
     position: absolute;
     top: 0;
     right: 0;
@@ -1328,43 +1322,44 @@ color: #ed1651;
     background-position: 50% center;
     background-size: 100%;
 }
-.file-display img {
+.item__display img {
     max-width: 100%;
     height: auto;
     margin: 0;
     vertical-align: top;
 }
-.attach-file-view .input__element {
+.attachments__wrap .input__element {
     font-size: 1.2rem;
     color: #999;
 }
-.attach-file-view .input__item_inner {
+.attachments__wrap .input__item_inner {
     border: none;
 }
-.post__wrap .tag-wrap {
+.post__wrap .tag__wrap {
     margin: 2rem 0;
 }
-.post__wrap .tag-wrap .input-wrap {
+.post__wrap .tag__wrap .input-wrap {
     margin: 0;
 }
-.post__wrap .tag-wrap .input-wrap .input__item_inner {
+.post__wrap .tag__wrap .input-wrap .input__item_inner {
     border-color: #ccc;
 }
-.post__wrap .tag-wrap .input-wrap .input__element {
+.post__wrap .tag__wrap .input-wrap .input__element {
     min-height: 2.4rem;
     padding: 0;
     line-height: 1.4rem;
     font-size: 1.2rem;
 }
-.post__wrap .tag-wrap .input-wrap .button {
+.post__wrap .tag__wrap .input-wrap .button {
     border-color: #ccc;
 }
-.post__wrap .tag-wrap .tag__item {
+.post__wrap .tag__wrap .tag__item {
     margin-top: 1.5rem;
 }
-.post__wrap .tag-wrap .input__button-remove {
+.post__wrap .tag__wrap .input__button-remove {
     width: 1.6rem;
     vertical-align: bottom;
+    z-index: inherit;
 }
 .post-wrap .util__wrap {
     position: fixed;

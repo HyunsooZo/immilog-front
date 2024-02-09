@@ -26,10 +26,10 @@ $(function () {
 	var imgTarget = $('.filepreview-type .input__element');
 	imgTarget.on('change', function () {
 		var parent = $(this).parent();
-		var existingImage = parent.siblings('.file-display img');
+		var existingImage = parent.siblings('.item__display img');
 		var displayImage = $('<img class="file-thumb">');
 
-		parent.siblings('.file-display').find('img').remove();
+		parent.siblings('.item__display').find('img').remove();
 
 		if (window.FileReader) {
 			if (!$(this)[0].files[0].type.match(/image\//)) return;
@@ -38,7 +38,7 @@ $(function () {
 			reader.onload = function (e) {
 				var src = e.target.result;
 				displayImage.attr('src', src);
-				parent.siblings('.file-display').prepend(displayImage);
+				parent.siblings('.item__display').prepend(displayImage);
 			};
 			reader.readAsDataURL($(this)[0].files[0]);
 		} else {
@@ -51,7 +51,7 @@ $(function () {
 				"progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\"" +
 				imgSrc +
 				'")';
-			parent.siblings('.file-display').prepend(displayImage);
+			parent.siblings('.item__display').prepend(displayImage);
 		}
 
 		// 이미지 업로드 후 재선택 가능하도록 input value 초기화
@@ -61,6 +61,6 @@ $(function () {
 	$('.filepreview-type .button--del').on('click', function () {
 		var imgTarget = $('.filepreview-type .input__element');
 		imgTarget.val('');
-		$('.file-display').find('img').remove();
+		$('.item__display').find('img').remove();
 	});
 });

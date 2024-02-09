@@ -33,27 +33,17 @@
 					</div>
 				</div>
 				<!-- file preview -->
-				<div class="attach-file-view">
-					<div
-						v-for="(image, index) in post.attachments"
-						:key="index"
-						class="file"
-					>
-						<div class="file-display">
+				<div class="attachments__wrap" v-if="post.attachments.length > 0">
+					<div class="attachments__item" v-for="(image, index) in post.attachments" :key="index">
+						<div class="item__display">
 							<img :src="image" alt="preview" />
 						</div>
-					</div>
-					<!-- //loop -->
+					</div><!-- //loop -->
 				</div>
-				<div class="tag-wrap">
+				<div class="tag__wrap">
 					<div class="tag__inner">
 						<div class="tag__item">
-							<button
-								v-for="tag in post.tags"
-								:key="tag"
-								type="button"
-								class="button button--hash"
-							>
+							<button v-for="tag in post.tags" :key="tag" type="button" class="button button--hash">
 								<em>{{ tag }}</em>
 							</button>
 						</div>
@@ -61,12 +51,7 @@
 				</div>
 				<div class="util__wrap">
 					<div class="item-fnc">
-						<button
-							type="button"
-							class="list__item_button like"
-							:class="{ active: isLiked }"
-							@click="likeApi"
-						>
+						<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likeApi">
 							<i class="blind">좋아요</i>
 							<span class="item__count">{{ post.likeCount }}</span>
 						</button>
@@ -137,8 +122,7 @@
 					</div>
 					<div class="item-fnc">
 						<button type="button" class="list__item_button more">
-							<i class="blind">더보기</i
-							><!-- //차단하기, 대화하기.. -->
+							<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 						</button>
 					</div>
 				</div>
@@ -150,10 +134,7 @@
 					<div class="info__wrap">
 						<div class="item-fnc">
 							<div class="list__item">
-								<button
-									type="button"
-									class="list__item_button user user--author"
-								>
+								<button type="button" class="list__item_button user user--author">
 									<!-- //원글작성자 댓글 .user--author -->
 									<em>원글작성자 대댓글</em>
 									<strong>원글작성자 닉네임</strong>
@@ -180,8 +161,7 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i
-								><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
@@ -217,8 +197,7 @@
 						</div>
 						<div class="item-fnc">
 							<button type="button" class="list__item_button more">
-								<i class="blind">더보기</i
-								><!-- //차단하기, 대화하기.. -->
+								<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 							</button>
 						</div>
 					</div>
@@ -233,13 +212,8 @@
 			</div>
 		</div>
 	</div>
-	<SelectDialog
-		v-if="isSortingSelectClicked"
-		:title="selectTitle"
-		:list="selectList"
-		@close="closeSelect"
-		@select:value="selectedValue"
-	/>
+	<SelectDialog v-if="isSortingSelectClicked" :title="selectTitle" :list="selectList" @close="closeSelect"
+		@select:value="selectedValue" />
 </template>
 
 <script setup>
