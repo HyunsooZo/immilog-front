@@ -13,10 +13,7 @@ export default function useAxios() {
 			const config = {
 				method,
 				url,
-				headers: {
-					'Content-Type': headers.contentType || 'application/json',
-					Authorization: headers.Authorization || '',
-				},
+				...headers,
 				...(method.toLowerCase() === 'get' || method.toLowerCase() === 'delete'
 					? { params: data }
 					: { data }),

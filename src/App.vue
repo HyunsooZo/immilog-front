@@ -26,10 +26,11 @@ const getUserInfo = async (latitude, longitude) => {
 			`/auth/user?latitude=${latitude}&longitude=${longitude}`,
 			{
 				headers: {
-					contentType: 'multipart/form-data',
-					AUTHORIZATION: `Bearer ${localStorage.getItem('accessToken')}`,
+					contentType: 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 				},
 			},
+			null,
 		);
 		if (status === 200) {
 			useUserInfoStore().setUserInfo(

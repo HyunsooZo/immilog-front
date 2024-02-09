@@ -355,7 +355,7 @@ const imageUpload = async () => {
 			'post',
 			'/images?imagePath=content',
 			{
-				header: {
+				headers: {
 					contentType: 'multipart/form-data',
 				},
 			},
@@ -396,9 +396,9 @@ const postUpload = async () => {
 			'post',
 			'/posts',
 			{
-				header: {
+				headers: {
 					contentType: 'application/json',
-					Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 				},
 			},
 			requstForm,
