@@ -11,6 +11,7 @@ import { useRoute } from 'vue-router';
 import TheFooter from './components/layouts/TheFooter.vue';
 import useAxios from './composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo.js';
+import router from './router';
 
 const { sendRequest } = useAxios();
 const route = useRoute();
@@ -58,6 +59,9 @@ const refreshToken = async () => {
 		if (status === 200) {
 			useUserInfoStore().setAccessToken(data.data.accessToken);
 			localStorage.setItem('accessToken', data.data.accessToken);
+		} else if (status === 404) {
+			localStorage.clear();
+			router.push('/sign-in');
 		}
 	} catch (error) {
 		console.log(error);
