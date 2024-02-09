@@ -181,6 +181,7 @@ const refreshToken = async () => {
 };
 
 const signIn = async (latitude, longitude) => {
+	onLoading();
 	try {
 		const { status, data } = await sendRequest(
 			'post',
@@ -239,7 +240,6 @@ const errorCallback = error => {
 };
 
 const getCoordinate = async () => {
-	onLoading();
 	try {
 		if (lat && lon) {
 			signIn(lat, lon);

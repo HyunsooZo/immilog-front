@@ -14,9 +14,8 @@ export default function useAxios() {
 				method,
 				url,
 				headers: {
-					Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`, // 기본 Authorization 설정
-					'Content-Type': 'application/json',
-					...headers,
+					'Content-Type': headers.contentType || 'application/json',
+					Authorization: headers.AUTHORIZATION || '',
 				},
 				...(method.toLowerCase() === 'get' || method.toLowerCase() === 'delete'
 					? { params: data }
@@ -59,7 +58,6 @@ export default function useAxios() {
 
 		if (refreshResponse.status === 200) {
 			localStorage.setItem('accessToken', refreshResponse.data.data);
-		} else {
 			onLogin();
 		}
 	};

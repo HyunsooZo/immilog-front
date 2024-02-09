@@ -42,11 +42,11 @@ const getUserInfo = async (latitude, longitude) => {
 				data.data.userProfileUrl,
 				data.data.isLocationMatch,
 			);
-		} else if (status === 401) {
-			await refreshToken();
-			getUserInfo();
-		} else if (status === 400) {
-			route.push('/sign-in');
+		} else {
+			const response = await refreshToken();
+			if (response) {
+				getUserInfo();
+			}
 		}
 	} catch (error) {
 		console.log(error);
@@ -55,14 +55,25 @@ const getUserInfo = async (latitude, longitude) => {
 
 const refreshToken = async () => {
 	try {
-		const { status, data } = await sendRequest('post', '/auth/refresh');
+		const { status, data } = await sendRequest(
+			'post',
+			'/auth/refresh?token' + localStorage.getItem('refreshToken'),
+		);
 		if (status === 200) {
 			useUserInfoStore().setAccessToken(data.data.accessToken);
 			localStorage.setItem('accessToken', data.data.accessToken);
+			return true;
+		} else if (status === 404) {
+			localStorage.clear();
+			router.push('/sign-in');
+			return false;
 		}
 	} catch (error) {
-		localStorage.clear();
-		router.push('/sign-in');
+		if (error.response && error.response.status === 404) {
+			localStorage.clear();
+			router.push('/sign-in');
+			return false;
+		}
 	}
 };
 
