@@ -4,7 +4,11 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">글쓰기</p>
-				<button type="button" class="button button--primary">
+				<button
+					type="button"
+					class="button button--primary"
+					@click="postUpload"
+				>
 					<span>등록</span>
 				</button>
 				<button
@@ -41,7 +45,7 @@
 									name="postSelect"
 									checked
 								/>
-								<label for="N" class="input__label">모든 국가</label>
+								<label for="N" class="input__label">모든 국가에 공개</label>
 							</div>
 							<div class="input__item">
 								<input
@@ -51,7 +55,7 @@
 									id="Y"
 									name="postSelect"
 								/>
-								<label for="Y" class="input__label">내 국가만</label>
+								<label for="Y" class="input__label">내 국가에만 공개</label>
 							</div>
 						</div>
 					</div>
@@ -75,9 +79,9 @@
 						</div>
 						<!-- contents -->
 						<div class="post__content">
-							<p class="user">
+							<!-- <p class="user">
 								<em>지역</em><strong class="name">작성자닉네임</strong>
-							</p>
+							</p> -->
 							<div class="post">
 								<textarea
 									class="text__area"
@@ -108,24 +112,12 @@
 													<span class="blind">삭제</span>
 												</button>
 											</div>
-											<div class="input__wrap underline-type">
-												<div class="input__item">
-													<div class="input__item_inner">
-														<input
-															type="text"
-															class="input__element"
-															placeholder="이미지에 대한 설명을 입력해주세요."
-															autocomplete="off"
-														/>
-													</div>
-												</div>
-											</div>
 										</div>
 										<!-- //loop -->
 									</div>
 								</div>
 								<!-- hashtag -->
-								<div class="tag-wrap">
+								<div class="tag-wrap" v-if="hashTagArea">
 									<div class="tag__inner">
 										<div class="input-wrap">
 											<div class="input__wrap underline-type">
@@ -157,6 +149,7 @@
 													type="button"
 													class="input__button-remove"
 													title="텍스트삭제"
+													@click="removeTag(tag)"
 												></button>
 											</span>
 										</div>
@@ -198,7 +191,11 @@
 						</div>
 						<!-- 해시태그 -->
 						<div class="item-fnc">
-							<button type="button" class="button-icon svg">
+							<button
+								type="button"
+								class="button-icon svg"
+								@click="hashTagAreaOpen"
+							>
 								<svg viewBox="0 0 16 16">
 									<path
 										d="M8.39 12.648a1.32 1.32 0 0 0-.015.18c0 .305.21.508.5.508.266 0 .492-.172.555-.477l.554-2.703h1.204c.421 0 .617-.234.617-.547 0-.312-.188-.53-.617-.53h-.985l.516-2.524h1.265c.43 0 .618-.227.618-.547 0-.313-.188-.524-.618-.524h-1.046l.476-2.304a1.06 1.06 0 0 0 .016-.164.51.51 0 0 0-.516-.516.54.54 0 0 0-.539.43l-.523 2.554H7.617l.477-2.304c.008-.04.015-.118.015-.164a.512.512 0 0 0-.523-.516.539.539 0 0 0-.531.43L6.53 5.484H5.414c-.43 0-.617.22-.617.532 0 .312.187.539.617.539h.906l-.515 2.523H4.609c-.421 0-.609.219-.609.531 0 .313.188.547.61.547h.976l-.516 2.492c-.008.04-.015.125-.015.18 0 .305.21.508.5.508.265 0 .492-.172.554-.477l.555-2.703h2.242l-.515 2.492zm-1-6.109h2.266l-.515 2.563H6.859l.532-2.563z"
@@ -231,7 +228,7 @@
 import { computed, ref, watch } from 'vue';
 import SelectDialog from './SelectDialog.vue';
 import CustomAlert from './modal/CustomAlert.vue';
-// import useAxios from '@/composables/useAxios.js';
+import useAxios from '@/composables/useAxios.js';
 
 const isCategorySelectClicked = ref(false);
 const selectTitle = '카테고리 선택';
@@ -241,7 +238,7 @@ const selectList = [
 	{ name: '소통', code: 'COMMUNICATION' },
 	{ name: '질문/답변', code: 'QNA' },
 ];
-
+const { sendRequest } = useAxios();
 const selectedCategory = ref({ name: '소통', code: 'COMMUNICATION' });
 const selectedValue = value => {
 	selectedCategory.value = value;
@@ -255,7 +252,6 @@ const closeSelect = () => {
 	isCategorySelectClicked.value = false;
 };
 
-// const { sendRequest } = useAxios();
 const alertValue = ref(false);
 const alertText = ref('');
 
@@ -283,8 +279,12 @@ const tags = ref([]);
 
 const isImageUploaded = computed(() => imagePreview.value.length > 0);
 
-const imageFile = ref(null);
+const imageFile = ref([]);
 const imagePreview = ref([]);
+
+const hashTagArea = ref(false);
+
+const imagePaths = ref([]);
 
 // preview image
 const previewImage = event => {
@@ -332,30 +332,85 @@ const addTag = () => {
 	hashTag.value = '';
 };
 
+const removeTag = tag => {
+	tags.value.splice(tags.value.indexOf(tag), 1);
+};
+
+const hashTagAreaOpen = () => {
+	hashTagArea.value = true;
+};
+
 // image upload
-// const imageUpload = async () => {
-// 	try {
-// 		const formData = new FormData();
-// 		formData.append('multipartFile', imageFile.value);
-// 		const { status, data } = await sendRequest(
-// 			'post',
-// 			'/images?imagePath=content',
-// 			{
-// 				headers: {
-// 					contentType: 'multipart/form-data',
-// 				},
-// 			},
-// 			formData,
-// 		);
-// 		if (status === 200) {
-// 			attachments.value.push(data.data);
-// 		} else {
-// 			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
-// 		}
-// 	} catch (error) {
-// 		console.log(error);
-// 	}
-// };
+const imageUpload = async () => {
+	if (imageFile.value.length === 0) {
+		openAlert('이미지를 업로드 해주세요.');
+		return;
+	}
+	try {
+		const formData = new FormData();
+		imageFile.value.forEach(file => {
+			formData.append('multipartFile', file);
+		});
+		const { status, data } = await sendRequest(
+			'post',
+			'/images?imagePath=content',
+			{
+				header: {
+					contentType: 'multipart/form-data',
+				},
+			},
+			formData,
+		);
+		if (status === 200) {
+			imagePaths.value = data.data.imageUrl;
+		} else {
+			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const postUpload = async () => {
+	if (imageFile.value.length > 0) {
+		await imageUpload();
+	}
+	if (!title.value) {
+		openAlert('제목을 입력해주세요.');
+		return;
+	}
+	if (!content.value) {
+		openAlert('내용을 입력해주세요.');
+		return;
+	}
+	try {
+		const requstForm = {
+			title: title.value,
+			content: content.value,
+			tags: tags.value,
+			attachments: imagePaths.value,
+			isPublic: privateYn.value === 'N' ? true : false,
+			category: selectedCategory.value.code,
+		};
+		const { status } = await sendRequest(
+			'post',
+			'/posts',
+			{
+				header: {
+					contentType: 'application/json',
+					Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
+				},
+			},
+			requstForm,
+		);
+		if (status === 200) {
+			openAlert('게시글이 등록되었습니다.');
+			closeModal();
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
 
 watch(content, adjustTextareaHeight);
 </script>

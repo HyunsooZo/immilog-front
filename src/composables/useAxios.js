@@ -15,7 +15,7 @@ export default function useAxios() {
 				url,
 				headers: {
 					'Content-Type': headers.contentType || 'application/json',
-					Authorization: headers.AUTHORIZATION || '',
+					Authorization: headers.Authorization || '',
 				},
 				...(method.toLowerCase() === 'get' || method.toLowerCase() === 'delete'
 					? { params: data }
