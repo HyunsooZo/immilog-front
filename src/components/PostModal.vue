@@ -362,7 +362,9 @@ const imageUpload = async () => {
 			formData,
 		);
 		if (status === 200) {
-			imagePaths.value = data.data.imageUrl;
+			data.data.forEach(image => {
+				imagePaths.value.push(image);
+			});
 		} else {
 			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
 		}
