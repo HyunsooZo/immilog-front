@@ -3,6 +3,7 @@
 		<div class="modal modal--full post--dialog">
 			<div class="modal-content">
 				<div class="modal-header">
+					<p class="modal-title">북마크</p>
 					<button
 						class="button-icon button--close"
 						role="link"
