@@ -60,7 +60,12 @@
 					<i class="blind">작성시간</i>
 					<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
 				</p>
-				<button type="button" class="list__item_button mark active">
+				<button
+					type="button"
+					class="list__item_button mark"
+					:class="{ active: isBookmarked }"
+					@click="bookmarkApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -97,6 +102,7 @@ const props = defineProps({
 			tags: [],
 			attachments: [],
 			likeUsers: [],
+			bookmarkUsers: [],
 			isPublic: '',
 			country: '',
 			region: '',
@@ -109,12 +115,17 @@ const props = defineProps({
 
 const likes = ref(props.post.likeCount);
 const likeUsers = ref(props.post.likeUsers);
+const bookmarkUsers = ref(props.post.bookmarkUsers);
 const userSeq = ref(userInfo.userSeq);
 const thumbnail = ref(
 	props.post.attachments.length > 0 ? props.post.attachments[0] : '',
 );
 const isLiked = computed(() => {
 	return likeUsers.value.includes(userSeq.value);
+});
+
+const isBookmarked = computed(() => {
+	return bookmarkUsers.value.includes(userSeq.value);
 });
 
 const onBoardDetail = () => {
@@ -193,6 +204,35 @@ const changeLike = () => {
 	} else {
 		likeUsers.value.push(userSeq.value);
 		likes.value++;
+	}
+};
+
+const bookmarkApi = async () => {
+	const token = localStorage.getItem('accessToken');
+	if (!token) {
+		router.push('/sign-in');
+		return;
+	}
+	changeBookmark();
+	try {
+		await sendRequest('post', `/bookmarks/posts/${props.post.seq}`, {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+			},
+		});
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const changeBookmark = () => {
+	if (isBookmarked.value) {
+		const index = bookmarkUsers.value.indexOf(userSeq.value);
+		if (index !== -1) {
+			bookmarkUsers.value.splice(index, 1);
+		}
+	} else {
+		bookmarkUsers.value.push(userSeq.value);
 	}
 };
 </script>
