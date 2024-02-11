@@ -126,13 +126,10 @@ const openEmailForm = () => {
 	const deviceInfo = navigator.userAgent;
 	const appVersion = "앱 버전";
 	const osVersion = navigator.userAgent.match(/(?:\w+\s)?(?:\w+\s)?(?:\w+\/)?([\d._]+)/)[1] || 'N/A';
-
 	const email = 'komeet@gmail.com';
 	const subject = '[komeet] 문의/요청/신고 합니다';
 	const body = `\n\n--------------------\n이메일: ${userEmail}\n닉네임: ${userNickname}\n접속국가: ${userCountry}\n기기 정보: ${deviceInfo}\n앱 버전: ${appVersion}\nOS 버전: ${osVersion}`;
-	// const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject,)}&body=${encodeURIComponent(body)}`;
 	const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
 
 	window.location.href = mailtoLink;
 };
