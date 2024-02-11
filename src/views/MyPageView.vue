@@ -7,7 +7,7 @@
 					<button type="button" class="item__pic" :class="{ noImg: !userInfo.userProfile }">
 						<img v-if="userInfo.userProfile" :src="userInfo.userProfile" alt="" />
 					</button>
-					<button type="button" class="item__fnc">
+					<button type="button" class="item__fnc" role="link" @click="onProfileEdit">
 						<div class="list__item">
 							<em>{{ userInfo.userCountry }}</em>
 							<em>{{ userInfo.userCountry }}</em>
@@ -98,6 +98,12 @@
 import BookMark from '@/components/BookMark.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+const onProfileEdit = () => {
+	router.push(`/profile-edit`);
+};
 
 const userInfo = useUserInfoStore();
 
