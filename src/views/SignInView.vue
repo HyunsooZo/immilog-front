@@ -293,15 +293,14 @@ const offLoading = () => {
 };
 
 onMounted(async () => {
-	if (localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
-		useLocationStore().setLocation(
-			Number(localStorage.getItem('latitude')),
-			Number(localStorage.getItem('longitude')),
-		);
-	} else {
+	if (!localStorage.getItem('latitude') && !localStorage.getItem('longitude')) {
 		await getCoordinate();
 	}
-	if (localStorage.getItem('accessToken') && getUserInfo) {
+	useLocationStore().setLocation(
+		Number(localStorage.getItem('latitude')),
+		Number(localStorage.getItem('longitude')),
+	);
+	if (localStorage.getItem('accessToken') && getUserInfo()) {
 		router.push({ name: 'Home' });
 	}
 });

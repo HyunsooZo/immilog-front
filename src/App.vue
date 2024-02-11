@@ -92,8 +92,8 @@ const getCoordinate = () => {
 							position => {
 								latitude.value = position.coords.latitude;
 								longitude.value = position.coords.longitude;
-								localStorage.setItem('latitude', position.coords.latitude);
-								localStorage.setItem('longitude', position.coords.longitude);
+								localStorage.setItem('latitude', latitude.value);
+								localStorage.setItem('longitude', longitude.value);
 								resolve();
 							},
 							error => {
@@ -119,11 +119,13 @@ const getCoordinate = () => {
 onMounted(async () => {
 	if (!localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
 		await getCoordinate();
-		nextTick(() => {
-			getUserInfo(latitude.value, longitude.value);
-		});
-	} else {
-		getUserInfo(
+	}
+	if (
+		localStorage.getItem('latitude') &&
+		localStorage.getItem('longitude') &&
+		localStorage.getItem('accessToken')
+	) {
+		await getUserInfo(
 			localStorage.getItem('latitude'),
 			localStorage.getItem('longitude'),
 		);
