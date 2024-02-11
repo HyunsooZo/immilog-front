@@ -77,7 +77,7 @@
 					</button>
 				</li>
 				<li class="item">
-					<button type="button" class="button button-text">
+					<button type="button" class="button">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 							class="bi bi-box-arrow-right" viewBox="0 0 16 16">
 							<path fill-rule="evenodd"

@@ -1285,7 +1285,7 @@ color: #ed1651;
 .list-wrap.list--link li.item:last-child {
     border-bottom: none;
 }
-.list-wrap.list--link li.item .button-text {
+.list-wrap.list--link li.item .button {
     position: relative;
     padding: 1.5rem 3.2rem 1.5rem 1rem;
 }
@@ -1295,7 +1295,7 @@ color: #ed1651;
     right: 1rem;
     transform: translateY(-50%);
 }
-.list-wrap.list--link li.item .button-text svg {
+.list-wrap.list--link li.item .button svg {
     width: 1.6rem;
     height: 1.6rem;
     margin-right: .4rem;
