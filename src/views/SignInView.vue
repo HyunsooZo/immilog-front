@@ -131,6 +131,7 @@ const lon = useLocationStore.longitude;
 const isLoading = ref(false);
 const alertValue = ref(false);
 const alertText = ref('');
+const userInfo = useUserInfoStore();
 
 const onSignUp = () => {
 	router.push({ name: 'SignUp' });
@@ -159,6 +160,7 @@ const getUserInfo = async (latitude, longitude) => {
 				data.data.userProfileUrl,
 				data.data.isLocationMatch,
 			);
+			return true;
 		} else if (status === 401) {
 			await refreshToken();
 			getUserInfo();
@@ -169,14 +171,28 @@ const getUserInfo = async (latitude, longitude) => {
 };
 
 const refreshToken = async () => {
+	const refreshToken = localStorage.getItem('refreshToken');
+	if (!refreshToken) {
+		router.push({ name: 'SignIn' });
+	}
 	try {
-		const { status, data } = await sendRequest('post', '/auth/refresh');
+		const { status, data } = await sendRequest(
+			'get',
+			'/auth/refresh?token=' + refreshToken,
+			null,
+			{
+				headers: { 'Content-Type': 'application/json' },
+			},
+		);
 		if (status === 200) {
 			useUserInfoStore().setAccessToken(data.data.accessToken);
+			useUserInfoStore().setRefreshToken(data.data.refreshToken);
 			localStorage.setItem('accessToken', data.data.accessToken);
+			localStorage.setItem('refreshToken', data.data.refreshToken);
 		}
 	} catch (error) {
 		console.log(error);
+		router.push({ name: 'SignIn' });
 	}
 };
 

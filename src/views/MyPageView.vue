@@ -97,8 +97,9 @@
 <script setup>
 import BookMark from '@/components/BookMark.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+
 const router = useRouter();
 
 const onProfileEdit = () => {
@@ -126,11 +127,23 @@ const openEmailForm = () => {
 	// const appVersion = getAppVersionFromServer();
 	const osVersion = navigator.userAgent.match(/(?:\w+\s)?(?:\w+\s)?(?:\w+\/)?([\d._]+)/)[1] || 'N/A';
 
-	const email = "komeet@gmail.com";
-	const subject = "[komeet] 문의/요청/신고 합니다";
+	const email = 'komeet@gmail.com';
+	const subject = '[komeet] 문의/요청/신고 합니다';
 	const body = `\n\n--------------------\n닉네임: ${userNickname}\n접속국가: ${userCountry}\n기기 정보: ${deviceInfo}\n앱 버전: ${appVersion}\nOS 버전: ${osVersion}`;
-	const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+	const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(
+		subject,
+	)}&body=${encodeURIComponent(body)}`;
 
 	window.location.href = mailtoLink;
 };
+
+onMounted(() => {
+	if (
+		userInfo.userNickname === '' ||
+		userInfo.userNickname === undefined ||
+		userInfo.userNickname === null
+	) {
+		router.push({ name: 'SignIn' });
+	}
+});
 </script>

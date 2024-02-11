@@ -1,10 +1,5 @@
 import axios from 'axios';
-import { useRouter } from 'vue-router';
 
-const router = useRouter();
-const onLogin = () => {
-	router.push({ name: 'SignIn' });
-};
 export default function useAxios() {
 	axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
@@ -45,23 +40,39 @@ export default function useAxios() {
 
 	const refreshAccessToken = async () => {
 		const refreshToken = localStorage.getItem('refreshToken');
-		const refreshResponse = await axios.get(
-			'/auth/refresh?token=' + refreshToken,
-			null,
-			{
-				headers: { 'Content-Type': 'application/json' },
-			},
-		);
+		if (!refreshToken) {
+			return;
+		}
+		try {
+			const refreshResponse = await axios.get(
+				'/auth/refresh?token=' + refreshToken,
+				null,
+				{
+					headers: { 'Content-Type': 'application/json' },
+				},
+			);
 
-		if (refreshResponse.status === 200) {
-			localStorage.setItem('accessToken', refreshResponse.data.data);
-			onLogin();
+			if (refreshResponse.status === 200) {
+				localStorage.setItem(
+					'accessToken',
+					refreshResponse.data.data.accessToken,
+				);
+				localStorage.setItem(
+					'refreshToken',
+					refreshResponse.data.data.refreshToken,
+				);
+			} else {
+				localStorage.removeItem('accessToken');
+				localStorage.removeItem('refreshToken');
+			}
+		} catch (error) {
+			localStorage.removeItem('accessToken');
+			localStorage.removeItem('refreshToken');
 		}
 	};
 
 	return {
 		sendRequest,
 		refreshAccessToken,
-		onLogin,
 	};
 }
