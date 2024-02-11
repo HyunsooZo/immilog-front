@@ -7,25 +7,46 @@
 			<!-- tab button -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
-						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
+					<li
+						v-for="(menu, index) in menus"
+						:key="index"
+						:class="{ active: menu.active.value }"
+						class="menu__list"
+					>
+						<button
+							@click="selectMenu(menu)"
+							type="button"
+							class="button"
+							:aria-selected="menu.active.value.toString()"
+						>
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
+				<span
+					class="menu__bar"
+					:style="{ left: menuBarLeft, width: menuBarWidth }"
+				></span>
 			</div>
 		</div>
 
 		<!-- 카테고리 정렬 -->
 		<div class="flexbox-wrap border--bot">
 			<div class="category__list">
-				<button type="button" class="button--select" @click="openCategorySelect">
+				<button
+					type="button"
+					class="button--select"
+					@click="openCategorySelect"
+				>
 					{{ selectCategoryValue.name }}
 				</button>
 			</div>
 			<div class="sort__list">
-				<button type="button" class="button--select sort" @click="openSortingSelect">
+				<button
+					type="button"
+					class="button--select sort"
+					@click="openSortingSelect"
+				>
 					{{ selectSortingValue.name }}
 				</button>
 			</div>
@@ -36,22 +57,37 @@
 		<div class="list-wrap">
 			<div class="list__title">
 				<span class="title">{{ selectCategoryValue.name }} </span>
-				<button type="button" class="button-icon button--post" @click="openPostModal">
+				<button
+					type="button"
+					class="button-icon button--post"
+					@click="openPostModal"
+				>
 					<svg viewBox="0 0 16 16">
 						<path
-							d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+							d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+						/>
 						<path
-							d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+							d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+						/>
 					</svg>
 					<span class="blind">글쓰기</span>
 				</button>
 			</div>
-			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
+			<BoardContent
+				v-for="(item, index) in state.posts"
+				:key="index"
+				:post="item"
+			/>
 		</div>
 	</div>
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
-	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
-		@close="closeSelect" @select:value="selectedValue" />
+	<SelectDialog
+		v-if="isCategorySelectClicked || isSortingSelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 </template>
 
 <script setup>
@@ -63,10 +99,13 @@ import CountryList from '@/components/CountryList.vue'; // .sub-menu-wrap
 import BoardContent from '@/components/BoardContent.vue';
 import useAxios from '@/composables/useAxios.js';
 import PostModal from '@/components/PostModal.vue';
+import { useUserInfoStore } from '@/stores/userInfo';
+import router from '@/router';
 
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
 
+const userInfo = useUserInfoStore();
 /* select variable & methods start */
 const selectTitle = ref('');
 const selectList = ref('');
@@ -205,6 +244,9 @@ const closePostModal = () => {
 };
 
 onMounted(() => {
+	if (!userInfo.accessToken) {
+		router.push('/sign-in');
+	}
 	updateMenuBar();
 	fetchBoardList('CREATED_DATE', 0);
 });

@@ -6,20 +6,22 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import TheFooter from './components/layouts/TheFooter.vue';
 import useAxios from './composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 
 const { sendRequest } = useAxios();
 const route = useRoute();
-const router = useRouter();
 const hideFooter = computed(() => route.meta.hideFooter);
 const latitude = ref(0);
 const longitude = ref(0);
 
 const getUserInfo = async (latitude, longitude) => {
+	if (localStorage.getItem('accessToken') === null) {
+		return;
+	}
 	try {
 		const { status, data } = await sendRequest(
 			'get',
@@ -43,40 +45,9 @@ const getUserInfo = async (latitude, longitude) => {
 				data.data.userProfileUrl,
 				data.data.isLocationMatch,
 			);
-		} else {
-			const response = await refreshToken();
-			if (response) {
-				getUserInfo();
-			}
 		}
 	} catch (error) {
 		console.log(error);
-	}
-};
-
-const refreshToken = async () => {
-	try {
-		const { status, data } = await sendRequest(
-			'get',
-			'/auth/refresh?token=' + localStorage.getItem('refreshToken'),
-		);
-		if (status === 200) {
-			useUserInfoStore().setAccessToken(data.data.accessToken);
-			useUserInfoStore().setRefreshToken(data.data.refreshToken);
-			localStorage.setItem('accessToken', data.data.accessToken);
-			localStorage.setItem('refreshToken', data.data.refreshToken);
-			return true;
-		} else if (status === 404) {
-			localStorage.clear();
-			router.push('/sign-in');
-			return false;
-		}
-	} catch (error) {
-		if (error.response && error.response.status === 404) {
-			localStorage.clear();
-			router.push('/sign-in');
-			return false;
-		}
 	}
 };
 

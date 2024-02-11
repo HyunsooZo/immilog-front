@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { nextTick } from 'vue';
 
 export default function useAxios() {
 	axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
@@ -15,20 +16,14 @@ export default function useAxios() {
 			};
 
 			const response = await axios(config);
-			if (response.status === 401) {
-				await refreshAccessToken();
-				config.headers.Authorization = `Bearer ${
-					localStorage.getItem('accessToken') || ''
-				}`;
-				return sendRequest(method, url, headers, data); // 재요청
-			}
-
 			return { status: response.status, data: response.data };
 		} catch (error) {
 			if (error.response && error.response.status === 401) {
 				// 401 Unauthorized 처리
 				await refreshAccessToken();
-				return sendRequest(method, url, headers, data); // 재요청
+				nextTick(() => {
+					return sendRequest(method, url, headers, data); // 재요청
+				});
 			}
 
 			return {
@@ -51,23 +46,22 @@ export default function useAxios() {
 					headers: { 'Content-Type': 'application/json' },
 				},
 			);
-
 			if (refreshResponse.status === 200) {
 				localStorage.setItem(
 					'accessToken',
 					refreshResponse.data.data.accessToken,
+					console.log(refreshResponse.data.data.accessToken),
 				);
 				localStorage.setItem(
 					'refreshToken',
 					refreshResponse.data.data.refreshToken,
+					console.log(refreshResponse.data.data.refreshToken),
 				);
-			} else {
-				localStorage.removeItem('accessToken');
-				localStorage.removeItem('refreshToken');
 			}
 		} catch (error) {
 			localStorage.removeItem('accessToken');
 			localStorage.removeItem('refreshToken');
+			return;
 		}
 	};
 

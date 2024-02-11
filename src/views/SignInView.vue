@@ -51,7 +51,7 @@
 
 			<div class="button-wrap">
 				<button
-					@click="getCoordinate"
+					@click="signIn"
 					:class="{
 						'button button--positive': isValidLogin && !isLoading,
 						'button button--disabled': !isValidLogin || isLoading,
@@ -116,7 +116,6 @@
 import { useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
 import { computed, onMounted, ref } from 'vue';
-import { useLocationStore } from '@/stores/location.js';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/LoadingModal.vue';
@@ -126,8 +125,6 @@ const password = ref('');
 const router = useRouter();
 const { sendRequest } = useAxios();
 const isValidLogin = computed(() => email.value && password.value);
-const lat = useLocationStore.latitude;
-const lon = useLocationStore.longitude;
 const isLoading = ref(false);
 const alertValue = ref(false);
 const alertText = ref('');
@@ -161,42 +158,13 @@ const getUserInfo = async (latitude, longitude) => {
 				data.data.isLocationMatch,
 			);
 			return true;
-		} else if (status === 401) {
-			await refreshToken();
-			getUserInfo();
 		}
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-const refreshToken = async () => {
-	const refreshToken = localStorage.getItem('refreshToken');
-	if (!refreshToken) {
-		router.push({ name: 'SignIn' });
-	}
-	try {
-		const { status, data } = await sendRequest(
-			'get',
-			'/auth/refresh?token=' + refreshToken,
-			null,
-			{
-				headers: { 'Content-Type': 'application/json' },
-			},
-		);
-		if (status === 200) {
-			useUserInfoStore().setAccessToken(data.data.accessToken);
-			useUserInfoStore().setRefreshToken(data.data.refreshToken);
-			localStorage.setItem('accessToken', data.data.accessToken);
-			localStorage.setItem('refreshToken', data.data.refreshToken);
-		}
-	} catch (error) {
-		console.log(error);
-		router.push({ name: 'SignIn' });
-	}
-};
-
-const signIn = async (latitude, longitude) => {
+const signIn = async () => {
 	onLoading();
 	try {
 		const { status, data } = await sendRequest(
@@ -210,8 +178,8 @@ const signIn = async (latitude, longitude) => {
 			{
 				email: email.value,
 				password: password.value,
-				latitude: latitude,
-				longitude: longitude,
+				latitude: localStorage.getItem('latitude'),
+				longitude: localStorage.getItem('longitude'),
 			},
 		);
 
@@ -245,52 +213,6 @@ const signIn = async (latitude, longitude) => {
 	}
 };
 
-const options = {
-	enableHighAccuracy: true,
-	timeout: 10000,
-	maximumAge: 0,
-};
-
-const errorCallback = error => {
-	console.error(`ERROR(${error.code}): ${error.message}`);
-};
-
-const getCoordinate = async () => {
-	try {
-		if (lat && lon) {
-			signIn(lat, lon);
-		} else if ('geolocation' in navigator) {
-			const permissionResult = await navigator.permissions.query({
-				name: 'geolocation',
-			});
-			if (permissionResult.state === 'granted') {
-				navigator.geolocation.getCurrentPosition(
-					position => {
-						signIn(position.coords.latitude, position.coords.longitude);
-						useLocationStore().setLocation(
-							position.coords.latitude,
-							position.coords.longitude,
-						);
-						localStorage.setItem('latitude', position.coords.latitude);
-						localStorage.setItem('longitude', position.coords.longitude);
-					},
-					errorCallback,
-					options,
-				);
-			} else if (permissionResult.state === 'prompt') {
-				const position = await new Promise((resolve, reject) => {
-					navigator.geolocation.getCurrentPosition(resolve, reject, options);
-				});
-				signIn(position.coords.latitude, position.coords.longitude);
-			} else if (permissionResult.state === 'denied') {
-				console.error('Geolocation permission denied.');
-			}
-		}
-	} catch (error) {
-		console.error('Failed to get location:', error);
-	}
-};
-
 const openAlert = content => {
 	alertValue.value = true;
 	alertText.value = content;
@@ -309,14 +231,16 @@ const offLoading = () => {
 };
 
 onMounted(async () => {
-	if (!localStorage.getItem('latitude') && !localStorage.getItem('longitude')) {
-		await getCoordinate();
+	if (
+		localStorage.getItem('accessToken') &&
+		localStorage.getItem('refreshToken')
+	) {
+		await getUserInfo(
+			localStorage.getItem('latitude'),
+			localStorage.getItem('longitude'),
+		);
 	}
-	useLocationStore().setLocation(
-		Number(localStorage.getItem('latitude')),
-		Number(localStorage.getItem('longitude')),
-	);
-	if (localStorage.getItem('accessToken') && getUserInfo()) {
+	if (userInfo.accessToken && getUserInfo()) {
 		router.push({ name: 'Home' });
 	}
 });
