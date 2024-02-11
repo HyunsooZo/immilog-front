@@ -1053,9 +1053,7 @@ color: #ed1651;
     transform: translate(-50%, -50%);
 }
 .list-wrap .item .info__wrap .item__pic img {
-    position: inherit;
     object-fit: contain;
-    z-index: 1;
 }
 .list-wrap .item .info__wrap .item__fnc {
     flex: 1;
@@ -1271,6 +1269,9 @@ color: #ed1651;
 .list-wrap.personal .item .info__wrap [class^=list__item].user {
     font-size: 1.5rem;
     color: #333;
+}
+.list-wrap.personal .item .info__wrap [class^=list__item].button-text::after {
+    margin-left: .4rem;
 }
 .list-wrap.personal .item .info__wrap [class^=list__item] * + *::before {
     background: #999;

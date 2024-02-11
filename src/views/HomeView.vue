@@ -21,6 +21,7 @@
 		<div class="flexbox-wrap border--bot">
 			<div class="category__list">
 				<button type="button" class="button--select" @click="openCategorySelect">
+					{{ selectCategoryValue.name }}
 				</button>
 			</div>
 			<div class="sort__list">
