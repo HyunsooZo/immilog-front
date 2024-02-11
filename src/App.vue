@@ -125,7 +125,8 @@ onMounted(async () => {
 	if (
 		localStorage.getItem('latitude') &&
 		localStorage.getItem('longitude') &&
-		localStorage.getItem('accessToken')
+		localStorage.getItem('accessToken') &&
+		localStorage.getItem('refreshToken')
 	) {
 		await getUserInfo(
 			localStorage.getItem('latitude'),
