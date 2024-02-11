@@ -131,7 +131,7 @@ const openEmailForm = () => {
 	const subject = '[komeet] 문의/요청/신고 합니다';
 	const body = `\n\n--------------------\n이메일: ${userEmail}\n닉네임: ${userNickname}\n접속국가: ${userCountry}\n기기 정보: ${deviceInfo}\n앱 버전: ${appVersion}\nOS 버전: ${osVersion}`;
 	// const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject,)}&body=${encodeURIComponent(body)}`;
-	const mailtoLink = `mailto:${email}?from=${userEmail}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+	const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
 
 	window.location.href = mailtoLink;
