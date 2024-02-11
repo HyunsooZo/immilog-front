@@ -65,8 +65,8 @@ const getCoordinate = () => {
 							position => {
 								latitude.value = position.coords.latitude;
 								longitude.value = position.coords.longitude;
-								localStorage.setItem('latitude', latitude.value);
-								localStorage.setItem('longitude', longitude.value);
+								localStorage.setItem('latitude', position.coords.latitude);
+								localStorage.setItem('longitude', position.coords.longitude);
 								resolve();
 							},
 							error => {
