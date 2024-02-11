@@ -62,7 +62,9 @@ const refreshToken = async () => {
 		);
 		if (status === 200) {
 			useUserInfoStore().setAccessToken(data.data.accessToken);
+			useUserInfoStore().setRefreshToken(data.data.refreshToken);
 			localStorage.setItem('accessToken', data.data.accessToken);
+			localStorage.setItem('refreshToken', data.data.refreshToken);
 			return true;
 		} else if (status === 404) {
 			localStorage.clear();
