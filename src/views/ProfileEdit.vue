@@ -1,0 +1,77 @@
+<template>
+	<TheHeader />
+	<div class="content">
+		<TheTopBox :title="'프로필 수정'" :text="'프로필 수정 후 확인 버튼을 눌러주세요.'" />
+		<div class="container">
+			<!-- profileimage -->
+			<div class="input-wrap">
+				<em class="input__title">프로필 사진</em>
+				<!-- input__wrap -->
+				<div class="input__wrap input__attachments">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<div class="input__file">
+								<input type="file" id="file-upload" class="input__element" @change="previewImage" />
+								<label for="file-upload" class="button button--primary" role="button">
+									<svg width="18" height="18" viewBox="0 0 16 16">
+										<path
+											d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+										<path fill-rule="evenodd"
+											d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+									</svg>
+									<span>프로필 사진 선택</span>
+								</label>
+							</div>
+							<div class="item__display">
+								<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
+								<button v-if="imagePreview" type="button" class="button--del" @click="removeImage">
+									<span class="blind">삭제</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- nickname -->
+			<div class="input-wrap">
+				<em class="input__title">닉네임 변경</em>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userNickName" type="text" class="input__element" placeholder="닉네임 입력(5~10자 한글, 영문, 숫자 조합)"
+								value="현수쓰" />
+						</div>
+					</div>
+					<button type="button" class="button button--primary" @click="checkNickName">
+						중복확인
+					</button>
+				</div>
+				<!-- 에러 메시지 -->
+				<p v-if="nickNameCheckDone && !isNickNameValid" class="input__error" aria-live="assertive">
+					이미 사용중인 닉네임 입니다.
+				</p>
+				<p v-if="nickNameCheckDone && isNickNameValid" class="input__text" aria-live="assertive">
+					사용 가능한 닉네임입니다.
+				</p>
+			</div>
+			<!-- country -->
+			<div class="input-wrap">
+				<em class="input__title">접속 국가 변경</em>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="country" type="text" class="input__element" placeholder="지역" value="대한민국" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script setup>
+import TheHeader from '@/components/layouts/TheHeader.vue';
+import TheTopBox from '@/components/TheTopBox.vue';
+</script>

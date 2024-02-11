@@ -30,7 +30,7 @@
 								required />
 						</div>
 					</div>
-					<button for="file-upload" class="button button--primary" role="button" @click="checkNickName">
+					<button type="button" class="button button--primary" @click="checkNickName">
 						중복확인
 					</button>
 				</div>
@@ -46,7 +46,7 @@
 			<div class="input-wrap">
 				<em class="input__title">프로필 사진</em>
 				<!-- input__wrap -->
-				<div class="input__wrap attach-file-wrap">
+				<div class="input__wrap input__attachments">
 					<div class="input__item">
 						<div class="input__item_inner">
 							<div class="input__file">
@@ -64,7 +64,7 @@
 							<div class="item__display">
 								<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
 								<button v-if="imagePreview" type="button" class="button--del" @click="removeImage">
-									삭제
+									<span class="blind">삭제</span>
 								</button>
 							</div>
 						</div>
