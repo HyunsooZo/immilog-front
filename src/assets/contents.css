@@ -1234,7 +1234,7 @@ color: #ed1651;
 }
 /* 마이페이지 */
 .list-wrap.personal .item {
-    padding: 3rem 2rem;
+    padding: 2rem;
 }
 .list-wrap.personal .item .info__wrap {
     justify-content: left;
