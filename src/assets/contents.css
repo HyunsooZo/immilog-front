@@ -1250,12 +1250,16 @@ color: #ed1651;
     padding: 3rem 2rem;
 }
 .list-wrap.personal .item .info__wrap {
+    justify-content: left;
     margin: 0;
 }
 .list-wrap.personal .item .info__wrap .item__pic {
     width: 5rem;
     height: 5rem;
     margin-right: .8rem;
+}
+.list-wrap.personal .item .info__wrap .item__fnc {
+    flex: 0 1 auto;
 }
 .list-wrap.personal .item .info__wrap.button-text::after {
     margin: auto 0 9px 6px;

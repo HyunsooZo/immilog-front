@@ -3,11 +3,11 @@
 		<!-- 개인정보 -->
 		<div class="list-wrap personal">
 			<div class="item">
-				<button type="button" class="info__wrap">
-					<div class="item__pic" :class="{ noImg: !userInfo.userProfile }">
+				<div class="info__wrap">
+					<button type="button" class="item__pic" :class="{ noImg: !userInfo.userProfile }">
 						<img v-if="userInfo.userProfile" :src="userInfo.userProfile" alt="" />
-					</div>
-					<div class="item__fnc">
+					</button>
+					<button type="button" class="item__fnc">
 						<div class="list__item">
 							<em>{{ userInfo.userCountry }}</em>
 							<em>{{ userInfo.userCountry }}</em>
@@ -15,8 +15,8 @@
 						<div class="list__item user button-text">
 							<strong>{{ userInfo.userNickname }}</strong>
 						</div>
-					</div>
-				</button>
+					</button>
+				</div>
 			</div>
 		</div>
 		<!--  -->
