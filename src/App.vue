@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import TheFooter from './components/layouts/TheFooter.vue';
 import useAxios from './composables/useAxios';
@@ -91,16 +91,18 @@ const getCoordinate = () => {
 
 onMounted(async () => {
 	await getCoordinate();
-	if (
-		localStorage.getItem('latitude') &&
-		localStorage.getItem('longitude') &&
-		localStorage.getItem('accessToken') &&
-		localStorage.getItem('refreshToken')
-	) {
-		await getUserInfo(
-			localStorage.getItem('latitude'),
-			localStorage.getItem('longitude'),
-		);
-	}
+	nextTick(async () => {
+		if (
+			localStorage.getItem('latitude') &&
+			localStorage.getItem('longitude') &&
+			localStorage.getItem('accessToken') &&
+			localStorage.getItem('refreshToken')
+		) {
+			await getUserInfo(
+				localStorage.getItem('latitude'),
+				localStorage.getItem('longitude'),
+			);
+		}
+	});
 });
 </script>
