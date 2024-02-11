@@ -72,6 +72,9 @@
 						<button type="button" class="list__item_button share">
 							<i class="blind">공유하기</i>
 						</button>
+						<button type="button" class="list__item_button more">
+							<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
+						</button>
 					</div>
 				</div>
 			</div>
