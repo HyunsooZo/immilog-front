@@ -1287,20 +1287,23 @@ color: #ed1651;
 }
 .list-wrap.list--link li.item .button {
     position: relative;
-    padding: 1.5rem 3.2rem 1.5rem 1rem;
+    padding: 1.5rem 1rem;
+}
+.list-wrap.list--link li.item .button svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-right: .6rem;
+    fill: #666;
+    vertical-align: -2px;
+}
+.list-wrap.list--link li.item .button-text {
+    padding-right: 3.2rem;
 }
 .list-wrap.list--link li.item .button-text::after {
     position: absolute;
     top: 50%;
     right: 1rem;
     transform: translateY(-50%);
-}
-.list-wrap.list--link li.item .button svg {
-    width: 1.6rem;
-    height: 1.6rem;
-    margin-right: .4rem;
-    fill: #666;
-    vertical-align: -2px;
 }
 
 /* 글쓰기 */
