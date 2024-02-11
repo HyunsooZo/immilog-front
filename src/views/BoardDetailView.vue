@@ -8,8 +8,8 @@
 			</div>
 			<div class="item">
 				<div class="info__wrap">
-					<div class="item__pic">
-						<img :src="post.userProfile" alt="post image" />
+					<div class="item__pic" :class="{ noImg: !post.userProfileUrl }">
+						<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
 					</div>
 					<div class="item__fnc">
 						<div class="list__item">
@@ -71,6 +71,9 @@
 					<div class="item__fnc">
 						<button type="button" class="list__item_button share">
 							<i class="blind">공유하기</i>
+						</button>
+						<button type="button" class="list__item_button more">
+							<i class="blind">더보기</i><!-- //차단하기, 대화하기.. -->
 						</button>
 					</div>
 				</div>
