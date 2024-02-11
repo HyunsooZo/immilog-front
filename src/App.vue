@@ -90,7 +90,7 @@ const getCoordinate = () => {
 };
 
 onMounted(async () => {
-	if (!localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
+	if (!localStorage.getItem('latitude') || !localStorage.getItem('longitude')) {
 		await getCoordinate();
 	}
 	if (
