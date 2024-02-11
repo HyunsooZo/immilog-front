@@ -134,36 +134,6 @@ const onSignUp = () => {
 	router.push({ name: 'SignUp' });
 };
 
-const getUserInfo = async (latitude, longitude) => {
-	try {
-		const { status, data } = await sendRequest(
-			'get',
-			`/auth/user?latitude=${latitude}&longitude=${longitude}`,
-			{
-				headers: {
-					contentType: 'multipart/form-data',
-					AUTHORIZATION: `Bearer ${localStorage.getItem('accessToken')}`,
-				},
-			},
-		);
-		if (status === 200) {
-			useUserInfoStore().setUserInfo(
-				data.data.userSeq,
-				data.data.accessToken,
-				data.data.refreshToken,
-				data.data.nickname,
-				data.data.email,
-				data.data.country,
-				data.data.userProfileUrl,
-				data.data.isLocationMatch,
-			);
-			return true;
-		}
-	} catch (error) {
-		console.log(error);
-	}
-};
-
 const signIn = async () => {
 	onLoading();
 	try {
@@ -231,16 +201,7 @@ const offLoading = () => {
 };
 
 onMounted(async () => {
-	if (
-		localStorage.getItem('accessToken') &&
-		localStorage.getItem('refreshToken')
-	) {
-		await getUserInfo(
-			localStorage.getItem('latitude'),
-			localStorage.getItem('longitude'),
-		);
-	}
-	if (userInfo.accessToken && getUserInfo()) {
+	if (userInfo.accessToken) {
 		router.push({ name: 'Home' });
 	}
 });

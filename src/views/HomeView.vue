@@ -244,9 +244,6 @@ const closePostModal = () => {
 };
 
 onMounted(() => {
-	if (!userInfo.accessToken) {
-		router.push('/sign-in');
-	}
 	updateMenuBar();
 	fetchBoardList('CREATED_DATE', 0);
 });
