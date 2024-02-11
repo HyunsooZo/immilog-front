@@ -1031,6 +1031,7 @@ color: #ed1651;
     text-align: left;
 }
 .list-wrap .item .info__wrap .item__pic {
+    position: relative;
     overflow: hidden;
     width: 3.2rem;
     height: 3.2rem;
@@ -1038,8 +1039,23 @@ color: #ed1651;
     border: 1px solid #e9e9e9;
     border-radius: 50%;
 }
+.list-wrap .item .info__wrap .item__pic.noImg::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 70%;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: 50% center;
+    background-size: auto 100%;
+    transform: translate(-50%, -50%);
+}
 .list-wrap .item .info__wrap .item__pic img {
+    position: inherit;
     object-fit: contain;
+    z-index: 1;
 }
 .list-wrap .item .info__wrap .item__fnc {
     flex: 1;
