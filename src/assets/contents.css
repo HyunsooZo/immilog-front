@@ -1256,18 +1256,17 @@ color: #ed1651;
     width: 5rem;
     height: 5rem;
     margin-right: .8rem;
-    border-color: #999;
 }
 .list-wrap.personal .item .info__wrap.button-text::after {
     margin: auto 0 9px 6px;
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(102 102 102)' xmlns='http://www.w3.org/2000/svg'><path d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/></svg>");
 }
 .list-wrap.personal .item .info__wrap [class^=list__item] {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     line-height: 1.8rem;
 }
 .list-wrap.personal .item .info__wrap [class^=list__item].user {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     color: #333;
 }
 .list-wrap.personal .item .info__wrap [class^=list__item].button-text::after {
