@@ -131,6 +131,7 @@ const lon = useLocationStore.longitude;
 const isLoading = ref(false);
 const alertValue = ref(false);
 const alertText = ref('');
+const userInfo = useUserInfoStore();
 
 const onSignUp = () => {
 	router.push({ name: 'SignUp' });
@@ -159,6 +160,7 @@ const getUserInfo = async (latitude, longitude) => {
 				data.data.userProfileUrl,
 				data.data.isLocationMatch,
 			);
+			return true;
 		} else if (status === 401) {
 			await refreshToken();
 			getUserInfo();
