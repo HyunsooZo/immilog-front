@@ -120,6 +120,7 @@ const offBookMark = () => {
 
 // 고객센터 이메일
 const openEmailForm = () => {
+	const userEmail = userInfo.userEmail;
 	const userNickname = userInfo.userNickname;
 	const userCountry = userInfo.userCountry;
 	const deviceInfo = navigator.userAgent;
@@ -130,9 +131,7 @@ const openEmailForm = () => {
 	const email = 'komeet@gmail.com';
 	const subject = '[komeet] 문의/요청/신고 합니다';
 	const body = `\n\n--------------------\n닉네임: ${userNickname}\n접속국가: ${userCountry}\n기기 정보: ${deviceInfo}\n앱 버전: ${appVersion}\nOS 버전: ${osVersion}`;
-	const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(
-		subject,
-	)}&body=${encodeURIComponent(body)}`;
+	const mailtoLink = `mailto:${userEmail}?subject=${encodeURIComponent(subject,)}&body=${encodeURIComponent(body)}`;
 
 	window.location.href = mailtoLink;
 };
