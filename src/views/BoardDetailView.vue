@@ -8,8 +8,8 @@
 			</div>
 			<div class="item">
 				<div class="info__wrap">
-					<div class="item__pic">
-						<img :src="post.userProfile" alt="post image" />
+					<div class="item__pic" :class="{ noImg: !post.userProfileUrl }">
+						<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
 					</div>
 					<div class="item__fnc">
 						<div class="list__item">
