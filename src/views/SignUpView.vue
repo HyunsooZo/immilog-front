@@ -26,7 +26,7 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userNickName" type="text" class="input__element" placeholder="닉네임 입력(5~20자 한글, 영문, 숫자 조합)"
+							<input v-model="userNickName" type="text" class="input__element" placeholder="닉네임 입력(5~10자 한글, 영문, 숫자 조합)"
 								required />
 						</div>
 					</div>
