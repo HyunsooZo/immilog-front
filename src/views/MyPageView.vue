@@ -119,11 +119,12 @@ const offBookMark = () => {
 
 // 고객센터 이메일
 const openEmailForm = () => {
-	const userNickname = "닉네임 정보";
-	const userCountry = "접속국가 정보";
+	const userNickname = userInfo.userNickname;
+	const userCountry = userInfo.userCountry;
 	const deviceInfo = navigator.userAgent;
 	const appVersion = "앱 버전";
-	const osVersion = "OS 버전";
+	// const appVersion = getAppVersionFromServer();
+	const osVersion = navigator.userAgent.match(/(?:\w+\s)?(?:\w+\s)?(?:\w+\/)?([\d._]+)/)[1] || 'N/A';
 
 	const email = "komeet@gmail.com";
 	const subject = "[komeet] 문의/요청/신고 합니다";
