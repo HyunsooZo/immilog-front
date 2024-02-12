@@ -12,7 +12,7 @@
 				</button>
 			</div>
 			<button type="button" class="button-icon button--notice new" role="link" @click="openNotificationModal">
-				<span>알림</span>
+				<span class="blind">알림</span>
 			</button>
 		</div>
 	</div>

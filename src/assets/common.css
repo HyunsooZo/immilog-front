@@ -35,13 +35,6 @@ pre {white-space: pre-wrap;}
 table {width: 100%; border-collapse: collapse; border-spacing: 0; table-layout: fixed;}
 legend, caption {display: none;}
 .blind {overflow: hidden; position: absolute; top: 0; left: 0; width: 0; height: 0; font-size: 0; line-height: 0; white-space: nowrap;}
-.flexbox-wrap {
-  display: flex;
-  justify-content: space-between;
-}
-.border--bot {
-  border-bottom: 1px solid #e9e9e9;
-}
 .point-color {
   color: #3f51b5;
   color: rgba(63,81,181,1);

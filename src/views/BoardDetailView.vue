@@ -20,7 +20,7 @@
 						</div>
 						<div class="list__item">
 							<button type="button" class="list__item_button user">
-								<em>작성자</em>
+								<em>{{ post.region }}</em>
 								<strong>{{ post.userNickname }}</strong>
 							</button>
 						</div>
@@ -82,10 +82,25 @@
 		</div>
 
 		<!-- 댓글 기능버튼 -->
-		<div class="flexbox-wrap border--bot">
+		<div class="fnc-wrap">
+			<div class="button__list">
+				<button type="button" class="button-icon__s button--post" @click="openReplyWrite">
+					<svg viewBox="0 0 16 16">
+						<path
+							d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+						<path
+							d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+					</svg>
+					<span>댓글쓰기</span>
+				</button>
+			</div>
 			<div class="sort__list">
-				<button type="button" class="button--icon last-reply" @click="goToDown">
-					마지막 댓글로 이동
+				<button type="button" class="button-icon__s last-reply" @click="goToDown">
+					<svg viewBox="0 0 16 16">
+						<path
+							d="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6z" />
+					</svg>
+					<span>마지막 댓글로 이동</span>
 				</button>
 			</div>
 		</div>
@@ -223,16 +238,28 @@
 			</div>
 		</div>
 	</div>
-	<SelectDialog v-if="isSortingSelectClicked" :title="selectTitle" :list="selectList" @close="closeSelect"
+	<!-- <SelectDialog v-if="isSortingSelectClicked" :title="selectTitle" :list="selectList" @close="closeSelect"
+		@select:value="selectedValue" /> -->
+	<ReplyWrite v-if="isReplyWriteClicked" :title="selectTitle" :list="selectList" @close="closeSelect"
 		@select:value="selectedValue" />
 </template>
 
 <script setup>
 import TheHeader from '@/components/layouts/TheHeader.vue';
-import SelectDialog from '@/components/SelectDialog.vue';
+// import SelectDialog from '@/components/SelectDialog.vue';
+import ReplyWrite from '@/components/ReplyWrite.vue';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
+
+// 댓글쓰기
+const isReplyWriteClicked = ref(false);
+const openReplyWrite = () => {
+	isReplyWriteClicked.value = true;
+};
+const closeSelect = () => {
+	isReplyWriteClicked.value = false;
+};
 
 const { sendRequest } = useAxios();
 const router = useRouter();
