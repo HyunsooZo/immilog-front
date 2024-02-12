@@ -687,6 +687,9 @@ strong + .button-text {
     margin: 0;
     padding: 0;
 }
+.reply--dialog .modal-body .text__area {
+    max-height: 15rem;
+}
 
 /* top-box */
 [class*=top-box] {
