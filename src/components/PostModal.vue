@@ -65,8 +65,9 @@
 						<div class="post__content">
 							<div class="post">
 								<textarea class="text__area" name="content" autocomplete="off"
-									placeholder="다른 사용자로부터 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 될 수 있습니다." data-autosuggest_is-input="true"
-									v-model="content" ref="textareaRef" @input="adjustTextareaHeight" rows="3"></textarea>
+									placeholder="게시글 내용을 입력해주세요. 다른 사용자로부터 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 될 수 있습니다."
+									data-autosuggest_is-input="true" v-model="content" ref="textareaRef" @input="adjustTextareaHeight"
+									rows="3"></textarea>
 								<!-- file preview -->
 								<div class="attachments__wrap" v-if="isImageUploaded">
 									<div class="attachments__item" v-for="(image, index) in imagePreview" :key="index">

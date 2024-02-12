@@ -688,6 +688,7 @@ strong + .button-text {
     padding: 0;
 }
 .reply--dialog .modal-body .text__area {
+    min-height: 4rem;
     max-height: 15rem;
 }
 
@@ -1129,6 +1130,7 @@ color: #ed1651;
     line-height: 2rem;
     font-size: 1.4rem;
     word-break: break-all;
+    white-space: pre-wrap;
 }
 .list-wrap .item .text__wrap [class*=list__item] .comment__user {
     padding-right: .4rem;
@@ -1351,22 +1353,31 @@ color: #ed1651;
 
 /* 글쓰기 */
 .post-wrap > .input-wrap {
-    margin: 2rem;
+    margin: 2rem 2rem 0;
 }
 .post-wrap .post__wrap {
-    padding: 2.4rem 2rem 6.9rem;
+    padding: 2.4rem 2rem 7.3rem;
+}
+.post-wrap .post__wrap:only-child {
+    padding-bottom: 2.4rem;
 }
 .post__wrap .post__title .input__item_inner {
     border-color: #ccc;
 }
+.post__wrap .post__title .input__element {
+    font-size: 1.6rem;
+}
 .post__wrap .post__content {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 .post__wrap .post {
     margin-top: 1rem;
 }
 .post__wrap .text__area {
-    color: #666;
+    min-height: 6rem;
+    color: #333;
+    font-size: 1.4rem;
+    line-height: 2rem;
 }
 .attachments__wrap {
     margin-top: 2rem;
@@ -1444,7 +1455,7 @@ color: #ed1651;
 .post-wrap .util__wrap .item__fnc + .item__fnc {
     margin-left: .6rem;
 }
-.post-wrap .util__wrap .item__fnc.right {
+.item__fnc.right {
     margin-left: auto;
 }
 .post-wrap .util__wrap .input__attachments .input__item_inner {
