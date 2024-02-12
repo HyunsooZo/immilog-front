@@ -148,6 +148,7 @@ const closeAlert = () => {
 
 const commentApi = async () => {
 	// 댓글 등록 api
+	closeDialog();
 	try {
 		await sendRequest(
 			'post',
