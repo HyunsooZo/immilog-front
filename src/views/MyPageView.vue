@@ -4,7 +4,7 @@
 		<div class="list-wrap personal">
 			<div class="item">
 				<div class="info__wrap">
-					<button type="button" class="item__pic" :class="{ noImg: !userInfo.userProfile }">
+					<button type="button" class="item__pic" :class="{ 'pic--default': !userInfo.userProfile }">
 						<img v-if="userInfo.userProfile" :src="userInfo.userProfile" alt="" />
 					</button>
 					<button type="button" class="item__fnc" role="link" @click="onProfileEdit">

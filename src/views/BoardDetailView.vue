@@ -8,7 +8,7 @@
 			</div>
 			<div class="item">
 				<div class="info__wrap">
-					<div class="item__pic" :class="{ noImg: !post.userProfileUrl }">
+					<div class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
 						<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
 					</div>
 					<div class="item__fnc">
@@ -67,17 +67,17 @@
 							<i class="blind">댓글</i>
 							<span class="item__count">{{ post.comments.length }}</span>
 						</p>
+					</div>
+					<div class="item__fnc">
+						<!-- <button type="button" class="list__item_button share">
+							<i class="blind">공유하기</i>
+						</button> -->
 						<p class="list__item past">
 							<i class="blind">작성시간</i>
 							<span class="item__count">{{
 								timeCalculation(post.createdAt)
 							}}</span>
 						</p>
-					</div>
-					<div class="item__fnc">
-						<!-- <button type="button" class="list__item_button share">
-							<i class="blind">공유하기</i>
-						</button> -->
 						<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
 							<!-- //활성화 .active -->
 							<i class="blind">북마크</i>

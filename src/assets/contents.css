@@ -980,6 +980,38 @@ color: #ed1651;
     width: 1.6rem;
     height: 1.6rem;
 }
+.list-wrap {
+    position: relative;
+}
+.button--post.sticky {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 4rem;
+    height: 4rem;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    z-index: 1;
+}
+.button--post.sticky.active {
+    position: fixed;
+    top: 105px;
+}
+.button--post.sticky::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+}
+.button--post.sticky svg {
+    position: relative;
+    fill: rgb(255, 255, 255);
+    z-index: 1;
+}
 /* 목록 상단타이틀 */
 .list-wrap .list__title {
     display: flex;
@@ -1055,7 +1087,7 @@ color: #ed1651;
     border: 1px solid #e9e9e9;
     border-radius: 50%;
 }
-.list-wrap .item .info__wrap .item__pic.noImg::after {
+.list-wrap .item .info__wrap .item__pic.pic--default::after {
     content: '';
     position: absolute;
     top: 50%;
