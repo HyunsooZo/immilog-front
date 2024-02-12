@@ -1076,6 +1076,10 @@ color: #ed1651;
     flex-direction: column;
     justify-content: center;
 }
+.list-wrap .item .info__wrap .item__fnc + .item__fnc {
+    flex: 0 1 auto;
+    margin: 0 0 auto auto;
+}
 .list-wrap .item .info__wrap .item__fnc .list__item + .list__item {
     margin-top: .2rem;
 }
@@ -1115,22 +1119,30 @@ color: #ed1651;
 }
 .list-wrap .item .text__wrap [class*=list__item] .text__item {
     flex: 1;
-    min-width: calc(100% - 68px);
+    min-width: calc(100% - 78px);/* thum width */
 }
 .list-wrap .item .text__wrap [class*=list__item] .title {
     padding-bottom: .8rem;
     word-break: break-all;
 }
 .list-wrap .item .text__wrap [class*=list__item] .text {
-    line-height: 1.7rem;
+    line-height: 2rem;
     font-size: 1.4rem;
     word-break: break-all;
 }
+.list-wrap .item .text__wrap [class*=list__item] .comment__user {
+    padding-right: .4rem;
+    color: #3fa0b5;
+}
+.list-wrap .item .text__wrap [class*=list__item] .comment__user::before {
+    content: '@';
+}
 .list-wrap .item .text__wrap [class*=list__item] .thumb {
-    /* flex: 0 0 60px; */
-    width: 6rem;
-    height: 6rem;
-    padding-left: 0.8rem;
+    overflow: hidden;
+    width: 6.8rem;
+    height: 6.8rem;
+    margin-left: 1rem;
+    border-radius: .4rem;
     box-sizing: content-box;
 }
 .list-wrap .item .text__wrap [class*=list__item] .thumb img {
@@ -1149,7 +1161,7 @@ color: #ed1651;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    max-height: 3.4rem;
+    max-height: 4rem;
 }
 /* 해시태그 */
 .list-wrap .item .tag__wrap {
@@ -1191,14 +1203,15 @@ color: #ed1651;
 .list-wrap .item .util__wrap .item__fnc [class*=list__item] + [class*=list__item] {
     margin-left: 1rem;
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].mark,
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].more {
+.list-wrap .item .item__fnc [class*=list__item].mark,
+.list-wrap .item .item__fnc [class*=list__item].more {
     margin: 0 -.4rem 0 .6rem;
     padding: .1rem .4rem;
     font-size: 0;
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].read::after,
-.list-wrap .item .util__wrap .item__fnc [class*=list__item]::before {
+.list-wrap .item :not(.info__wrap) .item__fnc [class*=list__item]::before,
+.list-wrap .item .item__fnc [class*=list__item].read::after,
+.list-wrap .item .item__fnc [class*=list__item].more::before {
     content: '';
     display: inline-block;
     width: 1.6rem;
@@ -1207,44 +1220,47 @@ color: #ed1651;
     background-position: 50% center;
     background-size: auto 100%;
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].read::after {
+.list-wrap .item .item__fnc [class*=list__item].past::before {
+    content: none;
+}
+.list-wrap .item .item__fnc [class*=list__item].read::after {
     position: absolute;
     left: 0;
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z'/></svg>");
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].read::before {
+.list-wrap .item .item__fnc [class*=list__item].read::before {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z'/></svg>");
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].like::before {
+.list-wrap .item .item__fnc [class*=list__item].like::before {
     height: 1.3rem;
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z'/></svg>");
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].like.active::before {
+.list-wrap .item .item__fnc [class*=list__item].like.active::before {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z'/></svg>");
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].cmt::before {
+.list-wrap .item .item__fnc [class*=list__item].cmt::before {
     height: 1.3rem;
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z'/></svg>");
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].mark::before,
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].more::before,
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].share::before {
+.list-wrap .item .item__fnc [class*=list__item].mark::before,
+.list-wrap .item .item__fnc [class*=list__item].more::before,
+.list-wrap .item .item__fnc [class*=list__item].share::before {
     width: 1.4rem;
     height: 1.4rem;
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].mark::before {
+.list-wrap .item .item__fnc [class*=list__item].mark::before {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z'/></svg>");
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].mark.active::before {
+.list-wrap .item .item__fnc [class*=list__item].mark.active::before {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z'/></svg>");
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].more::before {
+.list-wrap .item .item__fnc [class*=list__item].more::before {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z'/></svg>");
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item].share::before {
+.list-wrap .item .item__fnc [class*=list__item].share::before {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(153 153 153)' xmlns='http://www.w3.org/2000/svg'><path d='M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z'/></svg>");
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item] .item__count {
+.list-wrap .item .item__fnc [class*=list__item] .item__count {
     display: inline-block;
     padding-left: .2rem;
     line-height: 1.6rem;

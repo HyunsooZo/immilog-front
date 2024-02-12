@@ -67,6 +67,11 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="button-wrap">
+				<button class="button button--disabled"
+					role="link">저장</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
+			</div>
 		</div>
 	</div>
 </template>
