@@ -1,16 +1,19 @@
 <template>
 	<div class="content">
-		<SearchBar />
-		<!-- tab button -->
-		<div class="menu-wrap">
-			<ul class="menu__inner">
-				<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
-					<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
-						{{ menu.label }}
-					</button>
-				</li>
-			</ul>
-			<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
+		<!-- 상단 고정 영역 -->
+		<div class="sticky-wrap active">
+			<SearchBar />
+			<!-- tab button -->
+			<div class="menu-wrap">
+				<ul class="menu__inner">
+					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
+						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
+							{{ menu.label }}
+						</button>
+					</li>
+				</ul>
+				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
+			</div>
 		</div>
 
 		<!-- 카테고리 정렬 -->
