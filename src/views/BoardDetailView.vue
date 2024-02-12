@@ -232,9 +232,11 @@ import useAxios from '@/composables/useAxios.js';
 const isReplyWriteClicked = ref(false);
 const openReplyWrite = () => {
 	isReplyWriteClicked.value = true;
+	document.body.classList.add('inactive');
 };
 const closeSelect = () => {
 	isReplyWriteClicked.value = false;
+	document.body.classList.remove('inactive');
 };
 
 const { sendRequest } = useAxios();

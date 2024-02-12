@@ -32,10 +32,12 @@ const openNotificationModal = () => {
 
 const openSearchModal = () => {
 	searchModalValue.value = true;
+	document.body.classList.add('inactive');
 };
 
 const closeSearchModal = () => {
 	searchModalValue.value = false;
+	document.body.classList.remove('inactive');
 };
 
 const onHome = () => {

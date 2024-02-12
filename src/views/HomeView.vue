@@ -201,10 +201,12 @@ const setCountry = value => {
 const onPostModal = ref(false);
 const openPostModal = () => {
 	onPostModal.value = true;
+	document.body.classList.add('inactive');
 };
 const closePostModal = () => {
 	onPostModal.value = false;
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+	document.body.classList.remove('inactive');
 };
 
 onMounted(() => {
