@@ -129,7 +129,7 @@ onMounted(() => {
 	window.addEventListener('scroll', handleScroll);
 });
 const handleScroll = () => {
-	const listWrapTopPosition = listWrap.value.getBoundingClientRect().top;
+	// const listWrapTopPosition = listWrap.value.getBoundingClientRect().top;
 	isButtonActive.value = window.scrollY > 96;
 };
 

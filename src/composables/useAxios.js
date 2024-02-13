@@ -21,7 +21,7 @@ export default function useAxios() {
 			};
 
 			const response = await axios(config);
-			if (response.status === 200) {
+			if (response.status === 200 || response.status === 201) {
 				callCount--;
 				return { status: response.status, data: response.data };
 			}

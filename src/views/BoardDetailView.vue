@@ -156,9 +156,9 @@
 		>
 			<div class="item item--blind">
 				<!-- 댓글 신고로 숨김처리 시 -->
-				<div class="blind__text">
+				<!-- <div class="blind__text">
 					<p class="text__item">신고에 의해 숨김처리 되었습니다.</p>
-				</div>
+				</div> -->
 			</div>
 			<div class="item">
 				<div class="info__wrap">
@@ -304,6 +304,7 @@ const openReplyWrite = () => {
 };
 const closeReplyWrite = () => {
 	isReplyWriteClicked.value = false;
+	detailBoard();
 	document.body.classList.remove('inactive');
 };
 
