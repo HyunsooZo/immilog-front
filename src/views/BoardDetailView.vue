@@ -279,7 +279,7 @@
 		v-if="isReplyWriteClicked"
 		:postSeq="post.seq"
 		:type="'post'"
-		@close="closeSelect"
+		@close="closeReplyWrite"
 		@select:value="selectedValue"
 	/>
 </template>
@@ -292,6 +292,9 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
 import NoContent from '@/components/NoContent.vue';
+const { sendRequest } = useAxios();
+const router = useRouter();
+const route = useRoute();
 
 // 댓글쓰기
 const isReplyWriteClicked = ref(false);
@@ -299,14 +302,11 @@ const openReplyWrite = () => {
 	isReplyWriteClicked.value = true;
 	document.body.classList.add('inactive');
 };
-const closeSelect = () => {
+const closeReplyWrite = () => {
 	isReplyWriteClicked.value = false;
 	document.body.classList.remove('inactive');
 };
 
-const { sendRequest } = useAxios();
-const router = useRouter();
-const route = useRoute();
 const postSeq = route.params.postId;
 
 const post = ref({
