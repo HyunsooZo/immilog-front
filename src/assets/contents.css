@@ -1031,6 +1031,8 @@ color: #ed1651;
 }
 /* 목록 */
 .list-wrap .item {
+    position: relative;
+    width: 100%;
     padding: 1.5rem 2rem;
     border-bottom: 1px solid #e9e9e9;
     background: #fff;
@@ -1237,6 +1239,30 @@ color: #ed1651;
     -webkit-box-orient: vertical;
     max-height: 4rem;
 }
+/* chat */
+.list-wrap.chat .item {
+    padding-left: 8rem;
+}
+.list-wrap.chat .item .info__wrap {
+    margin-bottom: 0;
+}
+.list-wrap.chat .item .info__wrap .item__pic {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    width: 5rem;
+    height: 5rem;
+    transform: translateY(-50%);
+}
+.list-wrap.chat .item .text__wrap [class*=list__item] .text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -webkit-line-clamp: 1;
+}
+.list-wrap.chat .item .util__wrap {
+    margin-top: 0;
+}
 /* 해시태그 */
 .list-wrap .item .tag__wrap {
     margin: 1.5rem -.2rem;
@@ -1296,6 +1322,9 @@ color: #ed1651;
 }
 .list-wrap .item .item__fnc [class*=list__item].past::before {
     content: none;
+}
+.list-wrap .item .item__fnc [class*=list__item].past .item__count {
+    padding: 0;
 }
 .list-wrap .item .item__fnc [class*=list__item].read::after {
     position: absolute;
