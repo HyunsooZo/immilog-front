@@ -120,9 +120,7 @@ import CountryList from '@/components/CountryList.vue'; // .sub-menu-wrap
 import BoardContent from '@/components/BoardContent.vue';
 import useAxios from '@/composables/useAxios.js';
 import PostModal from '@/components/PostModal.vue';
-import { useUserInfoStore } from '@/stores/userInfo';
 import NoContent from '@/components/NoContent.vue';
-import router from '@/router';
 
 // 스크롤 글쓰기버튼
 const listWrap = ref(null);
@@ -138,7 +136,6 @@ const handleScroll = () => {
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
 
-const userInfo = useUserInfoStore();
 /* select variable & methods start */
 const selectTitle = ref('');
 const selectList = ref('');
