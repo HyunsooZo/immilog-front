@@ -1035,16 +1035,16 @@ color: #ed1651;
     border-bottom: 1px solid #e9e9e9;
     background: #fff;
 }
-.list-wrap .item.item--blind {
+.list-wrap .item--blind {
     background: transparent;
 }
-.list-wrap .item.item--blind .blind__text {
+.list-wrap .item--blind .blind__text .text__item {
     font-size: 1.4rem;
     color: #999;
 }
-.list-wrap .item.item--blind .info__wrap,
-.list-wrap .item.item--blind .text__wrap,
-.list-wrap .item.item--blind .util__wrap {
+.list-wrap .item--blind .info__wrap,
+.list-wrap .item--blind .text__wrap,
+.list-wrap .item--blind .util__wrap {
     display: none;
     overflow: hidden;
     position: absolute;
@@ -1054,6 +1054,46 @@ color: #ed1651;
     height: 0;
     font-size: 0;
     line-height: 0;
+}
+.list-wrap .item--noreply {
+    padding: 10rem 2rem;
+}
+.list-wrap.reply .item--noreply {
+    padding: 4rem 2rem;
+}
+.list-wrap .noreply__wrap .noreply__text {
+    text-align: center;
+    color: #666;
+}
+.list-wrap .noreply__wrap .noreply__text .text__item {
+    font-size: 1.4rem;
+}
+.list-wrap .noreply__wrap .noreply__text .text__item + .text__item {
+    margin-top: .6rem;
+    font-size: 1.2rem;
+}
+.list-wrap .item--noreply .item__bi {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 4.5rem;
+    margin: 0 0 2rem;
+}
+.list-wrap .item__bi svg {
+    position: absolute;
+    width: 4.5rem;
+    height: 4.5rem;
+}
+.list-wrap .item__bi .bi-blockquote-left {
+    fill: #bbb;
+}
+.list-wrap .item__bi .bi-pencil-square {
+    width: 3rem;
+    height: 3rem;
+    margin: -1.2rem 0 0 1.5rem;
+    fill: #999;
 }
 /* 댓글, 대댓글 */
 .list-wrap.reply .item .info__wrap {

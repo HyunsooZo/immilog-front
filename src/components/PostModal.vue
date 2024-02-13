@@ -5,8 +5,7 @@
 			<div class="modal-header">
 				<p class="modal-title">글쓰기</p>
 				<button type="button" class="button-icon__s button--post_upload" @click="postUpload">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square"
-						viewBox="0 0 16 16">
+					<svg viewBox="0 0 16 16">
 						<path
 							d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z" />
 						<path
@@ -64,10 +63,9 @@
 						<!-- contents -->
 						<div class="post__content">
 							<div class="post">
-								<textarea class="text__area" name="content" autocomplete="off"
-									placeholder="게시글 내용을 입력해주세요. 다른 사용자로부터 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 될 수 있습니다."
-									data-autosuggest_is-input="true" v-model="content" ref="textareaRef" @input="adjustTextareaHeight"
-									rows="3"></textarea>
+								<textarea v-model="content" class="text__area" name="content" autocomplete="off"
+									placeholder="게시글 내용을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다." data-autosuggest_is-input="true"
+									ref="adjustTextarea" @input="adjustTextareaHeight" rows="3"></textarea>
 								<!-- file preview -->
 								<div class="attachments__wrap" v-if="isImageUploaded">
 									<div class="attachments__item" v-for="(image, index) in imagePreview" :key="index">
@@ -197,6 +195,14 @@ const title = ref('');
 // content value
 const content = ref('');
 
+// textarea
+const adjustTextarea = ref(null);
+const adjustTextareaHeight = () => {
+	const textarea = adjustTextarea.value;
+	textarea.style.height = 'auto';
+	textarea.style.height = `${textarea.scrollHeight}px`;
+};
+
 // tags
 const hashTag = ref('');
 const tags = ref([]);
@@ -230,14 +236,6 @@ const previewImage = event => {
 // 미리보기 삭제
 const removeImage = index => {
 	imagePreview.value.splice(index, 1);
-};
-
-// textarea
-const textareaRef = ref(null);
-const adjustTextareaHeight = () => {
-	const textarea = textareaRef.value;
-	textarea.style.height = 'auto';
-	textarea.style.height = `${textarea.scrollHeight}px`;
 };
 
 const emit = defineEmits(['onPostModal:value']);

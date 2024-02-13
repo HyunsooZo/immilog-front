@@ -16,17 +16,19 @@
 			</div>
 		</div>
 
-		<!-- 카테고리 정렬 -->
-		<div class="fnc-wrap">
-			<div class="category__list">
-				<button type="button" class="button--select" @click="openCategorySelect">
-					<span>{{ selectCategoryValue.name }}</span>
-				</button>
-			</div>
-			<div class="sort__list">
-				<button type="button" class="button--select sort" @click="openSortingSelect">
-					<span>{{ selectSortingValue.name }}</span>
-				</button>
+		<div class="list-top-wrap">
+			<!-- 카테고리 정렬 -->
+			<div class="fnc-wrap">
+				<div class="category__list">
+					<button type="button" class="button--select" @click="openCategorySelect">
+						<span>{{ selectCategoryValue.name }}</span>
+					</button>
+				</div>
+				<div class="sort__list">
+					<button type="button" class="button--select sort" @click="openSortingSelect">
+						<span>{{ selectSortingValue.name }}</span>
+					</button>
+				</div>
 			</div>
 		</div>
 

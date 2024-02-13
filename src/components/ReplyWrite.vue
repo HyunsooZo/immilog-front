@@ -24,8 +24,12 @@
 				<div class="post-wrap">
 					<div class="post__wrap">
 						<textarea v-model="textareaRef" class="text__area" name="content" autocomplete="off"
+							placeholder="댓글을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다." data-autosuggest_is-input="true"
+							ref="adjustTextare" @input="adjustTextareaHeight" rows="2"></textarea>
+
+						<!-- <textarea v-model="content" class="text__area" name="content" autocomplete="off"
 							placeholder="댓글을 입력해주세요. 다른 사용자로부터 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 될 수 있습니다."
-							data-autosuggest_is-input="true" @input="adjustTextareaHeight" rows="2"></textarea>
+							data-autosuggest_is-input="true" ref="textareaRef" @input="adjustTextareaHeight" rows="2"></textarea> -->
 					</div>
 					<!-- <div class="util__wrap">
 						<div class="item__fnc">
@@ -84,14 +88,6 @@ const closeDialog = () => {
 	emit('close');
 };
 
-// textarea
-const textareaRef = ref(null);
-const adjustTextareaHeight = () => {
-	const textarea = textareaRef.value;
-	textarea.style.height = 'auto';
-	textarea.style.height = `${textarea.scrollHeight}px`;
-};
-
 const openAlert = content => {
 	alertValue.value = true;
 	alertText.value = content;
@@ -99,6 +95,14 @@ const openAlert = content => {
 
 const closeAlert = () => {
 	alertValue.value = false;
+};
+
+// textarea
+const textareaRef = ref(null);
+const adjustTextareaHeight = () => {
+	const textarea = textareaRef.value;
+	textarea.style.height = 'auto';
+	textarea.style.height = `${textarea.scrollHeight}px`;
 };
 
 const commentApi = async () => {

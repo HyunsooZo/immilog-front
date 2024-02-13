@@ -17,21 +17,24 @@
 			</div>
 		</div>
 
-		<!-- 카테고리 정렬 -->
-		<div class="fnc-wrap">
-			<div class="category__list">
-				<button type="button" class="button--select" @click="openCategorySelect">
-					<span>{{ selectCategoryValue.name }}</span>
-				</button>
+		<div class="list-top-wrap">
+			<!-- 카테고리 정렬 -->
+			<div class="fnc-wrap">
+				<div class="category__list">
+					<button type="button" class="button--select" @click="openCategorySelect">
+						<span>{{ selectCategoryValue.name }}</span>
+					</button>
+				</div>
+				<div class="sort__list">
+					<button type="button" class="button--select sort" @click="openSortingSelect">
+						<span>{{ selectSortingValue.name }}</span>
+					</button>
+				</div>
 			</div>
-			<div class="sort__list">
-				<button type="button" class="button--select sort" @click="openSortingSelect">
-					<span>{{ selectSortingValue.name }}</span>
-				</button>
-			</div>
+			<!-- sub menu -->
+			<CountryList @select:country="setCountry" />
 		</div>
-		<!-- sub menu -->
-		<CountryList @select:country="setCountry" />
+
 		<!-- 목록 -->
 		<div class="list-wrap" ref="listWrap">
 			<!-- 글쓰기버튼 -->
@@ -47,7 +50,7 @@
 			</button>
 			<div class="list__title" style="display: none;">
 				<span class="title">{{ selectCategoryValue.name }} </span>
-				<button type="button" class="button-icon button--post sticky" @click="openPostModal">
+				<button type="button" class="button-icon button--post" @click="openPostModal">
 					<svg viewBox="0 0 16 16">
 						<path
 							d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -85,7 +88,7 @@ onMounted(() => {
 });
 const handleScroll = () => {
 	const listWrapTopPosition = listWrap.value.getBoundingClientRect().top;
-	isButtonActive.value = window.scrollY > 95;
+	isButtonActive.value = window.scrollY > 96;
 };
 
 const menuBarLeft = ref('0px');
