@@ -32,5 +32,15 @@ export const useUserInfoStore = defineStore({
 			this.userProfile = userProfile;
 			this.isLocationMatch = isLocationMatch;
 		},
+		signOut() {
+			this.userSeq = null;
+			this.accessToken = null;
+			this.refreshToken = null;
+			this.userNickname = null;
+			this.userEmail = null;
+			this.userCountry = null;
+			this.userProfile = null;
+			this.isLocationMatch = false;
+		},
 	},
 });
