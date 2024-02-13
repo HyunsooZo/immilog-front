@@ -1,5 +1,21 @@
 <template>
 	<div class="content">
+		<div class="list-top-wrap">
+			<!-- 카테고리 정렬 -->
+			<div class="fnc-wrap">
+				<div class="category__list">
+					<button type="button" class="button--select" @click="openCategorySelect">
+						<span>selectCategoryValue.name</span>
+					</button>
+				</div>
+				<div class="sort__list">
+					<button type="button" class="button--select sort" @click="openSortingSelect">
+						<span>selectSortingValue.name</span>
+					</button>
+				</div>
+			</div>
+		</div>
+
 		<div class="list-wrap chat">
 			<div class="item">
 				<button type="button" class="list__item_button">
@@ -35,7 +51,7 @@
 						<i class="blind">더보기</i><!-- //신고, 나가기 -->
 					</button>
 				</div>
-			</div>
+			</div><!-- // .item -->
 		</div>
 	</div>
 </template>
