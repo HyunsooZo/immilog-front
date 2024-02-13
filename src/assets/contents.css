@@ -1166,6 +1166,9 @@ color: #ed1651;
 .list-wrap .item .info__wrap [class^=list__item].user {
     color: #999;
 }
+.list-wrap .item .info__wrap [class^=list__item].user::before {
+    content: none !important;
+}
 .list-wrap .item .info__wrap [class^=list__item].user--author strong::after {
     content: '*';
     display: inline;
@@ -1241,7 +1244,12 @@ color: #ed1651;
 }
 /* chat */
 .list-wrap.chat .item {
+    display: flex;
     padding-left: 8rem;
+}
+.list-wrap.chat .item > .list__item_button {
+    display: block;
+    width: calc(100% - 24px);
 }
 .list-wrap.chat .item .info__wrap {
     margin-bottom: 0;
