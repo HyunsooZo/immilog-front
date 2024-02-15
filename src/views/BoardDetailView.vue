@@ -154,12 +154,12 @@
 			v-for="(comment, index) in post.comments"
 			:key="comment.seq"
 		>
-			<div class="item item--blind">
-				<!-- 댓글 신고로 숨김처리 시 -->
-				<!-- <div class="blind__text">
+			<!-- <div class="item item--blind"> -->
+			<!-- 댓글 신고로 숨김처리 시 -->
+			<!-- <div class="blind__text">
 					<p class="text__item">신고에 의해 숨김처리 되었습니다.</p>
 				</div> -->
-			</div>
+			<!-- </div> -->
 			<div class="item">
 				<div class="info__wrap">
 					<div class="item__fnc">
@@ -207,19 +207,9 @@
 					</div>
 				</div>
 			</div>
-			<!-- n개 이상 대댓글 더보기 -->
-			<div class="item item__more">
-				<button
-					type="button"
-					class="list__item_button button-text"
-					@click="onReplyList(index)"
-				>
-					<span>대댓글 보기</span>
-				</button>
-			</div>
 			<!-- 대댓글 -->
 			<div class="re--reply" v-for="reply in comment.replies" :key="reply.seq">
-				<div class="item">
+				<div class="item" v-if="replyOn[index]">
 					<div class="info__wrap">
 						<div class="item__fnc">
 							<div class="list__item">
@@ -267,6 +257,16 @@
 				</div>
 				<!-- //.item -->
 			</div>
+			<!-- n개 이상 대댓글 더보기 -->
+			<div class="item item__more">
+				<button
+					type="button"
+					class="list__item_button button-text"
+					@click="onReplyList(index)"
+				>
+					<span>대댓글 보기</span>
+				</button>
+			</div>
 		</div>
 	</div>
 	<!-- <SelectDialog v-if="isSortingSelectClicked" :title="selectTitle" :list="selectList" @close="closeSelect"
@@ -300,7 +300,6 @@ const router = useRouter();
 const route = useRoute();
 const replyOn = ref([]);
 const onReplyList = index => {
-	replyOn.value = [...replyOn.value]; // 전체 배열을 복사하여 업데이트
 	replyOn.value[index] = !replyOn.value[index];
 };
 
