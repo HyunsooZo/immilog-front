@@ -117,7 +117,7 @@
 				<button
 					type="button"
 					class="button-icon__s button--post"
-					@click="openReplyWrite"
+					@click="openCommentWrite"
 				>
 					<svg viewBox="0 0 16 16">
 						<path
@@ -151,7 +151,7 @@
 		</div>
 		<div
 			class="list-wrap reply"
-			v-for="comment in post.comments"
+			v-for="(comment, index) in post.comments"
 			:key="comment.seq"
 		>
 			<div class="item item--blind">
@@ -194,7 +194,7 @@
 						<button
 							type="button"
 							class="list__item cmt"
-							@click="openReplyWrite"
+							@click="openReplyWrite(index)"
 						>
 							<span class="item__count">{{ comment.replies.length }}</span>
 						</button>
@@ -207,8 +207,18 @@
 					</div>
 				</div>
 			</div>
+			<!-- n개 이상 대댓글 더보기 -->
+			<div class="item item__more">
+				<button
+					type="button"
+					class="list__item_button button-text"
+					@click="onReplyList(index)"
+				>
+					<span>대댓글 보기</span>
+				</button>
+			</div>
 			<!-- 대댓글 -->
-			<div class="re--reply">
+			<div class="re--reply" v-for="reply in comment.replies" :key="reply.seq">
 				<div class="item">
 					<div class="info__wrap">
 						<div class="item__fnc">
@@ -218,8 +228,8 @@
 									class="list__item_button user user--author"
 								>
 									<!-- //원글작성자 댓글 .user--author -->
-									<em>원글작성자 대댓글</em>
-									<strong>원글작성자 닉네임</strong>
+									<em>{{ reply.author.country }}</em>
+									<strong>{{ reply.author.nickName }}</strong>
 								</button>
 							</div>
 						</div>
@@ -233,9 +243,8 @@
 						<div class="list__item">
 							<div class="text__item">
 								<p class="text">
-									<span class="comment__user">{{ comment.user.nickName }}</span>
-									대댓글내용 대댓글내용 대댓글내용 대댓글내용 대댓글내용
-									대댓글내용 대댓글내용
+									<span class="comment__user">{{ reply.author.nickName }}</span>
+									{{ reply.content }}
 								</p>
 							</div>
 						</div>
@@ -245,40 +254,34 @@
 							<button type="button" class="list__item_button like">
 								<!-- //활성화 .active -->
 								<i class="blind">좋아요</i>
-								<span class="item__count">10</span>
-							</button>
-							<button
-								type="button"
-								class="list__item cmt"
-								@click="openReplyWrite"
-							>
-								<span class="item__count blind">{{
-									comment.replies.length
-								}}</span>
+								<span class="item__count">{{ reply.upVotes }}</span>
 							</button>
 							<p class="list__item past">
 								<i class="blind">작성시간</i>
-								<span class="item__count">10시간 전</span>
+								<span class="item__count">
+									{{ timeCalculation(reply.createdAt) }}
+								</span>
 							</p>
 						</div>
 					</div>
 				</div>
 				<!-- //.item -->
-				<!-- n개 이상 대댓글 더보기 -->
-				<div class="item item__more">
-					<button type="button" class="list__item_button button-text">
-						<span>대댓글 <em>n</em>개 더보기</span>
-					</button>
-				</div>
 			</div>
 		</div>
 	</div>
 	<!-- <SelectDialog v-if="isSortingSelectClicked" :title="selectTitle" :list="selectList" @close="closeSelect"
 		@select:value="selectedValue" /> -->
 	<ReplyWrite
-		v-if="isReplyWriteClicked"
+		v-if="isCommentWriteClicked"
 		:postSeq="post.seq"
-		:type="'post'"
+		:isPostComment="true"
+		@close="closeCommentWrite"
+		@select:value="selectedValue"
+	/>
+	<ReplyWrite
+		v-if="isReplyWriteClicked"
+		:commentSeq="post.comments[replyIndex].seq"
+		:isPostComment="false"
 		@close="closeReplyWrite"
 		@select:value="selectedValue"
 	/>
@@ -295,19 +298,39 @@ import NoContent from '@/components/NoContent.vue';
 const { sendRequest } = useAxios();
 const router = useRouter();
 const route = useRoute();
+const replyOn = ref([]);
+const onReplyList = index => {
+	replyOn.value = [...replyOn.value]; // 전체 배열을 복사하여 업데이트
+	replyOn.value[index] = !replyOn.value[index];
+};
 
 // 댓글쓰기
 const isReplyWriteClicked = ref(false);
-const openReplyWrite = () => {
+const isCommentWriteClicked = ref(false);
+const replyIndex = ref();
+const openReplyWrite = index => {
+	replyIndex.value = index;
 	isReplyWriteClicked.value = true;
 	document.body.classList.add('inactive');
 };
 const closeReplyWrite = () => {
 	isReplyWriteClicked.value = false;
-	detailBoard();
 	document.body.classList.remove('inactive');
+	setTimeout(() => {
+		detailBoard();
+	}, 1500);
 };
-
+const openCommentWrite = () => {
+	isCommentWriteClicked.value = true;
+	document.body.classList.add('inactive');
+};
+const closeCommentWrite = () => {
+	isCommentWriteClicked.value = false;
+	document.body.classList.remove('inactive');
+	setTimeout(() => {
+		detailBoard();
+	}, 1500);
+};
 const postSeq = route.params.postId;
 
 const post = ref({

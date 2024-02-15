@@ -113,8 +113,8 @@ const props = defineProps({
 		type: Number,
 		required: false,
 	},
-	type: {
-		type: String,
+	isPostComment: {
+		type: Boolean,
 		required: true,
 	},
 });
@@ -142,11 +142,40 @@ const adjustTextareaHeight = () => {
 
 const commentApi = async () => {
 	// 댓글 등록 api
+	if (props.isPostComment) {
+		callCommentApi();
+	} else {
+		callReplyApi();
+	}
+	console.log(props.isPostComment);
 	closeDialog();
+};
+
+const callCommentApi = async () => {
 	try {
 		await sendRequest(
 			'post',
 			`/comments/posts/${props.postSeq}`,
+			{
+				headers: {
+					contentType: 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				},
+			},
+			{
+				content: textareaRef.value,
+			},
+		);
+	} catch (error) {
+		openAlert('서버와의 통신에 실패했습니다.');
+		console.log(error);
+	}
+};
+const callReplyApi = async () => {
+	try {
+		await sendRequest(
+			'post',
+			`/replies/comments/${props.commentSeq}`,
 			{
 				headers: {
 					contentType: 'application/json',
