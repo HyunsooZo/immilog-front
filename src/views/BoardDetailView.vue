@@ -258,13 +258,13 @@
 				<!-- //.item -->
 			</div>
 			<!-- n개 이상 대댓글 더보기 -->
-			<div class="item item__more">
+			<div class="item item__more" v-if="comment.replies.length > 0">
 				<button
 					type="button"
 					class="list__item_button button-text"
 					@click="onReplyList(index)"
 				>
-					<span>대댓글 보기</span>
+					<span>{{ comment.replies.length }}개의 대댓글 보기</span>
 				</button>
 			</div>
 		</div>
