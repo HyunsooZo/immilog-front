@@ -52,7 +52,7 @@
 				</button>
 				<p class="list__item cmt">
 					<i class="blind">댓글</i>
-					<span class="item__count">{{ post.comments.length }}</span>
+					<span class="item__count">{{ allCommentCounts(post) }}</span>
 				</p>
 			</div>
 			<div class="item__fnc">
@@ -234,5 +234,13 @@ const changeBookmark = () => {
 	} else {
 		bookmarkUsers.value.push(userSeq.value);
 	}
+};
+
+const allCommentCounts = post => {
+	let result = post.comments.length;
+	post.comments.forEach(comment => {
+		result += comment.replies.length;
+	});
+	return result;
 };
 </script>
