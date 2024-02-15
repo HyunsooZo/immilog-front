@@ -110,7 +110,13 @@
 			</div>
 			<!-- //.item -->
 		</div>
-
+		<ReplyModal
+			v-if="replyDetailModal"
+			:post="post"
+			:commentIndex="replyIndex"
+			:postIndex="postSeq"
+			@close="closeReplyModal"
+		/>
 		<!-- 댓글 기능버튼 -->
 		<div class="fnc-wrap">
 			<div class="button__list">
@@ -262,7 +268,7 @@
 				<button
 					type="button"
 					class="list__item_button button-text"
-					@click="onReplyList(index)"
+					@click="openReplyModal(index)"
 				>
 					<span>{{ comment.replies.length }}개의 대댓글 보기</span>
 				</button>
@@ -295,12 +301,25 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
 import NoContent from '@/components/NoContent.vue';
+import ReplyModal from '@/components/ReplyModal.vue';
+
 const { sendRequest } = useAxios();
 const router = useRouter();
 const route = useRoute();
 const replyOn = ref([]);
 const onReplyList = index => {
 	replyOn.value[index] = !replyOn.value[index];
+};
+
+const replyDetailModal = ref(false);
+
+const openReplyModal = index => {
+	replyIndex.value = index;
+	replyDetailModal.value = true;
+};
+
+const closeReplyModal = () => {
+	replyDetailModal.value = false;
 };
 
 // 댓글쓰기

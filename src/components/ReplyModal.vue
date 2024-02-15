@@ -1,0 +1,224 @@
+<template>
+	<div>
+		<button @click="closeModal">X</button>
+	</div>
+	<div class="list-wrap reply">
+		<!-- <div class="item item--blind"> -->
+		<!-- 댓글 신고로 숨김처리 시 -->
+		<!-- <div class="blind__text">
+					<p class="text__item">신고에 의해 숨김처리 되었습니다.</p>
+				</div> -->
+		<!-- </div> -->
+		<div class="item">
+			<div class="info__wrap">
+				<div class="item__fnc">
+					<div class="list__item">
+						<button type="button" class="list__item_button user">
+							<!-- //원글작성자 댓글 .user--author -->
+							<em>{{ detailPost.comments[commentIndex].user.country }}</em>
+							<strong>{{
+								detailPost.comments[commentIndex].user.nickName
+							}}</strong>
+						</button>
+					</div>
+				</div>
+				<div class="item__fnc">
+					<button type="button" class="list__item_button more">
+						<i class="blind">더보기</i>
+					</button>
+				</div>
+			</div>
+			<div class="text__wrap">
+				<div class="list__item">
+					<div class="text__item">
+						<p class="text">
+							{{ detailPost.comments[commentIndex].content }}
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="util__wrap">
+				<div class="item__fnc">
+					<button type="button" class="list__item_button like active">
+						<!-- //활성화 .active -->
+						<i class="blind">좋아요</i>
+						<span class="item__count">{{
+							detailPost.comments[commentIndex].upVotes
+						}}</span>
+					</button>
+					<button
+						type="button"
+						class="list__item cmt"
+						@click="openReplyWrite(commentIndex)"
+					>
+						<span class="item__count">{{
+							detailPost.comments[commentIndex].replies.length
+						}}</span>
+					</button>
+					<p class="list__item past">
+						<i class="blind">작성시간</i>
+						<span class="item__count">{{
+							timeCalculation(detailPost.comments[commentIndex].createdAt)
+						}}</span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<!-- 대댓글 -->
+		<div
+			class="re--reply"
+			v-for="reply in detailPost.comments[commentIndex].replies"
+			:key="reply.seq"
+		>
+			<div class="item">
+				<div class="info__wrap">
+					<div class="item__fnc">
+						<div class="list__item">
+							<button type="button" class="list__item_button user user--author">
+								<!-- //원글작성자 댓글 .user--author -->
+								<em>{{ reply.author.country }}</em>
+								<strong>{{ reply.author.nickName }}</strong>
+							</button>
+						</div>
+					</div>
+					<div class="item__fnc">
+						<button type="button" class="list__item_button more">
+							<i class="blind">더보기</i>
+						</button>
+					</div>
+				</div>
+				<div class="text__wrap">
+					<div class="list__item">
+						<div class="text__item">
+							<p class="text">
+								<span class="comment__user">{{ reply.author.nickName }}</span>
+								{{ reply.content }}
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="util__wrap">
+					<div class="item__fnc">
+						<button type="button" class="list__item_button like">
+							<!-- //활성화 .active -->
+							<i class="blind">좋아요</i>
+							<span class="item__count">{{ reply.upVotes }}</span>
+						</button>
+						<p class="list__item past">
+							<i class="blind">작성시간</i>
+							<span class="item__count">
+								{{ timeCalculation(reply.createdAt) }}
+							</span>
+						</p>
+					</div>
+				</div>
+			</div>
+			<!-- //.item -->
+		</div>
+	</div>
+	<ReplyWrite
+		v-if="isReplyWriteClicked"
+		:commentSeq="post.comments[commentIndex].seq"
+		:isPostComment="false"
+		@close="closeReplyWrite"
+	/>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import ReplyWrite from '@/components/ReplyWrite.vue';
+import useAxios from '@/composables/useAxios';
+
+const { sendRequest } = useAxios();
+
+const props = defineProps({
+	post: {
+		type: Object,
+		required: true,
+	},
+	commentIndex: {
+		type: Number,
+		required: true,
+	},
+	postIndex: {
+		type: Number,
+		required: true,
+	},
+});
+
+const detailPost = props.post;
+const isLiked = ref(false);
+
+const emit = defineEmits(['close']);
+
+const closeModal = () => {
+	emit('close');
+};
+
+// 댓글쓰기
+const isReplyWriteClicked = ref(false);
+const replyIndex = ref();
+const openReplyWrite = index => {
+	replyIndex.value = index;
+	isReplyWriteClicked.value = true;
+	document.body.classList.add('inactive');
+};
+const closeReplyWrite = () => {
+	isReplyWriteClicked.value = false;
+	document.body.classList.remove('inactive');
+	setTimeout(() => {
+		detailBoard();
+	}, 1500);
+};
+
+const timeCalculation = localTime => {
+	// LocalDateTime 문자열을 JavaScript Date 객체로 변환
+	const postDate = new Date(localTime);
+	const now = new Date();
+	const diff = now.getTime() - postDate.getTime();
+
+	// 시간 차이를 분 단위로 변환
+	const diffMinutes = Math.floor(diff / (1000 * 60));
+
+	if (diffMinutes < 10) {
+		return '방금 전';
+	} else if (diffMinutes < 60) {
+		return `${Math.ceil(diffMinutes / 10) * 10}분 전`;
+	}
+
+	// 시간 차이를 시간 단위로 변환
+	const diffHours = Math.floor(diffMinutes / 60);
+	if (diffHours < 24) {
+		return `${diffHours}시간 전`;
+	}
+
+	// 하루 이상 차이 나는 경우 날짜 포맷으로 반환
+	return postDate.toLocaleString('ko-KR', {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
+	});
+};
+
+const detailBoard = async () => {
+	try {
+		const { status, data } = await sendRequest(
+			'get',
+			`/posts/${props.postIndex}`,
+			{
+				header: {
+					contentType: 'application/json',
+				},
+			},
+		);
+		if (status === 200) {
+			detailPost.value = data.data;
+			isLiked.value = data.data.likeUsers.some(user => user.seq === 1);
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+</script>
