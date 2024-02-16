@@ -61,12 +61,15 @@
 							</p>
 						</li>
 						<li
-							v-for="(result, resultIndex) in filteredSearchResult.slice(0, 20)"
+							v-for="(result, resultIndex) in searchResult.content"
 							:key="'result-' + resultIndex"
 							class="item"
 						>
 							<button type="button" class="button button--result">
-								<em>{{ result }}</em>
+								<em>{{ result.title }}</em>
+								<em>{{ result.author }}</em>
+								<em>{{ result.content }}</em>
+								<em>{{ result.createdAt }}</em>
 							</button>
 						</li>
 					</ul>
@@ -74,15 +77,22 @@
 			</div>
 		</div>
 	</div>
+	<LoadingModal v-if="isLoading" />
 </template>
 
 <script setup>
 import { onMounted, ref, computed } from 'vue';
+import useAxios from '@/composables/useAxios';
+import LoadingModal from './LoadingModal.vue';
+
+const { sendRequest } = useAxios();
 
 const searchInput = ref('');
 const searchHistory = ref([]);
 const searchResult = ref([]);
 const searchApiCalled = ref(false);
+const isLoading = ref(false);
+const page = ref(0);
 
 const emits = defineEmits(['update:searchModalValue']);
 
@@ -90,10 +100,40 @@ const closeSearchModal = () => {
 	emits('update:searchModalValue', false);
 };
 
-const callSearchApi = () => {
-	console.log(searchInput.value);
+const onLoading = () => {
+	isLoading.value = true;
+};
+
+const offLoading = () => {
+	isLoading.value = false;
+};
+
+const callSearchApi = async () => {
+	onLoading();
 	stackSearchHistory();
-	searchApiCalled.value = true;
+	try {
+		const { status, data } = await sendRequest(
+			'get',
+			`/posts/search?keyword=${searchInput.value}&page=${page.value}`,
+			{
+				headers: {
+					contentType: 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				},
+			},
+			null,
+		);
+		if (status === 200) {
+			searchResult.value = data.data;
+			setTimeout(() => {
+				offLoading();
+			}, 1500);
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		offLoading();
+	}
 };
 
 const reCallSearchApi = item => {
@@ -136,9 +176,6 @@ onMounted(() => {
 	if (storedHistory) {
 		searchHistory.value = JSON.parse(storedHistory);
 	}
-
-	// 가상 검색 결과 데이터 (테스트용)
-	searchResult.value = ['검색결과1', '검색결과2', '검색결과3'];
 });
 
 const filteredSearchHistory = computed(() => {

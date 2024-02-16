@@ -384,6 +384,11 @@ const userSeq = ref(userInfo.userSeq);
 const likeUsers = ref(post.value.likeUsers);
 const likeCount = ref(post.value.likeCount);
 
+const bookmarkUsers = ref(post.value.bookmarkUsers);
+
+const isBookmarked = computed(() => {
+	return bookmarkUsers.value.includes(userSeq.value);
+});
 const isLiked = computed(() => {
 	return likeUsers.value.includes(userSeq.value);
 });
@@ -457,9 +462,10 @@ const detailBoard = async () => {
 		);
 		if (status === 200) {
 			post.value = data.data;
-			isLiked.value = data.data.likeUsers.some(
-				user => user.seq === userInfo.userSeq,
-			);
+			isLiked.value = data.data.likeUsers.some(user => user.seq === 1);
+			likeCount.value = data.data.likeCount;
+			likeUsers.value = data.data.likeUsers;
+			bookmarkUsers.value = data.data.bookmarkUsers;
 		}
 	} catch (error) {
 		console.log(error);
