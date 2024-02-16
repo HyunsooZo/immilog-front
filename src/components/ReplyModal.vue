@@ -1,119 +1,137 @@
 <template>
-	<div>
-		<button @click="closeModal">X</button>
-	</div>
-	<div class="list-wrap reply">
-		<!-- <div class="item item--blind"> -->
-		<!-- 댓글 신고로 숨김처리 시 -->
-		<!-- <div class="blind__text">
+	<div class="modal modal--full">
+		<div class="modal-content">
+			<button
+				type="button"
+				class="button-icon button--close"
+				role="link"
+				@click="closeModal"
+			>
+				<span class="blind">닫기</span>
+			</button>
+			<div class="modal-body">
+				<div class="list-wrap reply">
+					<!-- <div class="item item--blind"> -->
+					<!-- 댓글 신고로 숨김처리 시 -->
+					<!-- <div class="blind__text">
 					<p class="text__item">신고에 의해 숨김처리 되었습니다.</p>
 				</div> -->
-		<!-- </div> -->
-		<div class="item">
-			<div class="info__wrap">
-				<div class="item__fnc">
-					<div class="list__item">
-						<button type="button" class="list__item_button user">
-							<!-- //원글작성자 댓글 .user--author -->
-							<em>{{ detailPost.comments[commentIndex].user.country }}</em>
-							<strong>{{
-								detailPost.comments[commentIndex].user.nickName
-							}}</strong>
-						</button>
+					<!-- </div> -->
+					<div class="item">
+						<div class="info__wrap">
+							<div class="item__fnc">
+								<div class="list__item">
+									<button type="button" class="list__item_button user">
+										<!-- //원글작성자 댓글 .user--author -->
+										<em>{{
+											detailPost.comments[commentIndex].user.country
+										}}</em>
+										<strong>{{
+											detailPost.comments[commentIndex].user.nickName
+										}}</strong>
+									</button>
+								</div>
+							</div>
+							<div class="item__fnc">
+								<button type="button" class="list__item_button more">
+									<i class="blind">더보기</i>
+								</button>
+							</div>
+						</div>
+						<div class="text__wrap">
+							<div class="list__item">
+								<div class="text__item">
+									<p class="text">
+										{{ detailPost.comments[commentIndex].content }}
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="util__wrap">
+							<div class="item__fnc">
+								<button type="button" class="list__item_button like active">
+									<!-- //활성화 .active -->
+									<i class="blind">좋아요</i>
+									<span class="item__count">{{
+										detailPost.comments[commentIndex].upVotes
+									}}</span>
+								</button>
+								<button
+									type="button"
+									class="list__item cmt"
+									@click="openReplyWrite(commentIndex)"
+								>
+									<span class="item__count">{{
+										detailPost.comments[commentIndex].replies.length
+									}}</span>
+								</button>
+								<p class="list__item past">
+									<i class="blind">작성시간</i>
+									<span class="item__count">{{
+										timeCalculation(detailPost.comments[commentIndex].createdAt)
+									}}</span>
+								</p>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="item__fnc">
-					<button type="button" class="list__item_button more">
-						<i class="blind">더보기</i>
-					</button>
-				</div>
-			</div>
-			<div class="text__wrap">
-				<div class="list__item">
-					<div class="text__item">
-						<p class="text">
-							{{ detailPost.comments[commentIndex].content }}
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="util__wrap">
-				<div class="item__fnc">
-					<button type="button" class="list__item_button like active">
-						<!-- //활성화 .active -->
-						<i class="blind">좋아요</i>
-						<span class="item__count">{{
-							detailPost.comments[commentIndex].upVotes
-						}}</span>
-					</button>
-					<button
-						type="button"
-						class="list__item cmt"
-						@click="openReplyWrite(commentIndex)"
+					<!-- 대댓글 -->
+					<div
+						class="re--reply"
+						v-for="reply in detailPost.comments[commentIndex].replies"
+						:key="reply.seq"
 					>
-						<span class="item__count">{{
-							detailPost.comments[commentIndex].replies.length
-						}}</span>
-					</button>
-					<p class="list__item past">
-						<i class="blind">작성시간</i>
-						<span class="item__count">{{
-							timeCalculation(detailPost.comments[commentIndex].createdAt)
-						}}</span>
-					</p>
-				</div>
-			</div>
-		</div>
-		<!-- 대댓글 -->
-		<div
-			class="re--reply"
-			v-for="reply in detailPost.comments[commentIndex].replies"
-			:key="reply.seq"
-		>
-			<div class="item">
-				<div class="info__wrap">
-					<div class="item__fnc">
-						<div class="list__item">
-							<button type="button" class="list__item_button user user--author">
-								<!-- //원글작성자 댓글 .user--author -->
-								<em>{{ reply.author.country }}</em>
-								<strong>{{ reply.author.nickName }}</strong>
-							</button>
+						<div class="item">
+							<div class="info__wrap">
+								<div class="item__fnc">
+									<div class="list__item">
+										<button
+											type="button"
+											class="list__item_button user user--author"
+										>
+											<!-- //원글작성자 댓글 .user--author -->
+											<em>{{ reply.user.country }}</em>
+											<strong>{{ reply.user.nickName }}</strong>
+										</button>
+									</div>
+								</div>
+								<div class="item__fnc">
+									<button type="button" class="list__item_button more">
+										<i class="blind">더보기</i>
+									</button>
+								</div>
+							</div>
+							<div class="text__wrap">
+								<div class="list__item">
+									<div class="text__item">
+										<p class="text">
+											<span class="comment__user">{{
+												reply.user.nickName
+											}}</span>
+											{{ reply.content }}
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="util__wrap">
+								<div class="item__fnc">
+									<button type="button" class="list__item_button like">
+										<!-- //활성화 .active -->
+										<i class="blind">좋아요</i>
+										<span class="item__count">{{ reply.upVotes }}</span>
+									</button>
+									<p class="list__item past">
+										<i class="blind">작성시간</i>
+										<span class="item__count">
+											{{ timeCalculation(reply.createdAt) }}
+										</span>
+									</p>
+								</div>
+							</div>
 						</div>
-					</div>
-					<div class="item__fnc">
-						<button type="button" class="list__item_button more">
-							<i class="blind">더보기</i>
-						</button>
-					</div>
-				</div>
-				<div class="text__wrap">
-					<div class="list__item">
-						<div class="text__item">
-							<p class="text">
-								<span class="comment__user">{{ reply.author.nickName }}</span>
-								{{ reply.content }}
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="util__wrap">
-					<div class="item__fnc">
-						<button type="button" class="list__item_button like">
-							<!-- //활성화 .active -->
-							<i class="blind">좋아요</i>
-							<span class="item__count">{{ reply.upVotes }}</span>
-						</button>
-						<p class="list__item past">
-							<i class="blind">작성시간</i>
-							<span class="item__count">
-								{{ timeCalculation(reply.createdAt) }}
-							</span>
-						</p>
+						<!-- //.item -->
 					</div>
 				</div>
 			</div>
-			<!-- //.item -->
 		</div>
 	</div>
 	<ReplyWrite

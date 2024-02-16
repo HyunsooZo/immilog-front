@@ -11,7 +11,14 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="email" type="text" class="input__element" placeholder="이메일" id="inputEmail" required />
+							<input
+								v-model="email"
+								type="text"
+								class="input__element"
+								placeholder="이메일"
+								id="inputEmail"
+								required
+							/>
 						</div>
 					</div>
 				</div>
@@ -23,8 +30,14 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="password" type="password" class="input__element" placeholder="비밀번호" id="inputPassword"
-								required />
+							<input
+								v-model="password"
+								type="password"
+								class="input__element"
+								placeholder="비밀번호"
+								id="inputPassword"
+								required
+							/>
 						</div>
 					</div>
 				</div>
@@ -37,11 +50,17 @@
 			</div>
 
 			<div class="button-wrap">
-				<button @click="signIn" :class="{
-					'button button--positive': isValidLogin && !isLoading,
-					'button button--disabled': !isValidLogin || isLoading,
-				}" role="link" id="loginBtn">
-					로그인</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
+				<button
+					@click="signIn"
+					:class="{
+						'button button--positive': isValidLogin && !isLoading,
+						'button button--disabled': !isValidLogin || isLoading,
+					}"
+					role="link"
+					id="loginBtn"
+				>
+					로그인</button
+				><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 		</div>
 
@@ -81,7 +100,11 @@
 		</div>
 	</div>
 	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+		<CustomAlert
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
+		/>
 	</teleport>
 </template>
 
@@ -141,7 +164,10 @@ const signIn = async () => {
 			);
 			localStorage.setItem('accessToken', data.data.accessToken);
 			localStorage.setItem('refreshToken', data.data.refreshToken);
-			router.push({ name: 'Home' });
+			setTimeout(() => {
+				offLoading();
+				router.push({ name: 'Home' });
+			}, 2000);
 		} else {
 			password.value = '';
 			openAlert(
@@ -152,7 +178,9 @@ const signIn = async () => {
 		console.log(error);
 		openAlert('서버와의 통신에 실패했습니다.');
 	} finally {
-		offLoading();
+		setTimeout(() => {
+			offLoading();
+		}, 2000);
 	}
 };
 
