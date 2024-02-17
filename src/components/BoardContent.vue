@@ -172,6 +172,7 @@ const increaseViewCount = async () => {
 	try {
 		await sendRequest('patch', `/posts/${props.post.seq}/view`, {
 			headers: {
+				contentType: 'application/json',
 				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 			},
 		});
