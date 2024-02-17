@@ -13,7 +13,7 @@
 							<div class="input__file">
 								<input type="file" id="file-upload" class="input__element" @change="previewImage" />
 								<label for="file-upload" class="button button--primary" role="button">
-									<svg width="18" height="18" viewBox="0 0 16 16">
+									<svg viewBox="0 0 16 16">
 										<path
 											d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
 										<path fill-rule="evenodd"

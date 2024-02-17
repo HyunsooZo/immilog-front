@@ -1,5 +1,7 @@
 <template>
 	<div class="content">
+		<SearchBar />
+
 		<div class="list-top-wrap">
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
@@ -57,5 +59,5 @@
 </template>
 
 <script setup>
-
+import SearchBar from '@/components/SearchBar.vue';
 </script>

@@ -1,53 +1,31 @@
 <template>
 	<div class="content">
 		<!-- 상단 고정 영역 -->
-		<div class="sticky-wrap active">
-			<!-- //scroll up addClass .active / scroll down removeClass .active -->
+		<div class="sticky-wrap" :class="{ 'active': isStickyWrap }">
 			<SearchBar />
 			<!-- tab button -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li
-						v-for="(menu, index) in menus"
-						:key="index"
-						:class="{ active: menu.active.value }"
-						class="menu__list"
-					>
-						<button
-							@click="selectMenu(menu)"
-							type="button"
-							class="button"
-							:aria-selected="menu.active.value.toString()"
-						>
+					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
+						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span
-					class="menu__bar"
-					:style="{ left: menuBarLeft, width: menuBarWidth }"
-				></span>
+				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
 			</div>
 		</div>
 
-		<div class="list-top-wrap">
+		<div class="list-top-wrap" ref="listTop">
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button
-						type="button"
-						class="button--select"
-						@click="openCategorySelect"
-					>
+					<button type="button" class="button--select" @click="openCategorySelect">
 						<span>{{ selectCategoryValue.name }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button
-						type="button"
-						class="button--select sort"
-						@click="openSortingSelect"
-					>
+					<button type="button" class="button--select sort" @click="openSortingSelect">
 						<span>{{ selectSortingValue.name }}</span>
 					</button>
 				</div>
@@ -57,80 +35,60 @@
 		</div>
 
 		<!-- 목록 -->
-		<div class="list-wrap" ref="listWrap">
+		<div class="list-wrap">
 			<!-- 글쓰기버튼 -->
-			<button
-				type="button"
-				class="button-icon button--post sticky"
-				:class="{ active: isButtonActive }"
-				@click="openPostModal"
-			>
+			<button type="button" class="button-icon button--post sticky" :class="{ 'active': isStickyButton }"
+				@click="openPostModal">
 				<svg viewBox="0 0 16 16">
 					<path
-						d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-					/>
+						d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
 					<path
-						d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-					/>
+						d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
 				</svg>
 				<span class="blind">글쓰기</span>
 			</button>
-			<div class="list__title" style="display: none">
-				<span class="title">{{ selectCategoryValue.name }} </span>
-				<button
-					type="button"
-					class="button-icon button--post"
-					@click="openPostModal"
-				>
-					<svg viewBox="0 0 16 16">
-						<path
-							d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-						/>
-						<path
-							d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-						/>
-					</svg>
-					<span class="blind">글쓰기</span>
-				</button>
-			</div>
 			<NoContent v-if="state.posts.length === 0" :item="'글'" />
-			<BoardContent
-				v-for="(item, index) in state.posts"
-				:key="index"
-				:post="item"
-			/>
+			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
 		</div>
 	</div>
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
-	<SelectDialog
-		v-if="isCategorySelectClicked || isSortingSelectClicked"
-		:title="selectTitle"
-		:list="selectList"
-		@close="closeSelect"
-		@select:value="selectedValue"
-	/>
+	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
+		@close="closeSelect" @select:value="selectedValue" />
 </template>
 
 <script setup>
 // import TheFooter from '@/components/layouts/TheFooter.vue';
 import { nextTick, onMounted, ref } from 'vue';
-import SearchBar from '@/components/SearchBar.vue'; // .search-wrap
-import SelectDialog from '@/components/SelectDialog.vue'; // .select--dialog
-import CountryList from '@/components/CountryList.vue'; // .sub-menu-wrap
+import SearchBar from '@/components/SearchBar.vue';
+import SelectDialog from '@/components/SelectDialog.vue';
+import CountryList from '@/components/CountryList.vue';
 import BoardContent from '@/components/BoardContent.vue';
 import useAxios from '@/composables/useAxios.js';
 import PostModal from '@/components/PostModal.vue';
 import NoContent from '@/components/NoContent.vue';
 
-// 스크롤 글쓰기버튼
-const listWrap = ref(null);
-const isButtonActive = ref(false);
+// 스크롤 :상단고정영역, 글쓰기버튼
+const isStickyWrap = ref(false);
+const listTop = ref(null);
+const isStickyButton = ref(false);
 onMounted(() => {
-	window.addEventListener('scroll', handleScroll);
+	window.addEventListener('scroll', handleStickyWrap);
+	const listTopHeight = listTop.value?.getBoundingClientRect().height;
+	window.addEventListener('scroll', handleStickyButton.bind(null, listTopHeight));
 });
-const handleScroll = () => {
-	// const listWrapTopPosition = listWrap.value.getBoundingClientRect().top;
-	isButtonActive.value = window.scrollY > 96;
+const handleStickyWrap = () => {
+	isStickyWrap.value = window.scrollY > 0;
+};
+const handleStickyButton = (listTopHeight) => {
+	isStickyButton.value = window.scrollY > listTopHeight;
+};
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
 };
 
 const menuBarLeft = ref('0px');
@@ -176,6 +134,7 @@ const openCategorySelect = () => {
 		selectList.value = categoryList;
 		isCategorySelectClicked.value = true;
 	});
+	modalOpenClass();
 };
 
 const openSortingSelect = () => {
@@ -184,6 +143,7 @@ const openSortingSelect = () => {
 		selectList.value = sortingList;
 		isSortingSelectClicked.value = true;
 	});
+	modalOpenClass();
 };
 
 const selectedValue = value => {
@@ -199,6 +159,7 @@ const closeSelect = () => {
 	isCategorySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+	modalCloseClass();
 };
 /* select end */
 
@@ -267,12 +228,12 @@ const setCountry = value => {
 const onPostModal = ref(false);
 const openPostModal = () => {
 	onPostModal.value = true;
-	document.body.classList.add('inactive');
+	modalOpenClass();
 };
 const closePostModal = () => {
 	onPostModal.value = false;
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
-	document.body.classList.remove('inactive');
+	modalCloseClass();
 };
 
 onMounted(() => {

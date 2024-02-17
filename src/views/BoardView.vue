@@ -1,7 +1,7 @@
 <template>
 	<div class="content">
 		<!-- 상단 고정 영역 -->
-		<div class="sticky-wrap active">
+		<div class="sticky-wrap" :class="{ 'active': isStickyWrap }">
 			<SearchBar />
 			<!-- tab button -->
 			<div class="menu-wrap">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 
-		<div class="list-top-wrap">
+		<div class="list-top-wrap" ref="listTop">
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
@@ -34,9 +34,9 @@
 
 		<!-- 목록 -->
 		<!-- <BoardContent /> -->
-		<div class="list-wrap" ref="listWrap">
+		<div class="list-wrap">
 			<!-- 글쓰기버튼 -->
-			<button type="button" class="button-icon button--post sticky" :class="{ 'active': isButtonActive }"
+			<button type="button" class="button-icon button--post sticky" :class="{ 'active': isStickyButton }"
 				@click="openPostModal">
 				<svg viewBox="0 0 16 16">
 					<path
@@ -46,22 +46,7 @@
 				</svg>
 				<span class="blind">글쓰기</span>
 			</button>
-			<div class="list__title" style="display: none;">
-				<span class="title">{{ selectCategoryValue.name }}</span>
-				<!-- 글쓰기버튼 -->
-				<button type="button" class="button-icon button--post" @click="openPostModal">
-					<svg viewBox="0 0 16 16">
-						<path
-							d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-						<path
-							d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-					</svg>
-					<span class="blind">글쓰기</span>
-				</button>
-			</div>
-			<div>
-				<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
-			</div>
+			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
 		</div>
 	</div>
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
@@ -78,15 +63,28 @@ import PostModal from '@/components/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/BoardContent.vue';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 
-// 스크롤 글쓰기버튼
-const listWrap = ref(null);
-const isButtonActive = ref(false);
+// 스크롤 :상단고정영역, 글쓰기버튼
+const isStickyWrap = ref(false);
+const listTop = ref(null);
+const isStickyButton = ref(false);
 onMounted(() => {
-	window.addEventListener('scroll', handleScroll);
+	window.addEventListener('scroll', handleStickyWrap);
+	const listTopHeight = listTop.value?.getBoundingClientRect().height;
+	window.addEventListener('scroll', handleStickyButton.bind(null, listTopHeight));
 });
-const handleScroll = () => {
-	const listWrapTopPosition = listWrap.value.getBoundingClientRect().top;
-	isButtonActive.value = window.scrollY > 41;
+const handleStickyWrap = () => {
+	isStickyWrap.value = window.scrollY > 0;
+};
+const handleStickyButton = (listTopHeight) => {
+	isStickyButton.value = window.scrollY > listTopHeight;
+};
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
 };
 
 /* 사용자 정보 Store */
@@ -141,6 +139,7 @@ const openCategorySelect = () => {
 		selectList.value = categoryList;
 		isCategorySelectClicked.value = true;
 	});
+	modalOpenClass();
 };
 
 // .sort__list
@@ -159,6 +158,7 @@ const openSortingSelect = () => {
 		selectList.value = sortingList;
 		isSortingSelectClicked.value = true;
 	});
+	modalOpenClass();
 };
 
 const state = ref({
@@ -179,6 +179,7 @@ const closeSelect = () => {
 	isCategorySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
 	inquireBoardList(selectCategoryValue.value, selectSortingValue.value);
+	modalCloseClass();
 };
 
 const inquireBoardList = (category, sorting) => {
@@ -239,8 +240,10 @@ onMounted(() => {
 const onPostModal = ref(false);
 const openPostModal = () => {
 	onPostModal.value = true;
+	modalOpenClass();
 };
 const closePostModal = () => {
 	onPostModal.value = false;
+	modalCloseClass();
 };
 </script>

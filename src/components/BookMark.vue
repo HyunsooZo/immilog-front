@@ -1,22 +1,16 @@
 <template>
-	<div class="list-wrap">
-		<div class="modal modal--full post--dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<p class="modal-title">북마크</p>
-					<button
-						class="button-icon button--close"
-						role="link"
-						@click="closeModal"
-					>
-						<span class="blind">취소</span>
-					</button>
+	<div class="modal modal--full">
+		<div class="modal-content">
+			<div class="modal-header">
+				<p class="modal-title">북마크</p>
+				<button class="button-icon button--close" role="link" @click="closeModal">
+					<span class="blind">취소</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="list-wrap">
+					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
 				</div>
-				<BoardContent
-					v-for="(item, index) in state.posts"
-					:key="index"
-					:post="item"
-				/>
 			</div>
 		</div>
 	</div>

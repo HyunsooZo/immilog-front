@@ -5,7 +5,7 @@
 				<span class="blind">이전화면</span>
 			</button>
 		</div>
-		<h1><em>KoMeet</em></h1>
+		<h1 class="title"><em class="header-logo">KoMeet</em></h1>
 		<div class="item__fnc">
 			<button type="button" class="button-icon button--notice new" role="link" @click="onMenu">
 				<span class="blind">알림</span>
