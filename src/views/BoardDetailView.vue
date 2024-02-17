@@ -207,8 +207,8 @@
 						<button
 							type="button"
 							class="list__item_button like"
-							:class="{ active: isCommentLiked }"
-							@click="likeComment(comment.seq)"
+							:class="{ active: comment.likeUsers.includes(userSeq) }"
+							@click="likeComment(comment.seq, index)"
 						>
 							<!-- //활성화 .active -->
 							<i class="blind">좋아요</i>
@@ -271,8 +271,13 @@
 							<button
 								type="button"
 								class="list__item_button like"
-								:class="{ active: isReplyLiked(index, replyIndex) }"
-								@click="likeReply(reply.seq)"
+								:class="{
+									active:
+										post.comments[index].replies[replyIndex].likeUsers.includes(
+											userSeq,
+										),
+								}"
+								@click="likeReply(reply.seq, index, replyIndex)"
 							>
 								<!-- //활성화 .active -->
 								<i class="blind">좋아요</i>
@@ -430,15 +435,6 @@ const isBookmarked = computed(() => {
 const isLiked = computed(() => {
 	return likeUsers.value.includes(userSeq.value);
 });
-const isCommentLiked = index => {
-	const likeUsers = post.value.comments[index].likeUsers;
-	return likeUsers.includes(userSeq.value);
-};
-
-const isReplyLiked = (index, replyIndex) => {
-	const likeUsers = post.value.comments[index].replies[replyIndex].likeUsers;
-	return likeUsers.includes(userSeq.value);
-};
 
 const timeCalculation = localTime => {
 	// LocalDateTime 문자열을 JavaScript Date 객체로 변환
@@ -496,17 +492,32 @@ const likeApi = async index => {
 	}
 };
 
-const likeComment = async index => {
+const likeComment = async (seq, index) => {
+	const updatedPost = JSON.parse(JSON.stringify(post.value));
+	if (updatedPost.comments[index].likeUsers.includes(userSeq.value)) {
+		updatedPost.comments[index].upVotes--;
+		const userIndex = updatedPost.comments[index].likeUsers.indexOf(
+			userSeq.value,
+		);
+		updatedPost.comments[index].likeUsers.splice(userIndex, 1);
+	} else {
+		updatedPost.comments[index].upVotes++;
+		updatedPost.comments[index].likeUsers.push(userSeq.value);
+	}
+
+	// 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
+	post.value = updatedPost;
+
 	const token = localStorage.getItem('accessToken');
 	if (!token) {
 		router.push('/sign-in');
 		return;
 	}
 	try {
-		await sendRequest('patch', `/comments/${index}/like`, {
+		await sendRequest('patch', `/comments/${seq}/like`, {
 			headers: {
 				contentType: 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				Authorization: `Bearer ${token}`,
 			},
 		});
 	} catch (error) {
@@ -514,17 +525,40 @@ const likeComment = async index => {
 	}
 };
 
-const likeReply = async index => {
+const likeReply = async (seq, index, replyIndex) => {
+	const updatedPost = JSON.parse(JSON.stringify(post.value));
+	if (
+		updatedPost.comments[index].replies[replyIndex].likeUsers.includes(
+			userSeq.value,
+		)
+	) {
+		updatedPost.comments[index].replies[replyIndex].upVotes--;
+		const userIndex = updatedPost.comments[index].replies[
+			replyIndex
+		].likeUsers.indexOf(userSeq.value);
+		updatedPost.comments[index].replies[replyIndex].likeUsers.splice(
+			userIndex,
+			1,
+		);
+	} else {
+		updatedPost.comments[index].replies[replyIndex].upVotes++;
+		updatedPost.comments[index].replies[replyIndex].likeUsers.push(
+			userSeq.value,
+		);
+	}
+
+	// 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
+	post.value = updatedPost;
 	const token = localStorage.getItem('accessToken');
 	if (!token) {
 		router.push('/sign-in');
 		return;
 	}
 	try {
-		await sendRequest('patch', `/replies/${index}/like`, {
+		await sendRequest('patch', `/replies/${seq}/like`, {
 			headers: {
 				contentType: 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				Authorization: `Bearer ${token}`,
 			},
 		});
 	} catch (error) {
