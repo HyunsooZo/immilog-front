@@ -1,5 +1,5 @@
 <template>
-	<div class="modal modal--full post--dialog">
+	<div class="modal modal--full">
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="item__fnc">
@@ -79,8 +79,8 @@
 									<div class="list__item">
 										<button type="button" class="list__item_button user user--author">
 											<!-- //원글작성자 댓글 .user--author -->
-											<em>{{ reply.author.country }}</em>
-											<strong>{{ reply.author.nickName }}</strong>
+											<em>{{ reply.user.country }}</em>
+											<strong>{{ reply.user.nickName }}</strong>
 										</button>
 									</div>
 								</div>
@@ -94,7 +94,7 @@
 								<div class="list__item">
 									<div class="text__item">
 										<p class="text">
-											<span class="comment__user">{{ reply.author.nickName }}</span>
+											<span class="comment__user">{{ reply.user.nickName }}</span>
 											{{ reply.content }}
 										</p>
 									</div>
@@ -167,6 +167,7 @@ const modalOpenClass = () => {
 const modalCloseClass = () => {
 	document.body.classList.remove('inactive');
 };
+
 // 댓글쓰기
 const isReplyWriteClicked = ref(false);
 const replyIndex = ref();

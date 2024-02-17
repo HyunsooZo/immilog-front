@@ -69,11 +69,11 @@
 					<div class="item__fnc">
 						<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likeApi">
 							<i class="blind">좋아요</i>
-							<span class="item__count">{{ post.likeCount }}</span>
+							<span class="item__count">{{ likeCount }}</span>
 						</button>
 						<p class="list__item cmt">
 							<i class="blind">댓글</i>
-							<span class="item__count">{{ post.comments.length }}</span>
+							<span class="item__count">{{ allCommentCounts(post) }}</span>
 						</p>
 					</div>
 					<div class="item__fnc">
@@ -175,15 +175,15 @@
 				</div>
 			</div>
 			<!-- 대댓글 -->
-			<div class="re--reply" v-for="reply in comment.replies" :key="reply.seq">
-				<div class="item" v-if="replyOn[index]">
+			<div class="re--reply" v-for="reply in comment.replies.slice(0, 3)" :key="reply.seq">
+				<div class="item">
 					<div class="info__wrap">
 						<div class="item__fnc">
 							<div class="list__item">
 								<button type="button" class="list__item_button user user--author">
 									<!-- //원글작성자 댓글 .user--author -->
-									<em>{{ reply.author.country }}</em>
-									<strong>{{ reply.author.nickName }}</strong>
+									<em>{{ reply.user.country }}</em>
+									<strong>{{ reply.user.nickName }}</strong>
 								</button>
 							</div>
 						</div>
@@ -197,7 +197,7 @@
 						<div class="list__item">
 							<div class="text__item">
 								<p class="text">
-									<span class="comment__user">{{ reply.author.nickName }}</span>
+									<span class="comment__user">{{ reply.user.nickName }}</span>
 									{{ reply.content }}
 								</p>
 							</div>
@@ -226,7 +226,7 @@
 			<!-- n개 이상 대댓글 더보기 -->
 			<div class="item item__more" v-if="comment.replies.length > 0">
 				<button type="button" class="list__item_button button-text" @click="openReplyModal(index)">
-					<span>{{ comment.replies.length }}개의 대댓글 더보기</span>
+					<span>{{ comment.replies.length - 3 }}개의 대댓글 보기</span>
 				</button>
 			</div>
 		</div>
@@ -237,17 +237,20 @@
 		@select:value="selectedValue" />
 	<ReplyWrite v-if="isReplyWriteClicked" :commentSeq="post.comments[replyIndex].seq" :isPostComment="false"
 		@close="closeReplyWrite" @select:value="selectedValue" />
+	<LoadingModal v-if="isLoading" />
 </template>
 
 <script setup>
 import TheHeader from '@/components/layouts/TheHeader.vue';
 // import SelectDialog from '@/components/SelectDialog.vue';
 import ReplyWrite from '@/components/ReplyWrite.vue';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
 import NoContent from '@/components/NoContent.vue';
 import ReplyModal from '@/components/ReplyModal.vue';
+import LoadingModal from '@/components/LoadingModal.vue';
+import { useUserInfoStore } from '@/stores/userInfo';
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -263,10 +266,7 @@ const isMoreContOpen = ref(false);
 const { sendRequest } = useAxios();
 const router = useRouter();
 const route = useRoute();
-const replyOn = ref([]);
-const onReplyList = index => {
-	replyOn.value[index] = !replyOn.value[index];
-};
+const isLoading = ref(false);
 
 const replyDetailModal = ref(false);
 
@@ -314,22 +314,37 @@ const post = ref({
 	seq: 0,
 	title: '',
 	content: '',
-	userNickname: '',
 	userSeq: 0,
-	userProfile: '',
+	userProfileUrl: '',
+	userNickName: '',
 	comments: [],
 	viewCount: 0,
 	likeCount: 0,
 	tags: [],
 	attachments: [],
+	likeUsers: [],
+	bookmarkUsers: [],
+	isPublic: '',
 	country: '',
 	region: '',
-	category: '',
 	status: '',
+	category: '',
 	createdAt: '',
 });
-const likes = ref(post.value.likeCount);
-const isLiked = ref(false);
+
+const userInfo = useUserInfoStore();
+const userSeq = ref(userInfo.userSeq);
+const likeUsers = ref(post.value.likeUsers);
+const likeCount = ref(post.value.likeCount);
+
+const bookmarkUsers = ref(post.value.bookmarkUsers);
+
+const isBookmarked = computed(() => {
+	return bookmarkUsers.value.includes(userSeq.value);
+});
+const isLiked = computed(() => {
+	return likeUsers.value.includes(userSeq.value);
+});
 
 const timeCalculation = localTime => {
 	// LocalDateTime 문자열을 JavaScript Date 객체로 변환
@@ -369,9 +384,9 @@ const likeApi = async () => {
 		return;
 	}
 	if (isLiked.value) {
-		likes.value--;
+		likeCount.value--;
 	} else {
-		likes.value++;
+		likeCount.value++;
 	}
 	isLiked.value = !isLiked.value;
 
@@ -401,14 +416,35 @@ const detailBoard = async () => {
 		if (status === 200) {
 			post.value = data.data;
 			isLiked.value = data.data.likeUsers.some(user => user.seq === 1);
+			likeCount.value = data.data.likeCount;
+			likeUsers.value = data.data.likeUsers;
+			bookmarkUsers.value = data.data.bookmarkUsers;
 		}
 	} catch (error) {
 		console.log(error);
+	} finally {
+		offLoading();
 	}
 };
 
 const goToDown = () => {
 	window.scrollTo(0, document.body.scrollHeight);
+};
+
+const onLoading = () => {
+	isLoading.value = true;
+};
+
+const offLoading = () => {
+	isLoading.value = false;
+};
+
+const allCommentCounts = post => {
+	let result = post.comments.length;
+	post.comments.forEach(comment => {
+		result += comment.replies.length;
+	});
+	return result;
 };
 
 onMounted(() => {
