@@ -36,13 +36,13 @@
 		<div class="list-wrap list--link">
 			<ul>
 				<li class="item">
-					<button type="button" class="button button-text">
+					<button type="button" class="button button-text" @click="onMyBoard">
 						<svg viewBox="0 0 16 16">
 							<path
 								d="M2.5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm5 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm0 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm-5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm.79-5.373c.112-.078.26-.17.444-.275L3.524 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282c.024-.203.065-.37.123-.498a1.38 1.38 0 0 1 .252-.37 1.94 1.94 0 0 1 .346-.298zm2.167 0c.113-.078.262-.17.445-.275L5.692 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282a1.75 1.75 0 0 1 .118-.492c.058-.13.144-.254.257-.375a1.94 1.94 0 0 1 .346-.3z"
 							/>
 						</svg>
-						<span>작성글</span>
+						<span>내 게시물</span>
 					</button>
 				</li>
 				<li class="item">
@@ -126,11 +126,17 @@
 			</ul>
 		</div>
 		<BookMark @update:bookmarkValue="offBookMark" v-if="isBookmarkOn" />
+		<MyBoard @close="offMyBoard" v-if="isMyBoardOn" />"
 	</div>
+	<teleport to="#modal" v-if="modalValue">
+		<ConfirmModal :modalText="modalText" @modalValue="closeAlert" />
+	</teleport>
 </template>
 
 <script setup>
 import BookMark from '@/components/BookMark.vue';
+import MyBoard from '@/components/MyBoard.vue';
+import ConfirmModal from '@/components/modal/ConfirmModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -152,6 +158,20 @@ const onBookmark = () => {
 const offBookMark = () => {
 	isBookmarkOn.value = false;
 };
+
+const isMyBoardOn = ref(false);
+
+const onMyBoard = () => {
+	isMyBoardOn.value = true;
+};
+
+const offMyBoard = () => {
+	isMyBoardOn.value = false;
+};
+
+const modalValue = ref(false);
+
+const modalText = ref('로그아웃 하시겠습니까?');
 
 // 고객센터 이메일
 const openEmailForm = () => {
