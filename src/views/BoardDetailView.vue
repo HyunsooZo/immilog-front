@@ -24,7 +24,7 @@
 						<div class="list__item">
 							<button type="button" class="list__item_button user">
 								<em>{{ post.region }}</em>
-								<strong>{{ post.userNickname }}</strong></button
+								<strong>{{ post.userNickName }}</strong></button
 							><!-- //사용자 프로필 보기 > 채팅 -->
 						</div>
 					</div>
@@ -182,7 +182,11 @@
 				<div class="info__wrap">
 					<div class="item__fnc">
 						<div class="list__item">
-							<button type="button" class="list__item_button user">
+							<button
+								type="button"
+								class="list__item_button user"
+								:class="{ 'user--author': isAuthor(comment.user.seq) }"
+							>
 								<!-- //원글작성자 댓글 .user--author -->
 								<em>{{ comment.user.country }}</em>
 								<strong>{{ comment.user.nickName }}</strong>
@@ -242,7 +246,8 @@
 							<div class="list__item">
 								<button
 									type="button"
-									class="list__item_button user user--author"
+									class="list__item_button user"
+									:class="{ 'user--author': isAuthor(reply.user.seq) }"
 								>
 									<!-- //원글작성자 댓글 .user--author -->
 									<em>{{ reply.user.country }}</em>
@@ -348,6 +353,9 @@ const modalOpenClass = () => {
 };
 const modalCloseClass = () => {
 	document.body.classList.remove('inactive');
+};
+const isAuthor = userSeq => {
+	return userSeq === post.value.userSeq;
 };
 
 // 더보기
