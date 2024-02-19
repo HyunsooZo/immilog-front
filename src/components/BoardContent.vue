@@ -20,7 +20,11 @@
 			</div>
 		</div>
 		<div class="text__wrap">
-			<button type="button" class="list__item_button" @click="onBoardDetail(post.seq)">
+			<button
+				type="button"
+				class="list__item_button"
+				@click="onBoardDetail(post.seq)"
+			>
 				<div class="text__item">
 					<p class="title">{{ post.title }}</p>
 					<p class="text">{{ post.content }}</p>
@@ -36,7 +40,12 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ post.viewCount }}</span>
 				</p>
-				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likeApi">
+				<button
+					type="button"
+					class="list__item_button like"
+					:class="{ active: isLiked }"
+					@click="likeApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count"> {{ likes }}</span>
@@ -51,7 +60,12 @@
 					<i class="blind">작성시간</i>
 					<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
 				</p>
-				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
+				<button
+					type="button"
+					class="list__item_button mark"
+					:class="{ active: isBookmarked }"
+					@click="bookmarkApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -66,6 +80,7 @@ import { useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
+import { timeCalculation } from '@/services/utils.js';
 
 const userInfo = useUserInfoStore();
 const { sendRequest } = useAxios();
@@ -117,37 +132,6 @@ const isBookmarked = computed(() => {
 const onBoardDetail = () => {
 	increaseViewCount();
 	router.push(`/board/${props.post.seq}`);
-};
-
-const timeCalculation = localTime => {
-	// LocalDateTime 문자열을 JavaScript Date 객체로 변환
-	const postDate = new Date(localTime);
-	const now = new Date();
-	const diff = now.getTime() - postDate.getTime();
-
-	// 시간 차이를 분 단위로 변환
-	const diffMinutes = Math.floor(diff / (1000 * 60));
-
-	if (diffMinutes < 10) {
-		return '방금 전';
-	} else if (diffMinutes < 60) {
-		return `${Math.ceil(diffMinutes / 10) * 10}분 전`;
-	}
-
-	// 시간 차이를 시간 단위로 변환
-	const diffHours = Math.floor(diffMinutes / 60);
-	if (diffHours < 24) {
-		return `${diffHours}시간 전`;
-	}
-
-	// 하루 이상 차이 나는 경우 날짜 포맷으로 반환
-	return postDate.toLocaleString('ko-KR', {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-		hour: '2-digit',
-		minute: '2-digit',
-	});
 };
 
 const likeApi = async () => {

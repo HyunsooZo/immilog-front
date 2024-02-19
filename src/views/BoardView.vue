@@ -119,6 +119,7 @@ import useAxios from '@/composables/useAxios.js';
 import PostModal from '@/components/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/BoardContent.vue';
 import { useUserInfoStore } from '@/stores/userInfo.js';
+import { modalOpenClass, modalCloseClass } from '@/services/utils';
 
 // 스크롤 :상단고정영역, 글쓰기버튼
 const isStickyWrap = ref(false);
@@ -137,14 +138,6 @@ const handleStickyWrap = () => {
 };
 const handleStickyButton = listTopHeight => {
 	isStickyButton.value = window.scrollY > listTopHeight;
-};
-
-// modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
-	document.body.classList.add('inactive');
-};
-const modalCloseClass = () => {
-	document.body.classList.remove('inactive');
 };
 
 /* 사용자 정보 Store */

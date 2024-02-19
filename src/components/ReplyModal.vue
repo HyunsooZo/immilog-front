@@ -3,7 +3,12 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="item__fnc">
-					<button type="button" class="button-icon button--back" role="link" @click="closeModal">
+					<button
+						type="button"
+						class="button-icon button--back"
+						role="link"
+						@click="closeModal"
+					>
 						<span class="blind">이전화면</span>
 					</button>
 				</div>
@@ -26,7 +31,9 @@
 								<div class="list__item">
 									<button type="button" class="list__item_button user">
 										<!-- //원글작성자 댓글 .user--author -->
-										<em>{{ detailPost.comments[commentIndex].user.country }}</em>
+										<em>{{
+											detailPost.comments[commentIndex].user.country
+										}}</em>
 										<strong>{{
 											detailPost.comments[commentIndex].user.nickName
 										}}</strong>
@@ -57,7 +64,11 @@
 										detailPost.comments[commentIndex].upVotes
 									}}</span>
 								</button>
-								<button type="button" class="list__item cmt" @click="openReplyWrite(commentIndex)">
+								<button
+									type="button"
+									class="list__item cmt"
+									@click="openReplyWrite(commentIndex)"
+								>
 									<span class="item__count">{{
 										detailPost.comments[commentIndex].replies.length
 									}}</span>
@@ -72,12 +83,19 @@
 						</div>
 					</div>
 					<!-- 대댓글 -->
-					<div class="re--reply" v-for="reply in detailPost.comments[commentIndex].replies" :key="reply.seq">
+					<div
+						class="re--reply"
+						v-for="reply in detailPost.comments[commentIndex].replies"
+						:key="reply.seq"
+					>
 						<div class="item">
 							<div class="info__wrap">
 								<div class="item__fnc">
 									<div class="list__item">
-										<button type="button" class="list__item_button user user--author">
+										<button
+											type="button"
+											class="list__item_button user user--author"
+										>
 											<!-- //원글작성자 댓글 .user--author -->
 											<em>{{ reply.user.country }}</em>
 											<strong>{{ reply.user.nickName }}</strong>
@@ -94,7 +112,9 @@
 								<div class="list__item">
 									<div class="text__item">
 										<p class="text">
-											<span class="comment__user">{{ reply.user.nickName }}</span>
+											<span class="comment__user">{{
+												reply.user.nickName
+											}}</span>
 											{{ reply.content }}
 										</p>
 									</div>
@@ -107,7 +127,11 @@
 										<i class="blind">좋아요</i>
 										<span class="item__count">{{ reply.upVotes }}</span>
 									</button>
-									<button type="button" class="list__item cmt" @click="openReplyWrite(index)">
+									<button
+										type="button"
+										class="list__item cmt"
+										@click="openReplyWrite(index)"
+									>
 										<!-- <span class="item__count"></span> -->
 									</button>
 									<p class="list__item past">
@@ -125,14 +149,19 @@
 			</div>
 		</div>
 	</div>
-	<ReplyWrite v-if="isReplyWriteClicked" :commentSeq="post.comments[commentIndex].seq" :isPostComment="false"
-		@close="closeReplyWrite" />
+	<ReplyWrite
+		v-if="isReplyWriteClicked"
+		:commentSeq="post.comments[commentIndex].seq"
+		:isPostComment="false"
+		@close="closeReplyWrite"
+	/>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import ReplyWrite from '@/components/ReplyWrite.vue';
 import useAxios from '@/composables/useAxios';
+import { timeCalculation, modalOpenClass, modalCloseClass } from '@/services/utils';
 
 const { sendRequest } = useAxios();
 
@@ -160,14 +189,6 @@ const closeModal = () => {
 	emit('close');
 };
 
-// modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
-	document.body.classList.add('inactive');
-};
-const modalCloseClass = () => {
-	document.body.classList.remove('inactive');
-};
-
 // 댓글쓰기
 const isReplyWriteClicked = ref(false);
 const replyIndex = ref();
@@ -182,37 +203,6 @@ const closeReplyWrite = () => {
 	setTimeout(() => {
 		detailBoard();
 	}, 1500);
-};
-
-const timeCalculation = localTime => {
-	// LocalDateTime 문자열을 JavaScript Date 객체로 변환
-	const postDate = new Date(localTime);
-	const now = new Date();
-	const diff = now.getTime() - postDate.getTime();
-
-	// 시간 차이를 분 단위로 변환
-	const diffMinutes = Math.floor(diff / (1000 * 60));
-
-	if (diffMinutes < 10) {
-		return '방금 전';
-	} else if (diffMinutes < 60) {
-		return `${Math.ceil(diffMinutes / 10) * 10}분 전`;
-	}
-
-	// 시간 차이를 시간 단위로 변환
-	const diffHours = Math.floor(diffMinutes / 60);
-	if (diffHours < 24) {
-		return `${diffHours}시간 전`;
-	}
-
-	// 하루 이상 차이 나는 경우 날짜 포맷으로 반환
-	return postDate.toLocaleString('ko-KR', {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-		hour: '2-digit',
-		minute: '2-digit',
-	});
 };
 
 const detailBoard = async () => {

@@ -87,11 +87,11 @@
 						<button
 							type="button"
 							class="list__item_button like"
-							:class="{ active: isLiked }"
-							@click="likeApi(post.seq)"
+							:class="{ active: post.likeUsers.includes(userSeq) }"
+							@click="likePost"
 						>
 							<i class="blind">좋아요</i>
-							<span class="item__count">{{ likeCount }}</span>
+							<span class="item__count">{{ post.likeCount }}</span>
 						</button>
 						<p class="list__item cmt">
 							<i class="blind">댓글</i>
@@ -346,14 +346,13 @@ import NoContent from '@/components/NoContent.vue';
 import ReplyModal from '@/components/ReplyModal.vue';
 import LoadingModal from '@/components/LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
+import {
+	timeCalculation,
+	modalOpenClass,
+	modalCloseClass,
+} from '@/services/utils';
+import { likeApi } from '@/services/post.js';
 
-// modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
-	document.body.classList.add('inactive');
-};
-const modalCloseClass = () => {
-	document.body.classList.remove('inactive');
-};
 const isAuthor = userSeq => {
 	return userSeq === post.value.userSeq;
 };
@@ -434,72 +433,32 @@ const userInfo = useUserInfoStore();
 const userSeq = ref(userInfo.userSeq);
 const likeUsers = ref(post.value.likeUsers);
 const likeCount = ref(post.value.likeCount);
-
 const bookmarkUsers = ref(post.value.bookmarkUsers);
+const token = localStorage.getItem('accessToken');
 
 const isBookmarked = computed(() => {
 	return bookmarkUsers.value.includes(userSeq.value);
 });
-const isLiked = computed(() => {
-	return likeUsers.value.includes(userSeq.value);
-});
 
-const timeCalculation = localTime => {
-	// LocalDateTime 문자열을 JavaScript Date 객체로 변환
-	const postDate = new Date(localTime);
-	const now = new Date();
-	const diff = now.getTime() - postDate.getTime();
-
-	// 시간 차이를 분 단위로 변환
-	const diffMinutes = Math.floor(diff / (1000 * 60));
-
-	if (diffMinutes < 10) {
-		return '방금 전';
-	} else if (diffMinutes < 60) {
-		return `${Math.ceil(diffMinutes / 10) * 10}분 전`;
-	}
-
-	// 시간 차이를 시간 단위로 변환
-	const diffHours = Math.floor(diffMinutes / 60);
-	if (diffHours < 24) {
-		return `${diffHours}시간 전`;
-	}
-
-	// 하루 이상 차이 나는 경우 날짜 포맷으로 반환
-	return postDate.toLocaleString('ko-KR', {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-		hour: '2-digit',
-		minute: '2-digit',
-	});
-};
-
-const likeApi = async index => {
-	const token = localStorage.getItem('accessToken');
-	if (!token) {
-		router.push('/sign-in');
-		return;
-	}
-	if (isLiked.value) {
-		likeCount.value--;
+const likePost = async () => {
+	const updatedPost = JSON.parse(JSON.stringify(post.value));
+	if (updatedPost.value.likeUsers.includes(userSeq.value)) {
+		updatedPost.value.likeCount--;
+		const userIndex = updatedPost.value.likeUsers.indexOf(userSeq.value);
+		updatedPost.value.likeUsers.splice(userIndex, 1);
 	} else {
-		likeCount.value++;
+		updatedPost.value.likeCount++;
+		updatedPost.value.likeUsers.push(userSeq.value);
 	}
-	isLiked.value = !isLiked.value;
+	post.value = updatedPost;
 
-	try {
-		await sendRequest('patch', `/posts/${index}/like`, {
-			headers: {
-				contentType: 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-			},
-		});
-	} catch (error) {
-		console.log(error);
+	const response = await likeApi('posts', post.value.seq, token);
+	if (response.status === 401) {
+		router.push('/sign-in');
+	} else if (response.status !== 204) {
+		console.log('좋아요 실패');
 	}
 };
-
 const likeComment = async (seq, index) => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
 	if (updatedPost.comments[index].likeUsers.includes(userSeq.value)) {
@@ -516,20 +475,15 @@ const likeComment = async (seq, index) => {
 	// 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
 	post.value = updatedPost;
 
-	const token = localStorage.getItem('accessToken');
-	if (!token) {
+	const response = await likeApi(
+		'comments',
+		post.value.comments[index].seq,
+		token,
+	);
+	if (response.status === 401) {
 		router.push('/sign-in');
-		return;
-	}
-	try {
-		await sendRequest('patch', `/comments/${seq}/like`, {
-			headers: {
-				contentType: 'application/json',
-				Authorization: `Bearer ${token}`,
-			},
-		});
-	} catch (error) {
-		console.log(error);
+	} else if (response.status !== 201) {
+		console.log('좋아요 실패');
 	}
 };
 
@@ -557,20 +511,15 @@ const likeReply = async (seq, index, replyIndex) => {
 
 	// 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
 	post.value = updatedPost;
-	const token = localStorage.getItem('accessToken');
-	if (!token) {
+	const response = await likeApi(
+		'replies',
+		post.value.comments[index].replies[replyIndex].seq,
+		token,
+	);
+	if (response.status === 401) {
 		router.push('/sign-in');
-		return;
-	}
-	try {
-		await sendRequest('patch', `/replies/${seq}/like`, {
-			headers: {
-				contentType: 'application/json',
-				Authorization: `Bearer ${token}`,
-			},
-		});
-	} catch (error) {
-		console.log(error);
+	} else if (response.status !== 201) {
+		console.log('좋아요 실패');
 	}
 };
 
@@ -587,7 +536,6 @@ const detailBoard = async () => {
 		);
 		if (status === 200) {
 			post.value = data.data;
-			isLiked.value = data.data.likeUsers.some(user => user.seq === 1);
 			likeCount.value = data.data.likeCount;
 			likeUsers.value = data.data.likeUsers;
 			bookmarkUsers.value = data.data.bookmarkUsers;
