@@ -73,16 +73,17 @@
 				</div>
 			</div><!-- // .item -->
 		</div>
+		<ChatDetailView @close="closeChatDetail" v-if="isChatDetail" />
 	</div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { modalOpenClass, modalCloseClass } from '@/services/utils';
+import ChatDetailView from '@/components/ChatDetailView.vue';
 
 const isSearchOpen = ref(false);
 const searchInput = ref('');
-const router = useRouter();
 
 const initializeSearchInput = () => {
 	searchInput.value = '';
@@ -96,7 +97,13 @@ const closeSearchInput = () => {
 	searchInput.value = '';
 };
 
+const isChatDetail = ref(false);
 const onChatDetail = () => {
-	router.push({ name: 'ChatDetail' });
+	isChatDetail.value = true;
+	modalOpenClass();
+};
+const closeChatDetail = () => {
+	isChatDetail.value = false;
+	modalCloseClass();
 };
 </script>

@@ -4,7 +4,7 @@ import SignInView from '@/views/SignInView.vue';
 import HomeView from '@/views/HomeView.vue';
 import JobBoardView from '@/views/JobBoardView.vue';
 import ChatView from '@/views/ChatView.vue';
-import ChatDetailView from '@/views/ChatDetailView.vue';
+import ChatDetailView from '@/components/ChatDetailView.vue';
 import BoardView from '@/views/BoardView.vue';
 import BoardDetailView from '@/views/BoardDetailView.vue';
 import ResultViewVue from '@/views/ResultView.vue';

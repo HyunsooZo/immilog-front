@@ -21,7 +21,7 @@
 					<!-- message -->
 					<div class="chat__msg">
 						<p class="text">채팅 요청을 보냈습니다.</p>
-						<p class="text"><em class="user__name">상대방이용자</em>님의 참여를 기다리는 중입니다. </p>
+						<p class="text"><em class="user__name">userNickname{{ post.userNickname }}</em>님의 참여를 기다리는 중입니다. </p>
 					</div>
 					<!-- chat list -->
 					<div class="chat__content">
@@ -111,6 +111,15 @@
 
 <script setup>
 import { ref } from 'vue';
+import { modalCloseClass } from '@/services/utils';
+
+//모달 닫는 에밋 (false 넘김)
+const emits = defineEmits(['close']);
+
+const closeModal = () => {
+	emits('close');
+	modalCloseClass();
+};
 
 // textarea
 const adjustTextarea = ref(null);
@@ -119,7 +128,6 @@ const adjustTextareaHeight = () => {
 	textarea.style.height = 'auto';
 	textarea.style.height = `${textarea.scrollHeight}px`;
 };
-
 
 const post = ref({
 	userNickName: '',
