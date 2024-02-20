@@ -122,9 +122,6 @@ strong + .button-text {
 [class*=button-icon].button--menu::after {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(51 51 51)' xmlns='http://www.w3.org/2000/svg'><path d='M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5'/></svg>");
 }
-[class*=button-icon].button--send::after {
-    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(51 51 51)' xmlns='http://www.w3.org/2000/svg'><path d='M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z'/></svg>");
-}
 [class*=button-icon][class*=button--login-]::after,
 [class*=button-icon].button--post::after {
     content: none;
@@ -165,6 +162,12 @@ strong + .button-text {
     font-size: 1.2rem;
     line-height: 1.6rem;
     vertical-align: .4rem;
+}
+[class*=button-icon].button--send {
+    fill: #ced3d9;
+}
+[class*=button-icon].button--send.active {
+    fill: #3f51b5;
 }
 .input__button-remove {
     position: relative;
@@ -769,6 +772,37 @@ strong + .button-text {
 }
 .chat-wrap .chat__list .item .list__item + .list__item {
     margin-left: .6rem;
+}
+.chat-wrap .chat__write {
+    background: #fff;
+}
+.chat-wrap .chat__write .restriction__msg {
+    display: none;
+}
+.chat-wrap .chat__write .chat__inner {
+    display: flex;
+    align-items: flex-end;
+    padding: .8rem .5rem;
+}
+.chat-wrap .chat__write .chat__inner .item__textarea {
+    flex: 1;
+    padding: 1rem;
+    border: 1px solid #e9e9e9;
+    border-radius: 2rem;
+    line-height: 0;
+    box-sizing: content-box;
+}
+.chat-wrap .chat__write .chat__inner .item__textarea.inactive {
+    background: #e9e9e9;
+}
+.chat-wrap .chat__write .text__area {
+    max-height: 4.8rem;
+    font-size: 1.4rem;
+    color: #333;
+    line-height: 1.6rem;
+}
+.chat-wrap .chat__write [class*=button-icon] {
+    margin: .3rem 0;
 }
 /* top-box */
 [class*=top-box] {
