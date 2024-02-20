@@ -1107,6 +1107,7 @@ color: #ed1651;
     height: 1.6rem;
 }
 .fnc-wrap._search {
+    position: relative;
     padding: .5rem 0;
 }
 .fnc-wrap._search .sort__list {
@@ -1119,10 +1120,11 @@ color: #ed1651;
 }
 .fnc-wrap._search .search-wrap {
     position: absolute;
-    top: .5rem;
+    top: 50%;
     right: 0;
     padding: .2rem;
     background: transparent;
+    transform: translateY(-50%);
 }
 .fnc-wrap._search .search-wrap .input__inner {
     margin: 0;
