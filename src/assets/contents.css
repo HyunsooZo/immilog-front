@@ -1116,6 +1116,56 @@ color: #ed1651;
     width: 1.6rem;
     height: 1.6rem;
 }
+.fnc-wrap._search {
+    padding: .5rem 0;
+}
+.fnc-wrap._search .sort__list {
+    margin-right: 4.4rem;
+}
+.fnc-wrap._search .sort__list .button--select span {
+    overflow: hidden;
+    max-width: 50px;
+    text-overflow: ellipsis;
+}
+.fnc-wrap._search .search-wrap {
+    position: absolute;
+    top: .5rem;
+    right: 0;
+    padding: .2rem;
+    background: transparent;
+}
+.fnc-wrap._search .search-wrap .input__inner {
+    margin: 0;
+}
+.fnc-wrap._search .search-wrap .input__inner .button--search {
+    position: relative;
+    z-index: 1;
+    background: #fff;
+}
+.fnc-wrap._search .search-wrap .input__inner .input__inner-wrap {
+    position: absolute;
+    flex: 1;
+    display: flex;
+    transition:all .2s ease-out;
+    transform-origin: right;
+    transform: scale(0);
+}
+.fnc-wrap._search .search-wrap .input__inner .input__inner-item,
+.fnc-wrap._search .search-wrap .input__inner .button--close {
+    background: #fff;
+}
+.fnc-wrap._search .search-wrap.active {
+    width: 100%;
+    padding-left: 1rem;
+}
+.fnc-wrap._search .search-wrap.active .input__inner .button--search {
+    display: none;
+}
+.fnc-wrap._search .search-wrap.active .input__inner .input__inner-wrap {
+    position: inherit;
+    z-index: 1;
+    transform: scale(1);
+}
 .list-wrap {
     position: relative;
 }
