@@ -1148,7 +1148,7 @@ color: #ed1651;
     display: flex;
     transition:all .2s ease-out;
     transform-origin: right;
-    transform: scale(0);
+    transform: scaleX(0);
 }
 .fnc-wrap._search .search-wrap .input__inner .input__inner-item,
 .fnc-wrap._search .search-wrap .input__inner .button--close {
@@ -1164,7 +1164,7 @@ color: #ed1651;
 .fnc-wrap._search .search-wrap.active .input__inner .input__inner-wrap {
     position: inherit;
     z-index: 1;
-    transform: scale(1);
+    transform: scaleX(1);
 }
 .list-wrap {
     position: relative;
