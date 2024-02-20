@@ -442,13 +442,13 @@ const isBookmarked = computed(() => {
 
 const likePost = async () => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
-	if (updatedPost.value.likeUsers.includes(userSeq.value)) {
-		updatedPost.value.likeCount--;
-		const userIndex = updatedPost.value.likeUsers.indexOf(userSeq.value);
-		updatedPost.value.likeUsers.splice(userIndex, 1);
+	if (updatedPost.likeUsers.includes(userSeq.value)) {
+		updatedPost.likeCount--;
+		const userIndex = updatedPost.likeUsers.indexOf(userSeq.value);
+		updatedPost.likeUsers.splice(userIndex, 1);
 	} else {
-		updatedPost.value.likeCount++;
-		updatedPost.value.likeUsers.push(userSeq.value);
+		updatedPost.likeCount++;
+		updatedPost.likeUsers.push(userSeq.value);
 	}
 	post.value = updatedPost;
 
@@ -542,21 +542,11 @@ const detailBoard = async () => {
 		}
 	} catch (error) {
 		console.log(error);
-	} finally {
-		offLoading();
-	}
+	} 
 };
 
 const goToDown = () => {
 	window.scrollTo(0, document.body.scrollHeight);
-};
-
-const onLoading = () => {
-	isLoading.value = true;
-};
-
-const offLoading = () => {
-	isLoading.value = false;
 };
 
 const allCommentCounts = post => {
