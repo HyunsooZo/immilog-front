@@ -73,7 +73,7 @@
 				</div>
 			</div><!-- // .item -->
 		</div>
-		<ChatDetailView @close="closeChatDetail" v-if="isChatDetail" />
+		<ChatDetailView @close="offChatDetail" v-if="isChatDetail" />
 	</div>
 </template>
 
@@ -102,7 +102,7 @@ const onChatDetail = () => {
 	isChatDetail.value = true;
 	modalOpenClass();
 };
-const closeChatDetail = () => {
+const offChatDetail = () => {
 	isChatDetail.value = false;
 	modalCloseClass();
 };

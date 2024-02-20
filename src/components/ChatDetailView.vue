@@ -12,7 +12,7 @@
 						<strong>userNickname{{ post.userNickname }}</strong>
 					</p>
 				</div>
-				<button class="button-icon button--menu" role="link">
+				<button class="button-icon button--menu" role="link" @click="onSideMenu">
 					<i class="blind">메뉴</i>
 				</button>
 			</div>
@@ -102,16 +102,17 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
+		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
 	</div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { modalCloseClass } from '@/services/utils';
+import SideMenu from '@/components/SideMenu.vue';
 
 //모달 닫는 에밋 (false 넘김)
 const emits = defineEmits(['close']);
@@ -119,6 +120,15 @@ const emits = defineEmits(['close']);
 const closeModal = () => {
 	emits('close');
 	modalCloseClass();
+};
+
+//side menu
+const isSideMenu = ref(false);
+const onSideMenu = () => {
+	isSideMenu.value = true;
+};
+const offSideMenu = () => {
+	isSideMenu.value = false;
 };
 
 // textarea

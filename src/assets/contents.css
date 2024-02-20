@@ -805,6 +805,30 @@ strong + .button-text {
 .chat-wrap .chat__write [class*=button-icon] {
     margin: .3rem 0;
 }
+.chat--dialog .sidemenu-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+}
+.chat--dialog .sidemenu-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .35);
+}
+.chat--dialog .sidemenu-wrap .sidemenu__inner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: calc(100% - 5rem);
+    min-height: 100%;
+    background: #f6f6f6;
+}
 /* top-box */
 [class*=top-box] {
     position: relative;

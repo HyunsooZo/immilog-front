@@ -5,6 +5,7 @@ import HomeView from '@/views/HomeView.vue';
 import JobBoardView from '@/views/JobBoardView.vue';
 import ChatView from '@/views/ChatView.vue';
 import ChatDetailView from '@/components/ChatDetailView.vue';
+import SideMenu from '@/components/SideMenu.vue';
 import BoardView from '@/views/BoardView.vue';
 import BoardDetailView from '@/views/BoardDetailView.vue';
 import ResultViewVue from '@/views/ResultView.vue';
@@ -45,6 +46,11 @@ const router = createRouter({
 			path: '/chat-view',
 			name: 'ChatDetail',
 			component: ChatDetailView,
+		},
+		{
+			path: '/side-menu',
+			name: 'SideMenu',
+			component: SideMenu,
 		},
 		{
 			path: '/board',
