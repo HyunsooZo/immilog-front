@@ -54,7 +54,7 @@
 								<div class="chat__message">
 									<div class="item__message">
 										<p class="text">
-											보낸 메시지
+											보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지
 										</p>
 									</div>
 									<div class="item__fnc">
