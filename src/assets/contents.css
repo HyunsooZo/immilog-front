@@ -708,13 +708,13 @@ strong + .button-text {
     height: calc(100vh - 5rem);
 }
 .chat-wrap .chat__msg {
-    padding: 2rem 0 0;
+    margin: 2rem 0 0;
     text-align: center;
 }
 .chat-wrap .chat__content {
     flex: 1;
     overflow-y: auto;
-    padding-bottom: 2rem;
+    margin-bottom: 2rem;
 }
 .chat-wrap .chat__list > .item__notice {
     margin: 2rem 0 0;
@@ -724,6 +724,7 @@ strong + .button-text {
     display: inline-block;
     padding: .2rem .8rem;
     font-size: 1.2rem;
+    line-height: 1.6rem;
     color: #fff;
     background: #ccc;
     background: #a9b2b9;
@@ -738,6 +739,9 @@ strong + .button-text {
     position: absolute;
     top: 0;
     left: -4.2rem;
+}
+.chat-wrap .chat__list .item .info__wrap .item__pic.pic--default {
+    background: #fff;
 }
 .chat-wrap .chat__list .item .chat__message {
     flex: 1;
@@ -1117,6 +1121,7 @@ color: #ed1651;
     max-width: 50px;
     text-overflow: ellipsis;
 }
+/* 목록 상단 내 검색 버튼 */
 .fnc-wrap._search .sort__list {
     margin-right: 6rem;
 }
@@ -1152,9 +1157,7 @@ color: #ed1651;
     z-index: 1;
     transform: scaleX(1);
 }
-.list-wrap {
-    position: relative;
-}
+/* 목록 글쓰기 */
 .button--post._sticky {
     position: absolute;
     top: 1rem;
@@ -1202,6 +1205,9 @@ color: #ed1651;
     margin-right: -10px;
 }
 /* 목록 */
+.list-wrap {
+    position: relative;
+}
 .list-wrap .item {
     position: relative;
     width: 100%;
