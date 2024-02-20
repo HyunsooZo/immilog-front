@@ -542,7 +542,7 @@ const detailBoard = async () => {
 		}
 	} catch (error) {
 		console.log(error);
-	} 
+	}
 };
 
 const goToDown = () => {

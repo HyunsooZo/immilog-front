@@ -6,13 +6,26 @@
 			<!-- tab button -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
-						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
+					<li
+						v-for="(menu, index) in menus"
+						:key="index"
+						:class="{ active: menu.active.value }"
+						class="menu__list"
+					>
+						<button
+							@click="selectMenu(menu)"
+							type="button"
+							class="button"
+							:aria-selected="menu.active.value.toString()"
+						>
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
+				<span
+					class="menu__bar"
+					:style="{ left: menuBarLeft, width: menuBarWidth }"
+				></span>
 			</div>
 		</div>
 
@@ -20,12 +33,20 @@
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button type="button" class="button--select" @click="openCategorySelect">
+					<button
+						type="button"
+						class="button--select"
+						@click="openCategorySelect"
+					>
 						<span>{{ selectCategoryValue.name }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button type="button" class="button--select sort" @click="openSortingSelect">
+					<button
+						type="button"
+						class="button--select sort"
+						@click="openSortingSelect"
+					>
 						<span>{{ selectSortingValue.name }}</span>
 					</button>
 				</div>
@@ -36,37 +57,59 @@
 		<!-- <BoardContent /> -->
 		<div class="list-wrap">
 			<!-- 글쓰기버튼 -->
-			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
-				@click="openPostModal">
+			<button
+				type="button"
+				class="button-icon button--post _sticky"
+				:class="{ active: isStickyButton }"
+				@click="openPostModal"
+			>
 				<svg viewBox="0 0 16 16">
 					<path
-						d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+						d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+					/>
 					<path
-						d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+						d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+					/>
 				</svg>
 				<i class="blind">글쓰기</i>
 			</button>
 			<div class="list__title" style="display: none">
 				<span class="title">{{ selectCategoryValue.name }}</span>
 				<!-- 글쓰기버튼 -->
-				<button type="button" class="button-icon button--post" :class="{ active: isStickyButton }" @click="openPostModal">
+				<button
+					type="button"
+					class="button-icon button--post"
+					:class="{ active: isStickyButton }"
+					@click="openPostModal"
+				>
 					<svg viewBox="0 0 16 16">
 						<path
-							d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+							d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+						/>
 						<path
-							d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+							d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
+						/>
 					</svg>
 					<i class="blind">글쓰기</i>
 				</button>
 			</div>
 			<div>
-				<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
+				<BoardContent
+					v-for="(item, index) in state.posts"
+					:key="index"
+					:post="item"
+				/>
 			</div>
 		</div>
 	</div>
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
-	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
-		@close="closeSelect" @select:value="selectedValue" />
+	<SelectDialog
+		v-if="isCategorySelectClicked || isSortingSelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 </template>
 
 <script setup>
@@ -198,20 +241,22 @@ const inquireBoardList = (category, sorting) => {
 	console.log('inquireBoardList');
 };
 
-// const loadMoreData = () => {
-// 	if (!state.value.pagination.last && !state.value.loading) {
-// 		state.value.loading = true;
-// 		const nextPage = state.value.pagination.number + 1;
-// 		fetchBoardList(nextPage);
-// 	}
-// };
+const loadMoreData = async () => {
+	if (!state.value.pagination.last && !state.value.loading) {
+		state.value.loading = true;
+		const nextPage = state.value.pagination.pageNumber + 1;
+		await fetchBoardList('CREATED_DATE', nextPage); // await 추가
+		state.value.loading = false; // fetchBoardList 호출 후 loading 상태 변경
+	}
+};
 
 const fetchBoardList = async (sortingMethod, nextPage) => {
 	state.value.loading = true;
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/posts?country=${userInfo.userCountry
+			`/posts?country=${
+				userInfo.userCountry
 			}&category=${selectCategoryValue.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'Y'}&page=${nextPage}`,
 			{
 				headers: {
@@ -221,7 +266,7 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 			},
 		);
 		if (status === 200) {
-			state.value.posts = data.data.content;
+			data.data.content.forEach(post => state.value.posts.push(post));
 			state.value.pagination = data.data.pageable;
 		}
 	} catch (error) {
@@ -231,10 +276,9 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	}
 };
 
-watch(
-	[selectSortingValue, selectCategoryValue],
-	fetchBoardList(selectCategoryValue.value, currentPage.value),
-);
+watch([selectSortingValue, selectCategoryValue], () => {
+	fetchBoardList(selectCategoryValue.value, currentPage.value);
+});
 
 watch(
 	() => userInfo.userCountry,
@@ -246,7 +290,15 @@ watch(
 onMounted(() => {
 	updateMenuBar();
 	fetchBoardList('CREATED_DATE', 0);
+	window.addEventListener('scroll', handleScroll);
 });
+
+const handleScroll = () => {
+	const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+	if (scrollTop + clientHeight >= scrollHeight - 10) {
+		loadMoreData();
+	}
+};
 
 // .post--dialog open
 const onPostModal = ref(false);
