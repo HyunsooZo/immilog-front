@@ -38,7 +38,7 @@
 
 		<div class="list-wrap chat">
 			<div class="item">
-				<button type="button" class="list__item_button">
+				<button type="button" class="list__item_button" @click="onChatDetail">
 					<div class="info__wrap">
 						<div class="item__pic pic--default">
 							<!-- <img src="" alt="" /> -->
@@ -78,9 +78,11 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const isSearchOpen = ref(false);
 const searchInput = ref('');
+const router = useRouter();
 
 const initializeSearchInput = () => {
 	searchInput.value = '';
@@ -92,5 +94,9 @@ const openSearchInput = () => {
 const closeSearchInput = () => {
 	isSearchOpen.value = false;
 	searchInput.value = '';
+};
+
+const onChatDetail = () => {
+	router.push({ name: 'ChatDetail' });
 };
 </script>
