@@ -17,7 +17,7 @@
 					<div class="input-wrap">
 						<div class="input__inner">
 							<button class="button button--search" role="link" @click="openSearchInput">
-								<span class="blind">채팅 검색</span>
+								<i class="blind">채팅 검색</i>
 							</button>
 							<div class="input__inner-wrap">
 								<div class="input__inner-item">
