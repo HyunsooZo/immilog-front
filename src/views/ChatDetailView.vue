@@ -4,7 +4,7 @@
 			<div class="modal-header">
 				<div class="item__fnc">
 					<button type="button" class="button-icon button--back" role="link" @click="closeModal">
-						<span class="blind">이전화면</span>
+						<i class="blind">이전화면</i>
 					</button>
 				</div>
 				<div class="modal-title">
@@ -13,7 +13,7 @@
 					</p>
 				</div>
 				<button class="button-icon button--menu" role="link">
-					<span class="blind">메뉴</span>
+					<i class="blind">메뉴</i>
 				</button>
 			</div>
 			<div class="modal-body">
@@ -26,206 +26,6 @@
 					<!-- chat list -->
 					<div class="chat__content">
 						<ul class="chat__list">
-							<li class="item__notice">
-								<span class="text">2. 18. <em>(일)</em></span>
-							</li>
-							<li class="item" aria-label="받은 메시지" data-content-type="text">
-								<!-- 사용자 정보 -->
-								<div class="info__wrap">
-									<button type="button" class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
-										<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
-									</button><!-- // 사용자 프로필 보기 -->
-								</div>
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											받은 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<p class="list__item past">
-											<i class="blind">받은시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item _my" aria-label="보낸 메시지" data-content-type="text">
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											보낸 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<span class="list__item _read">읽지않음/읽음/전송실패(재전송)</span>
-										<p class="list__item past">
-											<i class="blind">보낸시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item__notice">
-								<span class="text">2. 18. <em>(일)</em></span>
-							</li>
-							<li class="item" aria-label="받은 메시지" data-content-type="text">
-								<!-- 사용자 정보 -->
-								<div class="info__wrap">
-									<button type="button" class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
-										<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
-									</button><!-- // 사용자 프로필 보기 -->
-								</div>
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											받은 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<p class="list__item past">
-											<i class="blind">받은시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item _my" aria-label="보낸 메시지" data-content-type="text">
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											보낸 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<span class="list__item _read">읽지않음/읽음/전송실패(재전송)</span>
-										<p class="list__item past">
-											<i class="blind">보낸시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item__notice">
-								<span class="text">2. 18. <em>(일)</em></span>
-							</li>
-							<li class="item" aria-label="받은 메시지" data-content-type="text">
-								<!-- 사용자 정보 -->
-								<div class="info__wrap">
-									<button type="button" class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
-										<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
-									</button><!-- // 사용자 프로필 보기 -->
-								</div>
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											받은 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<p class="list__item past">
-											<i class="blind">받은시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item _my" aria-label="보낸 메시지" data-content-type="text">
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											보낸 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<span class="list__item _read">읽지않음/읽음/전송실패(재전송)</span>
-										<p class="list__item past">
-											<i class="blind">보낸시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item__notice">
-								<span class="text">2. 18. <em>(일)</em></span>
-							</li>
-							<li class="item" aria-label="받은 메시지" data-content-type="text">
-								<!-- 사용자 정보 -->
-								<div class="info__wrap">
-									<button type="button" class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
-										<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
-									</button><!-- // 사용자 프로필 보기 -->
-								</div>
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											받은 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<p class="list__item past">
-											<i class="blind">받은시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item _my" aria-label="보낸 메시지" data-content-type="text">
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											보낸 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<span class="list__item _read">읽지않음/읽음/전송실패(재전송)</span>
-										<p class="list__item past">
-											<i class="blind">보낸시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item__notice">
-								<span class="text">2. 18. <em>(일)</em></span>
-							</li>
-							<li class="item" aria-label="받은 메시지" data-content-type="text">
-								<!-- 사용자 정보 -->
-								<div class="info__wrap">
-									<button type="button" class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
-										<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
-									</button><!-- // 사용자 프로필 보기 -->
-								</div>
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											받은 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<p class="list__item past">
-											<i class="blind">받은시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item _my" aria-label="보낸 메시지" data-content-type="text">
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											보낸 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<span class="list__item _read">읽지않음/읽음/전송실패(재전송)</span>
-										<p class="list__item past">
-											<i class="blind">보낸시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
 							<li class="item__notice">
 								<span class="text">2. 18. <em>(일)</em></span>
 							</li>
@@ -282,12 +82,12 @@
 											<path
 												d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
 										</svg>
-										<span class="blind">사진 선택</span>
+										<i class="blind">사진 선택</i>
 									</label>
 								</div>
 							</div>
 							<div class="item__textarea">
-								<!-- //.inactive textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
+								<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
 								<textarea v-model="content" class="text__area" name="content" autocomplete="off" placeholder="메시지를 입력하세요."
 									data-autosuggest_is-input="true" ref="adjustTextarea" @input="adjustTextareaHeight" rows="1"></textarea>
 							</div>

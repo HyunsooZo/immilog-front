@@ -64,7 +64,7 @@
 							<div class="item__display">
 								<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
 								<button v-if="imagePreview" type="button" class="button--del" @click="removeImage">
-									<span class="blind">삭제</span>
+									<i class="blind">삭제</i>
 								</button>
 							</div>
 						</div>

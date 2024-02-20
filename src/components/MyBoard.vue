@@ -3,21 +3,13 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">내 게시물</p>
-				<button
-					class="button-icon button--close"
-					role="link"
-					@click="closeModal"
-				>
-					<span class="blind">취소</span>
+				<button class="button-icon button--close" role="link" @click="closeModal">
+					<i class="blind">취소</i>
 				</button>
 			</div>
 			<div class="modal-body">
 				<div class="list-wrap">
-					<BoardContent
-						v-for="(item, index) in state.posts"
-						:key="index"
-						:post="item"
-					/>
+					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
 				</div>
 			</div>
 		</div>

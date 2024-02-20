@@ -2,13 +2,13 @@
 	<header class="header">
 		<div class="item__fnc">
 			<button type="button" class="button-icon button--back" role="link" @click="onBack">
-				<span class="blind">이전화면</span>
+				<i class="blind">이전화면</i>
 			</button>
 		</div>
 		<h1 class="title"><em class="header-logo">KoMeet</em></h1>
 		<div class="item__fnc">
 			<button type="button" class="button-icon button--notice new" role="link" @click="onMenu">
-				<span class="blind">알림</span>
+				<i class="blind">알림</i>
 			</button>
 			<!-- //새 알림 있는 경우 .new 추가 -->
 		</div>

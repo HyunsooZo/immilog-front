@@ -4,7 +4,7 @@
 			<div class="modal-header">
 				<p class="modal-title">북마크</p>
 				<button class="button-icon button--close" role="link" @click="closeModal">
-					<span class="blind">취소</span>
+					<i class="blind">취소</i>
 				</button>
 			</div>
 			<div class="modal-body">

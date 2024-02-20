@@ -3,18 +3,13 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="item__fnc">
-					<button
-						type="button"
-						class="button-icon button--back"
-						role="link"
-						@click="closeModal"
-					>
-						<span class="blind">이전화면</span>
+					<button type="button" class="button-icon button--back" role="link" @click="closeModal">
+						<i class="blind">이전화면</i>
 					</button>
 				</div>
 				<p class="modal-title"><em class="header-logo">KoMeet</em></p>
 				<!-- <button class="button-icon button--close" role="link" @click="closeModal">
-					<span class="blind">닫기</span>
+					<i class="blind">닫기</i>
 				</button> -->
 			</div>
 			<div class="modal-body">
@@ -64,11 +59,7 @@
 										detailPost.comments[commentIndex].upVotes
 									}}</span>
 								</button>
-								<button
-									type="button"
-									class="list__item cmt"
-									@click="openReplyWrite(commentIndex)"
-								>
+								<button type="button" class="list__item cmt" @click="openReplyWrite(commentIndex)">
 									<span class="item__count">{{
 										detailPost.comments[commentIndex].replies.length
 									}}</span>
@@ -83,19 +74,12 @@
 						</div>
 					</div>
 					<!-- 대댓글 -->
-					<div
-						class="re--reply"
-						v-for="reply in detailPost.comments[commentIndex].replies"
-						:key="reply.seq"
-					>
+					<div class="re--reply" v-for="reply in detailPost.comments[commentIndex].replies" :key="reply.seq">
 						<div class="item">
 							<div class="info__wrap">
 								<div class="item__fnc">
 									<div class="list__item">
-										<button
-											type="button"
-											class="list__item_button user user--author"
-										>
+										<button type="button" class="list__item_button user user--author">
 											<!-- //원글작성자 댓글 .user--author -->
 											<em>{{ reply.user.country }}</em>
 											<strong>{{ reply.user.nickName }}</strong>
@@ -127,11 +111,7 @@
 										<i class="blind">좋아요</i>
 										<span class="item__count">{{ reply.upVotes }}</span>
 									</button>
-									<button
-										type="button"
-										class="list__item cmt"
-										@click="openReplyWrite(index)"
-									>
+									<button type="button" class="list__item cmt" @click="openReplyWrite(index)">
 										<!-- <span class="item__count"></span> -->
 									</button>
 									<p class="list__item past">
@@ -149,12 +129,8 @@
 			</div>
 		</div>
 	</div>
-	<ReplyWrite
-		v-if="isReplyWriteClicked"
-		:commentSeq="post.comments[commentIndex].seq"
-		:isPostComment="false"
-		@close="closeReplyWrite"
-	/>
+	<ReplyWrite v-if="isReplyWriteClicked" :commentSeq="post.comments[commentIndex].seq" :isPostComment="false"
+		@close="closeReplyWrite" />
 </template>
 
 <script setup>

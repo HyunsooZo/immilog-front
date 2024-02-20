@@ -8,29 +8,13 @@
 					<div class="input-wrap">
 						<div class="input__inner">
 							<div class="input__inner-item">
-								<input
-									v-model="searchInput"
-									type="search"
-									id="inputSrch"
-									class="input__element input__element--search"
-									placeholder="검색어를 입력 후 엔터를 눌러주세요"
-									autocomplete="off"
-									@keyup.enter="callSearchApi"
-								/>
-								<button
-									v-if="searchInput !== ''"
-									type="button"
-									class="input__button-remove"
-									title="텍스트삭제"
-									@click="initializeSearchInput"
-								></button>
+								<input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
+									placeholder="검색어를 입력 후 엔터를 눌러주세요" autocomplete="off" @keyup.enter="callSearchApi" />
+								<button v-if="searchInput !== ''" type="button" class="input__button-remove" title="텍스트삭제"
+									@click="initializeSearchInput"></button>
 							</div>
-							<button
-								class="button button--close"
-								role="link"
-								@click="closeSearchModal"
-							>
-								<span class="blind">취소</span>
+							<button class="button button--close" role="link" @click="closeSearchModal">
+								<i class="blind">취소</i>
 							</button>
 						</div>
 					</div>
@@ -38,33 +22,17 @@
 				<!-- 검색결과 -->
 				<div class="search-result-wrap">
 					<ul class="search-result">
-						<li
-							v-for="(item, index) in filteredSearchHistory.slice(0, 20)"
-							:key="'history-' + index"
-							class="item"
-						>
-							<button
-								type="button"
-								class="button button--result-recently"
-								@click="reCallSearchApi(item)"
-							>
+						<li v-for="(item, index) in filteredSearchHistory.slice(0, 20)" :key="'history-' + index" class="item">
+							<button type="button" class="button button--result-recently" @click="reCallSearchApi(item)">
 								<em>{{ item }}</em>
 							</button>
 							<p class="item__fnc">
-								<button
-									type="button"
-									class="button button--del"
-									@click="removeSearchHistory(index)"
-								>
-									<span class="blind">삭제</span>
+								<button type="button" class="button button--del" @click="removeSearchHistory(index)">
+									<i class="blind">삭제</i>
 								</button>
 							</p>
 						</li>
-						<li
-							v-for="(result, resultIndex) in searchResult.content"
-							:key="'result-' + resultIndex"
-							class="item"
-						>
+						<li v-for="(result, resultIndex) in searchResult.content" :key="'result-' + resultIndex" class="item">
 							<button type="button" class="button button--result">
 								<em>{{ result.title }}</em>
 								<em>{{ result.author }}</em>

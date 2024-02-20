@@ -5,7 +5,7 @@
 			<div class="modal-header">
 				<p class="modal-title">{{ title }}</p>
 				<button type="button" class="button-icon button--close" role="link" @click="closeDialog">
-					<span class="blind">닫기</span>
+					<i class="blind">닫기</i>
 				</button>
 			</div>
 			<div class="modal-body">

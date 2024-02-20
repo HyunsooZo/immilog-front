@@ -11,14 +11,7 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input
-								v-model="email"
-								type="text"
-								class="input__element"
-								placeholder="이메일"
-								id="inputEmail"
-								required
-							/>
+							<input v-model="email" type="text" class="input__element" placeholder="이메일" id="inputEmail" required />
 						</div>
 					</div>
 				</div>
@@ -30,14 +23,8 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input
-								v-model="password"
-								type="password"
-								class="input__element"
-								placeholder="비밀번호"
-								id="inputPassword"
-								required
-							/>
+							<input v-model="password" type="password" class="input__element" placeholder="비밀번호" id="inputPassword"
+								required />
 						</div>
 					</div>
 				</div>
@@ -50,17 +37,11 @@
 			</div>
 
 			<div class="button-wrap">
-				<button
-					@click="signIn"
-					:class="{
-						'button button--positive': isValidLogin && !isLoading,
-						'button button--disabled': !isValidLogin || isLoading,
-					}"
-					role="link"
-					id="loginBtn"
-				>
-					로그인</button
-				><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
+				<button @click="signIn" :class="{
+					'button button--positive': isValidLogin && !isLoading,
+					'button button--disabled': !isValidLogin || isLoading,
+				}" role="link" id="loginBtn">
+					로그인</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 		</div>
 
@@ -72,17 +53,17 @@
 			<ul class="login-group">
 				<li class="item">
 					<button type="button" class="button-icon button--login-google">
-						<span class="blind">구글 로그인</span>
+						<i class="blind">구글 로그인</i>
 					</button>
 				</li>
 				<li class="item">
 					<button type="button" class="button-icon button--login-kakao">
-						<span class="blind">카카오톡 로그인</span>
+						<i class="blind">카카오톡 로그인</i>
 					</button>
 				</li>
 				<li class="item">
 					<button type="button" class="button-icon button--login-naver">
-						<span class="blind">네이버 로그인</span>
+						<i class="blind">네이버 로그인</i>
 					</button>
 				</li>
 			</ul>
@@ -100,11 +81,7 @@
 		</div>
 	</div>
 	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert
-			:alertValue="alertValue"
-			:alertText="alertText"
-			@update:alertValue="closeAlert"
-		/>
+		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
 	</teleport>
 </template>
 

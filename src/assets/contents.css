@@ -716,6 +716,10 @@ strong + .button-text {
     flex-direction: column;
     height: calc(100vh - 5rem);
 }
+.chat-wrap .chat__msg {
+    padding: 2rem 0 0;
+    text-align: center;
+}
 .chat-wrap .chat__content {
     flex: 1;
     overflow-y: auto;
