@@ -45,24 +45,24 @@
 			</div>
 		</div>
 
-		<!-- login -->
-		<div class="login-group-wrap">
-			<div class="title--small center">
+		<!-- signin -->
+		<div class="signin-group-wrap">
+			<div class="title--small">
 				<span>or login with</span>
 			</div>
-			<ul class="login-group">
+			<ul class="signin-group">
 				<li class="item">
-					<button type="button" class="button-icon button--login-google">
+					<button type="button" class="button-icon button--signin-google">
 						<i class="blind">구글 로그인</i>
 					</button>
 				</li>
 				<li class="item">
-					<button type="button" class="button-icon button--login-kakao">
+					<button type="button" class="button-icon button--signin-kakao">
 						<i class="blind">카카오톡 로그인</i>
 					</button>
 				</li>
 				<li class="item">
-					<button type="button" class="button-icon button--login-naver">
+					<button type="button" class="button-icon button--signin-naver">
 						<i class="blind">네이버 로그인</i>
 					</button>
 				</li>
@@ -73,7 +73,7 @@
 			<ul>
 				<li>
 					<strong>회원이 아닌 경우</strong>
-					<button type="button" class="button-text" @click="onSignUp">
+					<button type="button" class="button-text" role="link" @click="onSignUp">
 						<strong>가입하기</strong>
 					</button>
 				</li>
