@@ -75,13 +75,17 @@
 								</div>
 							</li>
 							<!-- 동적 메시지 리스트 -->
-							<li v-for="message in messages" :key="message.id" class="item _my">
+							<li
+								v-for="message in messages"
+								:key="message.id"
+								class="item _my"
+							>
 								<div class="chat__message">
 									<div class="item__message">
 										<p class="text">{{ message.text }}</p>
 									</div>
 									<div class="item__fnc">
-<span class="list__item _read"
+										<span class="list__item _read"
 											>읽지않음/읽음/전송실패(재전송)</span
 										>
 										<p class="list__item past">
@@ -121,14 +125,14 @@
 								</div>
 							</div>
 							<div class="item__textarea">
-<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
+								<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
 								<textarea
 									v-model="content"
 									class="text__area"
-name="content"
+									name="content"
 									autocomplete="off"
 									placeholder="메시지를 입력하세요."
-data-autosuggest_is-input="true"
+									data-autosuggest_is-input="true"
 									ref="adjustTextarea"
 									@input="adjustTextareaHeight"
 									rows="1"
@@ -163,11 +167,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { modalCloseClass } from '@/services/utils';
 import SideMenu from '@/components/SideMenu.vue';
 import { timeCalculation } from '@/services/utils';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
-
-const socket = new SockJS('http://localhost:8080/ws');
-const stompClient = Stomp.over(socket);
+import { stompClient } from '@/services/socket.js';
 
 const messages = ref([]);
 const content = ref('');
