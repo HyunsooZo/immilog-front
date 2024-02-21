@@ -167,7 +167,11 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { modalCloseClass } from '@/services/utils';
 import SideMenu from '@/components/SideMenu.vue';
 import { timeCalculation } from '@/services/utils';
-import { stompClient } from '@/services/socket.js';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+
+const socket = new SockJS('https://api.ko-meet-back.com:443' + '/ws');
+const stompClient = Stomp.over(socket);
 
 const messages = ref([]);
 const content = ref('');
