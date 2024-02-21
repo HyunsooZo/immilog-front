@@ -17,7 +17,11 @@
 						<strong>userNickname{{ post.userNickname }}</strong>
 					</p>
 				</div>
-				<button class="button-icon button--menu" role="link">
+				<button
+					class="button-icon button--menu"
+					role="link"
+					@click="onSideMenu"
+				>
 					<i class="blind">메뉴</i>
 				</button>
 			</div>
@@ -27,8 +31,8 @@
 					<div class="chat__msg">
 						<p class="text">채팅 요청을 보냈습니다.</p>
 						<p class="text">
-							<em class="user__name">상대방이용자</em>님의 참여를 기다리는
-							중입니다.
+							<em class="user__name">userNickname{{ post.userNickname }}</em
+							>님의 참여를 기다리는 중입니다.
 						</p>
 					</div>
 					<!-- chat list -->
@@ -77,7 +81,10 @@
 							>
 								<div class="chat__message">
 									<div class="item__message">
-										<p class="text">보낸 메시지</p>
+										<p class="text">
+											보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸
+											메시지 보낸 메시지
+										</p>
 									</div>
 									<div class="item__fnc">
 										<span class="list__item _read"
@@ -149,15 +156,31 @@
 				</div>
 			</div>
 		</div>
+		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
 	</div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
-import { stompClient } from '@/services/socket.js';
+import { ref } from 'vue';
+import { modalCloseClass } from '@/services/utils';
+import SideMenu from '@/components/SideMenu.vue';
 
-const messages = ref([]);
-const content = ref('');
+//모달 닫는 에밋 (false 넘김)
+const emits = defineEmits(['close']);
+
+const closeModal = () => {
+	emits('close');
+	modalCloseClass();
+};
+
+//side menu
+const isSideMenu = ref(false);
+const onSideMenu = () => {
+	isSideMenu.value = true;
+};
+const offSideMenu = () => {
+	isSideMenu.value = false;
+};
 
 // textarea
 const adjustTextarea = ref(null);
@@ -203,25 +226,4 @@ const timeCalculation = localTime => {
 		minute: '2-digit',
 	});
 };
-
-const sendMessage = () => {
-	if (content.value.trim()) {
-		stompClient.send('/app/chat', {}, JSON.stringify({ text: content.value }));
-		content.value = '';
-	}
-};
-
-onMounted(() => {
-	stompClient.connect({}, () => {
-		stompClient.subscribe('/topic/messages', message => {
-			messages.value.push(JSON.parse(message.body));
-		});
-	});
-});
-
-onUnmounted(() => {
-	if (stompClient && stompClient.connected) {
-		stompClient.disconnect();
-	}
-});
 </script>

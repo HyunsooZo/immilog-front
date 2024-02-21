@@ -23,7 +23,7 @@
 		<div class="list-wrap list--link">
 			<ul>
 				<li class="item">
-					<button type="button" class="button button-text" @click="onMyBoard">
+					<button type="button" class="button button-text" role="link" @click="onMyBoard">
 						<svg viewBox="0 0 16 16">
 							<path
 								d="M2.5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm5 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm0 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1h-6zm-5 3a.5.5 0 0 0 0 1h11a.5.5 0 0 0 0-1h-11zm.79-5.373c.112-.078.26-.17.444-.275L3.524 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282c.024-.203.065-.37.123-.498a1.38 1.38 0 0 1 .252-.37 1.94 1.94 0 0 1 .346-.298zm2.167 0c.113-.078.262-.17.445-.275L5.692 6c-.122.074-.272.17-.452.287-.18.117-.35.26-.51.428a2.425 2.425 0 0 0-.398.562c-.11.207-.164.438-.164.692 0 .36.072.65.217.873.144.219.385.328.72.328.215 0 .383-.07.504-.211a.697.697 0 0 0 .188-.463c0-.23-.07-.404-.211-.521-.137-.121-.326-.182-.568-.182h-.282a1.75 1.75 0 0 1 .118-.492c.058-.13.144-.254.257-.375a1.94 1.94 0 0 1 .346-.3z" />
@@ -32,7 +32,7 @@
 					</button>
 				</li>
 				<li class="item">
-					<button type="button" class="button button-text" @click="onBookmark">
+					<button type="button" class="button button-text" role="link" @click="onBookmark">
 						<svg viewBox="0 0 16 16">
 							<path fill-rule="evenodd"
 								d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
@@ -43,7 +43,7 @@
 					</button>
 				</li>
 				<li class="item">
-					<button type="button" class="button button-text">
+					<button type="button" class="button button-text" role="link">
 						<svg viewBox="0 0 16 16">
 							<path
 								d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
@@ -56,7 +56,7 @@
 			</ul>
 			<ul>
 				<li class="item">
-					<button type="button" class="button button-text">
+					<button type="button" class="button button-text" role="link">
 						<svg viewBox="0 0 16 16">
 							<path
 								d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z" />
@@ -66,7 +66,7 @@
 					</button>
 				</li>
 				<li class="item">
-					<button type="button" class="button button-text" @click="openEmailForm">
+					<button type="button" class="button button-text" role="link" @click="openEmailForm">
 						<svg viewBox="0 0 16 16">
 							<path
 								d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2H2Zm3.708 6.208L1 11.105V5.383l4.708 2.825ZM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2-7-4.2Z" />
@@ -77,11 +77,11 @@
 					</button>
 				</li>
 				<li class="item">
-					<button type="button" class="button" @click="signOut">
-						<svg width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-							<path fill-rule="evenodd"
+					<button type="button" class="button" role="link" @click="signOut">
+						<svg viewBox="0 0 16 16">
+							<path
 								d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
-							<path fill-rule="evenodd"
+							<path
 								d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
 						</svg>
 						<span>로그아웃</span>

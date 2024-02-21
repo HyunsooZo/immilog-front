@@ -1,10 +1,8 @@
 <template>
 	<div class="content">
-		<SearchBar />
-
 		<div class="list-top-wrap">
 			<!-- 카테고리 정렬 -->
-			<div class="fnc-wrap">
+			<div class="fnc-wrap _search">
 				<div class="category__list">
 					<button type="button" class="button--select" @click="openCategorySelect">
 						<span>selectCategoryValue.name</span>
@@ -15,12 +13,32 @@
 						<span>selectSortingValue.name</span>
 					</button>
 				</div>
+				<div class="search-wrap" :class="{ 'active': isSearchOpen }">
+					<div class="input-wrap">
+						<div class="input__inner">
+							<button class="button button--search" role="link" @click="openSearchInput">
+								<i class="blind">채팅 검색</i>
+							</button>
+							<div class="input__inner-wrap">
+								<div class="input__inner-item">
+									<input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
+										placeholder="검색어를 입력 후 엔터를 눌러주세요" autocomplete="off" @keyup.enter="callSearchApi" />
+									<button v-if="searchInput !== ''" type="button" class="input__button-remove" title="텍스트삭제"
+										@click="initializeSearchInput"></button>
+								</div>
+								<button class="button button--close" role="link" @click="closeSearchInput">
+									<i class="blind">취소</i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
 		<div class="list-wrap chat">
 			<div class="item">
-				<button type="button" class="list__item_button">
+				<button type="button" class="list__item_button" @click="onChatDetail">
 					<div class="info__wrap">
 						<div class="item__pic pic--default">
 							<!-- <img src="" alt="" /> -->
@@ -55,9 +73,37 @@
 				</div>
 			</div><!-- // .item -->
 		</div>
+		<ChatDetailView @close="offChatDetail" v-if="isChatDetail" />
 	</div>
 </template>
 
 <script setup>
-import SearchBar from '@/components/SearchBar.vue';
+import { ref } from 'vue';
+import { modalOpenClass, modalCloseClass } from '@/services/utils';
+import ChatDetailView from '@/components/ChatDetailView.vue';
+
+const isSearchOpen = ref(false);
+const searchInput = ref('');
+
+const initializeSearchInput = () => {
+	searchInput.value = '';
+};
+
+const openSearchInput = () => {
+	isSearchOpen.value = true;
+};
+const closeSearchInput = () => {
+	isSearchOpen.value = false;
+	searchInput.value = '';
+};
+
+const isChatDetail = ref(false);
+const onChatDetail = () => {
+	isChatDetail.value = true;
+	modalOpenClass();
+};
+const offChatDetail = () => {
+	isChatDetail.value = false;
+	modalCloseClass();
+};
 </script>

@@ -21,6 +21,7 @@ import { onMounted, ref } from 'vue';
 import BoardContent from './BoardContent.vue';
 import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
+import { modalCloseClass } from '@/services/utils';
 
 const { sendRequest } = useAxios();
 
@@ -56,6 +57,7 @@ const emits = defineEmits(['close']);
 
 const closeModal = () => {
 	emits('close');
+	modalCloseClass();
 };
 
 onMounted(() => {
