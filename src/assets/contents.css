@@ -836,6 +836,7 @@ strong + .button-text {
 }
 .sidemenu-wrap .sidemenu-header {
     display: flex;
+    min-height: 5rem;
     border-bottom: 1px solid #e5e5e5;
 }
 .sidemenu-wrap .sidemenu-header .item__fnc:only-child {
