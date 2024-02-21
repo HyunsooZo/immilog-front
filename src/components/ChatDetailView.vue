@@ -74,26 +74,20 @@
 									</div>
 								</div>
 							</li>
-							<li
-								class="item _my"
-								aria-label="보낸 메시지"
-								data-content-type="text"
-							>
+							<!-- 동적 메시지 리스트 -->
+							<li v-for="message in messages" :key="message.id" class="item _my">
 								<div class="chat__message">
 									<div class="item__message">
-										<p class="text">
-											보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸
-											메시지 보낸 메시지
-										</p>
+										<p class="text">{{ message.text }}</p>
 									</div>
 									<div class="item__fnc">
-										<span class="list__item _read"
+<span class="list__item _read"
 											>읽지않음/읽음/전송실패(재전송)</span
 										>
 										<p class="list__item past">
 											<i class="blind">보낸시간</i>
 											<span class="item__count">{{
-												timeCalculation(post.createdAt)
+												timeCalculation(message.createdAt)
 											}}</span>
 										</p>
 									</div>
@@ -127,22 +121,27 @@
 								</div>
 							</div>
 							<div class="item__textarea">
-								<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
+<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
 								<textarea
 									v-model="content"
 									class="text__area"
-									name="content"
+name="content"
 									autocomplete="off"
 									placeholder="메시지를 입력하세요."
-									data-autosuggest_is-input="true"
+data-autosuggest_is-input="true"
 									ref="adjustTextarea"
 									@input="adjustTextareaHeight"
 									rows="1"
-								></textarea>
+								>
+								</textarea>
 							</div>
 							<div class="item__fnc">
-								<button type="button" class="button-icon__s button--send">
-									<!-- //text__area .active -->
+								<button
+									type="button"
+									class="button-icon__s button--send"
+									@click="sendMessage"
+								>
+									<!-- 전송 버튼 아이콘 -->
 									<svg viewBox="0 0 16 16">
 										<path
 											d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"
@@ -159,11 +158,19 @@
 		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
 	</div>
 </template>
-
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { modalCloseClass } from '@/services/utils';
 import SideMenu from '@/components/SideMenu.vue';
+import { timeCalculation } from '@/services/utils';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+
+const socket = new SockJS('http://localhost:8080/ws');
+const stompClient = Stomp.over(socket);
+
+const messages = ref([]);
+const content = ref('');
 
 //모달 닫는 에밋 (false 넘김)
 const emits = defineEmits(['close']);
@@ -196,34 +203,24 @@ const post = ref({
 	createdAt: '',
 });
 
-const timeCalculation = localTime => {
-	// LocalDateTime 문자열을 JavaScript Date 객체로 변환
-	const postDate = new Date(localTime);
-	const now = new Date();
-	const diff = now.getTime() - postDate.getTime();
-
-	// 시간 차이를 분 단위로 변환
-	const diffMinutes = Math.floor(diff / (1000 * 60));
-
-	if (diffMinutes < 10) {
-		return '방금 전';
-	} else if (diffMinutes < 60) {
-		return `${Math.ceil(diffMinutes / 10) * 10}분 전`;
-	}
-
-	// 시간 차이를 시간 단위로 변환
-	const diffHours = Math.floor(diffMinutes / 60);
-	if (diffHours < 24) {
-		return `${diffHours}시간 전`;
-	}
-
-	// 하루 이상 차이 나는 경우 날짜 포맷으로 반환
-	return postDate.toLocaleString('ko-KR', {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-		hour: '2-digit',
-		minute: '2-digit',
+onMounted(() => {
+	stompClient.connect({}, () => {
+		stompClient.subscribe('/topic/messages', message => {
+			messages.value.push(JSON.parse(message.body));
+		});
 	});
+});
+
+onUnmounted(() => {
+	if (stompClient && stompClient.connected) {
+		stompClient.disconnect();
+	}
+});
+
+const sendMessage = () => {
+	if (content.value.trim()) {
+		stompClient.send('/app/chat', {}, JSON.stringify({ text: content.value }));
+		content.value = '';
+	}
 };
 </script>
