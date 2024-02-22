@@ -143,6 +143,43 @@
 									</div>
 								</div>
 							</li>
+							<li class="item" aria-label="받은 메시지" data-content-type="text">
+								<!-- 사용자 정보 -->
+								<div class="info__wrap">
+									<button type="button" class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
+										<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
+									</button><!-- // 사용자 프로필 보기 -->
+								</div>
+								<div class="chat__message">
+									<div class="item__message">
+										<p class="text">
+											받은 메시지
+										</p>
+									</div>
+									<div class="item__fnc">
+										<p class="list__item past">
+											<i class="blind">받은시간</i>
+											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
+										</p>
+									</div>
+								</div>
+							</li>
+							<li class="item _my" aria-label="보낸 메시지" data-content-type="text">
+								<div class="chat__message">
+									<div class="item__message">
+										<p class="text">
+											보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지
+										</p>
+									</div>
+									<div class="item__fnc">
+										<span class="list__item _read">읽지않음/읽음/전송실패(재전송)</span>
+										<p class="list__item past">
+											<i class="blind">보낸시간</i>
+											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
+										</p>
+									</div>
+								</div>
+							</li>
 						</ul>
 					</div>
 					<!-- chat write -->
