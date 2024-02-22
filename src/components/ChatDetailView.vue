@@ -18,130 +18,16 @@
 			</div>
 			<div class="modal-body">
 				<div class="chat-wrap">
-					<!-- message -->
-					<div class="chat__msg">
-						<p class="text">채팅 요청을 보냈습니다.</p>
-						<p class="text"><em class="user__name">userNickname{{ post.userNickname }}</em>님의 참여를 기다리는 중입니다. </p>
-					</div>
-					<!-- chat list -->
 					<div class="chat__content">
+						<!-- message -->
+						<div class="chat__msg">
+							<p class="text">채팅 요청을 보냈습니다.</p>
+							<p class="text"><em class="user__name">userNickname{{ post.userNickname }}</em>님의 참여를 기다리는 중입니다. </p>
+						</div>
+						<!-- chat list -->
 						<ul class="chat__list">
 							<li class="item__notice">
 								<span class="text">2. 18. <em>(일)</em></span>
-							</li>
-							<li class="item" aria-label="받은 메시지" data-content-type="text">
-								<!-- 사용자 정보 -->
-								<div class="info__wrap">
-									<button type="button" class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
-										<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
-									</button><!-- // 사용자 프로필 보기 -->
-								</div>
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											받은 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<p class="list__item past">
-											<i class="blind">받은시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item _my" aria-label="보낸 메시지" data-content-type="text">
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<span class="list__item _read">읽지않음/읽음/전송실패(재전송)</span>
-										<p class="list__item past">
-											<i class="blind">보낸시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item__notice">
-								<span class="text">2. 18. <em>(일)</em></span>
-							</li>
-							<li class="item" aria-label="받은 메시지" data-content-type="text">
-								<!-- 사용자 정보 -->
-								<div class="info__wrap">
-									<button type="button" class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
-										<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
-									</button><!-- // 사용자 프로필 보기 -->
-								</div>
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											받은 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<p class="list__item past">
-											<i class="blind">받은시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item _my" aria-label="보낸 메시지" data-content-type="text">
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<span class="list__item _read">읽지않음/읽음/전송실패(재전송)</span>
-										<p class="list__item past">
-											<i class="blind">보낸시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item" aria-label="받은 메시지" data-content-type="text">
-								<!-- 사용자 정보 -->
-								<div class="info__wrap">
-									<button type="button" class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
-										<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
-									</button><!-- // 사용자 프로필 보기 -->
-								</div>
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											받은 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<p class="list__item past">
-											<i class="blind">받은시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<li class="item _my" aria-label="보낸 메시지" data-content-type="text">
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">
-											보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지 보낸 메시지
-										</p>
-									</div>
-									<div class="item__fnc">
-										<span class="list__item _read">읽지않음/읽음/전송실패(재전송)</span>
-										<p class="list__item past">
-											<i class="blind">보낸시간</i>
-											<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
 							</li>
 							<li class="item" aria-label="받은 메시지" data-content-type="text">
 								<!-- 사용자 정보 -->
