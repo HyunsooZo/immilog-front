@@ -163,6 +163,7 @@
 		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
 	</div>
 </template>
+
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { modalCloseClass } from '@/services/utils';
