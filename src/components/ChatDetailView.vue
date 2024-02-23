@@ -14,7 +14,7 @@
 				</div>
 				<div class="modal-title">
 					<p class="list__item user">
-						<strong>userNickname{{ post.userNickname }}</strong>
+						<strong>userNickname{{ chats[0].counterpartNickname }}</strong>
 					</p>
 				</div>
 				<button
@@ -28,11 +28,10 @@
 			<div class="modal-body">
 				<div class="chat-wrap">
 					<!-- message -->
-					<div class="chat__msg">
-						<p class="text">채팅 요청을 보냈습니다.</p>
+					<div class="chat__msg" v-if="chats.length == 0">
 						<p class="text">
-							<em class="user__name">userNickname{{ post.userNickname }}</em
-							>님의 참여를 기다리는 중입니다.
+							<em class="user__name">userNickname{{ chats.userNickname }}</em
+							>님과의 채팅을 시작해보세요.
 						</p>
 					</div>
 					<!-- chat list -->
@@ -51,11 +50,13 @@
 									<button
 										type="button"
 										class="item__pic"
-										:class="{ 'pic--default': !post.userProfileUrl }"
+										:class="{
+											'pic--default': !chats[0].counterpartProfileImage,
+										}"
 									>
 										<img
-											v-if="post.userProfileUrl"
-											:src="post.userProfileUrl"
+											v-if="chats[0].counterpartProfileImage"
+											:src="chats[0].counterpartProfileImage"
 											alt=""
 										/></button
 									><!-- // 사용자 프로필 보기 -->
@@ -68,7 +69,7 @@
 										<p class="list__item past">
 											<i class="blind">받은시간</i>
 											<span class="item__count">{{
-												timeCalculation(post.createdAt)
+												timeCalculation(chats[0].createdAt)
 											}}</span>
 										</p>
 									</div>
@@ -169,12 +170,19 @@ import SideMenu from '@/components/SideMenu.vue';
 import { timeCalculation } from '@/services/utils';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import useAxios from '@/composables/useAxios';
+
+const { sendRequest } = useAxios();
 
 const socket = new SockJS('https://api.ko-meet-back.com:443' + '/ws');
 const stompClient = Stomp.over(socket);
 
 const messages = ref([]);
 const content = ref('');
+
+const props = defineProps({
+	chatRoomSeq: Number,
+});
 
 //모달 닫는 에밋 (false 넘김)
 const emits = defineEmits(['close']);
@@ -201,13 +209,16 @@ const adjustTextareaHeight = () => {
 	textarea.style.height = `${textarea.scrollHeight}px`;
 };
 
-const post = ref({
-	userNickName: '',
-	userProfileUrl: '',
-	createdAt: '',
-});
+const chats = ref([]);
 
 onMounted(() => {
+	const { status, data } = sendRequest(
+		'get',
+		`/chatRooms/${props.chatRoomSeq}/chats`,
+	);
+	if (status.value === 200) {
+		chats.value.push(data);
+	}
 	stompClient.connect({}, () => {
 		stompClient.subscribe('/topic/messages', message => {
 			messages.value.push(JSON.parse(message.body));
