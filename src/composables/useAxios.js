@@ -57,7 +57,7 @@ export default function useAxios() {
 				'/auth/refresh?token=' + refreshToken,
 				null,
 				{
-					headers: { 'Content-Type': 'application/json' },
+					headers: { contentType: 'application/json' },
 				},
 			);
 			if (refreshResponse.status === 200) {
