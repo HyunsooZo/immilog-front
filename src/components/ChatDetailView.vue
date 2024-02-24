@@ -14,7 +14,13 @@
 				</div>
 				<div class="modal-title">
 					<p class="list__item user">
-						<strong>userNickname{{ chats[0].counterpartNickname }}</strong>
+						<strong
+							>{{
+								amISender(chats[0].sender)
+									? chats[0].sender.nickname
+									: chats[0].recipient.nickname
+							}}
+						</strong>
 					</p>
 				</div>
 				<button
@@ -172,6 +178,9 @@ import { timeCalculation } from '@/services/utils';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import useAxios from '@/composables/useAxios';
+import { useUserInfoStore } from '@/stores/userInfo';
+
+const userInfo = useUserInfoStore();
 
 const { sendRequest } = useAxios();
 
@@ -180,6 +189,7 @@ const stompClient = Stomp.over(socket);
 
 const messages = ref([]);
 const content = ref('');
+const pageable = ref({});
 
 const props = defineProps({
 	chatRoomSeq: Number,
@@ -212,14 +222,23 @@ const adjustTextareaHeight = () => {
 
 const chats = ref([]);
 
-onMounted(() => {
-	const { status, data } = sendRequest(
-		'get',
-		`/chatRooms/${props.chatRoomSeq}/chats`,
-	);
-	if (status.value === 200) {
-		chats.value.push(data);
+const fetchChats = async () => {
+	try {
+		const { status, data } = sendRequest(
+			'get',
+			`/chat/rooms/${props.chatRoomSeq}&page=0`,
+		);
+		if (status.value === 200) {
+			data.data.content.forEach(chat => chats.value.push(chat));
+			data.data.pageable = pageable.value;
+		}
+	} catch (error) {
+		console.error(error);
 	}
+};
+
+onMounted(() => {
+	fetchChats();
 	stompClient.connect({}, () => {
 		stompClient.subscribe('/topic/messages', message => {
 			messages.value.push(JSON.parse(message.body));
@@ -233,6 +252,10 @@ onUnmounted(() => {
 	}
 });
 
+const amISender = sender => {
+	const userSeq = userInfo.userSeq;
+	return sender.seq === userSeq;
+};
 const sendMessage = () => {
 	if (content.value.trim()) {
 		stompClient.send('/app/chat', {}, JSON.stringify({ text: content.value }));

@@ -153,7 +153,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import { modalOpenClass, modalCloseClass } from '@/services/utils';
 import ChatDetailView from '@/components/ChatDetailView.vue';
 import useAxios from '@/composables/useAxios';
@@ -187,7 +187,9 @@ const chatRoomSeq = ref(null);
 
 const onChatDetail = seq => {
 	chatRoomSeq.value = seq;
-	isChatDetail.value = true;
+	nextTick(() => {
+		isChatDetail.value = true;
+	});
 	modalOpenClass();
 };
 const offChatDetail = () => {
@@ -203,7 +205,7 @@ const fetchChatList = async () => {
 			{
 				headers: {
 					contentType: 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+					Authorization: `Bearer ${userInfo.accessToken}`,
 				},
 			},
 		);
