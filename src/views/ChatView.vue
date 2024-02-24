@@ -1,60 +1,34 @@
 <template>
 	<div class="content">
+		<TheTopBox :title="'채팅'" />
+		<SearchBox />
 		<div class="list-top-wrap">
 			<!-- 카테고리 정렬 -->
-			<div class="fnc-wrap _search">
+			<div class="fnc-wrap">
 				<div class="category__list">
-					<button
-						type="button"
-						class="button--select"
-						@click="openCategorySelect"
-					>
+					<button type="button" class="button--select" @click="openCategorySelect">
 						<span>selectCategoryValue.name</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button
-						type="button"
-						class="button--select sort"
-						@click="openSortingSelect"
-					>
+					<button type="button" class="button--select sort" @click="openSortingSelect">
 						<span>selectSortingValue.name</span>
 					</button>
 				</div>
-				<div class="search-wrap" :class="{ active: isSearchOpen }">
+				<div class="search-wrap blind" :class="{ active: isSearchOpen }">
 					<div class="input-wrap">
 						<div class="input__inner">
-							<button
-								class="button button--search"
-								role="link"
-								@click="openSearchInput"
-							>
+							<button class="button button--search" role="link" @click="openSearchInput">
 								<i class="blind">채팅 검색</i>
 							</button>
 							<div class="input__inner-wrap">
 								<div class="input__inner-item">
-									<input
-										v-model="searchInput"
-										type="search"
-										id="inputSrch"
-										class="input__element input__element--search"
-										placeholder="검색어를 입력 후 엔터를 눌러주세요"
-										autocomplete="off"
-										@keyup.enter="callSearchApi"
-									/>
-									<button
-										v-if="searchInput !== ''"
-										type="button"
-										class="input__button-remove"
-										title="텍스트삭제"
-										@click="initializeSearchInput"
-									></button>
+									<input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
+										placeholder="검색어를 입력 후 엔터를 눌러주세요" autocomplete="off" @keyup.enter="callSearchApi" />
+									<button v-if="searchInput !== ''" type="button" class="input__button-remove" title="텍스트삭제"
+										@click="initializeSearchInput"></button>
 								</div>
-								<button
-									class="button button--close"
-									role="link"
-									@click="closeSearchInput"
-								>
+								<button class="button button--close" role="link" @click="closeSearchInput">
 									<i class="blind">취소</i>
 								</button>
 							</div>
@@ -66,48 +40,35 @@
 
 		<div class="list-wrap chat">
 			<div class="item" v-for="chatRoom in chatRooms" :key="chatRoom.seq">
-				<button
-					type="button"
-					class="list__item_button"
-					@click="onChatDetail(chatRoom.seq)"
-				>
+				<button type="button" class="list__item_button" @click="onChatDetail(chatRoom.seq)">
 					<div class="info__wrap">
-						<div
-							class="item__pic pic"
-							:class="{
-								'pic--default':
-									(amISender(chatRoom.sender) &&
-										chatRoom.sender.profileImage === ' ') ||
-									(amISender(chatRoom.recipient) &&
-										chatRoom.recipient.profileImage === ' '),
-							}"
-						>
-							<img
-								:src="
-									amISender(chatRoom.sender)
-										? chatRoom.sender.profileImage
-										: chatRoom.recipient.profileImage
-								"
-								alt=""
-								v-if="
-									(amISender(chatRoom.sender) &&
-										chatRoom.sender.profileImage !== ' ') ||
-									(amISender(chatRoom.recipient) &&
-										chatRoom.recipient.profileImage !== ' ')
-								"
-							/>
+						<div class="item__pic pic" :class="{
+							'pic--default':
+								(amISender(chatRoom.sender) &&
+									chatRoom.sender.profileImage === ' ') ||
+								(amISender(chatRoom.recipient) &&
+									chatRoom.recipient.profileImage === ' '),
+						}">
+							<img :src="amISender(chatRoom.sender)
+								? chatRoom.sender.profileImage
+								: chatRoom.recipient.profileImage
+								" alt="" v-if="(amISender(chatRoom.sender) &&
+		chatRoom.sender.profileImage !== ' ') ||
+		(amISender(chatRoom.recipient) &&
+			chatRoom.recipient.profileImage !== ' ')
+		" />
 						</div>
 						<div class="item__fnc">
 							<div class="list__item user">
 								<em>{{
 									amISender(chatRoom.sender)
-										? chatRoom.sender.country
-										: chatRoom.recipient.country
+									? chatRoom.sender.country
+									: chatRoom.recipient.country
 								}}</em>
 								<strong>{{
 									amISender(chatRoom.sender)
-										? chatRoom.sender.nickName
-										: chatRoom.recipient.nickName
+									? chatRoom.sender.nickName
+									: chatRoom.recipient.nickName
 								}}</strong>
 							</div>
 						</div>
@@ -137,22 +98,19 @@
 				</button>
 				<div class="item__fnc">
 					<button type="button" class="list__item_button more">
-						<i class="blind">더보기</i
-						><!-- //신고, 나가기 -->
+						<i class="blind">더보기</i><!-- //신고, 나가기 -->
 					</button>
 				</div>
 			</div>
 			<!-- // .item -->
 		</div>
-		<ChatDetailView
-			:chatRoomSeq="chatRoomSeq"
-			@close="offChatDetail"
-			v-if="isChatDetail"
-		/>
+		<ChatDetailView :chatRoomSeq="chatRoomSeq" @close="offChatDetail" v-if="isChatDetail" />
 	</div>
 </template>
 
 <script setup>
+import TheTopBox from '@/components/TheTopBox.vue';
+import SearchBox from '@/components/SearchBox.vue';
 import { nextTick, onMounted, ref } from 'vue';
 import { modalOpenClass, modalCloseClass } from '@/services/utils';
 import ChatDetailView from '@/components/ChatDetailView.vue';

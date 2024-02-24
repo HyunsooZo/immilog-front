@@ -1,13 +1,14 @@
 <template>
 	<div class="top-box">
-		<div class="page-header">
+		<div class="page-header" v-if="isEmptyOrNull(props.title)">
 			<span>{{ props.title }}</span>
 		</div>
-		<div class="page-guide">
-			<div class="tit-default">
+		<div class="page-guide" v-if="isEmptyOrNull(props.subTitle) || isEmptyOrNull(props.text)">
+			<div class="tit-default" v-if="isEmptyOrNull(props.subTitle)">
 				<span>{{ props.subTitle }}</span>
 			</div>
-			<p class="txt-default">{{ props.text }}</p>
+			<p class="txt-default" v-if="isEmptyOrNull(props.text)">
+				{{ props.text }}</p>
 		</div>
 	</div>
 </template>
@@ -25,6 +26,10 @@ const props = defineProps({
 		type: String,
 	},
 });
+
+const isEmptyOrNull = (value) => {
+	return value || value === '';
+}
 </script>
 
 <style lang="scss" scoped></style>
