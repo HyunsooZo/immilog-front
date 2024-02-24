@@ -1662,7 +1662,7 @@ color: #ed1651;
     padding-left: .2rem;
     line-height: 1.6rem;
 }
-.list-wrap .item .item__fnc .more__cont {
+/* .list-wrap .item .item__fnc .more__cont {
     position: absolute;
     top: 1.6rem;
     right: 0;
@@ -1671,7 +1671,7 @@ color: #ed1651;
     background: #fff;
     border: 1px solid #e9e9e9;
     z-index: 2;
-}
+} */
 /* 단순목록형태 :select dialog */
 .list-wrap li.item {
     padding: 0;
