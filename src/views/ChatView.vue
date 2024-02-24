@@ -145,7 +145,7 @@
 			<!-- // .item -->
 		</div>
 		<ChatDetailView
-			:chatRoomSeq="chatRoomSeq"
+			:chatRoomSeq="roomSeq"
 			@close="offChatDetail"
 			v-if="isChatDetail"
 		/>
@@ -183,13 +183,11 @@ const closeSearchInput = () => {
 };
 
 const isChatDetail = ref(false);
-const chatRoomSeq = ref(null);
+const roomSeq = ref(null);
 
 const onChatDetail = seq => {
-	chatRoomSeq.value = seq;
-	nextTick(() => {
-		isChatDetail.value = true;
-	});
+	roomSeq.value = seq;
+	isChatDetail.value = true;
 	modalOpenClass();
 };
 const offChatDetail = () => {
