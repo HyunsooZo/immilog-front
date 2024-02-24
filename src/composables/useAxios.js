@@ -1,3 +1,4 @@
+import { useUserInfoStore } from '@/stores/userInfo';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
@@ -26,6 +27,18 @@ export default function useAxios() {
 				response.status === 201 ||
 				response.status === 204
 			) {
+				if (url.includes('/auth/user?')) {
+					useUserInfoStore().setUserInfo(
+						data.data.userSeq,
+						data.data.accessToken,
+						data.data.refreshToken,
+						data.data.nickname,
+						data.data.email,
+						data.data.country,
+						data.data.userProfileUrl,
+						data.data.isLocationMatch,
+					);
+				}
 				callCount--;
 				return { status: response.status, data: response.data };
 			}
@@ -84,12 +97,9 @@ export default function useAxios() {
 						? { params: data }
 						: { data }),
 				};
-
 				await axios(config);
 			}
 		} catch (error) {
-			localStorage.removeItem('accessToken');
-			localStorage.removeItem('refreshToken');
 			router.push('/sign-in');
 			return;
 		}

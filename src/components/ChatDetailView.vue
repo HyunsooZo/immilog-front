@@ -1,5 +1,5 @@
 <template>
-	<div class="modal modal--full chat--dialog">
+	<div class="modal modal--full chat--dialog" v-if="chats.length > 0">
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="item__fnc">
@@ -16,9 +16,9 @@
 					<p class="list__item user">
 						<strong
 							>{{
-								amISender(chats[0].sender)
-									? chats[0].sender.nickname
-									: chats[0].recipient.nickname
+								amISender(chats[0].sender.seq)
+									? chats[0].recipient.nickName
+									: chats[0].sender.nickName
 							}}
 						</strong>
 					</p>
@@ -36,69 +36,53 @@
 					<!-- message -->
 					<div class="chat__msg" v-if="chats.length == 0">
 						<p class="text">
-							<em class="user__name">userNickname{{ chats.userNickname }}</em
+							<em class="user__name">
+								{{
+									amISender(chats[0].sender.seq)
+										? chats[0].recipient.nickName
+										: chats[0].sender.nickName
+								}} </em
 							>님과의 채팅을 시작해보세요.
 						</p>
 					</div>
 					<!-- chat list -->
 					<div class="chat__content">
-						<ul class="chat__list">
-							<li class="item__notice">
-								<span class="text">2. 18. <em>(일)</em></span>
+						<ul class="chat__list" v-for="chat in chats" :key="chat.id">
+							<li
+								class="item__notice"
+								v-if="lastDate !== formDate(chat.createdAt)"
+							>
+								<span class="text">{{ getDateTime(chat.createdAt) }}</span>
 							</li>
 							<li
 								class="item"
 								aria-label="받은 메시지"
 								data-content-type="text"
+								:class="{
+									_my: amISender(chat.sender.seq),
+								}"
 							>
 								<!-- 사용자 정보 -->
-								<div class="info__wrap">
+								<div class="info__wrap" v-if="!amISender(chat.sender.seq)">
 									<button
 										type="button"
 										class="item__pic"
 										:class="{
-											'pic--default': !chats[0].counterpartProfileImage,
+											'pic--default': chat.sender.profileImage === '',
 										}"
 									>
-										<img
-											v-if="chats[0].counterpartProfileImage"
-											:src="chats[0].counterpartProfileImage"
-											alt=""
-										/></button
+										<img :src="chat.sender.profileImage" alt="" /></button
 									><!-- // 사용자 프로필 보기 -->
 								</div>
 								<div class="chat__message">
 									<div class="item__message">
-										<p class="text">받은 메시지</p>
+										<p class="text">{{ chat.content }}</p>
 									</div>
 									<div class="item__fnc">
 										<p class="list__item past">
-											<i class="blind">받은시간</i>
+											<i class="blind">{{ chat.createdAt }}</i>
 											<span class="item__count">{{
-												timeCalculation(chats[0].createdAt)
-											}}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-							<!-- 동적 메시지 리스트 -->
-							<li
-								v-for="message in messages"
-								:key="message.id"
-								class="item _my"
-							>
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">{{ message.text }}</p>
-									</div>
-									<div class="item__fnc">
-										<span class="list__item _read"
-											>읽지않음/읽음/전송실패(재전송)</span
-										>
-										<p class="list__item past">
-											<i class="blind">보낸시간</i>
-											<span class="item__count">{{
-												timeCalculation(message.createdAt)
+												formDateTime(chat.createdAt)
 											}}</span>
 										</p>
 									</div>
@@ -174,7 +158,6 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { modalCloseClass } from '@/services/utils';
 import SideMenu from '@/components/SideMenu.vue';
-import { timeCalculation } from '@/services/utils';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import useAxios from '@/composables/useAxios';
@@ -187,10 +170,10 @@ const { sendRequest } = useAxios();
 const socket = new SockJS('https://api.ko-meet-back.com:443' + '/ws');
 const stompClient = Stomp.over(socket);
 
-const messages = ref([]);
 const content = ref('');
 const pageable = ref({});
-
+const page = ref(0);
+let lastDate = null;
 const props = defineProps({
 	chatRoomSeq: Number,
 });
@@ -224,11 +207,17 @@ const chats = ref([]);
 
 const fetchChats = async () => {
 	try {
-		const { status, data } = sendRequest(
+		const { status, data } = await sendRequest(
 			'get',
-			`/chat/rooms/${props.chatRoomSeq}&page=0`,
+			`/chat/rooms/${props.chatRoomSeq}?page=${page.value}`,
+			{
+				headers: {
+					contentType: 'application/json',
+					Authorization: `Bearer ${userInfo.accessToken}`,
+				},
+			},
 		);
-		if (status.value === 200) {
+		if (status === 200) {
 			data.data.content.forEach(chat => chats.value.push(chat));
 			data.data.pageable = pageable.value;
 		}
@@ -237,11 +226,11 @@ const fetchChats = async () => {
 	}
 };
 
-onMounted(() => {
-	fetchChats();
+onMounted(async () => {
+	await fetchChats();
 	stompClient.connect({}, () => {
 		stompClient.subscribe('/topic/messages', message => {
-			messages.value.push(JSON.parse(message.body));
+			chats.value.push(JSON.parse(message.body));
 		});
 	});
 });
@@ -252,14 +241,55 @@ onUnmounted(() => {
 	}
 });
 
-const amISender = sender => {
-	const userSeq = userInfo.userSeq;
-	return sender.seq === userSeq;
+const amISender = senderSeq => {
+	console.log('senderSeq:', senderSeq, 'userInfo.userSeq:', userInfo.userSeq);
+	return senderSeq === userInfo.userSeq;
+};
+
+const getDateTime = dateTime => {
+	const result = formDate(dateTime);
+	lastDate = result;
+	return result;
 };
 const sendMessage = () => {
 	if (content.value.trim()) {
 		stompClient.send('/app/chat', {}, JSON.stringify({ text: content.value }));
 		content.value = '';
+	}
+};
+
+const formDate = dateTime => {
+	const date = new Date(dateTime);
+	const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+	const day = weekdays[date.getDay()];
+
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const dayOfMonth = String(date.getDate()).padStart(2, '0');
+	return `${year}/${month}/${dayOfMonth} (${day})`;
+};
+
+const formDateTime = dateTime => {
+	const date = new Date(dateTime);
+	const now = new Date();
+
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	// 현재 날짜와 입력된 날짜가 같은지 확인
+	if (
+		year === now.getFullYear() &&
+		month === String(now.getMonth() + 1).padStart(2, '0') &&
+		day === String(now.getDate()).padStart(2, '0')
+	) {
+		// 같다면 시간 부분만 반환
+		return `${hours}:${minutes}`;
+	} else {
+		// 다르다면 날짜와 시간 모두 반환
+		return `${year}/${month}/${day} ${hours}:${minutes}`;
 	}
 };
 </script>
