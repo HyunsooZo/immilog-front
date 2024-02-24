@@ -1,8 +1,10 @@
 <template>
 	<div class="content">
+		<TheTopBox :title="'채팅'" />
+		<SearchBox />
 		<div class="list-top-wrap">
 			<!-- 카테고리 정렬 -->
-			<div class="fnc-wrap _search">
+			<div class="fnc-wrap">
 				<div class="category__list">
 					<button
 						type="button"
@@ -21,7 +23,7 @@
 						<span>selectSortingValue.name</span>
 					</button>
 				</div>
-				<div class="search-wrap" :class="{ active: isSearchOpen }">
+				<div class="search-wrap blind" :class="{ active: isSearchOpen }">
 					<div class="input-wrap">
 						<div class="input__inner">
 							<button
@@ -153,6 +155,8 @@
 </template>
 
 <script setup>
+import TheTopBox from '@/components/TheTopBox.vue';
+import SearchBox from '@/components/SearchBox.vue';
 import { nextTick, onMounted, ref } from 'vue';
 import { modalOpenClass, modalCloseClass } from '@/services/utils';
 import ChatDetailView from '@/components/ChatDetailView.vue';
