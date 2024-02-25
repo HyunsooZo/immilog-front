@@ -32,14 +32,14 @@ export default function useAxios() {
 						data.data.userSeq,
 						data.data.accessToken,
 						data.data.refreshToken,
-						data.data.nickname,
-						data.data.email,
-						data.data.country,
-						data.data.userProfileUrl,
+						data.data.userNickname,
+						data.data.userEmail,
+						data.data.userCountry,
+						data.data.userProfile,
 						data.data.isLocationMatch,
 					);
 				}
-				callCount--;
+				callCount = 0;
 				return { status: response.status, data: response.data };
 			}
 		} catch (error) {
