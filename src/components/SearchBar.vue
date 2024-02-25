@@ -4,7 +4,15 @@
 	<div class="search-wrap">
 		<div class="input-wrap">
 			<p class="logo-wrap">
-				<em class="header-logo"><span>Ko</span><span>Meet</span></em>
+				<!-- <em class="header-logo"><span>Ko</span><span>Meet</span></em> -->
+				<em class="header-logo">
+					<span>K</span>
+					<span>o</span>
+					<span>M</span>
+					<span>e</span>
+					<span>e</span>
+					<span>t</span>
+				</em>
 				<!-- <img src="@/assets/images/icon-logo.png" alt="ko-meet" @click="onHome" /> -->
 			</p>
 			<div class="input__inner">

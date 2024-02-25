@@ -50,10 +50,10 @@
 									chatRoom.recipient.profileImage === ' '),
 						}">
 							<img :src="amISender(chatRoom.sender)
-									? chatRoom.recipient.profileImage
-									: chatRoom.sender.profileImage
+								? chatRoom.recipient.profileImage
+								: chatRoom.sender.profileImage
 								" alt="" v-if="(amISender(chatRoom.sender) &&
-			chatRoom.sender.profileImage !== ' ') ||
+		chatRoom.sender.profileImage !== ' ') ||
 		(amISender(chatRoom.recipient) &&
 			chatRoom.recipient.profileImage !== ' ')
 		" />
@@ -100,6 +100,9 @@
 					<button type="button" class="list__item_button more">
 						<i class="blind">더보기</i><!-- //신고, 나가기 -->
 					</button>
+					<div class="item__badge">
+						<span class="text">99<i>+</i></span>
+					</div>
 				</div>
 			</div>
 			<!-- // .item -->
