@@ -124,7 +124,7 @@ import LoadingModal from '@/components/LoadingModal.vue';
 const email = ref('');
 const password = ref('');
 const router = useRouter();
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 const isValidLogin = computed(() => email.value && password.value);
 const isLoading = ref(false);
 const alertValue = ref(false);
@@ -155,8 +155,6 @@ const signIn = async () => {
 		);
 
 		if (status === 200) {
-			console.log(data.data);
-			console.dir(data.data);
 			useUserInfoStore().setUserInfo(
 				data.data.userSeq,
 				data.data.accessToken,

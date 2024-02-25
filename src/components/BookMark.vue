@@ -29,8 +29,10 @@ import { onMounted, ref } from 'vue';
 import BoardContent from './BoardContent.vue';
 import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 
 const userInfo = useUserInfoStore();
 

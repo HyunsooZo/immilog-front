@@ -1,6 +1,9 @@
 <template>
 	<div class="content">
-		<TheTopBox :title="'회원가입'" :text="'정보를 입력한 후 회원가입 버튼을 눌러주세요.'" />
+		<TheTopBox
+			:title="'회원가입'"
+			:text="'정보를 입력한 후 회원가입 버튼을 눌러주세요.'"
+		/>
 		<!-- 회원가입 -->
 		<div class="container">
 			<!-- e-mail -->
@@ -10,12 +13,22 @@
 				<div class="input__wrap underline-type email-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="emailRegister" type="text" class="input__element" placeholder="이메일 입력" required />
+							<input
+								v-model="emailRegister"
+								type="text"
+								class="input__element"
+								placeholder="이메일 입력"
+								required
+							/>
 						</div>
 					</div>
 				</div>
 				<!-- 에러 메시지 -->
-				<p v-if="submitted && !isValidEmail" class="input__error" aria-live="assertive">
+				<p
+					v-if="submitted && !isValidEmail"
+					class="input__error"
+					aria-live="assertive"
+				>
 					이메일 형식이 올바르지 않습니다.
 				</p>
 			</div>
@@ -26,19 +39,36 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userNickName" type="text" class="input__element" placeholder="닉네임 입력(5~10자 한글, 영문, 숫자 조합)"
-								required />
+							<input
+								v-model="userNickName"
+								type="text"
+								class="input__element"
+								placeholder="닉네임 입력(5~10자 한글, 영문, 숫자 조합)"
+								required
+							/>
 						</div>
 					</div>
-					<button type="button" class="button button--primary" @click="checkNickName">
+					<button
+						type="button"
+						class="button button--primary"
+						@click="checkNickName"
+					>
 						중복확인
 					</button>
 				</div>
 				<!-- 에러 메시지 -->
-				<p v-if="nickNameCheckDone && !isNickNameValid" class="input__error" aria-live="assertive">
+				<p
+					v-if="nickNameCheckDone && !isNickNameValid"
+					class="input__error"
+					aria-live="assertive"
+				>
 					이미 사용중인 닉네임 입니다.
 				</p>
-				<p v-if="nickNameCheckDone && isNickNameValid" class="input__text" aria-live="assertive">
+				<p
+					v-if="nickNameCheckDone && isNickNameValid"
+					class="input__text"
+					aria-live="assertive"
+				>
 					사용 가능한 닉네임입니다.
 				</p>
 			</div>
@@ -50,20 +80,37 @@
 					<div class="input__item">
 						<div class="input__item_inner">
 							<div class="input__file">
-								<input type="file" id="file-upload" class="input__element" @change="previewImage" />
-								<label for="file-upload" class="button button--primary" role="button">
+								<input
+									type="file"
+									id="file-upload"
+									class="input__element"
+									@change="previewImage"
+								/>
+								<label
+									for="file-upload"
+									class="button button--primary"
+									role="button"
+								>
 									<svg viewBox="0 0 16 16">
 										<path
-											d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-										<path fill-rule="evenodd"
-											d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+											d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"
+										/>
+										<path
+											fill-rule="evenodd"
+											d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"
+										/>
 									</svg>
 									<span>프로필 사진 선택</span>
 								</label>
 							</div>
 							<div class="item__display">
 								<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
-								<button v-if="imagePreview" type="button" class="button--del" @click="removeImage">
+								<button
+									v-if="imagePreview"
+									type="button"
+									class="button--del"
+									@click="removeImage"
+								>
 									<i class="blind">삭제</i>
 								</button>
 							</div>
@@ -78,8 +125,13 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userPassword" type="password" class="input__element"
-								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
+							<input
+								v-model="userPassword"
+								type="password"
+								class="input__element"
+								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)"
+								required
+							/>
 						</div>
 					</div>
 				</div>
@@ -87,16 +139,29 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
-								required />
+							<input
+								v-model="userPasswordConfirm"
+								type="password"
+								class="input__element"
+								placeholder="비밀번호 확인"
+								required
+							/>
 						</div>
 					</div>
 				</div>
 				<!-- 에러 메시지 -->
-				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
+				<p
+					v-if="submitted && !passwordMatch"
+					class="input__error"
+					aria-live="assertive"
+				>
 					비밀번호가 일치하지 않습니다.
 				</p>
-				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
+				<p
+					v-if="submitted && !passwordValidation"
+					class="input__error"
+					aria-live="assertive"
+				>
 					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
 				</p>
 			</div>
@@ -108,16 +173,30 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="country" type="text" class="input__element" placeholder="지역" value="지역" disabled />
+							<input
+								v-model="country"
+								type="text"
+								class="input__element"
+								placeholder="지역"
+								value="지역"
+								disabled
+							/>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<TheFooterButton :onClick="register" :condition="fullFilled && !isLoading" />
+		<TheFooterButton
+			:onClick="register"
+			:condition="fullFilled && !isLoading"
+		/>
 	</div>
 	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+		<CustomAlert
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
+		/>
 	</teleport>
 </template>
 
@@ -139,7 +218,6 @@ const userPasswordConfirm = ref('');
 const submitted = ref(false);
 const country = ref('국가정보없음');
 const region = ref('');
-const { sendRequest } = useAxios();
 const imageUrl = ref('');
 const imageFile = ref(null);
 const isLoading = ref(false);
@@ -150,6 +228,7 @@ const nickNameCheckDone = ref(false);
 const passwordValidation = ref(false);
 const passwordMatch = ref(false);
 const router = useRouter();
+const { sendRequest } = useAxios(router);
 
 const isValidEmail = computed(() => {
 	// 간단한 이메일 형식 체크 정규 표현식

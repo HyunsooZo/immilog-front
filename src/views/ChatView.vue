@@ -157,7 +157,7 @@
 <script setup>
 import TheTopBox from '@/components/TheTopBox.vue';
 import SearchBox from '@/components/SearchBox.vue';
-import { nextTick, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { modalOpenClass, modalCloseClass } from '@/services/utils';
 import ChatDetailView from '@/components/ChatDetailView.vue';
 import useAxios from '@/composables/useAxios';
@@ -167,7 +167,7 @@ import { timeCalculation } from '@/services/utils';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 const isSearchOpen = ref(false);
 const searchInput = ref('');
 const chatRooms = ref([]);
@@ -207,9 +207,10 @@ const fetchChatList = async () => {
 			{
 				headers: {
 					contentType: 'application/json',
-					Authorization: `Bearer ${userInfo.accessToken}`,
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 				},
 			},
+			null,
 		);
 		if (status === 200) {
 			data.data.content.forEach(chatRoom => {

@@ -168,8 +168,10 @@ import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
 
 const userInfo = useUserInfoStore();
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 
 const socket = new SockJS('https://api.ko-meet-back.com:443' + '/ws');
 const stompClient = Stomp.over(socket);
@@ -220,6 +222,7 @@ const fetchChats = async () => {
 					Authorization: `Bearer ${userInfo.accessToken}`,
 				},
 			},
+			null,
 		);
 		if (status === 200) {
 			data.data.content.forEach(chat => chats.value.push(chat));

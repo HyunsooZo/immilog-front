@@ -122,6 +122,9 @@ import PostModal from '@/components/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/BoardContent.vue';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import { modalOpenClass, modalCloseClass } from '@/services/utils';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 // 스크롤 :상단고정영역, 글쓰기버튼
 const isStickyWrap = ref(false);
@@ -189,7 +192,7 @@ const updateMenuBar = () => {
 const selectTitle = ref('');
 const selectList = ref('');
 const currentPage = ref(0);
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 
 // .category__list
 const selectCategoryValue = ref({ name: '전체', code: 'all' });

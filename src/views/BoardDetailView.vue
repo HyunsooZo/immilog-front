@@ -343,9 +343,10 @@ import { likeApi } from '@/services/post.js';
 const isAuthor = userSeq => {
 	return userSeq === post.value.userSeq;
 };
-
-const { sendRequest } = useAxios();
 const router = useRouter();
+
+const { sendRequest } = useAxios(router);
+
 const route = useRoute();
 const isLoading = ref(false);
 

@@ -6,32 +6,35 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import TheFooter from './components/layouts/TheFooter.vue';
-import useAxios from './composables/useAxios';
 import { getCoordinate } from '@/services/geolocation.js';
 import { getUserInfo } from '@/services/userInfoFetch';
+import { useUserInfoStore } from '@/stores/userInfo.js';
 
-const { sendRequest } = useAxios();
 const route = useRoute();
 const hideFooter = computed(() => route.meta.hideFooter);
 
 onMounted(async () => {
 	await getCoordinate();
-	nextTick(async () => {
-		if (
-			localStorage.getItem('latitude') &&
-			localStorage.getItem('longitude') &&
-			localStorage.getItem('accessToken') &&
-			localStorage.getItem('refreshToken')
-		) {
-			await getUserInfo(
-				sendRequest,
-				localStorage.getItem('latitude'),
-				localStorage.getItem('longitude.value'),
+	if (localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
+		const { status, data } = await getUserInfo(
+			localStorage.getItem('latitude'),
+			localStorage.getItem('longitude'),
+		);
+		if (status === 200 || status === 201) {
+			useUserInfoStore().setUserInfo(
+				data.data.userSeq,
+				data.data.accessToken,
+				data.data.refreshToken,
+				data.data.nickname,
+				data.data.email,
+				data.data.country,
+				data.data.userProfileUrl,
+				data.data.isLocationMatch,
 			);
 		}
-	});
+	}
 });
 </script>

@@ -30,8 +30,11 @@ import BoardContent from './BoardContent.vue';
 import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { modalCloseClass } from '@/services/utils';
+import { useRouter } from 'vue-router';
 
-const { sendRequest } = useAxios();
+const router = useRouter();
+
+const { sendRequest } = useAxios(router);
 
 const userInfo = useUserInfoStore();
 

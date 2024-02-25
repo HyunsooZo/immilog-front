@@ -243,6 +243,9 @@ import CustomAlert from './modal/CustomAlert.vue';
 import useAxios from '@/composables/useAxios.js';
 import LoadingModal from './LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const userInfo = useUserInfoStore();
 const isCategorySelectClicked = ref(false);
@@ -253,7 +256,7 @@ const selectList = [
 	{ name: '소통', code: 'COMMUNICATION' },
 	{ name: '질문/답변', code: 'QNA' },
 ];
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 const selectedCategory = ref({ name: '소통', code: 'COMMUNICATION' });
 const selectedValue = value => {
 	selectedCategory.value = value;

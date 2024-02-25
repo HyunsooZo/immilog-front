@@ -52,8 +52,10 @@
 import { onMounted, ref, computed } from 'vue';
 import useAxios from '@/composables/useAxios';
 import LoadingModal from './LoadingModal.vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 
 const searchInput = ref('');
 const searchHistory = ref([]);

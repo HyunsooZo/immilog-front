@@ -83,9 +83,9 @@ import { useUserInfoStore } from '@/stores/userInfo';
 import { timeCalculation } from '@/services/utils.js';
 
 const userInfo = useUserInfoStore();
-const { sendRequest } = useAxios();
-
 const router = useRouter();
+const { sendRequest } = useAxios(router);
+
 const props = defineProps({
 	post: {
 		type: Object,

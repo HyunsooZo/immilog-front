@@ -1,9 +1,7 @@
 import { useUserInfoStore } from '@/stores/userInfo';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
 
-export default function useAxios() {
-	const router = useRouter();
+const useAxios = router => {
 	axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
 	let callCount = 0;
@@ -12,6 +10,7 @@ export default function useAxios() {
 			return;
 		}
 		try {
+			console.log(headers);
 			const config = {
 				method,
 				url,
@@ -28,15 +27,16 @@ export default function useAxios() {
 				response.status === 204
 			) {
 				if (url.includes('/auth/user?')) {
-					useUserInfoStore().setUserInfo(
-						data.data.userSeq,
-						data.data.accessToken,
-						data.data.refreshToken,
-						data.data.userNickname,
-						data.data.userEmail,
-						data.data.userCountry,
-						data.data.userProfile,
-						data.data.isLocationMatch,
+					const userInfoStore = useUserInfoStore();
+					userInfoStore.setUserInfo(
+						response.data.data.userSeq,
+						response.data.data.accessToken,
+						response.data.data.refreshToken,
+						response.data.data.userNickname,
+						response.data.data.userEmail,
+						response.data.data.userCountry,
+						response.data.data.userProfile,
+						response.data.data.isLocationMatch,
 					);
 				}
 				callCount = 0;
@@ -49,9 +49,16 @@ export default function useAxios() {
 					error.response.status === 403 ||
 					error.response.status === 404)
 			) {
-				await refreshAccessToken(method, url, data, headers.contentType);
+				const { status } = await refreshAccessToken(
+					method,
+					url,
+					data,
+					headers['Content-Type'],
+				);
+				if (status === 200) {
+					return sendRequest(method, url, headers, data);
+				}
 			}
-
 			return {
 				status: error.response?.status || 500,
 				error: error.response?.data || 'Internal Server Error',
@@ -59,53 +66,36 @@ export default function useAxios() {
 		}
 	};
 
-	const refreshAccessToken = async (method, url, data, type) => {
+	const refreshAccessToken = async () => {
 		const refreshToken = localStorage.getItem('refreshToken');
 		if (!refreshToken) {
+			router.push('/sign-in');
 			return;
 		}
 		try {
 			callCount++;
 			const refreshResponse = await axios.get(
 				'/auth/refresh?token=' + refreshToken,
-				null,
-				{
-					headers: { contentType: 'application/json' },
-				},
 			);
 			if (refreshResponse.status === 200) {
-				callCount--;
 				localStorage.setItem(
 					'accessToken',
 					refreshResponse.data.data.accessToken,
-					console.log(refreshResponse.data.data.accessToken),
 				);
 				localStorage.setItem(
 					'refreshToken',
 					refreshResponse.data.data.refreshToken,
-					console.log(refreshResponse.data.data.refreshToken),
 				);
-				const config = {
-					method,
-					url,
-					headers: {
-						contentType: type,
-						Authorization: `Bearer ${refreshResponse.data.data.accessToken}`,
-					},
-					...(method.toLowerCase() === 'get' ||
-					method.toLowerCase() === 'delete'
-						? { params: data }
-						: { data }),
-				};
-				await axios(config);
+				callCount--;
 			}
 		} catch (error) {
 			router.push('/sign-in');
-			return;
 		}
 	};
 
 	return {
 		sendRequest,
 	};
-}
+};
+
+export default useAxios;

@@ -138,8 +138,10 @@ import { ref } from 'vue';
 import ReplyWrite from '@/components/ReplyWrite.vue';
 import useAxios from '@/composables/useAxios';
 import { timeCalculation, modalOpenClass, modalCloseClass } from '@/services/utils';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 
 const props = defineProps({
 	post: {

@@ -1,5 +1,6 @@
 // useGeolocation.js
-export const getCoordinate = (latitude, longitude) => {
+
+export const getCoordinate = () => {
 	return new Promise((resolve, reject) => {
 		if ('geolocation' in navigator) {
 			navigator.permissions
@@ -11,8 +12,6 @@ export const getCoordinate = (latitude, longitude) => {
 					) {
 						navigator.geolocation.getCurrentPosition(
 							position => {
-								latitude.value = position.coords.latitude;
-								longitude.value = position.coords.longitude;
 								localStorage.setItem('latitude', position.coords.latitude);
 								localStorage.setItem('longitude', position.coords.longitude);
 								resolve();
