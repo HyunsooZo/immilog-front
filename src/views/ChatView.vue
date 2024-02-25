@@ -50,10 +50,10 @@
 									chatRoom.recipient.profileImage === ' '),
 						}">
 							<img :src="amISender(chatRoom.sender)
-								? chatRoom.sender.profileImage
-								: chatRoom.recipient.profileImage
+									? chatRoom.recipient.profileImage
+									: chatRoom.sender.profileImage
 								" alt="" v-if="(amISender(chatRoom.sender) &&
-		chatRoom.sender.profileImage !== ' ') ||
+			chatRoom.sender.profileImage !== ' ') ||
 		(amISender(chatRoom.recipient) &&
 			chatRoom.recipient.profileImage !== ' ')
 		" />
@@ -62,13 +62,13 @@
 							<div class="list__item user">
 								<em>{{
 									amISender(chatRoom.sender)
-									? chatRoom.sender.country
-									: chatRoom.recipient.country
+									? chatRoom.recipient.country
+									: chatRoom.sender.country
 								}}</em>
 								<strong>{{
 									amISender(chatRoom.sender)
-									? chatRoom.sender.nickName
-									: chatRoom.recipient.nickName
+									? chatRoom.recipient.nickName
+									: chatRoom.sender.nickName
 								}}</strong>
 							</div>
 						</div>
@@ -111,7 +111,7 @@
 <script setup>
 import TheTopBox from '@/components/TheTopBox.vue';
 import SearchBox from '@/components/SearchBox.vue';
-import { nextTick, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { modalOpenClass, modalCloseClass } from '@/services/utils';
 import ChatDetailView from '@/components/ChatDetailView.vue';
 import useAxios from '@/composables/useAxios';
@@ -121,7 +121,7 @@ import { timeCalculation } from '@/services/utils';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 const isSearchOpen = ref(false);
 const searchInput = ref('');
 const chatRooms = ref([]);
@@ -161,9 +161,10 @@ const fetchChatList = async () => {
 			{
 				headers: {
 					contentType: 'application/json',
-					Authorization: `Bearer ${userInfo.accessToken}`,
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 				},
 			},
+			null,
 		);
 		if (status === 200) {
 			data.data.content.forEach(chatRoom => {

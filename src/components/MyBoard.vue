@@ -3,13 +3,21 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">내 게시물</p>
-				<button class="button-icon button--close" role="link" @click="closeModal">
+				<button
+					class="button-icon button--close"
+					role="link"
+					@click="closeModal"
+				>
 					<i class="blind">취소</i>
 				</button>
 			</div>
 			<div class="modal-body">
 				<div class="list-wrap">
-					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
+					<BoardContent
+						v-for="(item, index) in state.posts"
+						:key="index"
+						:post="item"
+					/>
 				</div>
 			</div>
 		</div>
@@ -22,8 +30,11 @@ import BoardContent from './BoardContent.vue';
 import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { modalCloseClass } from '@/services/utils';
+import { useRouter } from 'vue-router';
 
-const { sendRequest } = useAxios();
+const router = useRouter();
+
+const { sendRequest } = useAxios(router);
 
 const userInfo = useUserInfoStore();
 

@@ -1,6 +1,6 @@
-import useAxios from '@/composables/useAxios.js';
+import axios from 'axios';
 
-const { sendRequest } = useAxios();
+axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
 export const likeApi = async (path, seq, token) => {
 	if (!token) {
@@ -8,13 +8,17 @@ export const likeApi = async (path, seq, token) => {
 	}
 
 	try {
-		const { status } = await sendRequest('patch', `/${path}/${seq}/like`, {
+		const config = {
+			method: 'patch',
+			url: `/${path}/${seq}/like`,
 			headers: {
-				contentType: 'application/json',
+				'Content-Type': 'application/json',
 				Authorization: `Bearer ${token}`,
 			},
-		});
-		return { status: status };
+		};
+
+		const response = await axios(config);
+		return { status: response.status };
 	} catch (error) {
 		console.error(error);
 		return { status: 'error', error };

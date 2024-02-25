@@ -3,13 +3,21 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">북마크</p>
-				<button class="button-icon button--close" role="link" @click="closeModal">
+				<button
+					class="button-icon button--close"
+					role="link"
+					@click="closeModal"
+				>
 					<i class="blind">취소</i>
 				</button>
 			</div>
 			<div class="modal-body">
 				<div class="list-wrap">
-					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
+					<BoardContent
+						v-for="(item, index) in state.posts"
+						:key="index"
+						:post="item"
+					/>
 				</div>
 			</div>
 		</div>
@@ -21,8 +29,10 @@ import { onMounted, ref } from 'vue';
 import BoardContent from './BoardContent.vue';
 import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 
 const userInfo = useUserInfoStore();
 

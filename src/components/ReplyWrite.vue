@@ -62,8 +62,10 @@ import { ref } from 'vue';
 import useAxios from '@/composables/useAxios';
 import CustomAlert from './modal/CustomAlert.vue';
 import LoadingModal from './LoadingModal.vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 
 const alertValue = ref(false);
 const alertText = ref('');
