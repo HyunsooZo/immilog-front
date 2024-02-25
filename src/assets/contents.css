@@ -619,19 +619,19 @@ strong + .button-text {
     animation-delay: 0.2s;
 }
 .search-wrap .logo-wrap .header-logo span:nth-of-type(3) {
-    margin-top: -2px;
+    margin-top: -3px;
     animation-delay: 0.5s;
 }
 .search-wrap .logo-wrap .header-logo span:nth-of-type(4) {
-    margin-top: -2px;
+    margin-top: -3px;
     animation-delay: 0.6s;
 }
 .search-wrap .logo-wrap .header-logo span:nth-of-type(5) {
-    margin-top: -2px;
+    margin-top: -3px;
     animation-delay: 0.7s;
 }
 .search-wrap .logo-wrap .header-logo span:nth-of-type(6) {
-    margin-top: -2px;
+    margin-top: -3px;
     animation-delay: 0.8s;
 }
 .search-wrap .input-wrap {
