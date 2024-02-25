@@ -593,7 +593,7 @@ strong + .button-text {
     font: 500 1.2rem / 1.2rem 'LeckerliOne';
 }
 @keyframes burst_in {
-    20%, 80% {
+    20%, 70% {
         opacity: 1;
         transform: translateY(0);
     }
