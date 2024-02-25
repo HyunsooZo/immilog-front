@@ -184,13 +184,13 @@ const selectedValue = value => {
 	} else if (sortingList.some(s => s.code === value.code)) {
 		selectSortingValue.value = value;
 	}
+	initializeState();
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
 const closeSelect = () => {
 	isCategorySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
-	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 	modalCloseClass();
 };
 /* select end */
@@ -208,6 +208,12 @@ const state = ref({
 	pagination: {},
 	loading: false,
 });
+
+const initializeState = () => {
+	state.value.posts = [];
+	state.value.pagination = {};
+	currentPage.value = 0;
+};
 
 const updateMenuBar = () => {
 	const activeButton = document.querySelector('.menu__list.active .button');
@@ -245,14 +251,15 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 
 const setCountry = value => {
 	selectCountry.value = value;
+	initializeState();
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
 const loadMoreData = async () => {
 	if (!state.value.pagination.last && !state.value.loading) {
 		state.value.loading = true;
-		const nextPage = state.value.pagination.pageNumber + 1;
-		await fetchBoardList('CREATED_DATE', nextPage); // await 추가
+		currentPage.value += 1;
+		await fetchBoardList(selectSortingValue.value.code, currentPage.value);
 		state.value.loading = false; // fetchBoardList 호출 후 loading 상태 변경
 	}
 };

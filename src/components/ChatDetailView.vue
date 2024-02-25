@@ -71,7 +71,11 @@
 											'pic--default': chat.sender.profileImage === '',
 										}"
 									>
-										<img :src="chat.sender.profileImage" alt="" /></button
+										<img
+											:src="chat.sender.profileImage"
+											alt=""
+											v-if="chat.sender.profileImage !== ''"
+										/></button
 									><!-- // 사용자 프로필 보기 -->
 								</div>
 								<div class="chat__message">

@@ -87,8 +87,8 @@
 							<img
 								:src="
 									amISender(chatRoom.sender)
-										? chatRoom.sender.profileImage
-										: chatRoom.recipient.profileImage
+										? chatRoom.recipient.profileImage
+										: chatRoom.sender.profileImage
 								"
 								alt=""
 								v-if="
@@ -103,13 +103,13 @@
 							<div class="list__item user">
 								<em>{{
 									amISender(chatRoom.sender)
-										? chatRoom.sender.country
-										: chatRoom.recipient.country
+										? chatRoom.recipient.country
+										: chatRoom.sender.country
 								}}</em>
 								<strong>{{
 									amISender(chatRoom.sender)
-										? chatRoom.sender.nickName
-										: chatRoom.recipient.nickName
+										? chatRoom.recipient.nickName
+										: chatRoom.sender.nickName
 								}}</strong>
 							</div>
 						</div>
