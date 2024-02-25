@@ -4,22 +4,10 @@
 		<ul class="util-item-wrap">
 			<!-- 사용할 아이콘 목록 -->
 			<li v-for="(item, index) in menuItems" :key="index" class="util__item">
-				<button
-					type="button"
-					:class="{ active: activeItem === index, [item.styleClass]: true }"
-					@click="onMenuItemClick(index)"
-				>
-					<svg
-						:width="16"
-						:height="16"
-						:viewBox="item.viewBox"
-						aria-hidden="true"
-					>
-						<path
-							v-for="(path, pathIndex) in item.paths"
-							:key="pathIndex"
-							:d="path"
-						/>
+				<button type="button" :class="{ active: activeItem === index, [item.styleClass]: true }"
+					@click="onMenuItemClick(index)">
+					<svg :width="16" :height="16" :viewBox="item.viewBox" aria-hidden="true">
+						<path v-for="(path, pathIndex) in item.paths" :key="pathIndex" :d="path" />
 					</svg>
 					<span>{{ item.label }}</span>
 				</button>
@@ -53,7 +41,7 @@ const menuItems = [
 	{
 		label: '채팅',
 		viewBox: '0 0 16 16',
-		styleClass: 'item chat', // 스타일 클래스 추가
+		styleClass: 'item chat new', // 스타일 클래스 추가
 		paths: [
 			'M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z',
 			'M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z',
