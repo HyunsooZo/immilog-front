@@ -75,7 +75,10 @@
 				</svg>
 				<i class="blind">글쓰기</i>
 			</button>
-			<NoContent v-if="state.posts.length === 0" :item="'글'" />
+			<NoContent
+				v-if="state.pagination.sort && state.posts.length === 0"
+				:item="'글'"
+			/>
 			<BoardContent
 				v-for="(item, index) in state.posts"
 				:key="index"
@@ -83,6 +86,7 @@
 			/>
 		</div>
 	</div>
+	<LoadingModal v-if="isLoading" />
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
 	<SelectDialog
 		v-if="isCategorySelectClicked || isSortingSelectClicked"
@@ -105,6 +109,8 @@ import PostModal from '@/components/PostModal.vue';
 import NoContent from '@/components/NoContent.vue';
 import { modalOpenClass, modalCloseClass } from '@/services/utils';
 import { useRouter } from 'vue-router';
+import LoadingModal from '@/components/LoadingModal.vue';
+import { useUserInfoStore } from '@/stores/userInfo';
 
 const router = useRouter();
 
@@ -298,9 +304,21 @@ const handleScroll = () => {
 	}
 };
 
-onMounted(() => {
+const isLoading = ref(false);
+
+onMounted(async () => {
 	updateMenuBar();
-	fetchBoardList('CREATED_DATE', 0);
-	window.addEventListener('scroll', handleScroll);
+	if (useUserInfoStore().userSeq === null) {
+		isLoading.value = true;
+		setTimeout(() => {
+			fetchBoardList('CREATED_DATE', 0);
+			setTimeout(() => {
+				isLoading.value = false;
+			}, 1000);
+		}, 4000);
+	} else {
+		fetchBoardList('CREATED_DATE', 0);
+		window.addEventListener('scroll', handleScroll);
+	}
 });
 </script>

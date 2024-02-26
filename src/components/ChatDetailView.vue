@@ -278,25 +278,9 @@ const formDate = dateTime => {
 
 const formDateTime = dateTime => {
 	const date = new Date(dateTime);
-	const now = new Date();
-
-	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, '0');
-	const day = String(date.getDate()).padStart(2, '0');
 	const hours = String(date.getHours()).padStart(2, '0');
 	const minutes = String(date.getMinutes()).padStart(2, '0');
-
-	// 현재 날짜와 입력된 날짜가 같은지 확인
-	if (
-		year === now.getFullYear() &&
-		month === String(now.getMonth() + 1).padStart(2, '0') &&
-		day === String(now.getDate()).padStart(2, '0')
-	) {
-		// 같다면 시간 부분만 반환
-		return `${hours}:${minutes}`;
-	} else {
-		// 다르다면 날짜와 시간 모두 반환
-		return `${year}/${month}/${day} ${hours}:${minutes}`;
-	}
+	// 같다면 시간 부분만 반환
+	return `${hours}:${minutes}`;
 };
 </script>
