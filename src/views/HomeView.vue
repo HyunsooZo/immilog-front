@@ -30,6 +30,8 @@
 		</div>
 
 		<div class="list-top-wrap">
+			<!-- sub menu -->
+			<CountryList @select:country="setCountry" />
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
@@ -51,8 +53,6 @@
 					</button>
 				</div>
 			</div>
-			<!-- sub menu -->
-			<CountryList @select:country="setCountry" />
 		</div>
 
 		<!-- 목록 -->
