@@ -1,13 +1,12 @@
 <template>
+	<!-- footer 영역 -->
 	<div class="footer">
 		<div class="button-wrap">
+			<!-- 회원가입 버튼 -->
 			<button
 				@click="props.onClick"
-				:class="{
-					'button button--positive': computedCondition,
-					'button button--disabled': !computedCondition,
-				}"
-				:disabled="!computedCondition"
+				:class="buttonClasses"
+				:disabled="!props.condition"
 				role="link"
 				id="registerBtn"
 			>
@@ -31,5 +30,9 @@ const props = defineProps({
 	},
 });
 
-const computedCondition = computed(() => props.condition);
+// 버튼 클래스를 계산하는 computed 프로퍼티
+const buttonClasses = computed(() => ({
+	'button button--positive': props.condition,
+	'button button--disabled': !props.condition,
+}));
 </script>

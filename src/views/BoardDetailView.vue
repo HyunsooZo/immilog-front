@@ -125,12 +125,8 @@
 					@click="openCommentWrite"
 				>
 					<svg viewBox="0 0 16 16">
-						<path
-							d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-						/>
-						<path
-							d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-						/>
+						<path :d="writeReply.first" />
+						<path :d="writeReply.second" />
 					</svg>
 					<span>댓글쓰기</span>
 				</button>
@@ -142,9 +138,7 @@
 					@click="goToDown"
 				>
 					<svg viewBox="0 0 16 16">
-						<path
-							d="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6z"
-						/>
+						<path :d="lastReply" />
 					</svg>
 					<span>마지막 댓글 보기</span>
 				</button>
@@ -339,6 +333,7 @@ import {
 	modalCloseClass,
 } from '@/services/utils';
 import { likeApi } from '@/services/post.js';
+import { writeReply, lastReply } from '@/utils/icons';
 
 const isAuthor = userSeq => {
 	return userSeq === post.value.userSeq;
