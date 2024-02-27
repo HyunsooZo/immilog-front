@@ -5,9 +5,7 @@
 				<!-- //완료 .item__icon--check / 취소 .item__icon--error / 알림 .item__icon--warning -->
 				<div class="svg--item-wrap">
 					<svg class="svg--circle" viewBox="0 0 168 168">
-						<path
-							d="M163 84C163 127.63 127.63 163 84 163C40.3695 163 5 127.63 5 84C5 40.3695 40.3695 5 84 5C127.63 5 163 40.3695 163 84Z"
-						/>
+						<path :d="resultCircleIcon" />
 					</svg>
 					<!-- check -->
 					<svg class="svg--check" viewBox="0 0 168 168">
@@ -43,6 +41,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { resultCircleIcon } from '@/utils/icons';
 
 const router = useRouter();
 

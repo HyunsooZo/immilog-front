@@ -108,12 +108,8 @@
 									/>
 									<label for="file-upload" class="button-icon__s" role="button">
 										<svg viewBox="0 0 16 16">
-											<path
-												d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"
-											/>
-											<path
-												d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"
-											/>
+											<path :d="imageSelectIcon.first" />
+											<path :d="imageSelectIcon.second" />
 										</svg>
 										<i class="blind">사진 선택</i>
 									</label>
@@ -142,9 +138,7 @@
 								>
 									<!-- 전송 버튼 아이콘 -->
 									<svg viewBox="0 0 16 16">
-										<path
-											d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"
-										/>
+										<path :d="chatSendingIcon" />
 									</svg>
 									<i class="blind">채팅보내기</i>
 								</button>
@@ -166,6 +160,7 @@ import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
+import { imageSelectIcon, chatSendingIcon } from '@/utils/icons.js';
 
 const userInfo = useUserInfoStore();
 import { useRouter } from 'vue-router';

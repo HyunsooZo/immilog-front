@@ -1,30 +1,50 @@
 <template>
 	<!-- replydialog -->
-	<div class="modal reply--dialog" tabindex="-1" role="dialog" @click.self="closeDialog">
+	<div
+		class="modal reply--dialog"
+		tabindex="-1"
+		role="dialog"
+		@click.self="closeDialog"
+	>
 		<div class="modal-content">
 			<div class="modal-header">
 				<!-- 등록 -->
 				<div class="item__fnc right">
-					<button type="button" class="button-icon__s button--post_upload" @click="commentApi">
+					<button
+						type="button"
+						class="button-icon__s button--post_upload"
+						@click="commentApi"
+					>
 						<svg viewBox="0 0 16 16">
-							<path
-								d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z" />
-							<path
-								d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z" />
+							<path :d="postRegistrationIcon.first" />
+							<path :d="postRegistrationIcon.second" />
 						</svg>
 						<span>등록</span>
 					</button>
 				</div>
-				<button type="button" class="button-icon button--close" role="link" @click="closeDialog">
+				<button
+					type="button"
+					class="button-icon button--close"
+					role="link"
+					@click="closeDialog"
+				>
 					<i class="blind">닫기</i>
 				</button>
 			</div>
 			<div class="modal-body">
 				<div class="post-wrap">
 					<div class="post__wrap">
-						<textarea v-model="textareaRef" class="text__area" name="content" autocomplete="off"
-							placeholder="댓글을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다." data-autosuggest_is-input="true"
-							ref="adjustTextare" @input="adjustTextareaHeight" rows="2"></textarea>
+						<textarea
+							v-model="textareaRef"
+							class="text__area"
+							name="content"
+							autocomplete="off"
+							placeholder="댓글을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다."
+							data-autosuggest_is-input="true"
+							ref="adjustTextare"
+							@input="adjustTextareaHeight"
+							rows="2"
+						></textarea>
 
 						<!-- <textarea v-model="content" class="text__area" name="content" autocomplete="off"
 							placeholder="댓글을 입력해주세요. 다른 사용자로부터 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 될 수 있습니다."
@@ -53,7 +73,12 @@
 			</div>
 		</div>
 	</div>
-	<CustomAlert v-if="alertValue" :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+	<CustomAlert
+		v-if="alertValue"
+		:alertValue="alertValue"
+		:alertText="alertText"
+		@update:alertValue="closeAlert"
+	/>
 	<LoadingModal v-if="isLoading" />
 </template>
 
@@ -63,6 +88,7 @@ import useAxios from '@/composables/useAxios';
 import CustomAlert from './modal/CustomAlert.vue';
 import LoadingModal from './LoadingModal.vue';
 import { useRouter } from 'vue-router';
+import { postRegistrationIcon } from '@/utils/icons.js';
 const router = useRouter();
 
 const { sendRequest } = useAxios(router);

@@ -1,5 +1,8 @@
 <template>
-	<SearchModal v-if="searchModalValue" @update:search-modal-value="closeSearchModal" />
+	<SearchModal
+		v-if="searchModalValue"
+		@update:search-modal-value="closeSearchModal"
+	/>
 	<!-- 검색 -->
 	<div class="search-wrap">
 		<div class="input-wrap">
@@ -16,11 +19,20 @@
 				<!-- <img src="@/assets/images/icon-logo.png" alt="ko-meet" @click="onHome" /> -->
 			</p>
 			<div class="input__inner">
-				<button class="button button--search" role="link" @click="openSearchModal">
+				<button
+					class="button button--search"
+					role="link"
+					@click="openSearchModal"
+				>
 					<span>관심 있는 글 검색</span>
 				</button>
 			</div>
-			<button type="button" class="button-icon button--notice new" role="link" @click="openNotificationModal">
+			<button
+				type="button"
+				class="button-icon button--notice new"
+				role="link"
+				@click="openNotificationModal"
+			>
 				<i class="blind">알림</i>
 			</button>
 		</div>

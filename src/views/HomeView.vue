@@ -3,7 +3,7 @@
 		<!-- 상단 고정 영역 -->
 		<div class="sticky-wrap" :class="{ active: isStickyWrap }">
 			<SearchBar />
-			<!-- tab button -->
+			<!-- 탭 메뉴 -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
 					<li
@@ -30,9 +30,9 @@
 		</div>
 
 		<div class="list-top-wrap">
-			<!-- sub menu -->
+			<!-- 서브 메뉴 -->
 			<CountryList @select:country="setCountry" />
-			<!-- 카테고리 정렬 -->
+			<!-- 카테고리 및 정렬 옵션 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
 					<button
@@ -55,9 +55,9 @@
 			</div>
 		</div>
 
-		<!-- 목록 -->
+		<!-- 게시글 목록 -->
 		<div class="list-wrap">
-			<!-- 글쓰기버튼 -->
+			<!-- 글쓰기 버튼 -->
 			<button
 				type="button"
 				class="button-icon button--post _sticky"
@@ -94,7 +94,6 @@
 </template>
 
 <script setup>
-// import TheFooter from '@/components/layouts/TheFooter.vue';
 import { nextTick, onMounted, ref } from 'vue';
 import SearchBar from '@/components/SearchBar.vue';
 import SelectDialog from '@/components/SelectDialog.vue';
@@ -108,14 +107,16 @@ import { useRouter } from 'vue-router';
 import LoadingModal from '@/components/LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { postBtn } from '@/utils/icons';
+import { sortingList, categoryList } from '@/utils/selectItems.js';
 
 const router = useRouter();
+const { sendRequest } = useAxios(router);
 
-// 스크롤 :상단고정영역, 글쓰기버튼
+// 스크롤 관련 상태 및 이벤트 핸들러
 const isStickyWrap = ref(false);
 const isStickyButton = ref(false);
 const StickyWrapHeight = ref(0);
-onMounted(() => {
+const handleScrollEvent = () => {
 	window.addEventListener('scroll', handleStickyWrap);
 	const listTopHeight = document
 		.querySelector('.list-top-wrap')
@@ -131,7 +132,7 @@ onMounted(() => {
 			handleStickyButton.bind(null, listTopHeight),
 		);
 	};
-});
+};
 const handleStickyWrap = () => {
 	isStickyWrap.value = window.scrollY > 0;
 	if (isStickyButton.value) {
@@ -147,7 +148,7 @@ const handleStickyButton = listTopHeight => {
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
 
-/* select variable & methods start */
+// select 관련 상태 및 메소드
 const selectTitle = ref('');
 const selectList = ref('');
 const isCategorySelectClicked = ref(false);
@@ -155,20 +156,8 @@ const isSortingSelectClicked = ref(false);
 const selectCategoryValue = ref({ name: '전체', code: 'ALL' });
 const selectSortingValue = ref({ name: '최신순', code: 'CREATED_DATE' });
 const selectCountry = ref({ name: '전체', code: 'ALL' });
-const sortingList = [
-	{ name: '최신순', code: 'CREATED_DATE' },
-	{ name: '좋아요순', code: 'LIKE_COUNT' },
-	{ name: '조회순', code: 'VIEW_COUNT' },
-	{ name: '댓글순', code: 'COMMENT_COUNT' },
-];
-const categoryList = [
-	{ name: '전체', code: 'ALL' },
-	{ name: '워킹홀리데이', code: 'WORKING_HOLIDAY' },
-	{ name: '영주권', code: 'GREEN_CARD' },
-	{ name: '소통', code: 'COMMUNICATION' },
-	{ name: '질문/답변', code: 'QNA' },
-];
 
+// select 관련 메소드 (메뉴)
 const selectMenu = selectedMenu => {
 	selectedMenu.active.value = true;
 	menus
@@ -181,6 +170,7 @@ const selectMenu = selectedMenu => {
 	});
 };
 
+// select 관련 메소드 (카테고리 및 정렬)
 const openCategorySelect = () => {
 	nextTick(() => {
 		selectTitle.value = '카테고리 선택';
@@ -190,6 +180,7 @@ const openCategorySelect = () => {
 	modalOpenClass();
 };
 
+// select 관련 메소드 (정렬)
 const openSortingSelect = () => {
 	nextTick(() => {
 		selectTitle.value = '정렬 기준 선택';
@@ -199,6 +190,7 @@ const openSortingSelect = () => {
 	modalOpenClass();
 };
 
+// select 관련 메소드 (선택된 값 처리)
 const selectedValue = value => {
 	if (categoryList.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
@@ -209,39 +201,51 @@ const selectedValue = value => {
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
-const closeSelect = () => {
-	isCategorySelectClicked.value = false;
-	isSortingSelectClicked.value = false;
-	modalCloseClass();
-};
-/* select end */
-
-const currentPage = ref(0);
-const { sendRequest } = useAxios(router);
-
-let menus = [
-	{ label: '최신글', active: ref(true) },
-	{ label: '인기글', active: ref(false) },
-];
-
-const state = ref({
-	posts: [],
-	pagination: {},
-	loading: false,
-});
-
+// select 관련 메소드 (초기화)
 const initializeState = () => {
 	state.value.posts = [];
 	state.value.pagination = {};
 	currentPage.value = 0;
 };
 
+// select 관련 메소드 (닫기)
+const closeSelect = () => {
+	isCategorySelectClicked.value = false;
+	isSortingSelectClicked.value = false;
+	modalCloseClass();
+};
+
+// select 관련 메소드 (국가 선택)
+const setCountry = value => {
+	selectCountry.value = value;
+	initializeState();
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+};
+
+// 게시글 목록 관련 상태
+let menus = [
+	{ label: '최신글', active: ref(true) },
+	{ label: '인기글', active: ref(false) },
+];
+
+// 게시글 목록 관련 반응형 객체
+const state = ref({
+	posts: [],
+	pagination: {},
+	loading: false,
+});
+
+// 메뉴바 관련 메소드
 const updateMenuBar = () => {
 	const activeButton = document.querySelector('.menu__list.active .button');
 	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
 	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
 
+// 게시글 목록 관련 페이징 값
+const currentPage = ref(0);
+
+// 게시글 목록 호출 메서드
 const fetchBoardList = async (sortingMethod, nextPage) => {
 	state.value.loading = true;
 	try {
@@ -270,12 +274,15 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	}
 };
 
-const setCountry = value => {
-	selectCountry.value = value;
-	initializeState();
-	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+// 무한 스크롤 관련 메소드 (스크롤 핸들링)
+const handleScroll = () => {
+	const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+	if (scrollTop + clientHeight >= scrollHeight - 10) {
+		loadMoreData();
+	}
 };
 
+// 무한 스크롤 관련 메소드 (데이터 추가 호출)
 const loadMoreData = async () => {
 	if (!state.value.pagination.last && !state.value.loading) {
 		state.value.loading = true;
@@ -284,7 +291,8 @@ const loadMoreData = async () => {
 		state.value.loading = false; // fetchBoardList 호출 후 loading 상태 변경
 	}
 };
-// .post--dialog open
+
+// PostModal 오픈 및 닫기
 const onPostModal = ref(false);
 const openPostModal = () => {
 	onPostModal.value = true;
@@ -294,17 +302,12 @@ const closePostModal = () => {
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
-const handleScroll = () => {
-	const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-	if (scrollTop + clientHeight >= scrollHeight - 10) {
-		loadMoreData();
-	}
-};
-
+// 로딩화면 관련 상태
 const isLoading = ref(false);
 
 onMounted(async () => {
 	updateMenuBar();
+	handleScrollEvent();
 	if (useUserInfoStore().userSeq === null) {
 		isLoading.value = true;
 		setTimeout(() => {
