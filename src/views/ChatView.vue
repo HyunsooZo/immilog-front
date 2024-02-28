@@ -171,12 +171,17 @@ import { timeCalculation } from '@/services/utils';
 const userInfo = useUserInfoStore();
 const router = useRouter();
 const { sendRequest } = useAxios(router);
+
+// 채팅 목록 및 상세보기 관련 상태
 const isSearchOpen = ref(false);
 const searchInput = ref('');
 const chatRooms = ref([]);
 const chatRoomsPage = ref(0);
 const page = ref({});
+const isChatDetail = ref(false);
+const roomSeq = ref(null);
 
+// 채팅 검색 관련 메소드
 const initializeSearchInput = () => {
 	searchInput.value = '';
 };
@@ -189,9 +194,7 @@ const closeSearchInput = () => {
 	searchInput.value = '';
 };
 
-const isChatDetail = ref(false);
-const roomSeq = ref(null);
-
+// 채팅 상세보기 관련 메서드
 const onChatDetail = seq => {
 	roomSeq.value = seq;
 	isChatDetail.value = true;
@@ -202,6 +205,7 @@ const offChatDetail = () => {
 	modalCloseClass();
 };
 
+// 채팅목록 불러오기
 const fetchChatList = async () => {
 	try {
 		const { status, data } = await sendRequest(
@@ -226,11 +230,13 @@ const fetchChatList = async () => {
 	}
 };
 
+// 사용자가 채팅 발신자인지 확인
 const amISender = sender => {
 	const userSeq = userInfo.userSeq;
 	return sender.seq === userSeq;
 };
 
+// 컴포넌트 마운트 시 초기화 및 채팅목록 불러오기
 onMounted(() => {
 	if (localStorage.getItem('accessToken') === null) {
 		router.push('/sign-in');

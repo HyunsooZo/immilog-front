@@ -134,6 +134,9 @@
 								<button
 									type="button"
 									class="button-icon__s button--send"
+									:class="{
+										active: content.trim() !== '',
+									}"
 									@click="sendMessage"
 								>
 									<!-- 전송 버튼 아이콘 -->
@@ -167,8 +170,10 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const { sendRequest } = useAxios(router);
+const localhost = 'http://localhost:8080';
+const prodServer = 'https://api.ko-meet-back.com';
 
-const socket = new SockJS('https://api.ko-meet-back.com:443' + '/ws');
+const socket = new SockJS(prodServer + '/ws');
 const stompClient = Stomp.over(socket);
 
 const content = ref('');
@@ -228,15 +233,25 @@ const fetchChats = async () => {
 	}
 };
 
-onMounted(async () => {
-	await fetchChats();
+// 웹소켓 연결 및 구독 설정
+const connectWebSocket = () => {
 	stompClient.connect({}, () => {
-		stompClient.subscribe('/topic/messages', message => {
-			chats.value.push(JSON.parse(message.body));
+		stompClient.subscribe(`/topic/room/${props.chatRoomSeq}`, message => {
+			const newMessage = JSON.parse(message.body);
+			if (newMessage.chatRoomSeq === props.chatRoomSeq) {
+				// 수정된 부분
+				chats.value.push(newMessage);
+			}
 		});
 	});
+};
+onMounted(async () => {
+	await fetchChats();
+	connectWebSocket();
+	markMessagesAsRead();
 });
 
+// 컴포넌트 언마운트 시 웹소켓 연결 해제
 onUnmounted(() => {
 	if (stompClient && stompClient.connected) {
 		stompClient.disconnect();
@@ -244,7 +259,6 @@ onUnmounted(() => {
 });
 
 const amISender = senderSeq => {
-	console.log('senderSeq:', senderSeq, 'userInfo.userSeq:', userInfo.userSeq);
 	return senderSeq === userInfo.userSeq;
 };
 
@@ -253,9 +267,17 @@ const getDateTime = dateTime => {
 	lastDate = result;
 	return result;
 };
+// 메시지 전송
 const sendMessage = () => {
 	if (content.value.trim()) {
-		stompClient.send('/app/chat', {}, JSON.stringify({ text: content.value }));
+		const messageToSend = {
+			chatRoomSeq: props.chatRoomSeq,
+			senderSeq: userInfo.userSeq,
+			content: content.value,
+			attachments: [],
+		};
+		stompClient.send('/app/chat/send', {}, JSON.stringify(messageToSend));
+
 		content.value = '';
 	}
 };
@@ -277,5 +299,26 @@ const formDateTime = dateTime => {
 	const minutes = String(date.getMinutes()).padStart(2, '0');
 	// 같다면 시간 부분만 반환
 	return `${hours}:${minutes}`;
+};
+
+// 채팅방에 들어갔을 때 '읽음' 상태를 서버에 보내는 함수
+const markMessagesAsRead = () => {
+	// 모든 메시지를 '읽음'으로 표시
+	chats.value.forEach(chat => {
+		if (!amISender(chat.sender.seq) && !chat.isRead) {
+			// 읽음 상태를 서버에 보내기
+			stompClient.send(
+				'/app/chat/read',
+				{},
+				JSON.stringify({
+					messageId: chat.id,
+					userId: userInfo.userSeq,
+				}),
+			);
+
+			// 프론트엔드에서 상태 업데이트
+			chat.isRead = true;
+		}
+	});
 };
 </script>
