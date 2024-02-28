@@ -156,7 +156,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { modalCloseClass } from '@/services/utils';
 import SideMenu from '@/components/SideMenu.vue';
 import SockJS from 'sockjs-client';
@@ -209,6 +209,13 @@ const adjustTextareaHeight = () => {
 	textarea.style.height = `${textarea.scrollHeight}px`;
 };
 
+// textarea 높이 초기화 함수
+const resetTextareaHeight = () => {
+	if (adjustTextarea.value) {
+		adjustTextarea.value.style.height = null;
+	}
+};
+
 const chats = ref([]);
 
 const fetchChats = async () => {
@@ -230,6 +237,10 @@ const fetchChats = async () => {
 		}
 	} catch (error) {
 		console.error(error);
+	} finally {
+		nextTick(() => {
+			scrollToBottom();
+		});
 	}
 };
 
@@ -242,6 +253,9 @@ const connectWebSocket = () => {
 				// 수정된 부분
 				chats.value.push(newMessage);
 			}
+			nextTick(() => {
+				scrollToBottom();
+			});
 		});
 	});
 };
@@ -277,8 +291,8 @@ const sendMessage = () => {
 			attachments: [],
 		};
 		stompClient.send('/app/chat/send', {}, JSON.stringify(messageToSend));
-
 		content.value = '';
+		resetTextareaHeight();
 	}
 };
 
@@ -320,5 +334,13 @@ const markMessagesAsRead = () => {
 			chat.isRead = true;
 		}
 	});
+};
+
+// 스크롤을 맨 아래로 내리는 함수
+const scrollToBottom = () => {
+	const chatContainer = document.querySelector('.chat__content');
+	if (chatContainer) {
+		chatContainer.scrollTop = chatContainer.scrollHeight;
+	}
 };
 </script>
