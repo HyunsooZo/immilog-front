@@ -272,9 +272,15 @@ const handleScroll = () => {
 onMounted(async () => {
 	await fetchChats();
 	setupScrollListener();
-	connectWebSocket();
-	markMessagesAsRead();
-	scrollToBottom();
+	nextTick(() => {
+		connectWebSocket();
+		nextTick(() => {
+			markMessagesAsRead();
+			scrollToBottom();
+		});
+		markMessagesAsRead();
+		scrollToBottom();
+	});
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 해제
