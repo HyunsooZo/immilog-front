@@ -1008,7 +1008,7 @@ strong + .button-text {
     padding-bottom: 2rem;
 }
 .chat-wrap .chat__list > .item__notice {
-    margin: 2rem 0 0;
+    margin: 2rem 0;
     text-align: center;
 }
 .chat-wrap .chat__list > .item__notice .text {
@@ -1021,10 +1021,13 @@ strong + .button-text {
     background: #a9b2b9;
     border-radius: 1rem;
 }
-.chat-wrap .chat__list >  .item {
+.chat-wrap .chat__list > .item {
     display: flex;
     position: relative;
-    margin: 2rem 1rem 0 5.2rem;
+    margin: 1rem 1rem 0 5.2rem;
+}
+.chat-wrap .chat__list > .item:not(._my) + .item:not(._my) .info__wrap {
+    display: none;
 }
 .chat-wrap .chat__list .item .info__wrap {
     position: absolute;
