@@ -270,14 +270,10 @@ const handleScroll = () => {
 };
 
 onMounted(async () => {
+	connectWebSocket();
 	await fetchChats();
 	setupScrollListener();
 	nextTick(() => {
-		connectWebSocket();
-		nextTick(() => {
-			markMessagesAsRead();
-			scrollToBottom();
-		});
 		markMessagesAsRead();
 		scrollToBottom();
 	});
