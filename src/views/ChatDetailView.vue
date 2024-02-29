@@ -157,7 +157,6 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-import { modalCloseClass } from '@/services/utils';
 import SideMenu from '@/components/SideMenu.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
@@ -166,30 +165,25 @@ import { useUserInfoStore } from '@/stores/userInfo';
 import { imageSelectIcon, chatSendingIcon } from '@/utils/icons.js';
 
 const userInfo = useUserInfoStore();
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 const router = useRouter();
+const route = useRoute();
 
 const { sendRequest } = useAxios(router);
 const localhost = 'http://localhost:8080';
 const prodServer = 'https://api.ko-meet-back.com';
 
-const socket = new SockJS(prodServer + '/ws');
+const socket = new SockJS(localhost + '/ws');
 const stompClient = Stomp.over(socket);
 
 const content = ref('');
 const pageable = ref({});
 const page = ref(0);
 let lastDate = null;
-const props = defineProps({
-	chatRoomSeq: Number,
-});
-
-//모달 닫는 에밋 (false 넘김)
-const emits = defineEmits(['close']);
+const chatRoomSeq = ref(route.params.chatRoomId);
 
 const closeModal = () => {
-	emits('close');
-	modalCloseClass();
+	router.back();
 };
 
 //side menu
@@ -222,7 +216,7 @@ const fetchChats = async () => {
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/chat/rooms/${props.chatRoomSeq}?page=${page.value}`,
+			`/chat/rooms/${chatRoomSeq.value}?page=${page.value}`,
 			{
 				headers: {
 					contentType: 'application/json',
@@ -244,25 +238,55 @@ const fetchChats = async () => {
 	}
 };
 
+const fetchMore = async () => {
+	page.value = pageable.value.pageNumber + 1;
+	await fetchChats();
+};
+
 // 웹소켓 연결 및 구독 설정
 const connectWebSocket = () => {
 	stompClient.connect({}, () => {
-		stompClient.subscribe(`/topic/room/${props.chatRoomSeq}`, message => {
+		stompClient.subscribe(`/topic/room/${chatRoomSeq.value}`, message => {
 			const newMessage = JSON.parse(message.body);
-			if (newMessage.chatRoomSeq === props.chatRoomSeq) {
-				// 수정된 부분
-				chats.value.push(newMessage);
-			}
+			chats.value.push(newMessage);
 			nextTick(() => {
 				scrollToBottom();
 			});
 		});
 	});
 };
+
+// 스크롤 이벤트 리스너를 추가하는 함수
+const addScrollListener = () => {
+	const chatContainer = document.querySelector('.chat__content');
+	if (chatContainer) {
+		chatContainer.addEventListener('scroll', handleScroll);
+	}
+};
+
+// 스크롤 이벤트 리스너를 제거하는 함수
+const removeScrollListener = () => {
+	const chatContainer = document.querySelector('.chat__content');
+	if (chatContainer) {
+		chatContainer.removeEventListener('scroll', handleScroll);
+	}
+};
+
+// 스크롤 이벤트 핸들러
+const handleScroll = event => {
+	const chatContainer = event.target;
+	console.log(chatContainer.scrollTop);
+	if (chatContainer.scrollTop === 0) {
+		console.log('fetchMore');
+		fetchMore(); // 스크롤이 맨 위에 도달했을 때 fetchMore 호출
+	}
+};
+
 onMounted(async () => {
 	await fetchChats();
 	connectWebSocket();
 	markMessagesAsRead();
+	addScrollListener();
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 해제
@@ -270,6 +294,7 @@ onUnmounted(() => {
 	if (stompClient && stompClient.connected) {
 		stompClient.disconnect();
 	}
+	removeScrollListener();
 });
 
 const amISender = senderSeq => {
@@ -285,7 +310,7 @@ const getDateTime = dateTime => {
 const sendMessage = () => {
 	if (content.value.trim()) {
 		const messageToSend = {
-			chatRoomSeq: props.chatRoomSeq,
+			chatRoomSeq: chatRoomSeq.value,
 			senderSeq: userInfo.userSeq,
 			content: content.value,
 			attachments: [],

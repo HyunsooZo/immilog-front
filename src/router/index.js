@@ -4,7 +4,7 @@ import SignInView from '@/views/SignInView.vue';
 import HomeView from '@/views/HomeView.vue';
 import JobBoardView from '@/views/JobBoardView.vue';
 import ChatView from '@/views/ChatView.vue';
-import ChatDetailView from '@/components/ChatDetailView.vue';
+import ChatDetailView from '@/views/ChatDetailView.vue';
 import SideMenu from '@/components/SideMenu.vue';
 import BoardView from '@/views/BoardView.vue';
 import BoardDetailView from '@/views/BoardDetailView.vue';
@@ -43,7 +43,7 @@ const router = createRouter({
 			component: ChatView,
 		},
 		{
-			path: '/chat-view',
+			path: '/chat/:chatRoomId',
 			name: 'ChatDetail',
 			component: ChatDetailView,
 		},

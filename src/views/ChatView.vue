@@ -149,11 +149,6 @@
 			</div>
 			<!-- // .item -->
 		</div>
-		<ChatDetailView
-			:chatRoomSeq="roomSeq"
-			@close="offChatDetail"
-			v-if="isChatDetail"
-		/>
 	</div>
 </template>
 
@@ -161,8 +156,6 @@
 import TheTopBox from '@/components/TheTopBox.vue';
 import SearchBox from '@/components/SearchBox.vue';
 import { onMounted, ref } from 'vue';
-import { modalOpenClass, modalCloseClass } from '@/services/utils';
-import ChatDetailView from '@/components/ChatDetailView.vue';
 import useAxios from '@/composables/useAxios';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.js';
@@ -178,8 +171,6 @@ const searchInput = ref('');
 const chatRooms = ref([]);
 const chatRoomsPage = ref(0);
 const page = ref({});
-const isChatDetail = ref(false);
-const roomSeq = ref(null);
 
 // 채팅 검색 관련 메소드
 const initializeSearchInput = () => {
@@ -196,13 +187,7 @@ const closeSearchInput = () => {
 
 // 채팅 상세보기 관련 메서드
 const onChatDetail = seq => {
-	roomSeq.value = seq;
-	isChatDetail.value = true;
-	modalOpenClass();
-};
-const offChatDetail = () => {
-	isChatDetail.value = false;
-	modalCloseClass();
+	router.push(`/chat/${seq}`);
 };
 
 // 채팅목록 불러오기
