@@ -526,7 +526,7 @@ strong + .button-text {
 }
 .footer .util-item-wrap .util__item .item.chat.new::before {
     top: .4rem;
-    right: 1.6rem;
+    left: calc(50% + 7px);
 }
 .footer .util-item-wrap .util__item .item span {
     padding: .3rem 0 0;
@@ -1050,6 +1050,7 @@ strong + .button-text {
     background: #fff;
     border: 1px solid #ccc;
     border-radius: .4rem;
+    white-space: pre-wrap;
 }
 .chat-wrap .chat__list .item .item__fnc {
     margin-top: .3rem;
@@ -1496,6 +1497,7 @@ color: #ed1651;
     margin: 0 1rem 0 auto;
 }
 .fnc-wrap [class*=__list] .button-icon__s {
+    height: 4rem;
     padding: 1.2rem 1rem;
 }
 .fnc-wrap [class*=__list] .button-icon__s svg {
