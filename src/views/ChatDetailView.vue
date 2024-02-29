@@ -173,7 +173,7 @@ const { sendRequest } = useAxios(router);
 const localhost = 'http://localhost:8080';
 const prodServer = 'https://api.ko-meet-back.com';
 
-const socket = new SockJS(prodServer + '/ws');
+const socket = new SockJS(localhost + '/ws');
 const stompClient = Stomp.over(socket);
 
 const content = ref('');
@@ -227,6 +227,7 @@ const fetchChats = async () => {
 		);
 		if (status === 200) {
 			data.data.content.forEach(chat => chats.value.push(chat));
+			chats.value.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 			data.data.pageable = pageable.value;
 		}
 	} catch (error) {
@@ -258,12 +259,6 @@ const setupScrollListener = () => {
 	const chatContainer = document.querySelector('.chat__content');
 	chatContainer.addEventListener('scroll', handleScroll);
 };
-
-// // 스크롤 이벤트 리스너를 제거하는 함수
-// const removeScrollListener = () => {
-// 	const chatContainer = document.querySelector('.chat__content');
-// 	chatContainer.removeEventListener('scroll', handleScroll);
-// };
 
 // 스크롤 이벤트 핸들러
 const handleScroll = () => {
@@ -347,7 +342,6 @@ const markMessagesAsRead = () => {
 					userId: userInfo.userSeq,
 				}),
 			);
-
 			// 프론트엔드에서 상태 업데이트
 			chat.isRead = true;
 		}
