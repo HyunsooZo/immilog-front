@@ -6,20 +6,12 @@
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button
-						type="button"
-						class="button--select"
-						@click="openCategorySelect"
-					>
+					<button type="button" class="button--select">
 						<span>selectCategoryValue.name</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button
-						type="button"
-						class="button--select sort"
-						@click="openSortingSelect"
-					>
+					<button type="button" class="button--select sort">
 						<span>selectSortingValue.name</span>
 					</button>
 				</div>
@@ -187,7 +179,7 @@ const closeSearchInput = () => {
 
 // 채팅 상세보기 관련 메서드
 const onChatDetail = seq => {
-	router.push(`/chat/${seq}`);
+	router.push('/chat/' + seq);
 };
 
 // 채팅목록 불러오기
@@ -222,10 +214,10 @@ const amISender = sender => {
 };
 
 // 컴포넌트 마운트 시 초기화 및 채팅목록 불러오기
-onMounted(() => {
+onMounted(async () => {
 	if (localStorage.getItem('accessToken') === null) {
 		router.push('/sign-in');
 	}
-	fetchChatList();
+	await fetchChatList();
 });
 </script>

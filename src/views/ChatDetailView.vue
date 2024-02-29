@@ -173,7 +173,7 @@ const { sendRequest } = useAxios(router);
 const localhost = 'http://localhost:8080';
 const prodServer = 'https://api.ko-meet-back.com';
 
-const socket = new SockJS(prodServer + '/ws');
+const socket = new SockJS(localhost + '/ws');
 const stompClient = Stomp.over(socket);
 
 const content = ref('');
@@ -259,7 +259,9 @@ const connectWebSocket = () => {
 // 스크롤 이벤트 리스너를 추가하는 함수
 const addScrollListener = () => {
 	const chatContainer = document.querySelector('.chat__content');
+	console.log('addScrollListener1');
 	if (chatContainer) {
+		console.log('addScrollListener2');
 		chatContainer.addEventListener('scroll', handleScroll);
 	}
 };
@@ -275,8 +277,8 @@ const removeScrollListener = () => {
 // 스크롤 이벤트 핸들러
 const handleScroll = event => {
 	const chatContainer = event.target;
-	console.log(chatContainer.scrollTop);
 	if (chatContainer.scrollTop === 0) {
+		// 스크롤이 맨 위에 도달했을 때
 		console.log('fetchMore');
 		fetchMore(); // 스크롤이 맨 위에 도달했을 때 fetchMore 호출
 	}

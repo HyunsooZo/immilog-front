@@ -46,6 +46,7 @@ const router = createRouter({
 			path: '/chat/:chatRoomId',
 			name: 'ChatDetail',
 			component: ChatDetailView,
+			props: true,
 		},
 		{
 			path: '/side-menu',
