@@ -338,8 +338,8 @@ const markMessagesAsRead = () => {
 				'/app/chat/read',
 				{},
 				JSON.stringify({
-					messageId: chat.id,
-					userId: userInfo.userSeq,
+					chatSeq: chat.id,
+					userSeq: userInfo.userSeq,
 				}),
 			);
 			// 프론트엔드에서 상태 업데이트
