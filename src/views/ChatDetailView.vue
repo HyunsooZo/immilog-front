@@ -173,7 +173,7 @@ const { sendRequest } = useAxios(router);
 const localhost = 'http://localhost:8080';
 const prodServer = 'https://api.ko-meet-back.com';
 
-const socket = new SockJS(prodServer + '/ws');
+const socket = new SockJS(localhost + '/ws');
 const stompClient = Stomp.over(socket);
 
 const content = ref('');
@@ -233,14 +233,11 @@ const fetchChats = async () => {
 		console.error(error);
 	} finally {
 		nextTick(() => {
-			scrollToBottom();
+			if (page.value === 0) {
+				scrollToBottom();
+			}
 		});
 	}
-};
-
-const fetchMore = async () => {
-	page.value = pageable.value.pageNumber + 1;
-	await fetchChats();
 };
 
 // 웹소켓 연결 및 구독 설정
@@ -257,38 +254,32 @@ const connectWebSocket = () => {
 };
 
 // 스크롤 이벤트 리스너를 추가하는 함수
-const addScrollListener = () => {
+const setupScrollListener = () => {
 	const chatContainer = document.querySelector('.chat__content');
-	console.log('addScrollListener1');
-	if (chatContainer) {
-		console.log('addScrollListener2');
-		chatContainer.addEventListener('scroll', handleScroll);
-	}
+	chatContainer.addEventListener('scroll', handleScroll);
 };
 
-// 스크롤 이벤트 리스너를 제거하는 함수
-const removeScrollListener = () => {
-	const chatContainer = document.querySelector('.chat__content');
-	if (chatContainer) {
-		chatContainer.removeEventListener('scroll', handleScroll);
-	}
-};
+// // 스크롤 이벤트 리스너를 제거하는 함수
+// const removeScrollListener = () => {
+// 	const chatContainer = document.querySelector('.chat__content');
+// 	chatContainer.removeEventListener('scroll', handleScroll);
+// };
 
 // 스크롤 이벤트 핸들러
-const handleScroll = event => {
-	const chatContainer = event.target;
+const handleScroll = () => {
+	const chatContainer = document.querySelector('.chat__content');
 	if (chatContainer.scrollTop === 0) {
-		// 스크롤이 맨 위에 도달했을 때
-		console.log('fetchMore');
-		fetchMore(); // 스크롤이 맨 위에 도달했을 때 fetchMore 호출
+		page.value++;
+		fetchChats();
 	}
 };
 
 onMounted(async () => {
 	await fetchChats();
+	setupScrollListener();
 	connectWebSocket();
 	markMessagesAsRead();
-	addScrollListener();
+	scrollToBottom();
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 해제
@@ -296,7 +287,7 @@ onUnmounted(() => {
 	if (stompClient && stompClient.connected) {
 		stompClient.disconnect();
 	}
-	removeScrollListener();
+	// removeScrollListener();
 });
 
 const amISender = senderSeq => {
