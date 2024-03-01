@@ -105,7 +105,7 @@
 					<!-- 대댓글 -->
 					<div
 						class="re--reply"
-						v-for="reply in detailPost.comments[commentIndex].replies"
+						v-for="(reply, index) in detailPost.comments[commentIndex].replies"
 						:key="reply.seq"
 					>
 						<div class="item">
@@ -156,7 +156,7 @@
 										:class="{
 											active: reply.likeUsers.includes(userSeq),
 										}"
-										@click="likeReply(commentIndex, reply.seq)"
+										@click="likeReply(commentIndex, index)"
 									>
 										<!-- //활성화 .active -->
 										<i class="blind">좋아요</i>
