@@ -159,13 +159,13 @@
 
 <script setup>
 import { ref } from 'vue';
-import ReplyWrite from '@/components/ReplyWrite.vue';
+import ReplyWrite from '@/components/comment/ReplyWrite.vue';
 import useAxios from '@/composables/useAxios';
 import {
 	timeCalculation,
 	modalOpenClass,
 	modalCloseClass,
-} from '@/services/utils';
+} from '@/utils/date-time.js';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 

@@ -319,19 +319,19 @@
 <script setup>
 import TheHeader from '@/components/layouts/TheHeader.vue';
 // import SelectDialog from '@/components/SelectDialog.vue';
-import ReplyWrite from '@/components/ReplyWrite.vue';
+import ReplyWrite from '@/components/comment/ReplyWrite.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
-import NoContent from '@/components/NoContent.vue';
-import ReplyModal from '@/components/ReplyModal.vue';
-import LoadingModal from '@/components/LoadingModal.vue';
+import NoContent from '@/components/board/NoContent.vue';
+import ReplyModal from '@/components/comment/ReplyModal.vue';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import {
 	timeCalculation,
 	modalOpenClass,
 	modalCloseClass,
-} from '@/services/utils';
+} from '@/utils/date-time.js';
 import { likeApi } from '@/services/post.js';
 import { writeReply, lastReply } from '@/utils/icons';
 

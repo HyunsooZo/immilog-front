@@ -26,7 +26,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import BoardContent from './BoardContent.vue';
+import BoardContent from '@/components/board/BoardContent.vue';
 import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { useRouter } from 'vue-router';

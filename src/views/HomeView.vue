@@ -95,16 +95,16 @@
 
 <script setup>
 import { nextTick, onMounted, ref } from 'vue';
-import SearchBar from '@/components/SearchBar.vue';
-import SelectDialog from '@/components/SelectDialog.vue';
-import CountryList from '@/components/CountryList.vue';
-import BoardContent from '@/components/BoardContent.vue';
+import SearchBar from '@/components/search/SearchBar.vue';
+import SelectDialog from '@/components/selections/SelectDialog.vue';
+import CountryList from '@/components/selections/CountryList.vue';
+import BoardContent from '@/components/board/BoardContent.vue';
 import useAxios from '@/composables/useAxios.js';
-import PostModal from '@/components/PostModal.vue';
-import NoContent from '@/components/NoContent.vue';
-import { modalOpenClass, modalCloseClass } from '@/services/utils';
+import PostModal from '@/components/board/PostModal.vue';
+import NoContent from '@/components/board/NoContent.vue';
+import { modalOpenClass, modalCloseClass } from '@/utils/date-time';
 import { useRouter } from 'vue-router';
-import LoadingModal from '@/components/LoadingModal.vue';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { postBtn } from '@/utils/icons';
 import { sortingList, categoryList } from '@/utils/selectItems.js';

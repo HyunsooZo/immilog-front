@@ -91,13 +91,13 @@
 
 <script setup>
 import { nextTick, onMounted, ref, watch } from 'vue';
-import SearchBar from '@/components/SearchBar.vue'; // .search-wrap
-import SelectDialog from '@/components/SelectDialog.vue'; // .select--dialog
+import SearchBar from '@/components/search/SearchBar.vue'; // .search-wrap
+import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select--dialog
 import useAxios from '@/composables/useAxios.js';
-import PostModal from '@/components/PostModal.vue'; // .post--dialog
-import BoardContent from '@/components/BoardContent.vue';
+import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
+import BoardContent from '@/components/board/BoardContent.vue';
 import { useUserInfoStore } from '@/stores/userInfo.js';
-import { modalOpenClass, modalCloseClass } from '@/services/utils';
+import { modalOpenClass, modalCloseClass } from '@/utils/date-time';
 import { useRouter } from 'vue-router';
 import { postBtn } from '@/utils/icons.js';
 

@@ -145,13 +145,13 @@
 </template>
 
 <script setup>
-import TheTopBox from '@/components/TheTopBox.vue';
-import SearchBox from '@/components/SearchBox.vue';
+import TheTopBox from '@/components/search/TheTopBox.vue';
+import SearchBox from '@/components/search/SearchBox.vue';
 import { onMounted, ref } from 'vue';
 import useAxios from '@/composables/useAxios';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.js';
-import { timeCalculation } from '@/services/utils';
+import { timeCalculation } from '@/utils/date-time.js';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
@@ -169,6 +169,7 @@ const initializeSearchInput = () => {
 	searchInput.value = '';
 };
 
+// 검색 모달 열기 및 닫기
 const openSearchInput = () => {
 	isSearchOpen.value = true;
 };

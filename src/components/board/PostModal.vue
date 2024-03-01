@@ -219,7 +219,7 @@
 	<SelectDialog
 		v-if="isCategorySelectClicked"
 		:title="selectTitle"
-		:list="selectList"
+		:list="categoryList"
 		@close="closeSelect"
 		@select:value="selectedValue"
 	/>
@@ -228,12 +228,14 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue';
-import SelectDialog from './SelectDialog.vue';
-import CustomAlert from './modal/CustomAlert.vue';
+import SelectDialog from '@/components/selections/SelectDialog.vue';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
 import useAxios from '@/composables/useAxios.js';
-import LoadingModal from './LoadingModal.vue';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { useRouter } from 'vue-router';
+import { resizeImage } from '@/utils/image.js';
+import { categoryList } from '@/utils/selectItems';
 import {
 	postRegistrationIcon,
 	imageSelectIcon,
@@ -241,17 +243,11 @@ import {
 } from '@/utils/icons.js';
 
 const router = useRouter();
-
+const { sendRequest } = useAxios(router);
 const userInfo = useUserInfoStore();
 const isCategorySelectClicked = ref(false);
+
 const selectTitle = '카테고리 선택';
-const selectList = [
-	{ name: '워킹홀리데이', code: 'WORKING_HOLIDAY' },
-	{ name: '영주권', code: 'GREEN_CARD' },
-	{ name: '소통', code: 'COMMUNICATION' },
-	{ name: '질문/답변', code: 'QNA' },
-];
-const { sendRequest } = useAxios(router);
 const selectedCategory = ref({ name: '소통', code: 'COMMUNICATION' });
 const selectedValue = value => {
 	selectedCategory.value = value;
@@ -283,10 +279,11 @@ const privateYn = ref('N');
 // title value
 const title = ref('');
 
-// content value
+// content 변수 및 watch
 const content = ref('');
+watch(content, adjustTextareaHeight);
 
-// textarea
+// 텍스트 영역 조정 함수
 const adjustTextarea = ref(null);
 const adjustTextareaHeight = () => {
 	const textarea = adjustTextarea.value;
@@ -294,21 +291,13 @@ const adjustTextareaHeight = () => {
 	textarea.style.height = `${textarea.scrollHeight}px`;
 };
 
-// tags
-const hashTag = ref('');
-const tags = ref([]);
-
+// 이미지 관련 변수
 const isImageUploaded = computed(() => imagePreview.value.length > 0);
-
 const imageFile = ref([]);
 const imagePreview = ref([]);
-
-const hashTagArea = ref(false);
-
 const imagePaths = ref([]);
-const isLoading = ref(false);
 
-// preview image
+// 프리뷰 이미지
 const previewImage = event => {
 	const input = event.target;
 	if (imagePreview.value.length > 2) {
@@ -332,17 +321,23 @@ const removeImage = index => {
 
 const emit = defineEmits(['onPostModal:value']);
 
-// close modal
+// 게시물 게시 모달 닫기
 const closeModal = () => {
 	emit('onPostModal:value', false);
 };
 
+// tags 변수
+const hashTag = ref('');
+const tags = ref([]);
+
+// 특수문자 제거 메서드
 const removeSpecialCharacters = str => {
 	// 특수 문자를 제거하기 위한 정규식
 	const regex = /[^\wㄱ-ㅎㅏ-ㅣ가-힣]/gi;
 	return str.replace(regex, '');
 };
 
+// 태그 추가 및 제거 메서드
 const addTag = () => {
 	if (tags.value.length > 7) {
 		openAlert('태그는 최대 8개까지만 등록이 가능합니다.');
@@ -357,11 +352,13 @@ const removeTag = tag => {
 	tags.value.splice(tags.value.indexOf(tag), 1);
 };
 
+// 해시태그 모달 오픈
+const hashTagArea = ref(false);
 const hashTagAreaOpen = () => {
 	hashTagArea.value = true;
 };
 
-// image upload
+// 이미지 업로드 함수
 const imageUpload = async () => {
 	if (imageFile.value.length === 0) {
 		openAlert('이미지를 업로드 해주세요.');
@@ -369,9 +366,13 @@ const imageUpload = async () => {
 	}
 	try {
 		const formData = new FormData();
-		imageFile.value.forEach(file => {
-			formData.append('multipartFile', file);
-		});
+		for (const file of imageFile.value) {
+			const resizedImage = await resizeImage(file, 0.5);
+			formData.append(
+				'multipartFile',
+				new File([resizedImage], file.name, { type: file.type }),
+			);
+		}
 		const { status, data } = await sendRequest(
 			'post',
 			'/images?imagePath=content',
@@ -394,6 +395,7 @@ const imageUpload = async () => {
 	}
 };
 
+// 게시물 업로드 함수
 const postUpload = async () => {
 	onLoading();
 	if (imageFile.value.length > 0) {
@@ -439,6 +441,9 @@ const postUpload = async () => {
 	}
 };
 
+// 로딩 변수 및 로딩 on & off 함수
+const isLoading = ref(false);
+
 const onLoading = () => {
 	isLoading.value = true;
 };
@@ -446,6 +451,4 @@ const onLoading = () => {
 const offLoading = () => {
 	isLoading.value = false;
 };
-
-watch(content, adjustTextareaHeight);
 </script>

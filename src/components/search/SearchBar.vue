@@ -41,9 +41,9 @@
 
 <script setup>
 import router from '@/router';
-import SearchModal from './SearchModal.vue';
+import SearchModal from '@/components/search/SearchModal.vue';
 import { ref } from 'vue';
-import { modalOpenClass, modalCloseClass } from '@/services/utils';
+import { modalOpenClass, modalCloseClass } from '@/utils/date-time.js';
 
 const searchModalValue = ref(false);
 const notificationModalValue = ref(false);

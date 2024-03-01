@@ -85,8 +85,8 @@
 <script setup>
 import { ref } from 'vue';
 import useAxios from '@/composables/useAxios';
-import CustomAlert from './modal/CustomAlert.vue';
-import LoadingModal from './LoadingModal.vue';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
 import { postRegistrationIcon } from '@/utils/icons.js';
 const router = useRouter();

@@ -116,8 +116,8 @@
 </template>
 
 <script setup>
-import BookMark from '@/components/BookMark.vue';
-import MyBoard from '@/components/MyBoard.vue';
+import BookMark from '@/components/board/BookMark.vue';
+import MyBoard from '@/components/board/MyBoard.vue';
 import ConfirmModal from '@/components/modal/ConfirmModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { onMounted, ref } from 'vue';

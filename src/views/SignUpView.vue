@@ -202,7 +202,7 @@
 import { computed, ref, watch } from 'vue';
 import useAxios from '@/composables/useAxios.js';
 import { onMounted } from 'vue';
-import TheTopBox from '@/components/TheTopBox.vue';
+import TheTopBox from '@/components/search/TheTopBox.vue';
 import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
 import { useLocationStore } from '@/stores/location';
 import CustomAlert from '@/components/modal/CustomAlert.vue';

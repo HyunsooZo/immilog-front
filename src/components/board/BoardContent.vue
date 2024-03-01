@@ -80,7 +80,7 @@ import { useRouter } from 'vue-router';
 import useAxios from '@/composables/useAxios.js';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
-import { timeCalculation } from '@/services/utils.js';
+import { timeCalculation } from '@/utils/date-time.js';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();

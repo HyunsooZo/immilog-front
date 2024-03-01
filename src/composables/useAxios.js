@@ -10,7 +10,6 @@ const useAxios = router => {
 			return;
 		}
 		try {
-			console.log(headers);
 			const config = {
 				method,
 				url,

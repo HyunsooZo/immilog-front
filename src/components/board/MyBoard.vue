@@ -26,10 +26,10 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import BoardContent from './BoardContent.vue';
+import BoardContent from '@/components/board/BoardContent.vue';
 import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
-import { modalCloseClass } from '@/services/utils';
+import { modalCloseClass } from '@/utils/date-time.js';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();

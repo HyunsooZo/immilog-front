@@ -119,7 +119,7 @@ import useAxios from '@/composables/useAxios.js';
 import { computed, onMounted, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
-import LoadingModal from '@/components/LoadingModal.vue';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
 
 const email = ref('');
 const password = ref('');

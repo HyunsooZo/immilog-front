@@ -83,7 +83,7 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import useAxios from '@/composables/useAxios';
-import LoadingModal from './LoadingModal.vue';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 

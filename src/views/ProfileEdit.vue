@@ -119,6 +119,6 @@
 
 <script setup>
 import TheHeader from '@/components/layouts/TheHeader.vue';
-import TheTopBox from '@/components/TheTopBox.vue';
+import TheTopBox from '@/components/search/TheTopBox.vue';
 import { profilePicSelectIcon } from '@/utils/icons';
 </script>

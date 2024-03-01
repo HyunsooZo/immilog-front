@@ -7,7 +7,7 @@
 						type="button"
 						class="button-icon button--back"
 						role="link"
-						@click="closeModal"
+						@click="previousComponent"
 					>
 						<i class="blind">이전화면</i>
 					</button>
@@ -86,7 +86,7 @@
 										<p class="list__item past">
 											<i class="blind">{{ chat.createdAt }}</i>
 											<span class="item__count">{{
-												formDateTime(chat.createdAt)
+												formTime(chat.createdAt)
 											}}</span>
 										</p>
 									</div>
@@ -157,7 +157,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-import SideMenu from '@/components/SideMenu.vue';
+import SideMenu from '@/components/settings/SideMenu.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import useAxios from '@/composables/useAxios';
@@ -170,23 +170,27 @@ const router = useRouter();
 const route = useRoute();
 
 const { sendRequest } = useAxios(router);
-const localhost = 'http://localhost:8080';
-const prodServer = 'https://api.ko-meet-back.com';
+const server = import.meta.env.VITE_APP_API_URL.replace('/api/v1', '');
 
-const socket = new SockJS(prodServer + '/ws');
+// 웹소켓 관련 변수
+const socket = new SockJS(server + '/ws');
 const stompClient = Stomp.over(socket);
 
+// 채팅 컨텐츠 및 페이지 관련 변수
 const content = ref('');
 const pageable = ref({});
 const page = ref(0);
 let lastDate = null;
+
+// 채팅방 번호
 const chatRoomSeq = ref(route.params.chatRoomId);
 
-const closeModal = () => {
+// 뒤로가기
+const previousComponent = () => {
 	router.back();
 };
 
-//side menu
+// 사이드 메뉴 관련 변수 및 메서드
 const isSideMenu = ref(false);
 const onSideMenu = () => {
 	isSideMenu.value = true;
@@ -195,7 +199,7 @@ const offSideMenu = () => {
 	isSideMenu.value = false;
 };
 
-// textarea
+// 텍스트 영역 조절
 const adjustTextarea = ref(null);
 const adjustTextareaHeight = () => {
 	const textarea = adjustTextarea.value;
@@ -210,8 +214,10 @@ const resetTextareaHeight = () => {
 	}
 };
 
+// 채팅 내용을 담는 배열
 const chats = ref([]);
 
+// db에 저장된 채팅 내용을 가져오는 함수
 const fetchChats = async () => {
 	try {
 		const { status, data } = await sendRequest(
@@ -269,6 +275,7 @@ const handleScroll = () => {
 	}
 };
 
+// 화면 마운트
 onMounted(async () => {
 	connectWebSocket();
 	await fetchChats();
@@ -284,18 +291,41 @@ onUnmounted(() => {
 	if (stompClient && stompClient.connected) {
 		stompClient.disconnect();
 	}
-	// removeScrollListener();
 });
 
+// 사용자가 채팅 발신자인지 확인
 const amISender = senderSeq => {
 	return senderSeq === userInfo.userSeq;
 };
 
+// 날짜 가져오기
 const getDateTime = dateTime => {
 	const result = formDate(dateTime);
 	lastDate = result;
 	return result;
 };
+
+// 날짜 리포맷팅
+const formDate = dateTime => {
+	const date = new Date(dateTime);
+	const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+	const day = weekdays[date.getDay()];
+
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const dayOfMonth = String(date.getDate()).padStart(2, '0');
+	return `${year}/${month}/${dayOfMonth} (${day})`;
+};
+
+// 시간 리포맷팅
+const formTime = dateTime => {
+	const date = new Date(dateTime);
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+	// 같다면 시간 부분만 반환
+	return `${hours}:${minutes}`;
+};
+
 // 메시지 전송
 const sendMessage = () => {
 	if (content.value.trim()) {
@@ -309,25 +339,6 @@ const sendMessage = () => {
 		content.value = '';
 		resetTextareaHeight();
 	}
-};
-
-const formDate = dateTime => {
-	const date = new Date(dateTime);
-	const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-	const day = weekdays[date.getDay()];
-
-	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, '0');
-	const dayOfMonth = String(date.getDate()).padStart(2, '0');
-	return `${year}/${month}/${dayOfMonth} (${day})`;
-};
-
-const formDateTime = dateTime => {
-	const date = new Date(dateTime);
-	const hours = String(date.getHours()).padStart(2, '0');
-	const minutes = String(date.getMinutes()).padStart(2, '0');
-	// 같다면 시간 부분만 반환
-	return `${hours}:${minutes}`;
 };
 
 // 채팅방에 들어갔을 때 '읽음' 상태를 서버에 보내는 함수
