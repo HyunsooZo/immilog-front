@@ -29,8 +29,18 @@
 						<div class="info__wrap">
 							<div class="item__fnc">
 								<div class="list__item">
-									<button type="button" class="list__item_button user">
+									<button
+										type="button"
+										class="list__item_button user"
+										:class="{
+											'user--author': isAuthor(
+												detailPost.userSeq,
+												detailPost.comments[commentIndex].user.seq,
+											),
+										}"
+									>
 										<!-- //원글작성자 댓글 .user--author -->
+
 										<em>{{
 											detailPost.comments[commentIndex].user.country
 										}}</em>
@@ -67,7 +77,7 @@
 								<button
 									type="button"
 									class="list__item cmt"
-									@click="openReplyWrite(commentIndex)"
+									@click="openReplyWrite(commentIndex, null)"
 								>
 									<span class="item__count">{{
 										detailPost.comments[commentIndex].replies.length
@@ -94,7 +104,13 @@
 									<div class="list__item">
 										<button
 											type="button"
-											class="list__item_button user user--author"
+											class="list__item_button user"
+											:class="{
+												'user--author': isAuthor(
+													detailPost.userSeq,
+													reply.user.seq,
+												),
+											}"
 										>
 											<!-- //원글작성자 댓글 .user--author -->
 											<em>{{ reply.user.country }}</em>
@@ -112,10 +128,12 @@
 								<div class="list__item">
 									<div class="text__item">
 										<p class="text">
-											<span class="comment__user">{{
-												reply.user.nickName
-											}}</span>
-											{{ reply.content }}
+											<span
+												class="comment__user"
+												v-if="extractAtWordAndRest(reply.content).atWord"
+												>{{ extractAtWordAndRest(reply.content).atWord }}</span
+											>
+											{{ extractAtWordAndRest(reply.content).restText }}
 										</p>
 									</div>
 								</div>
@@ -130,7 +148,7 @@
 									<button
 										type="button"
 										class="list__item cmt"
-										@click="openReplyWrite(index)"
+										@click="openReplyWrite(index, reply.user.nickName)"
 									>
 										<!-- <span class="item__count"></span> -->
 									</button>
@@ -153,6 +171,7 @@
 		v-if="isReplyWriteClicked"
 		:commentSeq="post.comments[commentIndex].seq"
 		:isPostComment="false"
+		:taggedUser="taggedUser"
 		@close="closeReplyWrite"
 	/>
 </template>
@@ -167,6 +186,8 @@ import {
 	modalCloseClass,
 } from '@/utils/date-time.js';
 import { useRouter } from 'vue-router';
+import { extractAtWordAndRest } from '@/utils/comment.js';
+
 const router = useRouter();
 
 const { sendRequest } = useAxios(router);
@@ -198,7 +219,9 @@ const closeModal = () => {
 // 댓글쓰기
 const isReplyWriteClicked = ref(false);
 const replyIndex = ref();
-const openReplyWrite = index => {
+const taggedUser = ref();
+const openReplyWrite = (index, nickName) => {
+	taggedUser.value = nickName ? nickName : '';
 	replyIndex.value = index;
 	isReplyWriteClicked.value = true;
 	modalOpenClass();
@@ -229,5 +252,9 @@ const detailBoard = async () => {
 	} catch (error) {
 		console.log(error);
 	}
+};
+
+const isAuthor = (postUserSeq, userSeq) => {
+	return postUserSeq === userSeq;
 };
 </script>

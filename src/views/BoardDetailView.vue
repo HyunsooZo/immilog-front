@@ -338,6 +338,7 @@ import {
 } from '@/utils/date-time.js';
 import { likeApi } from '@/services/post.js';
 import { writeReply, lastReply } from '@/utils/icons';
+import { extractAtWordAndRest } from '@/utils/comment.js';
 
 const isAuthor = userSeq => {
 	return userSeq === post.value.userSeq;
@@ -543,23 +544,6 @@ const allCommentCounts = post => {
 	});
 	return result;
 };
-
-function extractAtWordAndRest(text) {
-	// '@'로 시작하는 단어를 찾는 정규 표현식
-	const regex = /@\S+/;
-	const match = text.match(regex);
-
-	if (match) {
-		// '@'로 시작하는 단어를 찾았다면
-		const atWord = match[0].replace('@', ''); // '@'로 시작하는 단어
-		const restText = text.slice(match.index + atWord.length).trim(); // 나머지 텍스트
-
-		return { atWord, restText };
-	} else {
-		// '@'로 시작하는 단어가 없다면 원래 문자열을 반환
-		return { atWord: null, restText: text };
-	}
-}
 
 onMounted(() => {
 	detailBoard();
