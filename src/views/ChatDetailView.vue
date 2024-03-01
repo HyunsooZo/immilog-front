@@ -82,6 +82,7 @@
 									<div class="item__message">
 										<p class="text">{{ chat.content }}</p>
 									</div>
+									<p>{{ chat.readStatus ? '' : '1' }}</p>
 									<div class="item__fnc">
 										<p class="list__item past">
 											<i class="blind">{{ chat.createdAt }}</i>

@@ -202,7 +202,7 @@
 						<button
 							type="button"
 							class="list__item cmt"
-							@click="openReplyWrite(index)"
+							@click="openReplyWrite(index, null)"
 						>
 							<span class="item__count">{{ comment.replies.length }}</span>
 						</button>
@@ -246,8 +246,12 @@
 						<div class="list__item">
 							<div class="text__item">
 								<p class="text">
-									<span class="comment__user">{{ reply.user.nickName }}</span>
-									{{ reply.content }}
+									<span
+										class="comment__user"
+										v-if="extractAtWordAndRest(reply.content).atWord"
+										>{{ extractAtWordAndRest(reply.content).atWord }}</span
+									>
+									{{ extractAtWordAndRest(reply.content).restText }}
 								</p>
 							</div>
 						</div>
@@ -272,7 +276,7 @@
 							<button
 								type="button"
 								class="list__item cmt"
-								@click="openReplyWrite(index)"
+								@click="openReplyWrite(index, reply.user.nickName)"
 							></button>
 							<p class="list__item past">
 								<i class="blind">작성시간</i>
@@ -310,6 +314,7 @@
 		v-if="isReplyWriteClicked"
 		:commentSeq="post.comments[replyIndex].seq"
 		:isPostComment="false"
+		:taggedUser="taggedUser"
 		@close="closeReplyWrite"
 		@select:value="selectedValue"
 	/>
@@ -318,7 +323,6 @@
 
 <script setup>
 import TheHeader from '@/components/layouts/TheHeader.vue';
-// import SelectDialog from '@/components/SelectDialog.vue';
 import ReplyWrite from '@/components/comment/ReplyWrite.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -362,13 +366,16 @@ const closeReplyModal = () => {
 const isReplyWriteClicked = ref(false);
 const isCommentWriteClicked = ref(false);
 const replyIndex = ref();
-const openReplyWrite = index => {
+const taggedUser = ref('');
+const openReplyWrite = (index, nickName) => {
 	replyIndex.value = index;
 	isReplyWriteClicked.value = true;
+	taggedUser.value = nickName ? nickName : '';
 	modalOpenClass();
 };
 const closeReplyWrite = () => {
 	isReplyWriteClicked.value = false;
+	taggedUser.value = '';
 	modalCloseClass();
 	setTimeout(() => {
 		detailBoard();
@@ -536,6 +543,23 @@ const allCommentCounts = post => {
 	});
 	return result;
 };
+
+function extractAtWordAndRest(text) {
+	// '@'로 시작하는 단어를 찾는 정규 표현식
+	const regex = /@\S+/;
+	const match = text.match(regex);
+
+	if (match) {
+		// '@'로 시작하는 단어를 찾았다면
+		const atWord = match[0].replace('@', ''); // '@'로 시작하는 단어
+		const restText = text.slice(match.index + atWord.length).trim(); // 나머지 텍스트
+
+		return { atWord, restText };
+	} else {
+		// '@'로 시작하는 단어가 없다면 원래 문자열을 반환
+		return { atWord: null, restText: text };
+	}
+}
 
 onMounted(() => {
 	detailBoard();

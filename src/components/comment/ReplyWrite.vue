@@ -112,6 +112,10 @@ const props = defineProps({
 		type: Boolean,
 		required: true,
 	},
+	taggedUser: {
+		type: String,
+		required: false,
+	},
 });
 
 const closeDialog = () => {
@@ -128,7 +132,7 @@ const closeAlert = () => {
 };
 
 // textarea
-const textareaRef = ref(null);
+const textareaRef = ref(props.taggedUser ? `@${props.taggedUser} ` : '');
 const adjustTextareaHeight = () => {
 	const textarea = textareaRef.value;
 	textarea.style.height = 'auto';
