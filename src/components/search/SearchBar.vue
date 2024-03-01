@@ -43,7 +43,14 @@
 import router from '@/router';
 import SearchModal from '@/components/search/SearchModal.vue';
 import { ref } from 'vue';
-import { modalOpenClass, modalCloseClass } from '@/utils/date-time.js';
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
+};
 
 const searchModalValue = ref(false);
 const notificationModalValue = ref(false);

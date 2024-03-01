@@ -18,7 +18,7 @@
 				</button> -->
 			</div>
 			<div class="modal-body">
-				<div class="list-wrap reply">
+				<div class="list-wrap reply" v-if="detailPost">
 					<!-- <div class="item item--blind"> -->
 					<!-- 댓글 신고로 숨김처리 시 -->
 					<!-- <div class="blind__text">
@@ -67,7 +67,17 @@
 						</div>
 						<div class="util__wrap">
 							<div class="item__fnc">
-								<button type="button" class="list__item_button like active">
+								<button
+									type="button"
+									class="list__item_button like"
+									:class="{
+										active:
+											detailPost.comments[commentIndex].likeUsers.includes(
+												userSeq,
+											),
+									}"
+									@click="likeComment(commentIndex)"
+								>
 									<!-- //활성화 .active -->
 									<i class="blind">좋아요</i>
 									<span class="item__count">{{
@@ -140,7 +150,14 @@
 							</div>
 							<div class="util__wrap">
 								<div class="item__fnc">
-									<button type="button" class="list__item_button like">
+									<button
+										type="button"
+										class="list__item_button like"
+										:class="{
+											active: reply.likeUsers.includes(userSeq),
+										}"
+										@click="likeReply(commentIndex, reply.seq)"
+									>
 										<!-- //활성화 .active -->
 										<i class="blind">좋아요</i>
 										<span class="item__count">{{ reply.upVotes }}</span>
@@ -177,16 +194,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import ReplyWrite from '@/components/comment/ReplyWrite.vue';
 import useAxios from '@/composables/useAxios';
-import {
-	timeCalculation,
-	modalOpenClass,
-	modalCloseClass,
-} from '@/utils/date-time.js';
+import { timeCalculation } from '@/utils/date-time.js';
 import { useRouter } from 'vue-router';
 import { extractAtWordAndRest } from '@/utils/comment.js';
+import { useUserInfoStore } from '@/stores/userInfo';
+import { likeApi } from '@/services/post.js';
+
+const userInfo = useUserInfoStore();
+
+const userSeq = userInfo.userSeq;
 
 const router = useRouter();
 
@@ -207,10 +226,18 @@ const props = defineProps({
 	},
 });
 
-const detailPost = props.post;
+const detailPost = ref();
 const isLiked = ref(false);
 
 const emit = defineEmits(['close']);
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
+};
 
 const closeModal = () => {
 	emit('close');
@@ -231,7 +258,7 @@ const closeReplyWrite = () => {
 	modalCloseClass();
 	setTimeout(() => {
 		detailBoard();
-	}, 1500);
+	}, 500);
 };
 
 const detailBoard = async () => {
@@ -257,4 +284,67 @@ const detailBoard = async () => {
 const isAuthor = (postUserSeq, userSeq) => {
 	return postUserSeq === userSeq;
 };
+
+const likeComment = async index => {
+	const updatedPost = detailPost.value;
+	if (updatedPost.comments[index].likeUsers.includes(userSeq)) {
+		updatedPost.comments[index].upVotes--;
+		const userIndex = updatedPost.comments[index].likeUsers.indexOf(userSeq);
+		updatedPost.comments[index].likeUsers.splice(userIndex, 1);
+	} else {
+		updatedPost.comments[index].upVotes++;
+		updatedPost.comments[index].likeUsers.push(userSeq);
+	}
+
+	// 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
+	detailPost.value = updatedPost;
+
+	const response = await likeApi(
+		'comments',
+		detailPost.value.comments[index].seq,
+		userInfo.accessToken,
+	);
+	if (response.status === 401) {
+		router.push('/sign-in');
+	} else if (response.status !== 201) {
+		console.log('좋아요 실패');
+	}
+};
+
+const likeReply = async (index, replyIndex) => {
+	const updatedPost = detailPost.value;
+	if (
+		updatedPost.comments[index].replies[replyIndex].likeUsers.includes(userSeq)
+	) {
+		updatedPost.comments[index].replies[replyIndex].upVotes--;
+		const userIndex =
+			updatedPost.comments[index].replies[replyIndex].likeUsers.indexOf(
+				userSeq,
+			);
+		updatedPost.comments[index].replies[replyIndex].likeUsers.splice(
+			userIndex,
+			1,
+		);
+	} else {
+		updatedPost.comments[index].replies[replyIndex].upVotes++;
+		updatedPost.comments[index].replies[replyIndex].likeUsers.push(userSeq);
+	}
+
+	// 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
+	detailPost.value = updatedPost;
+	const response = await likeApi(
+		'replies',
+		detailPost.value.comments[index].replies[replyIndex].seq,
+		userInfo.accessToken,
+	);
+	if (response.status === 401) {
+		router.push('/sign-in');
+	} else if (response.status !== 201) {
+		console.log('좋아요 실패');
+	}
+};
+
+onMounted(() => {
+	detailPost.value = props.post;
+});
 </script>

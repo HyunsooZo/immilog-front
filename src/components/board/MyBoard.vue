@@ -29,7 +29,6 @@ import { onMounted, ref } from 'vue';
 import BoardContent from '@/components/board/BoardContent.vue';
 import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
-import { modalCloseClass } from '@/utils/date-time.js';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -65,6 +64,14 @@ const fetchBookmarkList = async () => {
 
 //모달 닫는 에밋 (false 넘김)
 const emits = defineEmits(['close']);
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
+};
 
 const closeModal = () => {
 	emits('close');

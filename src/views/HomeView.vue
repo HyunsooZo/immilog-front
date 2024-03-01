@@ -102,7 +102,6 @@ import BoardContent from '@/components/board/BoardContent.vue';
 import useAxios from '@/composables/useAxios.js';
 import PostModal from '@/components/board/PostModal.vue';
 import NoContent from '@/components/board/NoContent.vue';
-import { modalOpenClass, modalCloseClass } from '@/utils/date-time';
 import { useRouter } from 'vue-router';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
@@ -111,6 +110,14 @@ import { sortingList, categoryList } from '@/utils/selectItems.js';
 
 const router = useRouter();
 const { sendRequest } = useAxios(router);
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
+};
 
 // 스크롤 관련 상태 및 이벤트 핸들러
 const isStickyWrap = ref(false);

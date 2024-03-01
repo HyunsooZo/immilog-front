@@ -267,7 +267,7 @@
 											userSeq,
 										),
 								}"
-								@click="likeReply(reply.seq, index, replyIndex)"
+								@click="likeReply(index, replyIndex)"
 							>
 								<!-- //활성화 .active -->
 								<i class="blind">좋아요</i>
@@ -331,14 +331,18 @@ import NoContent from '@/components/board/NoContent.vue';
 import ReplyModal from '@/components/comment/ReplyModal.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
-import {
-	timeCalculation,
-	modalOpenClass,
-	modalCloseClass,
-} from '@/utils/date-time.js';
+import { timeCalculation } from '@/utils/date-time.js';
 import { likeApi } from '@/services/post.js';
 import { writeReply, lastReply } from '@/utils/icons';
 import { extractAtWordAndRest } from '@/utils/comment.js';
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
+};
 
 const isAuthor = userSeq => {
 	return userSeq === post.value.userSeq;
@@ -391,7 +395,7 @@ const closeCommentWrite = () => {
 	modalCloseClass();
 	setTimeout(() => {
 		detailBoard();
-	}, 1500);
+	}, 500);
 };
 const postSeq = route.params.postId;
 
@@ -475,7 +479,7 @@ const likeComment = async (seq, index) => {
 	}
 };
 
-const likeReply = async (seq, index, replyIndex) => {
+const likeReply = async (index, replyIndex) => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
 	if (
 		updatedPost.comments[index].replies[replyIndex].likeUsers.includes(

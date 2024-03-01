@@ -29,12 +29,4 @@ const timeCalculation = localTime => {
 	});
 };
 
-// modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
-	document.body.classList.add('inactive');
-};
-const modalCloseClass = () => {
-	document.body.classList.remove('inactive');
-};
-
-export { timeCalculation, modalOpenClass, modalCloseClass };
+export { timeCalculation };

@@ -97,11 +97,18 @@ import useAxios from '@/composables/useAxios.js';
 import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/board/BoardContent.vue';
 import { useUserInfoStore } from '@/stores/userInfo.js';
-import { modalOpenClass, modalCloseClass } from '@/utils/date-time';
 import { useRouter } from 'vue-router';
 import { postBtn } from '@/utils/icons.js';
 
 const router = useRouter();
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
+};
 
 // 스크롤 :상단고정영역, 글쓰기버튼
 const isStickyWrap = ref(false);
