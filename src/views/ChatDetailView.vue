@@ -84,13 +84,13 @@
 											<p class="text">{{ chat.content }}</p>
 										</div>
 										<div class="item__fnc">
-											<p
-												class="list__item past"
-												v-if="amISender(chat.sender.seq)"
-											>
+											<p class="list__item past">
 												<i class="blind">{{ chat.createdAt }}</i>
 
-												<span class="item__count">
+												<span
+													class="item__count"
+													v-if="amISender(chat.sender.seq)"
+												>
 													{{ chat.readStatus ? '읽음  ' : '안 읽음  ' }}</span
 												>
 												<span class="item__count">
