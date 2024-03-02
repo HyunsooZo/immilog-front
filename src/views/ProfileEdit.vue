@@ -1,4 +1,5 @@
 <template>
+	<LoadingModal v-if="isLoading" />
 	<TheHeader />
 	<div class="content">
 		<TheTopBox
@@ -103,22 +104,274 @@
 								class="input__element"
 								placeholder="지역"
 								value="대한민국"
+								disabled
 							/>
 						</div>
 					</div>
+					<button
+						type="button"
+						class="button button--primary"
+						@click="fetchLocation"
+					>
+						위치가져오기
+					</button>
 				</div>
 			</div>
 
 			<div class="button-wrap">
-				<button class="button button--disabled" role="link">저장</button
-				><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
+				<button
+					class="button"
+					role="link"
+					:class="{
+						'button--positive':
+							nickNameCheckDone && isNickNameValid && country && userNickName,
+						'button--disabled':
+							!nickNameCheckDone ||
+							!isNickNameValid ||
+							!country ||
+							!userNickName,
+					}"
+					@click="saveProfile"
+				>
+					저장
+				</button>
 			</div>
 		</div>
 	</div>
+	<teleport to="#modal" v-if="alertValue">
+		<CustomAlert
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
+		/>
+	</teleport>
 </template>
 
 <script setup>
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
-import { profilePicSelectIcon } from '@/utils/icons';
+import { profilePicSelectIcon } from '@/utils/icons.js';
+import { useUserInfoStore } from '@/stores/userInfo.js';
+import { useLocationStore } from '@/stores/location';
+import { onMounted, ref } from 'vue';
+import useAxios from '@/composables/useAxios.js';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
+import router from '@/router';
+
+const { sendRequest } = useAxios();
+const nickNameCheckDone = ref(true);
+const isNickNameValid = ref(true);
+const userInfo = useUserInfoStore();
+const userNickName = ref();
+const country = ref();
+const imagePreview = ref();
+const imageFile = ref(null);
+const latitude = ref(0.0);
+const longitude = ref(0.0);
+const isLoading = ref(false);
+
+// 프리뷰 이미지
+const previewImage = event => {
+	const input = event.target;
+	if (input.files && input.files[0]) {
+		const reader = new FileReader();
+		reader.onload = e => {
+			imagePreview.value = e.target.result;
+			imageFile.value = input.files[0];
+		};
+		reader.readAsDataURL(input.files[0]);
+	}
+};
+
+// 프리뷰이미지 삭제
+const removeImage = () => {
+	// 비어있는 이미지로 설정
+	imagePreview.value = '';
+	// input 엘리먼트의 값을 비워줌
+	const input = document.getElementById('file-upload');
+	if (input) {
+		input.value = '';
+	}
+};
+
+// 닉네임 중복 체크
+const checkNickName = async () => {
+	if (userNickName.value == userInfo.userNickname) {
+		isNickNameValid.value = true;
+		nickNameCheckDone.value = true;
+		return;
+	}
+	try {
+		const { status, data } = await sendRequest(
+			'get',
+			`/users/nicknames?nickname=${userNickName.value}`,
+			{
+				headers: {
+					contentType: 'multipart/form-data',
+				},
+			},
+			null,
+		);
+		if (status === 200) {
+			isNickNameValid.value = data.data ? true : false;
+			nickNameCheckDone.value = true;
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const hostImage = async () => {
+	if (!imagePreview.value || !imageFile.value) {
+		return;
+	}
+	try {
+		const formData = new FormData();
+		formData.append('multipartFile', imageFile.value);
+		const { status, data } = await sendRequest(
+			'post',
+			'/images?imagePath=profile',
+			{
+				headers: {
+					contentType: 'multipart/form-data',
+				},
+			},
+			formData,
+		);
+		if (status === 200) {
+			imagePreview.value = data.data;
+		} else {
+			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const saveProfile = async () => {
+	await hostImage();
+	const formData = {
+		nickName:
+			userNickName.value === userInfo.userNickname ? null : userNickName.value,
+		country: country.value === userInfo.userCountry ? null : country.value,
+		profileImage:
+			imagePreview.value === userInfo.userProfile
+				? null
+				: imagePreview.value[0],
+		latitude: latitude.value,
+		longitude: longitude.value,
+	};
+	try {
+		const { status } = await sendRequest(
+			'patch',
+			'/users/information',
+			{
+				headers: {
+					contentType: 'json/application',
+					Authorization: `Bearer ${userInfo.accessToken}`,
+				},
+			},
+			formData,
+		);
+		if (status === 200) {
+			userInfo.userNickname = userNickName.value;
+			userInfo.userCountry = country.value;
+			userInfo.userProfile = imagePreview.value;
+			router.back();
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const alertValue = ref(false);
+const alertText = ref('');
+
+const openAlert = content => {
+	alertValue.value = true;
+	alertText.value = content;
+};
+
+const options = {
+	enableHighAccuracy: true,
+	timeout: 10000,
+	maximumAge: 0,
+};
+
+const errorCallback = error => {
+	console.error(`ERROR(${error.code}): ${error.message}`);
+};
+
+const fetchLocation = async () => {
+	try {
+		isLoading.value = true;
+		if ('geolocation' in navigator) {
+			const permissionResult = await navigator.permissions.query({
+				name: 'geolocation',
+			});
+			if (permissionResult.state === 'granted') {
+				navigator.geolocation.getCurrentPosition(
+					position => {
+						getCountry(position.coords.latitude, position.coords.longitude);
+						useLocationStore().setLocation(
+							position.coords.latitude,
+							position.coords.longitude,
+						);
+						isLoading.value = false;
+					},
+					errorCallback,
+					options,
+				);
+			} else if (permissionResult.state === 'prompt') {
+				const position = await new Promise((resolve, reject) => {
+					navigator.geolocation.getCurrentPosition(resolve, reject, options);
+				});
+				getCountry(position.coords.latitude, position.coords.longitude);
+				isLoading.value = false;
+			} else if (permissionResult.state === 'denied') {
+				console.error('Geolocation permission denied.');
+				isLoading.value = false;
+			}
+		}
+	} catch (error) {
+		console.error('Failed to get location:', error);
+		isLoading.value = false;
+	}
+};
+
+const setCountryCoordinates = async (lat, long) => {
+	latitude.value = lat;
+	longitude.value = long;
+};
+
+const getCountry = async (latitude, longitude) => {
+	setCountryCoordinates(latitude, longitude);
+	try {
+		const { status, data } = await sendRequest(
+			'get',
+			`/locations?latitude=${latitude}&longitude=${longitude}`,
+			{
+				headers: {
+					contentType: 'multipart/form-data',
+				},
+			},
+			null,
+		);
+		if (status === 200) {
+			country.value = data.data.country;
+		} else {
+			openAlert(
+				'지역정보를 가져오는데 실패했습니다. 위치권한 설정을 확인해주세요.',
+			);
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+onMounted(() => {
+	userNickName.value = userInfo.userNickname;
+	country.value = userInfo.userCountry;
+	imagePreview.value = userInfo.userProfile;
+});
 </script>
