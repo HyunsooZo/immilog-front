@@ -71,9 +71,9 @@
 							:class="{
 								'pic--default':
 									(amISender(chatRoom.sender) &&
-										chatRoom.sender.profileImage === ' ') ||
+										chatRoom.recipient.profileImage === '') ||
 									(amISender(chatRoom.recipient) &&
-										chatRoom.recipient.profileImage === ' '),
+										chatRoom.sender.profileImage === ''),
 							}"
 						>
 							<img
@@ -85,9 +85,9 @@
 								alt=""
 								v-if="
 									(amISender(chatRoom.sender) &&
-										chatRoom.sender.profileImage !== ' ') ||
+										chatRoom.recipient.profileImage !== '') ||
 									(amISender(chatRoom.recipient) &&
-										chatRoom.recipient.profileImage !== ' ')
+										chatRoom.sender.profileImage !== '')
 								"
 							/>
 						</div>

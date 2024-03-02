@@ -325,7 +325,7 @@ onMounted(async () => {
 		}, 4000);
 	} else {
 		fetchBoardList('CREATED_DATE', 0);
-		window.addEventListener('scroll', handleScroll);
 	}
+	window.addEventListener('scroll', handleScroll);
 });
 </script>

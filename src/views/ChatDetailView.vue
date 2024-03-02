@@ -47,52 +47,60 @@
 					</div>
 					<!-- chat list -->
 					<div class="chat__content">
-						<ul class="chat__list" v-for="chat in chats" :key="chat.id">
-							<li
-								class="item__notice"
-								v-if="lastDate !== formDate(chat.createdAt)"
-							>
-								<span class="text">{{ getDateTime(chat.createdAt) }}</span>
-							</li>
-							<li
-								class="item"
-								aria-label="받은 메시지"
-								data-content-type="text"
-								:class="{
-									_my: amISender(chat.sender.seq),
-								}"
-							>
-								<!-- 사용자 정보 -->
-								<div class="info__wrap" v-if="!amISender(chat.sender.seq)">
-									<button
-										type="button"
-										class="item__pic"
-										:class="{
-											'pic--default': chat.sender.profileImage === '',
-										}"
-									>
-										<img
-											:src="chat.sender.profileImage"
-											alt=""
-											v-if="chat.sender.profileImage !== ''"
-										/></button
-									><!-- // 사용자 프로필 보기 -->
-								</div>
-								<div class="chat__message">
-									<div class="item__message">
-										<p class="text">{{ chat.content }}</p>
+						<ul class="chat__list">
+							<template v-for="chat in chats" :key="chat.id">
+								<li
+									class="item__notice"
+									v-if="lastDate !== formDate(chat.createdAt)"
+								>
+									<span class="text">{{ getDateTime(chat.createdAt) }}</span>
+								</li>
+								<li
+									class="item"
+									aria-label="받은 메시지"
+									data-content-type="text"
+									:class="{
+										_my: amISender(chat.sender.seq),
+									}"
+								>
+									<!-- 사용자 정보 -->
+									<div class="info__wrap" v-if="!amISender(chat.sender.seq)">
+										<button
+											type="button"
+											class="item__pic"
+											:class="{
+												'pic--default': chat.sender.profileImage === '',
+											}"
+										>
+											<img
+												:src="chat.sender.profileImage"
+												alt=""
+												v-if="chat.sender.profileImage !== ''"
+											/></button
+										><!-- // 사용자 프로필 보기 -->
 									</div>
-									<p>{{ chat.readStatus ? '' : '1' }}</p>
-									<div class="item__fnc">
-										<p class="list__item past">
-											<i class="blind">{{ chat.createdAt }}</i>
-											<span class="item__count">{{
-												formTime(chat.createdAt)
-											}}</span>
-										</p>
+									<div class="chat__message">
+										<div class="item__message">
+											<p class="text">{{ chat.content }}</p>
+										</div>
+										<div class="item__fnc">
+											<p
+												class="list__item past"
+												v-if="amISender(chat.sender.seq)"
+											>
+												<i class="blind">{{ chat.createdAt }}</i>
+
+												<span class="item__count">
+													{{ chat.readStatus ? '읽음  ' : '안 읽음  ' }}</span
+												>
+												<span class="item__count">
+													{{ formTime(chat.createdAt) }}</span
+												>
+											</p>
+										</div>
 									</div>
-								</div>
-							</li>
+								</li>
+							</template>
 						</ul>
 					</div>
 					<!-- chat write -->
