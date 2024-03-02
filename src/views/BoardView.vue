@@ -259,7 +259,7 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 			'get',
 			`/posts?country=${
 				userInfo.userCountry
-			}&category=${selectCategoryValue.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'Y'}&page=${nextPage}`,
+			}&category=${selectCategoryValue.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'N'}&page=${nextPage}`,
 			{
 				headers: {
 					contentType: 'multipart/application/json',
