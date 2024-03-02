@@ -154,10 +154,12 @@ import { profilePicSelectIcon } from '@/utils/icons.js';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import { useLocationStore } from '@/stores/location';
 import { onMounted, ref } from 'vue';
+import { resizeImage } from '@/utils/image.js';
 import useAxios from '@/composables/useAxios.js';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
-import router from '@/router';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const { sendRequest } = useAxios();
 const nickNameCheckDone = ref(true);
 const isNickNameValid = ref(true);
@@ -227,7 +229,8 @@ const hostImage = async () => {
 	}
 	try {
 		const formData = new FormData();
-		formData.append('multipartFile', imageFile.value);
+		const resizedImage = await resizeImage(imageFile.value, 0.5);
+		formData.append('multipartFile', resizedImage);
 		const { status, data } = await sendRequest(
 			'post',
 			'/images?imagePath=profile',

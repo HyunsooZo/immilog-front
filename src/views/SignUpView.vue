@@ -208,6 +208,7 @@ import { useLocationStore } from '@/stores/location';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import { useRouter } from 'vue-router';
 import { profilePicSelectIcon } from '@/utils/icons';
+import { resizeImage } from '@/utils/image';
 
 const imagePreview = ref('');
 const emailRegister = ref('');
@@ -275,7 +276,8 @@ const hostImage = async () => {
 	}
 	try {
 		const formData = new FormData();
-		formData.append('multipartFile', imageFile.value);
+		const resizedImage = await resizeImage(imageFile.value, 0.5);
+		formData.append('multipartFile', resizedImage);
 		const { status, data } = await sendRequest(
 			'post',
 			'/images?imagePath=profile',
