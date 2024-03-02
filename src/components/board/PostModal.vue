@@ -281,7 +281,6 @@ const title = ref('');
 
 // content 변수 및 watch
 const content = ref('');
-watch(content, adjustTextareaHeight);
 
 // 텍스트 영역 조정 함수
 const adjustTextarea = ref(null);
@@ -291,6 +290,7 @@ const adjustTextareaHeight = () => {
 	textarea.style.height = `${textarea.scrollHeight}px`;
 };
 
+watch(content, adjustTextareaHeight);
 // 이미지 관련 변수
 const isImageUploaded = computed(() => imagePreview.value.length > 0);
 const imageFile = ref([]);
