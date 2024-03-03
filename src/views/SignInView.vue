@@ -206,7 +206,7 @@ const offLoading = () => {
 };
 
 onMounted(async () => {
-	if (userInfo.accessToken) {
+	if (localStorage.getItem('accessToken')) {
 		router.push({ name: 'Home' });
 	}
 });
