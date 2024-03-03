@@ -34,6 +34,7 @@ const useAxios = router => {
 						response.data.data.userNickname,
 						response.data.data.userEmail,
 						response.data.data.userCountry,
+						response.data.data.userRegion,
 						response.data.data.userProfile,
 						response.data.data.isLocationMatch,
 					);

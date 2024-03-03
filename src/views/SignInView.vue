@@ -162,6 +162,7 @@ const signIn = async () => {
 				data.data.nickname,
 				data.data.email,
 				data.data.country,
+				data.data.region,
 				data.data.userProfileUrl,
 				data.data.isLocationMatch,
 			);

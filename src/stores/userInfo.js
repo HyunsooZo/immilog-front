@@ -9,6 +9,7 @@ export const useUserInfoStore = defineStore({
 		userNickname: null,
 		userEmail: null,
 		userCountry: null,
+		userRegion: null,
 		userProfile: null,
 		isLocationMatch: false,
 	}),
@@ -20,6 +21,7 @@ export const useUserInfoStore = defineStore({
 			nickname,
 			email,
 			country,
+			region,
 			userProfile,
 			isLocationMatch,
 		) {
@@ -29,6 +31,7 @@ export const useUserInfoStore = defineStore({
 			this.userNickname = nickname;
 			this.userEmail = email;
 			this.userCountry = country;
+			this.userRegion = region;
 			this.userProfile = userProfile;
 			this.isLocationMatch = isLocationMatch;
 		},
@@ -39,6 +42,7 @@ export const useUserInfoStore = defineStore({
 			this.userNickname = null;
 			this.userEmail = null;
 			this.userCountry = null;
+			this.userRegion = null;
 			this.userProfile = null;
 			this.isLocationMatch = false;
 		},

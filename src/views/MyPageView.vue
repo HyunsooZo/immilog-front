@@ -23,7 +23,7 @@
 					>
 						<div class="list__item">
 							<em>{{ userInfo.userCountry }}</em>
-							<em>{{ userInfo.userCountry }}</em>
+							<em>{{ userInfo.userRegion }}</em>
 						</div>
 						<div class="list__item user button-text">
 							<strong>{{ userInfo.userNickname }}</strong>
