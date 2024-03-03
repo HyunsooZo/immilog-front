@@ -29,6 +29,7 @@
 					<p class="title">{{ post.title }}</p>
 					<p class="text">{{ post.content }}</p>
 				</div>
+				<span v-if="post.isPublic === 'N'">비밀글표시</span>
 				<div class="thumb" v-if="post.attachments.length > 0">
 					<img :src="thumbnail" alt="" />
 				</div>
