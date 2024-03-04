@@ -37,12 +37,12 @@
 				</div>
 				<!-- 검색결과 -->
 				<div class="search-result-wrap">
-					<ul class="search-result">
-						<li
-							v-for="(item, index) in filteredSearchHistory.slice(0, 20)"
-							:key="'history-' + index"
-							class="item"
-						>
+					<ul
+						class="search-result"
+						v-for="(item, index) in filteredSearchHistory.slice(0, 20)"
+						:key="'history-' + index"
+					>
+						<li class="item">
 							<button
 								type="button"
 								class="button button--result-recently"
@@ -73,6 +73,13 @@
 							</button>
 						</li>
 					</ul>
+					<div class="list-wrap">
+						<SearchResult
+							v-for="(item, index) in state.posts"
+							:key="index"
+							:post="item"
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -85,6 +92,7 @@ import { onMounted, ref, computed } from 'vue';
 import useAxios from '@/composables/useAxios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
+import SearchResult from '../board/SearchResult.vue';
 const router = useRouter();
 
 const { sendRequest } = useAxios(router);
@@ -95,6 +103,12 @@ const searchResult = ref([]);
 const searchApiCalled = ref(false);
 const isLoading = ref(false);
 const page = ref(0);
+
+const state = ref({
+	posts: [],
+	pagination: {},
+	loading: false,
+});
 
 const emits = defineEmits(['update:searchModalValue']);
 
@@ -126,7 +140,8 @@ const callSearchApi = async () => {
 			null,
 		);
 		if (status === 200) {
-			searchResult.value = data.data;
+			state.value.posts = data.data.content;
+			state.value.pagination = data.data.pagination;
 			setTimeout(() => {
 				offLoading();
 			}, 1500);

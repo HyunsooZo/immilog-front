@@ -69,9 +69,6 @@ const closeSearchModal = () => {
 	modalCloseClass();
 };
 
-const onHome = () => {
-	router.push('/');
-};
 </script>
 
 <style lang="scss" scoped></style>
