@@ -264,6 +264,9 @@ const connectWebSocket = () => {
 			chats.value.push(newMessage);
 			nextTick(() => {
 				scrollToBottom();
+				if (!amISender(newMessage.sender.seq)) {
+					markMessageAsRead(newMessage.id);
+				}
 			});
 		});
 		// 메시지 읽음 상태 업데이트 구독
@@ -365,23 +368,34 @@ const sendMessage = () => {
 };
 
 // 채팅방에 들어갔을 때 '읽음' 상태를 서버에 보내는 함수
-const markMessagesAsRead = () => {
-	// 모든 메시지를 '읽음'으로 표시
-	chats.value.forEach(chat => {
-		if (!amISender(chat.sender.seq) && !chat.isRead) {
-			// 읽음 상태를 서버에 보내기
-			stompClient.send(
-				'/app/chat/read',
-				{},
-				JSON.stringify({
-					chatSeq: chat.id,
-					userSeq: userInfo.userSeq,
-				}),
-			);
-			// 프론트엔드에서 상태 업데이트
-			chat.isRead = true;
-		}
-	});
+const markMessagesAsRead = id => {
+	if (id) {
+		stompClient.send(
+			'/app/chat/read',
+			{},
+			JSON.stringify({
+				chatSeq: id,
+				userSeq: userInfo.userSeq,
+			}),
+		);
+	} else {
+		// 모든 메시지를 '읽음'으로 표시
+		chats.value.forEach(chat => {
+			if (!amISender(chat.sender.seq) && !chat.isRead) {
+				// 읽음 상태를 서버에 보내기
+				stompClient.send(
+					'/app/chat/read',
+					{},
+					JSON.stringify({
+						chatSeq: chat.id,
+						userSeq: userInfo.userSeq,
+					}),
+				);
+				// 프론트엔드에서 상태 업데이트
+				chat.isRead = true;
+			}
+		});
+	}
 };
 
 // 스크롤을 맨 아래로 내리는 함수
