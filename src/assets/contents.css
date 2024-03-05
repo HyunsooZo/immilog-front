@@ -1408,6 +1408,9 @@ color: #ed1651;
     height: 1.6rem;
 }
 /* 프로필 수정 */
+.input__attachments._edit {
+    padding: 0 0 1rem;
+}
 .input__attachments._edit .input__item {
     display: flex;
     justify-content: center;
@@ -1425,8 +1428,8 @@ color: #ed1651;
 .input__attachments._edit .input__file {
     position: absolute;
     top: 0;
-    width: 9rem;
-    height: 9rem;
+    width: 10rem;
+    height: 10rem;
     z-index: 1;
 }
 .input__attachments._edit .item__display {
@@ -1434,13 +1437,13 @@ color: #ed1651;
     text-align: center;
 }
 .input__attachments._edit .item__display img {
-    width: 9rem;
-    height: 9rem;
+    width: 10rem;
+    height: 10rem;
 }
 .input__attachments._edit .item__display .button--del {
-    right: calc(50% - 4.5rem);
-    width: 2rem;
-    height: 2rem;
+    right: calc(50% - 5rem);
+    width: 2.2rem;
+    height: 2.2rem;
     z-index: 1;
 }
 
