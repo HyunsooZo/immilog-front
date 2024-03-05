@@ -266,6 +266,20 @@ const connectWebSocket = () => {
 				scrollToBottom();
 			});
 		});
+		// 메시지 읽음 상태 업데이트 구독
+		stompClient.subscribe(`/topic/readChat`, message => {
+			const readChatInfo = JSON.parse(message.body);
+			updateReadStatus(readChatInfo);
+		});
+	});
+};
+
+// 메시지 읽음 상태를 업데이트하는 함수
+const updateReadStatus = readChatInfo => {
+	chats.value.forEach(chat => {
+		if (chat.id === readChatInfo.chatSeq) {
+			chat.isRead = true;
+		}
 	});
 };
 
