@@ -24,6 +24,8 @@ onMounted(async () => {
 			localStorage.getItem('longitude'),
 		);
 		if (status === 200 || status === 201) {
+			localStorage.setItem('accessToken', data.data.accessToken);
+			localStorage.setItem('refreshToken', data.data.refreshToken);
 			useUserInfoStore().setUserInfo(
 				data.data.userSeq,
 				data.data.accessToken,
