@@ -209,6 +209,6 @@ const changeBookmark = () => {
 const highlightKeyword = (text, keyword) => {
 	if (!keyword) return text;
 	const regex = new RegExp(`(${keyword})`, 'gi');
-	return text.replace(regex, '<strong>$1</strong>');
+	return text.replace(regex, '<strong class="highlight"><span>$1</span></strong>');
 };
 </script>

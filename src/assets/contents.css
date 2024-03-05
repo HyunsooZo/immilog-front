@@ -74,9 +74,9 @@ strong + .button-text {
     background-size: 100%;
     vertical-align: -1px;
 }
-.button-text strong {
+/* .button-text strong {
     font-weight: 500;
-}
+} */
 [class*=button-icon] {
     position: relative;
     display: inline-block;
@@ -489,7 +489,7 @@ strong + .button-text {
     margin:0;
     padding:2rem 1.5rem calc(2rem + constant(safe-area-inset-bottom));
     padding:2rem 1.5rem calc(2rem + env(safe-area-inset-bottom));
-    background: linear-gradient(0deg, rgba(246,246,246,1) 90%, rgba(246,246,246,0) 100%);
+    background: linear-gradient(0deg, rgb(246 246 246 / 1) 90%, rgb(246 246 246 / 0) 100%);
 }
 .footer > .button-wrap .button {
     margin: 0 .5rem;
@@ -873,7 +873,7 @@ strong + .button-text {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, .35);
+    background: rgb(0 0 0 / .35);
 }
 .modal-content {
     position: absolute;
@@ -1117,7 +1117,7 @@ strong + .button-text {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, .35);
+    background: rgb(0 0 0 / .35);
 }
 .sidemenu-wrap .sidemenu__inner {
     display: flex;
@@ -1388,23 +1388,60 @@ color: #ed1651;
 }
 .input__attachments .item__display {
     position: relative;
-    margin-left: 1.5rem;
+    margin: -1rem 0 -1rem 1.5rem;
 }
 .input__attachments .item__display img {
-    width: 3.4rem;
-    height: 3.4rem;
+    width: 4.4rem;
+    height: 4.4rem;
     border: 1px solid #e9e9e9;
     border-radius: 50%;
     vertical-align: top;
     object-fit: cover;
 }
 .input__attachments .item__display .button--del {
-    position: relative;
-    width: 1.8rem;
-    height: 1.8rem;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    top: inherit;
+    bottom: 0;
+    right: calc(50% - 2.2rem);
+    width: 1.6rem;
+    height: 1.6rem;
 }
-.input__attachments .item__display img + .button--del {
-    display: inline-block;
+/* 프로필 수정 */
+.input__attachments._edit .input__item {
+    display: flex;
+    justify-content: center;
+}
+.input__attachments._edit .input__item_inner {
+    display: inline-flex;
+    padding: 0;
+}
+.input__attachments._edit .input__file .button,
+.input__attachments._edit .input__file .button span {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+.input__attachments._edit .input__file {
+    position: absolute;
+    top: 0;
+    width: 9rem;
+    height: 9rem;
+    z-index: 1;
+}
+.input__attachments._edit .item__display {
+    margin: 0;
+    text-align: center;
+}
+.input__attachments._edit .item__display img {
+    width: 9rem;
+    height: 9rem;
+}
+.input__attachments._edit .item__display .button--del {
+    right: calc(50% - 4.5rem);
+    width: 2rem;
+    height: 2rem;
+    z-index: 1;
 }
 
 .signin-group-wrap {
@@ -1529,11 +1566,11 @@ color: #ed1651;
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgb(0 0 0 / 0.5);
 }
 .button--post._sticky svg {
     position: relative;
-    fill: rgb(255, 255, 255);
+    fill: rgb(255 255 255 / 1);
     z-index: 1;
 }
 /* 목록 상단타이틀 */
@@ -1556,6 +1593,26 @@ color: #ed1651;
 /* 목록 */
 .list-wrap {
     position: relative;
+}
+.list-wrap .item .highlight {
+    position: relative;
+}
+.list-wrap .item .highlight::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 3px;
+    width: 100%;
+    height: 40%;
+    background: rgb(250 250 136 / .8);
+    z-index: 0;
+}
+.list-wrap .item .tag__wrap .highlight::after {
+    background: rgb(250 250 136 / 1);
+}
+.list-wrap .item .highlight span {
+    position: relative;
+    z-index: 1;
 }
 .list-wrap .item {
     position: relative;
@@ -2086,7 +2143,7 @@ color: #ed1651;
     width: 2rem;
     height: 2rem;
     border-radius: .2rem;
-    background-color: rgba(51, 51, 51, .8);
+    background-color: rgb(51 51 51 / .7);
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(255 255 255)' xmlns='http://www.w3.org/2000/svg'><path d='M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z'/></svg>");
     background-repeat: no-repeat;
     background-position: 50% center;
@@ -2278,7 +2335,7 @@ color: #ed1651;
     background: linear-gradient(0deg, #00bcd4, #3f51b5);
 }
 .splash.color--bg_dark {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgb(0 0 0 / 0.5);
 }
 
 .splash .svg--logo {
@@ -2287,31 +2344,31 @@ color: #ed1651;
     font: 500 4rem / 4rem 'LeckerliOne';
     animation: textStroke 2s linear infinite;
     animation-fill-mode: forwards;
-    fill: rgba(63, 81, 181, 1);
+    fill: rgb(63 81 181 / 1);
 }
 @keyframes textStroke {
   0% {
     stroke-dashoffset: 0%;
     stroke-dasharray: 0 50%;
-    fill: rgba(63, 81, 181, 0);
-    stroke: rgba(63, 81, 181, 1);
+    fill: rgb(63 81 181 / 0);
+    stroke: rgb(63 81 181 / 1);
     stroke-width: 2;
   }
   33% {
-    fill: rgba(63, 81, 181, 0);
-    stroke: rgba(63, 81, 181, 1);
+    fill: rgb(63 81 181 / 0);
+    stroke: rgb(63 81 181 / 1);
   }
   66% {
     stroke-dashoffset: -0%;
     stroke-dasharray: 50% 0;
-    fill: rgba(63, 81, 181, 1);
-    stroke: rgba(63, 81, 181, 0);
+    fill: rgb(63 81 181 / 1);
+    stroke: rgb(63 81 181 / 0);
     stroke-width: 0;
   }
 }
 .splash[class*=color--bg] .svg--logo {
     animation-name: textStrokeBg;
-    fill: rgba(255, 255, 255, 1);
+    fill: rgb(255 255 255 / 1);
 }
 @keyframes textStrokeBg {
   0% {
