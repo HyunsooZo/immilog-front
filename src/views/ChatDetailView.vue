@@ -91,9 +91,7 @@
 													class="item__count"
 													v-if="amISender(chat.sender.seq)"
 												>
-													{{
-														isChatRead(chat.id) ? '읽음  ' : '안 읽음  '
-													}}</span
+													{{ isRead(chat.id) ? '읽음  ' : '안 읽음  ' }}</span
 												>
 												<span class="item__count">
 													{{ formTime(chat.createdAt) }}</span
@@ -283,16 +281,14 @@ const connectWebSocket = () => {
 const updateReadStatus = readChatInfo => {
 	chats.value.forEach(chat => {
 		if (chat.id === readChatInfo.chatSeq) {
-			chat.isRead = true;
+			chat.readStatus = true;
 		}
 	});
 };
 
-const isChatRead = id => {
-	const chat = chats.value.find(c => c.id === id);
-	return chat ? chat.isRead : false;
+const isRead = chatId => {
+	return chats.value.find(chat => chat.id === chatId).readStatus;
 };
-
 // 스크롤 이벤트 리스너를 추가하는 함수
 const setupScrollListener = () => {
 	const chatContainer = document.querySelector('.chat__content');
