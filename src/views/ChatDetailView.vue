@@ -279,7 +279,9 @@ const connectWebSocket = () => {
 
 // 메시지 읽음 상태를 업데이트하는 함수
 const updateReadStatus = readChatInfo => {
+	console.log('받았으:' + readChatInfo);
 	chats.value.forEach(chat => {
+		console.log('원본 :' + chat.id);
 		if (chat.id === readChatInfo.chatSeq) {
 			chat.isRead = true;
 		}
