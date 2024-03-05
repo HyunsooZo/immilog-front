@@ -9,6 +9,9 @@
 					<button type="button" class="list__item_button ctg">
 						<em>{{ post.country }}</em>
 						<strong>{{ post.category }}</strong>
+						<span v-if="post.isPublic === 'N'" class="list__private">
+							<i class="blind">내국가에만 공개 된 글</i>
+						</span>
 					</button>
 				</div>
 				<div class="list__item">
@@ -20,16 +23,11 @@
 			</div>
 		</div>
 		<div class="text__wrap">
-			<button
-				type="button"
-				class="list__item_button"
-				@click="onBoardDetail(post.seq)"
-			>
+			<button type="button" class="list__item_button" @click="onBoardDetail(post.seq)">
 				<div class="text__item">
 					<p class="title">{{ post.title }}</p>
 					<p class="text">{{ post.content }}</p>
 				</div>
-				<span v-if="post.isPublic === 'N'">비밀글표시</span>
 				<div class="thumb" v-if="post.attachments.length > 0">
 					<img :src="thumbnail" alt="" />
 				</div>
@@ -41,12 +39,7 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ post.viewCount }}</span>
 				</p>
-				<button
-					type="button"
-					class="list__item_button like"
-					:class="{ active: isLiked }"
-					@click="likeApi"
-				>
+				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likeApi">
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count"> {{ likes }}</span>
@@ -61,12 +54,7 @@
 					<i class="blind">작성시간</i>
 					<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
 				</p>
-				<button
-					type="button"
-					class="list__item_button mark"
-					:class="{ active: isBookmarked }"
-					@click="bookmarkApi"
-				>
+				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
