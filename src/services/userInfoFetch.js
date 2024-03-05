@@ -30,12 +30,15 @@ export const getUserInfo = async (latitude, longitude) => {
 	} catch (error) {
 		// 에러 처리
 		console.error('Error:', error);
-		if (error.response && [401, 403, 404].includes(error.response.status)) {
+		if (error.response && [401, 403].includes(error.response.status)) {
 			// 토큰 갱신 시도
 			const refreshResult = await refreshAccessToken();
 			if (refreshResult && refreshResult.status === 200) {
 				// 재시도
 				return getUserInfo(latitude, longitude);
+			} else {
+				localStorage.removeItem('accessToken');
+				return { status: 401, error: 'Unauthorized' };
 			}
 		}
 		// 기타 에러 반환
