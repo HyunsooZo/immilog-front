@@ -265,7 +265,7 @@ const connectWebSocket = () => {
 			nextTick(() => {
 				scrollToBottom();
 				if (!amISender(newMessage.sender.seq)) {
-					markMessageAsRead(newMessage.id);
+					markMessagesAsRead(newMessage.id);
 				}
 			});
 		});
