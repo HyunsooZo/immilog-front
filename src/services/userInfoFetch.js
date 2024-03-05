@@ -40,6 +40,8 @@ export const getUserInfo = async (latitude, longitude) => {
 				localStorage.removeItem('accessToken');
 				return { status: 401, error: 'Unauthorized' };
 			}
+		} else {
+			localStorage.removeItem('accessToken');
 		}
 		// 기타 에러 반환
 		return {

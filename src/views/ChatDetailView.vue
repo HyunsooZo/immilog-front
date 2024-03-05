@@ -91,7 +91,9 @@
 													class="item__count"
 													v-if="amISender(chat.sender.seq)"
 												>
-													{{ chat.readStatus ? '읽음  ' : '안 읽음  ' }}</span
+													{{
+														isChatRead(chat.id) ? '읽음  ' : '안 읽음  '
+													}}</span
 												>
 												<span class="item__count">
 													{{ formTime(chat.createdAt) }}</span
@@ -284,6 +286,11 @@ const updateReadStatus = readChatInfo => {
 			chat.isRead = true;
 		}
 	});
+};
+
+const isChatRead = id => {
+	const chat = chats.value.find(c => c.id === id);
+	return chat ? chat.isRead : false;
 };
 
 // 스크롤 이벤트 리스너를 추가하는 함수
