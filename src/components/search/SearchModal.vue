@@ -10,7 +10,7 @@
 							<div class="input__inner-item">
 								<input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
 									placeholder="검색어를 입력 후 엔터를 눌러주세요" autocomplete="off" @keyup.enter="callSearchApi" />
-								<button v-if="searchInput !== ''" type="button" class="input__button-remove" title="텍스트삭제"
+								<button v-if="searchInput !== ''" type="reset" class="input__button-remove" title="텍스트삭제"
 									@click="initializeSearchInput"></button>
 							</div>
 							<button class="button button--close" role="link" @click="closeSearchModal">
