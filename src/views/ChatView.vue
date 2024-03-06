@@ -128,16 +128,30 @@
 							</p>
 						</div>
 					</div>
-				</button>
-				<div class="item__fnc">
-					<button type="button" class="list__item_button more">
-						<i class="blind">더보기</i
-						><!-- //신고, 나가기 -->
-					</button>
-					<div class="item__badge">
-						<span class="text">99<i>+</i></span>
+					<div class="item__fnc">
+						<button type="button" class="list__item_button more">
+							<i class="blind">더보기</i
+							><!-- //신고, 나가기 -->
+						</button>
+						<div
+							class="item__badge"
+							v-if="
+								(amISender(chatRoom.sender) &&
+									chatRoom.unreadCountForRecipient > 0) ||
+								(!amISender(chatRoom.sender) &&
+									chatRoom.unreadCountForSender > 0)
+							"
+						>
+							<span class="text">
+								{{
+									amISender(chatRoom.sender)
+										? chatRoom.unreadCountForRecipient
+										: chatRoom.unreadCountForSender
+								}}
+							</span>
+						</div>
 					</div>
-				</div>
+				</button>
 			</div>
 			<!-- // .item -->
 		</div>
@@ -152,10 +166,15 @@ import useAxios from '@/composables/useAxios';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import { timeCalculation } from '@/utils/date-time.js';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 
+const server = import.meta.env.VITE_APP_API_URL.replace('/api/v1', '');
 const userInfo = useUserInfoStore();
 const router = useRouter();
 const { sendRequest } = useAxios(router);
+const socket = new SockJS(server + '/ws');
+const stompClient = Stomp.over(socket);
 
 // 채팅 목록 및 상세보기 관련 상태
 const isSearchOpen = ref(false);
@@ -214,11 +233,35 @@ const amISender = sender => {
 	return sender.seq === userSeq;
 };
 
+const updateChatRoomList = updateChatRoom => {
+	const index = chatRooms.value.findIndex(
+		room => room.id === updateChatRoom.id,
+	);
+	if (index !== -1) {
+		chatRooms.value.splice(index, 1);
+	}
+	chatRooms.value.unshift(updateChatRoom);
+};
+
+// 웹소켓 연결 및 구독 설정
+const connectWebSocket = () => {
+	stompClient.connect({}, () => {
+		// 채팅방 상태 업데이트 등록
+		stompClient.subscribe(
+			`/topic/updateChatRoomList/${userInfo.userSeq}`,
+			message => {
+				updateChatRoomList(JSON.parse(message.body));
+			},
+		);
+	});
+};
+
 // 컴포넌트 마운트 시 초기화 및 채팅목록 불러오기
 onMounted(async () => {
 	if (localStorage.getItem('accessToken') === null) {
 		router.push('/sign-in');
 	}
 	await fetchChatList();
+	connectWebSocket();
 });
 </script>
