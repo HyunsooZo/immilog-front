@@ -137,16 +137,16 @@
 							class="item__badge"
 							v-if="
 								(amISender(chatRoom.sender) &&
-									chatRoom.unreadCountForRecipient > 0) ||
+									chatRoom.unreadCountForSender > 0) ||
 								(!amISender(chatRoom.sender) &&
-									chatRoom.unreadCountForSender > 0)
+									chatRoom.unreadCountForRecipient > 0)
 							"
 						>
 							<span class="text">
 								{{
 									amISender(chatRoom.sender)
-										? chatRoom.unreadCountForRecipient
-										: chatRoom.unreadCountForSender
+										? chatRoom.unreadCountForSender
+										: chatRoom.unreadCountForRecipient
 								}}
 							</span>
 						</div>
