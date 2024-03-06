@@ -32,12 +32,7 @@
 								}"
 							>
 								<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
-								<button
-									v-if="imagePreview"
-									type="button"
-									class="button--del"
-									@click="removeImage"
-								>
+								<button type="button" class="button--del" @click="removeImage">
 									<i class="blind">삭제</i>
 								</button>
 							</div>
