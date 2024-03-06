@@ -241,7 +241,9 @@ const hostImage = async () => {
 };
 
 const saveProfile = async () => {
-	await hostImage();
+	if (imageFile.value) {
+		await hostImage();
+	}
 	const formData = {
 		nickName:
 			userNickName.value === userInfo.userNickname ? null : userNickName.value,
