@@ -2153,6 +2153,7 @@ color: #ed1651;
     position: relative;
     overflow: hidden;
     display: inline-block;
+    min-height: 2rem;
 }
 .attachments__wrap .attachments__item + .attachments__item {
     margin-top: 1.5rem;
