@@ -258,23 +258,23 @@ const fetchChats = async () => {
 
 // 웹소켓 연결 및 구독 설정
 const connectWebSocket = () => {
-	// stompClient.connect({}, () => {
-	stompClient.subscribe(`/topic/room/${chatRoomSeq.value}`, message => {
-		const newMessage = JSON.parse(message.body);
-		chats.value.push(newMessage);
-		nextTick(() => {
-			scrollToBottom();
-			if (!amISender(newMessage.sender.seq)) {
-				markMessagesAsRead(newMessage.id);
-			}
+	stompClient.connect({}, () => {
+		stompClient.subscribe(`/topic/room/${chatRoomSeq.value}`, message => {
+			const newMessage = JSON.parse(message.body);
+			chats.value.push(newMessage);
+			nextTick(() => {
+				scrollToBottom();
+				if (!amISender(newMessage.sender.seq)) {
+					markMessagesAsRead(newMessage.id);
+				}
+			});
+		});
+		// 메시지 읽음 상태 업데이트 구독
+		stompClient.subscribe(`/topic/readChat`, message => {
+			const readChatInfo = JSON.parse(message.body);
+			updateReadStatus(readChatInfo);
 		});
 	});
-	// 메시지 읽음 상태 업데이트 구독
-	stompClient.subscribe(`/topic/readChat`, message => {
-		const readChatInfo = JSON.parse(message.body);
-		updateReadStatus(readChatInfo);
-	});
-	// });
 };
 
 // 메시지 읽음 상태를 업데이트하는 함수
