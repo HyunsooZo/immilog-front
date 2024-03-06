@@ -178,11 +178,7 @@ const previewImage = event => {
 const removeImage = () => {
 	// 비어있는 이미지로 설정
 	imagePreview.value = '';
-	// input 엘리먼트의 값을 비워줌
-	// const input = document.getElementById('file-upload');
-	// if (input) {
-	// 	input.value = '';
-	// }
+	imageFile.value = null;
 };
 
 // 닉네임 중복 체크
