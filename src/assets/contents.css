@@ -1904,7 +1904,14 @@ color: #ed1651;
     flex-direction: column;
     margin-top: -1rem;
 }
-.list-wrap.chat .item > .item__fnc .item__badge {
+.list-wrap.chat .item > .list__item_button > .item__fnc {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: -1rem;
+    right: -2.4rem;
+}
+.list-wrap.chat .item .item__fnc .item__badge {
     display: inline-flex;
     align-items: center;
     justify-content:center;
@@ -1915,14 +1922,14 @@ color: #ed1651;
     background: #ed1651;
     border-radius: 1.8rem;
 }
-.list-wrap.chat .item > .item__fnc .item__badge .text {
+.list-wrap.chat .item .item__fnc .item__badge .text {
     display: inline-block;
     padding: 0 .2rem;
     line-height: 1.1rem;
     font-size: 1.1rem;
     color: #fff;
 }
-.list-wrap.chat .item > .item__fnc .item__badge .text i {
+.list-wrap.chat .item .item__fnc .item__badge .text i {
     font-size: 1rem;
 }
 /* 해시태그 */
