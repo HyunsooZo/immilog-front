@@ -3,11 +3,7 @@
 		<div class="sidemenu__inner">
 			<div class="sidemenu-header">
 				<div class="item__fnc">
-					<button
-						class="button-icon button--close"
-						role="link"
-						@click="closeModal"
-					>
+					<button class="button-icon button--close" role="link" @click="closeModal">
 						<i class="blind">취소</i>
 					</button>
 				</div>
@@ -17,12 +13,7 @@
 				<div class="list-wrap list--link">
 					<ul>
 						<li class="item">
-							<button
-								type="button"
-								class="button button-text"
-								role="link"
-								@click="onPicBoard"
-							>
+							<button type="button" class="button button-text" role="link" @click="onPicBoard">
 								<span>사진</span>
 							</button>
 							<div class="item__list">
@@ -36,12 +27,7 @@
 							</div>
 						</li>
 						<li class="item">
-							<button
-								type="button"
-								class="button button-text"
-								role="link"
-								@click="onLinkBoard"
-							>
+							<button type="button" class="button button-text" role="link" @click="onLinkBoard">
 								<span>링크</span>
 							</button>
 						</li>
@@ -49,6 +35,30 @@
 				</div>
 
 				<div class="title">대화상대</div>
+				<!-- <div class="list-wrap list--link">
+					<ul>
+						<li class="item">
+							<div class="info__wrap">
+								<div class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
+									<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
+								</div>
+								<div class="item__fnc">
+									<div class="list__item">
+										<button type="button" class="list__item_button ctg">
+											<em>{{ post.country }}</em>
+										</button>
+									</div>
+									<div class="list__item">
+										<button type="button" class="list__item_button user">
+											<em>{{ post.region }}</em>
+											<strong>{{ post.userNickName }}</strong>
+										</button>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div> -->
 			</div>
 			<div class="sidemenu-footer">
 				<div class="item__fnc">
@@ -76,6 +86,7 @@
 
 <script setup>
 import { quitIcon, settingIcon } from '@/utils/icons';
+
 //모달 닫는 에밋
 const emits = defineEmits(['close']);
 

@@ -977,16 +977,6 @@ strong + .button-text {
 .select--dialog .modal-body .list-wrap .item:last-child {
     border-bottom: none;
 }
-/* search dialog */
-.content._search {
-    height: 100vh;
-    background: #fff;
-}
-.content._search .search-wrap {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-}
 /* reply dialog */
 .reply--dialog .modal-content {
     top: auto;
@@ -1006,6 +996,16 @@ strong + .button-text {
 .reply--dialog .modal-body .text__area {
     min-height: 4rem;
     max-height: 15rem;
+}
+/* search */
+.content._search {
+    height: 100vh;
+    background: #fff;
+}
+.content._search .search-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 /* chat */
 .chat-wrap {
