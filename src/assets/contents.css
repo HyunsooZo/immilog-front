@@ -284,6 +284,7 @@ strong + .button-text {
 }
 .header .title {
     flex: 1;
+    font-weight: 500;
 }
 [class*=header] [class*=title] .header-logo {
     color: #333;
