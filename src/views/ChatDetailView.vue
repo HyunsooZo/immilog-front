@@ -54,6 +54,11 @@
 							</div>
 							<div class="chat__message">
 								<div class="item__wrap">
+									<div class="item__message">
+										<p class="text">{{ chat.content }}</p>
+									</div>
+								</div>
+								<div class="item__fnc">
 									<p class="list__item read" :class="{ active: isRead(chat.id) }">
 										<i class="blind">채팅 읽음 여부</i>
 										<span class="item__count" v-if="amISender(chat.sender.seq)">
@@ -63,15 +68,10 @@
 													d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
 											</svg>
 										</span>
-									</p>
-									<div class="item__message">
-										<p class="text">{{ chat.content }}</p>
-									</div>
-								</div>
-								<div class="item__fnc">
-									<p class="list__item past">
 										<!-- <span class="item__count" v-if="amISender(chat.sender.seq)">
 											{{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }}</span> -->
+									</p>
+									<p class="list__item past">
 										<i class="blind">채팅 전송시간</i>
 										<span class="item__count">
 											{{ formTime(chat.createdAt) }}</span>

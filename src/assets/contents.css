@@ -1064,7 +1064,6 @@ strong + .button-text {
 .chat-wrap .chat__list .item .item__message {
     display: inline-block;
     padding: .4rem;
-    /* max-width: calc(100% - 4.2rem - 1.6rem); */
     background: #fff;
     border: 1px solid #ccc;
     border-radius: .4rem;
@@ -1075,13 +1074,16 @@ strong + .button-text {
     font-size: 1.1rem;
 }
 .chat-wrap .chat__list .item._my .item__fnc {
+    margin: 0;
     text-align: right;
 }
 .chat-wrap .chat__list .list__item.read {
-    position: absolute;
+    /* position: absolute;
     bottom: 0;
-    left: -1.8rem;
+    left: -1.8rem; */
+    margin-right: -.6rem;
     font-size: 0;
+    vertical-align: -.4rem
 }
 .chat-wrap .chat__list .list__item.read .item__count {
     display: inline-block;
