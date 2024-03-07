@@ -1056,10 +1056,15 @@ strong + .button-text {
 .chat-wrap .chat__list .item .chat__message .text {
     text-align: left;
 }
-.chat-wrap .chat__list .item .item__message {
+.chat-wrap .chat__list .item .item__wrap {
+    position: relative;
     display: inline-block;
     max-width: calc(100% - 4.2rem);
+}
+.chat-wrap .chat__list .item .item__message {
+    display: inline-block;
     padding: .4rem;
+    /* max-width: calc(100% - 4.2rem - 1.6rem); */
     background: #fff;
     border: 1px solid #ccc;
     border-radius: .4rem;
@@ -1071,6 +1076,23 @@ strong + .button-text {
 }
 .chat-wrap .chat__list .item._my .item__fnc {
     text-align: right;
+}
+.chat-wrap .chat__list .list__item.read {
+    position: absolute;
+    bottom: 0;
+    left: -1.8rem;
+    font-size: 0;
+}
+.chat-wrap .chat__list .list__item.read .item__count {
+    display: inline-block;
+}
+.chat-wrap .chat__list .list__item.read svg {
+    width: 1.8rem;
+    height: 1.8rem;
+    fill: #00bcd4;
+}
+.chat-wrap .chat__list .list__item.read.active svg {
+    fill: #999;
 }
 .chat-wrap .chat__list .list__item {
     display: inline-block;
