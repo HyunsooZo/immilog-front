@@ -1063,14 +1063,13 @@ strong + .button-text {
 }
 .chat-wrap .chat__list .item .item__message {
     display: inline-block;
-    padding: .4rem;
+    padding: .5rem .4rem .4rem;
     background: #fff;
     border: 1px solid #ccc;
     border-radius: .4rem;
     white-space: pre-wrap;
 }
 .chat-wrap .chat__list .item._my .item__message {
-    font-weight: 300;
     color: #fff;
     background: #888;
     border-color: #888;
