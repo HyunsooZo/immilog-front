@@ -228,7 +228,7 @@ const fetchChats = async () => {
 		isLoading.value = true;
 		const { status, data } = await sendRequest(
 			'get',
-			`/chat/rooms/${chatRoomSeq.value}?page=${page.value + 1}`,
+			`/chat/rooms/${chatRoomSeq.value}?page=${page.value}`,
 			{
 				headers: {
 					contentType: 'application/json',
