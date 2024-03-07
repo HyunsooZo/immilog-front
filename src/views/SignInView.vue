@@ -131,7 +131,6 @@ const isValidLogin = computed(() => email.value && password.value);
 const isLoading = ref(false);
 const alertValue = ref(false);
 const alertText = ref('');
-const userInfo = useUserInfoStore();
 
 const onSignUp = () => {
 	router.push({ name: 'SignUp' });
