@@ -70,9 +70,9 @@
 								</div>
 								<div class="item__fnc">
 									<p class="list__item past">
+										<!-- <span class="item__count" v-if="amISender(chat.sender.seq)">
+											{{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }}</span> -->
 										<i class="blind">채팅 전송시간</i>
-										<span class="item__count" v-if="amISender(chat.sender.seq)">
-											{{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }}</span>
 										<span class="item__count">
 											{{ formTime(chat.createdAt) }}</span>
 									</p>
