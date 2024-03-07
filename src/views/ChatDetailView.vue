@@ -250,7 +250,7 @@ const fetchChats = async () => {
 			if (page.value == 0) {
 				scrollToBottom();
 			} else {
-				scrollToLower();
+				// scrollToLower();
 			}
 			setTimeout(() => {
 				isLoading.value = false;
@@ -410,7 +410,7 @@ const scrollToBottom = () => {
 	window.scrollTo(0, pageHeight);
 };
 
-const scrollToLower = () => {
-	window.scrollTo(0, window.innerHeight / 5);
-};
+// const scrollToLower = () => {
+// 	window.scrollTo(0, window.innerHeight / 5);
+// };
 </script>
