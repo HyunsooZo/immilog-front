@@ -217,7 +217,7 @@ const resetTextareaHeight = () => {
 
 // 채팅 내용을 담는 배열
 const chats = ref([]);
-
+const savedScrollPosition = ref(0);
 const isLoading = ref(false);
 // db에 저장된 채팅 내용을 가져오는 함수
 const fetchChats = async () => {
@@ -249,8 +249,6 @@ const fetchChats = async () => {
 		nextTick(() => {
 			if (page.value == 0) {
 				scrollToBottom();
-			} else {
-				// scrollToLower();
 			}
 			setTimeout(() => {
 				isLoading.value = false;
@@ -300,9 +298,7 @@ const setupScrollListener = () => {
 // 스크롤 이벤트 핸들러
 const handleScroll = () => {
 	if (window.scrollY === 0 && !isLoading.value) {
-		// 페이지 상단 근처에서만 채팅을 불러오도록 함
 		fetchChats();
-		scrollToLower();
 	}
 };
 
@@ -409,8 +405,4 @@ const scrollToBottom = () => {
 	const pageHeight = document.documentElement.scrollHeight;
 	window.scrollTo(0, pageHeight);
 };
-
-// const scrollToLower = () => {
-// 	window.scrollTo(0, window.innerHeight / 5);
-// };
 </script>
