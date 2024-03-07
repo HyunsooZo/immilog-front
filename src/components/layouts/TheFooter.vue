@@ -49,7 +49,7 @@ const router = useRouter();
 const iconViewBox = '0 0 16 16'; // 모든 아이콘에 적용되는 viewBox 값
 
 // 메뉴 아이템 정의
-const menuItems = [
+const menuItems = ref([
 	// 홈 아이콘
 	{
 		label: '홈',
@@ -65,7 +65,7 @@ const menuItems = [
 	// 채팅 아이콘
 	{
 		label: '채팅',
-		styleClass: 'chat new',
+		styleClass: 'chat',
 		paths: [chatIcon.first, chatIcon.second],
 	},
 	// 구인/구직 아이콘
@@ -80,7 +80,7 @@ const menuItems = [
 		styleClass: 'my',
 		paths: [myPageIcon],
 	},
-];
+]);
 
 const activeItem = ref(0);
 
