@@ -46,6 +46,7 @@ const router = createRouter({
 			name: 'ChatDetail',
 			component: ChatDetailView,
 			props: true,
+			meta: { hideFooter: true },
 		},
 		{
 			path: '/board',
