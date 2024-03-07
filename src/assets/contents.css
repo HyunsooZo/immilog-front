@@ -19,7 +19,7 @@
     background: #f6f6f6;
 }
 .content {
-    padding-bottom: 4.9rem;
+    padding-bottom: 5rem;
 }
 .header + .content {
     padding-top: 5rem;
@@ -31,6 +31,16 @@
 .content > .container:first-child {
     margin-top: 0;
     padding-top: 2.4rem;
+}
+.header._bg {
+    background: #f6f6f6;
+}
+.content._full {
+    padding-bottom: 0;
+}
+.content._full .container {
+    margin: 0;
+    padding: 0;
 }
 
 /* button */
@@ -267,12 +277,14 @@ strong + .button-text {
     position: fixed;
     top: 0;
     width: 100%;
+    min-height: 5rem;
     background: #fff;
     border-bottom: 1px solid #e9e9e9;
     z-index: 10;
 }
 .header .title {
     flex: 1;
+    font-weight: 500;
 }
 [class*=header] [class*=title] .header-logo {
     color: #333;
@@ -756,7 +768,7 @@ strong + .button-text {
 /* 검색 버튼 */
 .search-wrap._search {
     position: absolute;
-    top: 14px;
+    top: 9px;
     right: 0;
     padding: 0;
     background: transparent;
@@ -991,23 +1003,13 @@ strong + .button-text {
     min-height: 4rem;
     max-height: 15rem;
 }
-/* chat dialog */
-.chat--dialog .modal-content {
-    background: #f6f6f6;
-}
+/* chat */
 .chat-wrap {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 5rem);
+    padding-bottom: 5.5rem;
 }
 .chat-wrap .chat__msg {
     margin: 2rem 0 0;
     text-align: center;
-}
-.chat-wrap .chat__content {
-    flex: 1;
-    overflow-y: auto;
-    padding-bottom: 2rem;
 }
 .chat-wrap .chat__list > .item__notice {
     margin: 2rem 0;
@@ -1027,6 +1029,9 @@ strong + .button-text {
     display: flex;
     position: relative;
     margin: 1rem 1rem 0 5.2rem;
+}
+.chat-wrap .chat__list > .item:last-child {
+    margin-bottom: 2rem;
 }
 .chat-wrap .chat__list > .item:not(._my) + .item:not(._my) .info__wrap {
     display: none;
@@ -1071,7 +1076,11 @@ strong + .button-text {
     margin-left: .6rem;
 }
 .chat-wrap .chat__write {
-    margin-top: auto;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
     background: #fff;
 }
 .chat-wrap .chat__write .restriction__msg {
@@ -1105,14 +1114,15 @@ strong + .button-text {
 .chat-wrap .chat__write .input__file [class*=button-icon] svg {
     fill: #999;
 }
-.chat--dialog .sidemenu-wrap {
+.sidemenu-wrap {
     position: fixed;
     top: 0;
     left: 0;
     min-width: 100%;
     min-height: 100%;
+    z-index: 11;
 }
-.chat--dialog .sidemenu-wrap::before {
+.sidemenu-wrap::before {
     content: '';
     position: absolute;
     top: 0;
@@ -1140,6 +1150,7 @@ strong + .button-text {
     flex: 1;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 .sidemenu-wrap .sidemenu-body {
     flex: 1;
