@@ -38,10 +38,6 @@
 .content._full {
     padding-bottom: 0;
 }
-.content._full .container {
-    margin: 0;
-    padding: 0;
-}
 
 /* button */
 .button-wrap {
@@ -693,6 +689,9 @@ strong + .button-text {
     line-height: 4rem;
     color: #333;
 }
+.search-wrap .input__inner-item .input__element--search {
+    padding-top: .2rem;
+}
 .search-wrap .button--search span {
     color: #999;
 }
@@ -977,16 +976,6 @@ strong + .button-text {
 .select--dialog .modal-body .list-wrap .item:last-child {
     border-bottom: none;
 }
-/* search dialog */
-.content._search {
-    height: 100vh;
-    background: #fff;
-}
-.content._search .search-wrap {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-}
 /* reply dialog */
 .reply--dialog .modal-content {
     top: auto;
@@ -1006,6 +995,16 @@ strong + .button-text {
 .reply--dialog .modal-body .text__area {
     min-height: 4rem;
     max-height: 15rem;
+}
+/* search */
+.content._search {
+    height: 100vh;
+    background: #fff;
+}
+.content._search .search-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 /* chat */
 .chat-wrap {
@@ -2164,6 +2163,17 @@ color: #ed1651;
     color: #333;
     font-size: 1.4rem;
     line-height: 2rem;
+}
+.post__wrap .write__count {
+    text-align: right;
+    font-size: 1.2rem;
+    color: #999;
+}
+.post__wrap .write__count .count__num {
+    color: #333;
+}
+.post__wrap .write__count i {
+    padding: 0 .2rem;
 }
 .attachments__wrap {
     margin-top: 2rem;
