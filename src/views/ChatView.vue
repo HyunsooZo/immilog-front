@@ -5,16 +5,6 @@
 		<div class="list-top-wrap">
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
-				<div class="category__list">
-					<button type="button" class="button--select">
-						<span>selectCategoryValue.name</span>
-					</button>
-				</div>
-				<div class="sort__list">
-					<button type="button" class="button--select sort">
-						<span>selectSortingValue.name</span>
-					</button>
-				</div>
 				<div class="search-wrap blind" :class="{ active: isSearchOpen }">
 					<div class="input-wrap">
 						<div class="input__inner">

@@ -384,7 +384,7 @@ const markMessagesAsRead = id => {
 	} else {
 		// 모든 메시지를 '읽음'으로 표시
 		chats.value.forEach(chat => {
-			if (!amISender(chat.sender.seq) && !chat.isRead) {
+			if (!amISender(chat.sender.seq) && !chat.readStatus) {
 				// 읽음 상태를 서버에 보내기
 				stompClient.send(
 					'/app/chat/read',
@@ -395,7 +395,7 @@ const markMessagesAsRead = id => {
 					}),
 				);
 				// 프론트엔드에서 상태 업데이트
-				chat.isRead = true;
+				chat.readStatus = true;
 			}
 		});
 	}
