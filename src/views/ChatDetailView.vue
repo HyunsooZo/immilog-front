@@ -411,6 +411,6 @@ const scrollToBottom = () => {
 };
 
 const scrollToLower = () => {
-	window.scrollTo(0, 1000);
+	window.scrollTo(0, window.innerHeight / 5);
 };
 </script>
