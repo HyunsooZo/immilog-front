@@ -22,98 +22,98 @@
 		</div>
 	</header>
 	<div class="content _full" v-if="chats.length > 0">
-		<div class="container">
-			<div class="chat-wrap">
-				<!-- message -->
-				<div class="chat__msg" v-if="chats.length == 0">
-					<p class="text">
-						<em class="user__name">
-							{{
-								amISender(chats[0].sender.seq)
-								? chats[0].recipient.nickName
-								: chats[0].sender.nickName
-							}} </em>님과의 채팅을 시작해보세요.
-					</p>
-				</div>
-				<!-- chat list -->
-				<div class="chat__content">
-					<ul class="chat__list">
-						<template v-for="chat in chats" :key="chat.id">
-							<li class="item__notice" v-if="lastDate !== formDate(chat.createdAt)">
-								<span class="text">{{ getDateTime(chat.createdAt) }}</span>
-							</li>
-							<li class="item" aria-label="받은 메시지" data-content-type="text" :class="{
-								_my: amISender(chat.sender.seq),
-							}">
-								<!-- 사용자 정보 -->
-								<div class="info__wrap" v-if="!amISender(chat.sender.seq)">
-									<button type="button" class="item__pic" :class="{
-										'pic--default': chat.sender.profileImage === '',
-									}">
-										<img :src="chat.sender.profileImage" alt=""
-											v-if="chat.sender.profileImage !== ''" /></button><!-- // 사용자 프로필 보기 -->
-								</div>
-								<div class="chat__message">
-									<div class="item__wrap">
-										<p class="list__item read" :class="{ active: isRead(chat.id) }">
-											<i class="blind">채팅 읽음 여부</i>
-											<span class="item__count" v-if="amISender(chat.sender.seq)">
-												<!-- {{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }} -->
-												<svg viewBox="0 0 16 16">
-													<path
-														d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
-												</svg>
-											</span>
-										</p>
-										<div class="item__message">
-											<p class="text">{{ chat.content }}</p>
-										</div>
-									</div>
-									<div class="item__fnc">
-										<p class="list__item past">
-											<i class="blind">채팅 전송시간</i>
-											<span class="item__count">
-												{{ formTime(chat.createdAt) }}</span>
-										</p>
-									</div>
-								</div>
-							</li>
-						</template>
-					</ul>
-				</div>
-				<!-- chat write -->
-				<div class="chat__write">
-					<div class="chat__inner">
-						<div class="input__wrap input__attachments">
-							<div class="input__file">
-								<input type="file" id="file-upload" multiple="multiple"
-									accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff" @change="previewImage" />
-								<label for="file-upload" class="button-icon__s" role="button">
-									<svg viewBox="0 0 16 16">
-										<path :d="imageSelectIcon.first" />
-										<path :d="imageSelectIcon.second" />
-									</svg>
-									<i class="blind">사진 선택</i>
-								</label>
+		<div class="chat-wrap">
+			<!-- message -->
+			<div class="chat__msg" v-if="chats.length == 0">
+				<p class="text">
+					<em class="user__name">
+						{{
+							amISender(chats[0].sender.seq)
+							? chats[0].recipient.nickName
+							: chats[0].sender.nickName
+						}} </em>님과의 채팅을 시작해보세요.
+				</p>
+			</div>
+			<!-- chat list -->
+			<div class="chat__content">
+				<ul class="chat__list">
+					<template v-for="chat in chats" :key="chat.id">
+						<li class="item__notice" v-if="lastDate !== formDate(chat.createdAt)">
+							<span class="text">{{ getDateTime(chat.createdAt) }}</span>
+						</li>
+						<li class="item" aria-label="받은 메시지" data-content-type="text" :class="{
+							_my: amISender(chat.sender.seq),
+						}">
+							<!-- 사용자 정보 -->
+							<div class="info__wrap" v-if="!amISender(chat.sender.seq)">
+								<button type="button" class="item__pic" :class="{
+									'pic--default': chat.sender.profileImage === '',
+								}">
+									<img :src="chat.sender.profileImage" alt=""
+										v-if="chat.sender.profileImage !== ''" /></button><!-- // 사용자 프로필 보기 -->
 							</div>
-						</div>
-						<div class="item__textarea">
-							<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
-							<textarea v-model="content" class="text__area" name="content" autocomplete="off" placeholder="메시지를 입력하세요."
-								data-autosuggest_is-input="true" ref="adjustTextarea" @input="adjustTextareaHeight" rows="1">
-								</textarea>
-						</div>
-						<div class="item__fnc">
-							<button type="button" class="button-icon__s button--send" :class="{
-								active: content.trim() !== '',
-							}" @click="sendMessage">
-								<!-- 전송 버튼 아이콘 -->
+							<div class="chat__message">
+								<div class="item__wrap">
+									<p class="list__item read" :class="{ active: isRead(chat.id) }">
+										<i class="blind">채팅 읽음 여부</i>
+										<span class="item__count" v-if="amISender(chat.sender.seq)">
+											<!-- {{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }} -->
+											<svg viewBox="0 0 16 16">
+												<path
+													d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
+											</svg>
+										</span>
+									</p>
+									<div class="item__message">
+										<p class="text">{{ chat.content }}</p>
+									</div>
+								</div>
+								<div class="item__fnc">
+									<p class="list__item past">
+										<i class="blind">채팅 전송시간</i>
+										<span class="item__count" v-if="amISender(chat.sender.seq)">
+											{{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }}</span>
+										<span class="item__count">
+											{{ formTime(chat.createdAt) }}</span>
+									</p>
+								</div>
+							</div>
+						</li>
+					</template>
+				</ul>
+			</div>
+			<!-- chat write -->
+			<div class="chat__write">
+				<div class="chat__inner">
+					<div class="input__wrap input__attachments">
+						<div class="input__file">
+							<input type="file" id="file-upload" multiple="multiple"
+								accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff" @change="previewImage" />
+							<label for="file-upload" class="button-icon__s" role="button">
 								<svg viewBox="0 0 16 16">
-									<path :d="chatSendingIcon" />
+									<path :d="imageSelectIcon.first" />
+									<path :d="imageSelectIcon.second" />
 								</svg>
-								<i class="blind">채팅보내기</i>
-							</button>
+								<i class="blind">사진 선택</i>
+							</label>
 						</div>
+					</div>
+					<div class="item__textarea">
+						<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
+						<textarea v-model="content" class="text__area" name="content" autocomplete="off" placeholder="메시지를 입력하세요."
+							data-autosuggest_is-input="true" ref="adjustTextarea" @input="adjustTextareaHeight" rows="1">
+								</textarea>
+					</div>
+					<div class="item__fnc">
+						<button type="button" class="button-icon__s button--send" :class="{
+							active: content.trim() !== '',
+						}" @click="sendMessage">
+							<!-- 전송 버튼 아이콘 -->
+							<svg viewBox="0 0 16 16">
+								<path :d="chatSendingIcon" />
+							</svg>
+							<i class="blind">채팅보내기</i>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -133,6 +133,7 @@ import { imageSelectIcon, chatSendingIcon } from '@/utils/icons.js';
 
 const userInfo = useUserInfoStore();
 import { useRoute, useRouter } from 'vue-router';
+
 const router = useRouter();
 const route = useRoute();
 
@@ -183,10 +184,15 @@ const resetTextareaHeight = () => {
 
 // 채팅 내용을 담는 배열
 const chats = ref([]);
-
+const savedScrollPosition = ref(0);
+const isLoading = ref(false);
 // db에 저장된 채팅 내용을 가져오는 함수
 const fetchChats = async () => {
+	if (isLoading.value) {
+		return;
+	}
 	try {
+		isLoading.value = true;
 		const { status, data } = await sendRequest(
 			'get',
 			`/chat/rooms/${chatRoomSeq.value}?page=${page.value}`,
@@ -202,14 +208,18 @@ const fetchChats = async () => {
 			data.data.content.forEach(chat => chats.value.push(chat));
 			chats.value.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 			data.data.pageable = pageable.value;
+			page.value = page.value + 1;
 		}
 	} catch (error) {
-		console.error(error);
+		console.error('error: ', error);
 	} finally {
 		nextTick(() => {
-			if (page.value === 0) {
+			if (page.value == 0) {
 				scrollToBottom();
 			}
+			setTimeout(() => {
+				isLoading.value = false;
+			}, 2000);
 		});
 	}
 };
@@ -249,15 +259,12 @@ const isRead = chatId => {
 };
 // 스크롤 이벤트 리스너를 추가하는 함수
 const setupScrollListener = () => {
-	const chatContainer = document.querySelector('.chat__content');
-	chatContainer.addEventListener('scroll', handleScroll);
+	window.addEventListener('scroll', handleScroll);
 };
 
 // 스크롤 이벤트 핸들러
 const handleScroll = () => {
-	const chatContainer = document.querySelector('.chat__content');
-	if (chatContainer.scrollTop === 0) {
-		page.value++;
+	if (window.scrollY === 0 && !isLoading.value) {
 		fetchChats();
 	}
 };
@@ -267,10 +274,10 @@ onMounted(async () => {
 	connectWebSocket();
 	await fetchChats();
 	setupScrollListener();
-	setTimeout(() => {
+	nextTick(() => {
 		markMessagesAsRead();
 		scrollToBottom();
-	}, 1000);
+	});
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 해제
@@ -278,6 +285,7 @@ onUnmounted(() => {
 	if (stompClient && stompClient.connected) {
 		stompClient.disconnect();
 	}
+	window.removeEventListener('scroll', handleScroll);
 });
 
 // 사용자가 채팅 발신자인지 확인
@@ -361,9 +369,7 @@ const markMessagesAsRead = id => {
 
 // 스크롤을 맨 아래로 내리는 함수
 const scrollToBottom = () => {
-	const chatContainer = document.querySelector('.chat__content');
-	if (chatContainer) {
-		chatContainer.scrollTop = chatContainer.scrollHeight;
-	}
+	const pageHeight = document.documentElement.scrollHeight;
+	window.scrollTo(0, pageHeight);
 };
 </script>
