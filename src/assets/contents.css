@@ -2165,6 +2165,17 @@ color: #ed1651;
     font-size: 1.4rem;
     line-height: 2rem;
 }
+.post__wrap .write__count {
+    text-align: right;
+    font-size: 1.2rem;
+    color: #999;
+}
+.post__wrap .write__count .count__num {
+    color: #333;
+}
+.post__wrap .write__count i {
+    padding: 0 .2rem;
+}
 .attachments__wrap {
     margin-top: 2rem;
     font-size: 0;
