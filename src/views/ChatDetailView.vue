@@ -261,7 +261,7 @@ onMounted(async () => {
 	setTimeout(() => {
 		markMessagesAsRead();
 		scrollToBottom();
-	}, 500);
+	}, 1000);
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 해제
