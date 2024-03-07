@@ -309,10 +309,10 @@ onMounted(async () => {
 	connectWebSocket();
 	await fetchChats();
 	setupScrollListener();
-	nextTick(() => {
+	setTimeout(() => {
 		markMessagesAsRead();
 		scrollToBottom();
-	});
+	}, 500);
 });
 
 // 컴포넌트 언마운트 시 웹소켓 연결 해제
