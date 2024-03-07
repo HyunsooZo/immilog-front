@@ -9,7 +9,7 @@ import BoardView from '@/views/BoardView.vue';
 import BoardDetailView from '@/views/BoardDetailView.vue';
 import ResultViewVue from '@/views/ResultView.vue';
 import MyPageView from '@/views/MyPageView.vue';
-import ProfileEdit from '@/views/ProfileEdit.vue';
+import ProfileEditView from '@/views/ProfileEditView.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -75,8 +75,8 @@ const router = createRouter({
 		},
 		{
 			path: '/profile-edit',
-			name: 'ProfileEdit',
-			component: ProfileEdit,
+			name: 'ProfileEditView',
+			component: ProfileEditView,
 		},
 	],
 });
