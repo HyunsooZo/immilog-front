@@ -63,14 +63,14 @@
 							<div class="post">
 								<textarea v-model="content" class="text__area" name="content" autocomplete="off"
 									placeholder="게시글 내용을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다." data-autosuggest_is-input="true"
-									ref="adjustTextarea" @input="adjustTextareaHeight" rows="2"></textarea>
+									ref="adjustTextarea" @input="adjustTextareaHeight" rows="3"></textarea>
 								<!-- 총 글자수 -->
 								<p class="write__count">
 									<i class="blind">현재 입력한 글자수</i>
-									<em class="count__num">0</em>
+									<em class="count__num">{{ currentCharCount }}</em>
 									<i>/</i>
 									<i class="blind">전체 입력 가능한 글자수</i>
-									<span class="count__total">500</span>
+									<span class="count__total">{{ maxCharCount }}</span>
 								</p>
 								<!-- file preview -->
 								<div class="attachments__wrap" v-if="isImageUploaded">
@@ -208,13 +208,23 @@ const content = ref('');
 
 // 텍스트 영역 조정 함수
 const adjustTextarea = ref(null);
+// update character count
+const currentCharCount = ref(0);
+const maxCharCount = 500;
 const adjustTextareaHeight = () => {
 	const textarea = adjustTextarea.value;
 	textarea.style.height = 'auto';
 	textarea.style.height = `${textarea.scrollHeight}px`;
+	// update character count
+	currentCharCount.value = content.value.length;
+	if (currentCharCount.value > maxCharCount) {
+		content.value = content.value.slice(0, maxCharCount);
+	}
 };
+watch(content, () => {
+	adjustTextareaHeight();
+});
 
-watch(content, adjustTextareaHeight);
 // 이미지 관련 변수
 const isImageUploaded = computed(() => imagePreview.value.length > 0);
 const imageFile = ref([]);
