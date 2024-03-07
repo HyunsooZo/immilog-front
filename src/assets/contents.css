@@ -693,6 +693,9 @@ strong + .button-text {
     line-height: 4rem;
     color: #333;
 }
+.search-wrap .input__inner-item .input__element--search {
+    padding-top: .2rem;
+}
 .search-wrap .button--search span {
     color: #999;
 }
