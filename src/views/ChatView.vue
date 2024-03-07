@@ -151,7 +151,7 @@
 <script setup>
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import SearchBox from '@/components/search/SearchBox.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import useAxios from '@/composables/useAxios';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.js';
@@ -253,5 +253,12 @@ onMounted(async () => {
 	}
 	await fetchChatList();
 	connectWebSocket();
+});
+
+// 컴포넌트 언마운트 시 웹소켓 연결 해제
+onUnmounted(() => {
+	if (stompClient && stompClient.connected) {
+		stompClient.disconnect();
+	}
 });
 </script>
