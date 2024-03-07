@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import SignUpView from '@/views/SignUpView.vue';
 import SignInView from '@/views/SignInView.vue';
+import SearchView from '@/views/SearchView.vue';
 import HomeView from '@/views/HomeView.vue';
 import JobBoardView from '@/views/JobBoardView.vue';
 import ChatView from '@/views/ChatView.vue';
@@ -24,6 +25,12 @@ const router = createRouter({
 			path: '/sign-in',
 			name: 'SignIn',
 			component: SignInView,
+			meta: { hideFooter: true },
+		},
+		{
+			path: '/search',
+			name: 'Search',
+			component: SearchView,
 			meta: { hideFooter: true },
 		},
 		{

@@ -4,23 +4,10 @@
 		<div class="list-wrap personal">
 			<div class="item">
 				<div class="info__wrap">
-					<button
-						type="button"
-						class="item__pic"
-						:class="{ 'pic--default': !userInfo.userProfile }"
-					>
-						<img
-							v-if="userInfo.userProfile"
-							:src="userInfo.userProfile"
-							alt=""
-						/>
+					<button type="button" class="item__pic" :class="{ 'pic--default': !userInfo.userProfile }">
+						<img v-if="userInfo.userProfile" :src="userInfo.userProfile" alt="" />
 					</button>
-					<button
-						type="button"
-						class="item__fnc"
-						role="link"
-						@click="onProfileEdit"
-					>
+					<button type="button" class="item__fnc" role="link" @click="onProfileEdit">
 						<div class="list__item">
 							<em>{{ userInfo.userCountry }}</em>
 							<em>{{ userInfo.userRegion }}</em>
@@ -36,12 +23,7 @@
 		<div class="list-wrap list--link">
 			<ul>
 				<li class="item">
-					<button
-						type="button"
-						class="button button-text"
-						role="link"
-						@click="onMyBoard"
-					>
+					<button type="button" class="button button-text" role="link" @click="onMyBoard">
 						<svg viewBox="0 0 16 16">
 							<path :d="myPostIcon" />
 						</svg>
@@ -49,12 +31,7 @@
 					</button>
 				</li>
 				<li class="item">
-					<button
-						type="button"
-						class="button button-text"
-						role="link"
-						@click="onBookmark"
-					>
+					<button type="button" class="button button-text" role="link" @click="onBookmark">
 						<svg viewBox="0 0 16 16">
 							<path fill-rule="evenodd" :d="bookmarkIcon.first" />
 							<path :d="bookmarkIcon.second" />
@@ -83,12 +60,7 @@
 					</button>
 				</li>
 				<li class="item">
-					<button
-						type="button"
-						class="button button-text"
-						role="link"
-						@click="openEmailForm"
-					>
+					<button type="button" class="button button-text" role="link" @click="openEmailForm">
 						<svg viewBox="0 0 16 16">
 							<path :d="customerCenterIcon.first" />
 							<path :d="customerCenterIcon.second" />
@@ -134,18 +106,38 @@ import {
 const router = useRouter();
 const userInfo = useUserInfoStore();
 
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
+};
+
 // 프로필 수정 페이지로 이동
 const onProfileEdit = () => router.push(`/profile-edit`);
 
+// 내 게시물 표시 상태
+const isMyBoardOn = ref(false);
+const onMyBoard = () => {
+	isMyBoardOn.value = true;
+	modalOpenClass();
+};
+const offMyBoard = () => {
+	isMyBoardOn.value = false;
+	modalCloseClass();
+};
+
 // 북마크 표시 상태
 const isBookmarkOn = ref(false);
-const onBookmark = () => (isBookmarkOn.value = true);
-const offBookMark = () => (isBookmarkOn.value = false);
-
-// 내 게시판 표시 상태
-const isMyBoardOn = ref(false);
-const onMyBoard = () => (isMyBoardOn.value = true);
-const offMyBoard = () => (isMyBoardOn.value = false);
+const onBookmark = () => {
+	isBookmarkOn.value = true;
+	modalOpenClass();
+};
+const offBookMark = () => {
+	isBookmarkOn.value = false;
+	modalCloseClass();
+};
 
 // 모달 상태
 const modalValue = ref(false);

@@ -978,7 +978,11 @@ strong + .button-text {
     border-bottom: none;
 }
 /* search dialog */
-.search--dialog .modal-body .search-wrap {
+.content._search {
+    height: 100vh;
+    background: #fff;
+}
+.content._search .search-wrap {
     position: sticky;
     top: 0;
     z-index: 2;
