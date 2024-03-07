@@ -1069,6 +1069,12 @@ strong + .button-text {
     border-radius: .4rem;
     white-space: pre-wrap;
 }
+.chat-wrap .chat__list .item._my .item__message {
+    font-weight: 300;
+    color: #fff;
+    background: #888;
+    border-color: #888;
+}
 .chat-wrap .chat__list .item .item__fnc {
     margin-top: .3rem;
     font-size: 1.1rem;
@@ -1076,6 +1082,15 @@ strong + .button-text {
 .chat-wrap .chat__list .item._my .item__fnc {
     margin: 0;
     text-align: right;
+}
+.chat-wrap .chat__list .list__item {
+    display: inline-block;
+}
+.chat-wrap .chat__list .list__item + .list__item {
+    margin-left: .6rem;
+}
+.chat-wrap .chat__list .list__item .item__count {
+    color: #888;
 }
 .chat-wrap .chat__list .list__item.read {
     margin-right: -.6rem;
@@ -1092,12 +1107,6 @@ strong + .button-text {
 }
 .chat-wrap .chat__list .list__item.read.active svg {
     fill: #00bcd4;
-}
-.chat-wrap .chat__list .list__item {
-    display: inline-block;
-}
-.chat-wrap .chat__list .list__item + .list__item {
-    margin-left: .6rem;
 }
 .chat-wrap .chat__write {
     position: fixed;
