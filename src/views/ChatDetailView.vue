@@ -435,7 +435,7 @@ const moveToFirstMessage = currentSize => {
 			`message-${firstMessageLocation.value}`,
 		);
 		if (messageElement) {
-			window.scrollTo(0, messageElement.offsetTop);
+			window.scrollTo(0, messageElement.offsetTop - 100);
 		}
 	}
 };
