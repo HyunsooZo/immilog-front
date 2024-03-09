@@ -423,16 +423,16 @@ const scrollToBottom = () => {
 	window.scrollTo(0, pageHeight);
 };
 
-const firstMessageLocation = ref(0);
+const messageLenth = ref(0);
 // 로드 전 첫 채팅메세지 위치 기억하는 함수
 const saveFirstMessage = () => {
-	firstMessageLocation.value = chats.value[0].id;
+	messageLenth.value = chats.value.length;
 };
 
 const moveToFirstMessage = currentSize => {
 	if (currentSize < chats.value.length) {
 		const messageElement = document.getElementById(
-			`message-${firstMessageLocation.value}`,
+			`message-${chats.value[chats.value.length - messageLenth.value].id}`,
 		);
 		if (messageElement) {
 			window.scrollTo(0, messageElement.offsetTop - 100);
