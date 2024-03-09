@@ -52,6 +52,7 @@
 							<span class="text">{{ getDateTime(chat.createdAt) }}</span>
 						</li>
 						<li
+							:id="`message-${chat.id}`"
 							class="item"
 							aria-label="받은 메시지"
 							data-content-type="text"
@@ -309,9 +310,12 @@ const setupScrollListener = () => {
 };
 
 // 스크롤 이벤트 핸들러
-const handleScroll = () => {
+const handleScroll = async () => {
 	if (window.scrollY === 0 && !isLoading.value) {
-		fetchChats();
+		saveFirstMessage();
+		const currentSize = chats.value.length;
+		await fetchChats();
+		moveToFirstMessage(currentSize);
 	}
 };
 
@@ -417,5 +421,22 @@ const markMessagesAsRead = id => {
 const scrollToBottom = () => {
 	const pageHeight = document.documentElement.scrollHeight;
 	window.scrollTo(0, pageHeight);
+};
+
+const firstMessageLocation = ref(0);
+// 로드 전 첫 채팅메세지 위치 기억하는 함수
+const saveFirstMessage = () => {
+	firstMessageLocation.value = chats.value[0].id;
+};
+
+const moveToFirstMessage = currentSize => {
+	if (currentSize < chats.value.length) {
+		const messageElement = document.getElementById(
+			`message-${firstMessageLocation.value}`,
+		);
+		if (messageElement) {
+			window.scrollTo(0, messageElement.offsetTop);
+		}
+	}
 };
 </script>
