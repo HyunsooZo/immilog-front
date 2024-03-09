@@ -277,7 +277,9 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	} catch (error) {
 		console.log(error);
 	} finally {
-		state.value.loading = false;
+		setTimeout(() => {
+			state.value.loading = false;
+		}, 1000);
 	}
 };
 
