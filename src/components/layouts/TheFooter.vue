@@ -37,6 +37,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useMenuStore } from '@/stores/menu';
 import {
 	homeIcon,
 	areaIcon,
@@ -82,7 +83,7 @@ const menuItems = ref([
 	},
 ]);
 
-const activeItem = ref(0);
+const activeItem = ref(useMenuStore().getMenu());
 
 // 라우트 매핑과 메뉴 아이템 클릭 핸들러
 const routeMapping = {
@@ -94,6 +95,7 @@ const routeMapping = {
 };
 
 const onMenuItemClick = index => {
+	useMenuStore().setMenu(index);
 	router.push(routeMapping[index] || '/');
 	activeItem.value = index;
 };
