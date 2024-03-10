@@ -27,14 +27,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import BoardContent from '@/components/board/BoardContent.vue';
-import useAxios from '@/composables/useAxios';
-import { useUserInfoStore } from '@/stores/userInfo';
-import { useRouter } from 'vue-router';
-const router = useRouter();
-
-const { sendRequest } = useAxios(router);
-
-const userInfo = useUserInfoStore();
+import { getBookmarkedPostApi } from '@/services/post.js';
 
 const state = ref({
 	posts: [],
@@ -45,12 +38,7 @@ const state = ref({
 const fetchBookmarkList = async () => {
 	state.value.loading = true;
 	try {
-		const { status, data } = await sendRequest('get', '/bookmarks', {
-			headers: {
-				contentType: 'application/json',
-				Authorization: `Bearer ${userInfo.accessToken}`,
-			},
-		});
+		const { status, data } = await getBookmarkedPostApi();
 		if (status === 200) {
 			state.value.posts = data.data;
 		}

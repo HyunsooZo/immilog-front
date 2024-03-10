@@ -27,15 +27,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import BoardContent from '@/components/board/BoardContent.vue';
-import useAxios from '@/composables/useAxios';
-import { useUserInfoStore } from '@/stores/userInfo';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const { sendRequest } = useAxios(router);
-
-const userInfo = useUserInfoStore();
+import { getMyPostsApi } from '@/services/post.js';
 
 const state = ref({
 	posts: [],
@@ -43,15 +35,10 @@ const state = ref({
 	loading: false,
 });
 
-const fetchBookmarkList = async () => {
+const fetchMyPostList = async page => {
 	state.value.loading = true;
 	try {
-		const { status, data } = await sendRequest('get', `/posts/my?page=0`, {
-			headers: {
-				contentType: 'application/json',
-				Authorization: `Bearer ${userInfo.accessToken}`,
-			},
-		});
+		const { status, data } = getMyPostsApi(page);
 		if (status === 200) {
 			state.value.posts = data.data.content;
 		}
@@ -79,6 +66,6 @@ const closeModal = () => {
 };
 
 onMounted(() => {
-	fetchBookmarkList();
+	fetchMyPostList(0);
 });
 </script>

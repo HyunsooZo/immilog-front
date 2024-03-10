@@ -4,14 +4,22 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">글쓰기</p>
-				<button type="button" class="button-icon__s button--post_upload" @click="postUpload">
+				<button
+					type="button"
+					class="button-icon__s button--post_upload"
+					@click="postUpload"
+				>
 					<svg viewBox="0 0 16 16">
 						<path :d="postRegistrationIcon.first" />
 						<path :d="postRegistrationIcon.second" />
 					</svg>
 					<span>등록</span>
 				</button>
-				<button class="button-icon button--close" role="link" @click="closeModal">
+				<button
+					class="button-icon button--close"
+					role="link"
+					@click="closeModal"
+				>
 					<i class="blind">취소</i>
 				</button>
 			</div>
@@ -20,7 +28,11 @@
 					<!-- selectbox -->
 					<div class="fnc-wrap">
 						<div class="category__list">
-							<button type="button" class="button--select" @click="openCategorySelect">
+							<button
+								type="button"
+								class="button--select"
+								@click="openCategorySelect"
+							>
 								<span>{{ selectedCategory.name }}</span>
 							</button>
 						</div>
@@ -29,18 +41,36 @@
 					<div class="input-wrap">
 						<div class="input__wrap radio-type">
 							<div class="input__item">
-								<input v-model="privateYn" type="radio" class="input__radio" id="allCountries" name="postSelect" value="N"
-									checked />
-								<label for="allCountries" class="input__label">모든 국가에 공개</label>
+								<input
+									v-model="privateYn"
+									type="radio"
+									class="input__radio"
+									id="allCountries"
+									name="postSelect"
+									value="N"
+									checked
+								/>
+								<label for="allCountries" class="input__label"
+									>모든 국가에 공개</label
+								>
 							</div>
 							<div class="input__item">
-								<input v-model="privateYn" type="radio" class="input__radio" id="onlyMyCountry" name="postSelect"
-									value="Y" @click="
+								<input
+									v-model="privateYn"
+									type="radio"
+									class="input__radio"
+									id="onlyMyCountry"
+									name="postSelect"
+									value="Y"
+									@click="
 										openAlert(
 											'내 국가에만 공개 선택 시<br>같은 국가 사용자만 해당 게시물을 볼 수 있습니다.',
 										)
-										" />
-								<label for="onlyMyCountry" class="input__label">내 국가에만 공개</label>
+									"
+								/>
+								<label for="onlyMyCountry" class="input__label"
+									>내 국가에만 공개</label
+								>
 							</div>
 						</div>
 					</div>
@@ -52,8 +82,13 @@
 							<div class="input__wrap underline-type">
 								<div class="input__item">
 									<div class="input__item_inner">
-										<input v-model="title" type="text" class="input__element" placeholder="제목을 입력해주세요."
-											autocomplete="off" />
+										<input
+											v-model="title"
+											type="text"
+											class="input__element"
+											placeholder="제목을 입력해주세요."
+											autocomplete="off"
+										/>
 									</div>
 								</div>
 							</div>
@@ -61,9 +96,17 @@
 						<!-- contents -->
 						<div class="post__content">
 							<div class="post">
-								<textarea v-model="content" class="text__area" name="content" autocomplete="off"
-									placeholder="게시글 내용을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다." data-autosuggest_is-input="true"
-									ref="adjustTextarea" @input="adjustTextareaHeight" rows="3"></textarea>
+								<textarea
+									v-model="content"
+									class="text__area"
+									name="content"
+									autocomplete="off"
+									placeholder="게시글 내용을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다."
+									data-autosuggest_is-input="true"
+									ref="adjustTextarea"
+									@input="adjustTextareaHeight"
+									rows="3"
+								></textarea>
 								<!-- 총 글자수 -->
 								<p class="write__count">
 									<i class="blind">현재 입력한 글자수</i>
@@ -74,10 +117,18 @@
 								</p>
 								<!-- file preview -->
 								<div class="attachments__wrap" v-if="isImageUploaded">
-									<div class="attachments__item" v-for="(image, index) in imagePreview" :key="index">
+									<div
+										class="attachments__item"
+										v-for="(image, index) in imagePreview"
+										:key="index"
+									>
 										<div class="item__display">
 											<img :src="image" alt="preview" />
-											<button type="button" class="button--del" @click="removeImage(index)">
+											<button
+												type="button"
+												class="button--del"
+												@click="removeImage(index)"
+											>
 												<i class="blind">삭제</i>
 											</button>
 										</div>
@@ -91,11 +142,20 @@
 											<div class="input__wrap underline-type">
 												<div class="input__item">
 													<div class="input__item_inner">
-														<input v-model="hashTag" type="text" class="input__element"
-															placeholder="해시태그를 입력 후 등록 버튼을 클릭하세요" autocomplete="off" />
+														<input
+															v-model="hashTag"
+															type="text"
+															class="input__element"
+															placeholder="해시태그를 입력 후 등록 버튼을 클릭하세요"
+															autocomplete="off"
+														/>
 													</div>
 												</div>
-												<button type="button" class="button button--primary" @click="addTag">
+												<button
+													type="button"
+													class="button button--primary"
+													@click="addTag"
+												>
 													<span>등록</span>
 												</button>
 											</div>
@@ -104,7 +164,12 @@
 										<div class="tag__item">
 											<span class="item--hash" v-for="tag in tags" :key="tag">
 												<em>{{ tag }}</em>
-												<button type="button" class="input__button-remove" title="텍스트삭제" @click="removeTag(tag)"></button>
+												<button
+													type="button"
+													class="input__button-remove"
+													title="텍스트삭제"
+													@click="removeTag(tag)"
+												></button>
 											</span>
 										</div>
 									</div>
@@ -118,8 +183,13 @@
 						<div class="item__fnc">
 							<div class="input__wrap input__attachments">
 								<div class="input__file">
-									<input type="file" id="file-upload" multiple="multiple"
-										accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff" @change="previewImage" />
+									<input
+										type="file"
+										id="file-upload"
+										multiple="multiple"
+										accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff"
+										@change="previewImage"
+									/>
 									<label for="file-upload" class="button-icon__s" role="button">
 										<svg viewBox="0 0 16 16">
 											<path :d="imageSelectIcon.first" />
@@ -132,7 +202,11 @@
 						</div>
 						<!-- 해시태그 -->
 						<div class="item__fnc">
-							<button type="button" class="button-icon__s" @click="hashTagAreaOpen">
+							<button
+								type="button"
+								class="button-icon__s"
+								@click="hashTagAreaOpen"
+							>
 								<svg viewBox="0 0 16 16">
 									<path :d="hashTagIcon" />
 								</svg>
@@ -144,9 +218,19 @@
 			</div>
 		</div>
 	</div>
-	<CustomAlert v-if="alertValue" :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
-	<SelectDialog v-if="isCategorySelectClicked" :title="selectTitle" :list="categoryList" @close="closeSelect"
-		@select:value="selectedValue" />
+	<CustomAlert
+		v-if="alertValue"
+		:alertValue="alertValue"
+		:alertText="alertText"
+		@update:alertValue="closeAlert"
+	/>
+	<SelectDialog
+		v-if="isCategorySelectClicked"
+		:title="selectTitle"
+		:list="categoryList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 	<LoadingModal v-if="isLoading" />
 </template>
 
@@ -156,10 +240,11 @@ import SelectDialog from '@/components/selections/SelectDialog.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import useAxios from '@/composables/useAxios.js';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
-import { useUserInfoStore } from '@/stores/userInfo';
 import { useRouter } from 'vue-router';
 import { resizeImage } from '@/utils/image.js';
 import { categoryList } from '@/utils/selectItems';
+import { uploadPostApi } from '@/services/post.js';
+import { uploadImageApi } from '@/services/image.js';
 import {
 	postRegistrationIcon,
 	imageSelectIcon,
@@ -168,7 +253,6 @@ import {
 
 const router = useRouter();
 const { sendRequest } = useAxios(router);
-const userInfo = useUserInfoStore();
 const isCategorySelectClicked = ref(false);
 
 const selectTitle = '카테고리 선택';
@@ -307,16 +391,7 @@ const imageUpload = async () => {
 				new File([resizedImage], file.name, { type: file.type }),
 			);
 		}
-		const { status, data } = await sendRequest(
-			'post',
-			'/images?imagePath=content',
-			{
-				headers: {
-					contentType: 'multipart/form-data',
-				},
-			},
-			formData,
-		);
+		const { status, data } = await uploadImageApi(`content`, formData);
 		if (status === 200) {
 			data.data.forEach(image => {
 				imagePaths.value.push(image);
@@ -331,39 +406,22 @@ const imageUpload = async () => {
 
 // 게시물 업로드 함수
 const postUpload = async () => {
+	checkIfTokenExists();
+	if (!validateUploadPost()) {
+		return;
+	}
 	onLoading();
 	if (imageFile.value.length > 0) {
-		await imageUpload();
-	}
-	if (!title.value) {
-		openAlert('제목을 입력해주세요.');
-		return;
-	}
-	if (!content.value) {
-		openAlert('내용을 입력해주세요.');
-		return;
+		const { status } = await imageUpload();
+		if (status !== 200) {
+			offLoading();
+			return;
+		}
 	}
 	try {
-		const requstForm = {
-			title: title.value,
-			content: content.value,
-			tags: tags.value,
-			attachments: imagePaths.value,
-			isPublic: privateYn.value === 'N' ? true : false,
-			category: selectedCategory.value.code,
-		};
-		const { status } = await sendRequest(
-			'post',
-			'/posts',
-			{
-				headers: {
-					contentType: 'application/json',
-					Authorization: `Bearer ${userInfo.accessToken}`,
-				},
-			},
-			requstForm,
-		);
-		if (status === 201 || status === 200 || status === 204) {
+		const form = createImageForm();
+		const { status } = await uploadPostApi('content', form);
+		if (status === 201 || status === 200) {
 			setTimeout(() => {
 				offLoading();
 				openAlert('게시글이 등록되었습니다.');
@@ -372,6 +430,7 @@ const postUpload = async () => {
 		}
 	} catch (error) {
 		console.log(error);
+		offLoading();
 	}
 };
 
@@ -384,5 +443,37 @@ const onLoading = () => {
 
 const offLoading = () => {
 	isLoading.value = false;
+};
+
+// 토큰 존재여부 체크 함수
+const checkIfTokenExists = () => {
+	const token = localStorage.getItem('accessToken');
+	if (!token) {
+		router.push('/sign-in');
+	}
+};
+
+// 이미지 업로드 요청 폼 생성 함수
+const createImageForm = () => {
+	return {
+		title: title.value,
+		content: content.value,
+		tags: tags.value,
+		attachments: imagePaths.value,
+		isPublic: privateYn.value === 'N' ? true : false,
+		category: selectedCategory.value.code,
+	};
+};
+
+const validateUploadPost = () => {
+	if (!title.value) {
+		openAlert('제목을 입력해주세요.');
+		return false;
+	}
+	if (!content.value) {
+		openAlert('내용을 입력해주세요.');
+		return false;
+	}
+	return true;
 };
 </script>

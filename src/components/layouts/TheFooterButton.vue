@@ -19,6 +19,7 @@
 <script setup>
 import { computed } from 'vue';
 
+// props 정의
 const props = defineProps({
 	onClick: {
 		type: Function,

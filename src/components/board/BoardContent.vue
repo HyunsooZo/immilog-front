@@ -23,7 +23,11 @@
 			</div>
 		</div>
 		<div class="text__wrap">
-			<button type="button" class="list__item_button" @click="onBoardDetail(post.seq)">
+			<button
+				type="button"
+				class="list__item_button"
+				@click="onBoardDetail(post.seq)"
+			>
 				<div class="text__item">
 					<p class="title">{{ post.title }}</p>
 					<p class="text">{{ post.content }}</p>
@@ -39,7 +43,12 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ post.viewCount }}</span>
 				</p>
-				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likeApi">
+				<button
+					type="button"
+					class="list__item_button like"
+					:class="{ active: isLiked }"
+					@click="likePost"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count"> {{ likes }}</span>
@@ -54,7 +63,12 @@
 					<i class="blind">작성시간</i>
 					<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
 				</p>
-				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
+				<button
+					type="button"
+					class="list__item_button mark"
+					:class="{ active: isBookmarked }"
+					@click="bookmarkApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -70,10 +84,10 @@ import useAxios from '@/composables/useAxios.js';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { timeCalculation } from '@/utils/date-time.js';
+import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.js';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
-const { sendRequest } = useAxios(router);
 
 const props = defineProps({
 	post: {
@@ -119,39 +133,15 @@ const isBookmarked = computed(() => {
 });
 
 const onBoardDetail = () => {
-	increaseViewCount();
+	viewApi(props.post.seq);
 	router.push(`/board/${props.post.seq}`);
 };
 
-const likeApi = async () => {
-	const token = localStorage.getItem('accessToken');
-	if (!token) {
-		router.push('/sign-in');
-		return;
-	}
+// 좋아요 API 호출
+const likePost = () => {
+	checkIfTokenExists();
 	changeLike();
-	try {
-		await sendRequest('patch', `/posts/${props.post.seq}/like`, {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-			},
-		});
-	} catch (error) {
-		console.log(error);
-	}
-};
-
-const increaseViewCount = async () => {
-	try {
-		await sendRequest('patch', `/posts/${props.post.seq}/view`, {
-			headers: {
-				contentType: 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-			},
-		});
-	} catch (error) {
-		console.log(error);
-	}
+	likeApi('posts', props.post.seq);
 };
 
 const changeLike = () => {
@@ -168,18 +158,10 @@ const changeLike = () => {
 };
 
 const bookmarkApi = async () => {
-	const token = localStorage.getItem('accessToken');
-	if (!token) {
-		router.push('/sign-in');
-		return;
-	}
+	checkIfTokenExists();
 	changeBookmark();
 	try {
-		await sendRequest('post', `/bookmarks/posts/${props.post.seq}`, {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-			},
-		});
+		postBookmarkdApi();
 	} catch (error) {
 		console.log(error);
 	}
@@ -202,5 +184,12 @@ const allCommentCounts = post => {
 		result += comment.replies.length;
 	});
 	return result;
+};
+
+const checkIfTokenExists = () => {
+	const token = localStorage.getItem('accessToken');
+	if (!token) {
+		router.push('/sign-in');
+	}
 };
 </script>

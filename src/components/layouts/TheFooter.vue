@@ -83,6 +83,7 @@ const menuItems = ref([
 	},
 ]);
 
+// 현재, 그리고 마지막으로 활성화된 메뉴의 인덱스
 const activeItem = ref(useMenuStore().getMenu());
 
 // 라우트 매핑과 메뉴 아이템 클릭 핸들러
@@ -94,6 +95,7 @@ const routeMapping = {
 	4: '/my-page',
 };
 
+// 메뉴 아이템 클릭 핸들러
 const onMenuItemClick = index => {
 	useMenuStore().setMenu(index);
 	router.push(routeMapping[index] || '/');
