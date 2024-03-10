@@ -325,8 +325,10 @@ onMounted(async () => {
 	await fetchChats();
 	setupScrollListener();
 	nextTick(() => {
-		markMessagesAsRead();
 		scrollToBottom();
+		setTimeout(() => {
+			markMessagesAsRead();
+		}, 1000);
 	});
 });
 
