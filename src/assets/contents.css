@@ -1238,6 +1238,8 @@ strong + .button-text {
     justify-content: space-between;
     margin-top: auto;
     padding: .8rem .5rem;
+    padding-bottom: calc(constant(safe-area-inset-bottom) + .8rem);
+    padding-bottom: calc(env(safe-area-inset-bottom) + .8rem);
     background: #fff;
     border-top: 1px solid #e5e5e5;
 }
