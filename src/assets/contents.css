@@ -19,7 +19,7 @@
     background: #f6f6f6;
 }
 .content {
-    padding-bottom: 5rem;
+    padding-bottom: 4.9rem;
 }
 .header + .content {
     padding-top: 5rem;
@@ -1116,6 +1116,8 @@ strong + .button-text {
     right: 0;
     bottom: 0;
     width: 100%;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
     background: #fff;
 }
 .chat-wrap .chat__write .restriction__msg {
