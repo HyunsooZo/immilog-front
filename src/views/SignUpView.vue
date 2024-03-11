@@ -1,5 +1,5 @@
 <template>
-	<div class="content">
+	<div class="content TheFooterButton"><!-- //TheFooterButton -->
 		<TheTopBox :title="'회원가입'" :text="'정보를 입력한 후 회원가입 버튼을 눌러주세요.'" />
 		<!-- 회원가입 -->
 		<div class="container">
@@ -19,6 +19,7 @@
 					이메일 형식이 올바르지 않습니다.
 				</p>
 			</div>
+
 			<!-- nickname -->
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">닉네임</em>
@@ -42,6 +43,7 @@
 					사용 가능한 닉네임입니다.
 				</p>
 			</div>
+
 			<!-- profileimage -->
 			<div class="input-wrap" style="display: none;">
 				<em class="input__title">프로필 사진</em>
@@ -69,151 +71,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- password -->
-			<div class="input-wrap" aria-label="required">
-				<em class="input__title">비밀번호</em>
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input v-model="userPassword" type="password" class="input__element"
-								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
-						</div>
-					</div>
-				</div>
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
-								required />
-						</div>
-					</div>
-				</div>
-				<!-- 에러 메시지 -->
-				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
-					비밀번호가 일치하지 않습니다.
-				</p>
-				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
-					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
-				</p>
-			</div>
-			<!-- password -->
-			<div class="input-wrap" aria-label="required">
-				<em class="input__title">비밀번호</em>
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input v-model="userPassword" type="password" class="input__element"
-								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
-						</div>
-					</div>
-				</div>
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
-								required />
-						</div>
-					</div>
-				</div>
-				<!-- 에러 메시지 -->
-				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
-					비밀번호가 일치하지 않습니다.
-				</p>
-				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
-					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
-				</p>
-			</div>
-			<!-- password -->
-			<div class="input-wrap" aria-label="required">
-				<em class="input__title">비밀번호</em>
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input v-model="userPassword" type="password" class="input__element"
-								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
-						</div>
-					</div>
-				</div>
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
-								required />
-						</div>
-					</div>
-				</div>
-				<!-- 에러 메시지 -->
-				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
-					비밀번호가 일치하지 않습니다.
-				</p>
-				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
-					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
-				</p>
-			</div>
-			<!-- password -->
-			<div class="input-wrap" aria-label="required">
-				<em class="input__title">비밀번호</em>
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input v-model="userPassword" type="password" class="input__element"
-								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
-						</div>
-					</div>
-				</div>
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
-								required />
-						</div>
-					</div>
-				</div>
-				<!-- 에러 메시지 -->
-				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
-					비밀번호가 일치하지 않습니다.
-				</p>
-				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
-					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
-				</p>
-			</div>
-			<!-- password -->
-			<div class="input-wrap" aria-label="required">
-				<em class="input__title">비밀번호</em>
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input v-model="userPassword" type="password" class="input__element"
-								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
-						</div>
-					</div>
-				</div>
-				<!-- input__wrap -->
-				<div class="input__wrap underline-type">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
-								required />
-						</div>
-					</div>
-				</div>
-				<!-- 에러 메시지 -->
-				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
-					비밀번호가 일치하지 않습니다.
-				</p>
-				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
-					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
-				</p>
-			</div>
+
 			<!-- password -->
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">비밀번호</em>
