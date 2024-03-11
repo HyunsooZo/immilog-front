@@ -1237,9 +1237,8 @@ strong + .button-text {
     display: flex;
     justify-content: space-between;
     margin-top: auto;
-    padding: .8rem .5rem;
-    padding-bottom: calc(constant(safe-area-inset-bottom) + .8rem);
-    padding-bottom: calc(env(safe-area-inset-bottom) + .8rem);
+    padding: .8rem .5rem calc(.8rem + constant(safe-area-inset-bottom));
+    padding: .8rem .5rem calc(.8rem + env(safe-area-inset-bottom));
     background: #fff;
     border-top: 1px solid #e5e5e5;
 }
