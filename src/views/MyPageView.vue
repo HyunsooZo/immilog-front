@@ -78,6 +78,64 @@
 					</button>
 				</li>
 			</ul>
+			<ul>
+				<li class="item">
+					<button type="button" class="button button-text" role="link">
+						<svg viewBox="0 0 16 16">
+							<path :d="noticeIcon.first" />
+							<path :d="noticeIcon.second" />
+						</svg>
+						<span>공지사항</span>
+					</button>
+				</li>
+				<li class="item">
+					<button type="button" class="button button-text" role="link" @click="openEmailForm">
+						<svg viewBox="0 0 16 16">
+							<path :d="customerCenterIcon.first" />
+							<path :d="customerCenterIcon.second" />
+						</svg>
+						<span>고객센터</span>
+					</button>
+				</li>
+				<li class="item">
+					<button type="button" class="button" role="link" @click="signOut">
+						<svg viewBox="0 0 16 16">
+							<path :d="logoutIcon.first" />
+							<path :d="logoutIcon.second" />
+						</svg>
+						<span>로그아웃</span>
+					</button>
+				</li>
+			</ul>
+			<ul>
+				<li class="item">
+					<button type="button" class="button button-text" role="link">
+						<svg viewBox="0 0 16 16">
+							<path :d="noticeIcon.first" />
+							<path :d="noticeIcon.second" />
+						</svg>
+						<span>공지사항</span>
+					</button>
+				</li>
+				<li class="item">
+					<button type="button" class="button button-text" role="link" @click="openEmailForm">
+						<svg viewBox="0 0 16 16">
+							<path :d="customerCenterIcon.first" />
+							<path :d="customerCenterIcon.second" />
+						</svg>
+						<span>고객센터</span>
+					</button>
+				</li>
+				<li class="item">
+					<button type="button" class="button" role="link" @click="signOut">
+						<svg viewBox="0 0 16 16">
+							<path :d="logoutIcon.first" />
+							<path :d="logoutIcon.second" />
+						</svg>
+						<span>로그아웃</span>
+					</button>
+				</li>
+			</ul>
 		</div>
 		<BookMark @update:bookmarkValue="offBookMark" v-if="isBookmarkOn" />
 		<MyBoard @close="offMyBoard" v-if="isMyBoardOn" />

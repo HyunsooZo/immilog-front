@@ -12,6 +12,11 @@
 #aab8c2
 */
 
+body {
+    padding: constant(safe-area-inset-top) constant(safe-area-inset-right) constant(safe-area-inset-bottom) constant(safe-area-inset-left);
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    background: #f6f6f6;
+}
 /* #app {
     min-height: 100%;
     padding: 0 0 constant(safe-area-inset-bottom);
@@ -563,6 +568,8 @@ strong + .button-text {
 
 /* sticky top */
 .sticky-wrap {
+    padding-top: constant(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
     background: #fff;
 }
 .sticky-wrap.active {
