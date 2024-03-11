@@ -44,7 +44,7 @@ const categoryList2 = [
 ];
 const sortingList2 = [
 	{ name: '최신순', code: 'CREATED_DATE' },
-	{ name: '남은기간순', code: 'LIKE_COUNT' },
+	{ name: '기간임박순', code: 'LIKE_COUNT' },
 	{ name: '조회순', code: 'VIEW_COUNT' },
 ];
 
