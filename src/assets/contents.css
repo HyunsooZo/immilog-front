@@ -506,8 +506,8 @@ strong + .button-text {
 }
 .footer .button-wrap {
     margin:0;
-    padding:2rem 1.5rem calc(2rem + constant(safe-area-inset-bottom));
-    padding:2rem 1.5rem calc(2rem + env(safe-area-inset-bottom));
+    padding:2rem 1.5rem;
+    padding:2rem 1.5rem;
     background: linear-gradient(0deg, rgb(246 246 246 / 1) 90%, rgb(246 246 246 / 0) 100%);
 }
 .footer > .button-wrap .button {
