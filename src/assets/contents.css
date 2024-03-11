@@ -490,8 +490,8 @@ strong + .button-text {
     position: fixed;
     left: 0;
     right: 0;
-    bottom: calc(0 + constant(safe-area-inset-bottom));
-    bottom: calc(0 + env(safe-area-inset-bottom));
+    bottom: calc(0 - constant(safe-area-inset-bottom));
+    bottom: calc(0 - env(safe-area-inset-bottom));
     width: 100%;
 }
 .footer .button-wrap {
