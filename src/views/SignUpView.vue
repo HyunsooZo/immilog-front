@@ -43,7 +43,7 @@
 				</p>
 			</div>
 			<!-- profileimage -->
-			<div class="input-wrap">
+			<div class="input-wrap" style="display: none;">
 				<em class="input__title">프로필 사진</em>
 				<!-- input__wrap -->
 				<div class="input__wrap input__attachments">
@@ -68,6 +68,151 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<!-- password -->
+			<div class="input-wrap" aria-label="required">
+				<em class="input__title">비밀번호</em>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userPassword" type="password" class="input__element"
+								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
+						</div>
+					</div>
+				</div>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
+								required />
+						</div>
+					</div>
+				</div>
+				<!-- 에러 메시지 -->
+				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
+					비밀번호가 일치하지 않습니다.
+				</p>
+				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
+					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
+				</p>
+			</div>
+			<!-- password -->
+			<div class="input-wrap" aria-label="required">
+				<em class="input__title">비밀번호</em>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userPassword" type="password" class="input__element"
+								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
+						</div>
+					</div>
+				</div>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
+								required />
+						</div>
+					</div>
+				</div>
+				<!-- 에러 메시지 -->
+				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
+					비밀번호가 일치하지 않습니다.
+				</p>
+				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
+					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
+				</p>
+			</div>
+			<!-- password -->
+			<div class="input-wrap" aria-label="required">
+				<em class="input__title">비밀번호</em>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userPassword" type="password" class="input__element"
+								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
+						</div>
+					</div>
+				</div>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
+								required />
+						</div>
+					</div>
+				</div>
+				<!-- 에러 메시지 -->
+				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
+					비밀번호가 일치하지 않습니다.
+				</p>
+				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
+					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
+				</p>
+			</div>
+			<!-- password -->
+			<div class="input-wrap" aria-label="required">
+				<em class="input__title">비밀번호</em>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userPassword" type="password" class="input__element"
+								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
+						</div>
+					</div>
+				</div>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
+								required />
+						</div>
+					</div>
+				</div>
+				<!-- 에러 메시지 -->
+				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
+					비밀번호가 일치하지 않습니다.
+				</p>
+				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
+					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
+				</p>
+			</div>
+			<!-- password -->
+			<div class="input-wrap" aria-label="required">
+				<em class="input__title">비밀번호</em>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userPassword" type="password" class="input__element"
+								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
+						</div>
+					</div>
+				</div>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner">
+							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
+								required />
+						</div>
+					</div>
+				</div>
+				<!-- 에러 메시지 -->
+				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
+					비밀번호가 일치하지 않습니다.
+				</p>
+				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
+					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
+				</p>
 			</div>
 			<!-- password -->
 			<div class="input-wrap" aria-label="required">
@@ -129,7 +274,7 @@ import { useLocationStore } from '@/stores/location';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import { useRouter } from 'vue-router';
 import { profilePicSelectIcon } from '@/utils/icons';
-import { resizeImage } from '@/utils/image';
+// import { resizeImage } from '@/utils/image';
 
 const imagePreview = ref('');
 const emailRegister = ref('');
@@ -139,8 +284,8 @@ const userPasswordConfirm = ref('');
 const submitted = ref(false);
 const country = ref('국가정보없음');
 const region = ref('');
-const imageUrl = ref('');
-const imageFile = ref(null);
+// const imageUrl = ref('');
+// const imageFile = ref(null);
 const isLoading = ref(false);
 const isNickNameValid = ref(false);
 const alertValue = ref(false);
@@ -158,28 +303,28 @@ const isValidEmail = computed(() => {
 });
 
 // 프리뷰 이미지
-const previewImage = event => {
-	const input = event.target;
-	if (input.files && input.files[0]) {
-		const reader = new FileReader();
-		reader.onload = e => {
-			imagePreview.value = e.target.result;
-			imageFile.value = input.files[0];
-		};
-		reader.readAsDataURL(input.files[0]);
-	}
-};
+// const previewImage = event => {
+// 	const input = event.target;
+// 	if (input.files && input.files[0]) {
+// 		const reader = new FileReader();
+// 		reader.onload = e => {
+// 			imagePreview.value = e.target.result;
+// 			imageFile.value = input.files[0];
+// 		};
+// 		reader.readAsDataURL(input.files[0]);
+// 	}
+// };
 
-// 미리보기 삭제
-const removeImage = () => {
-	// 비어있는 이미지로 설정
-	imagePreview.value = '';
-	// input 엘리먼트의 값을 비워줌
-	const input = document.getElementById('file-upload');
-	if (input) {
-		input.value = '';
-	}
-};
+// // 미리보기 삭제
+// const removeImage = () => {
+// 	// 비어있는 이미지로 설정
+// 	imagePreview.value = '';
+// 	// input 엘리먼트의 값을 비워줌
+// 	const input = document.getElementById('file-upload');
+// 	if (input) {
+// 		input.value = '';
+// 	}
+// };
 
 //입력값 검증
 const fullFilled = computed(() => {
@@ -191,37 +336,37 @@ const fullFilled = computed(() => {
 	);
 });
 
-const hostImage = async () => {
-	if (!imagePreview.value) {
-		return;
-	}
-	try {
-		const formData = new FormData();
-		const resizedImage = await resizeImage(imageFile.value, 0.5);
-		formData.append('multipartFile', resizedImage);
-		const { status, data } = await sendRequest(
-			'post',
-			'/images?imagePath=profile',
-			{
-				headers: {
-					contentType: 'multipart/form-data',
-				},
-			},
-			formData,
-		);
-		if (status === 200) {
-			imageUrl.value = data.data;
-		} else {
-			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
-		}
-	} catch (error) {
-		console.log(error);
-	}
-};
+// const hostImage = async () => {
+// 	if (!imagePreview.value) {
+// 		return;
+// 	}
+// 	try {
+// 		const formData = new FormData();
+// 		const resizedImage = await resizeImage(imageFile.value, 0.5);
+// 		formData.append('multipartFile', resizedImage);
+// 		const { status, data } = await sendRequest(
+// 			'post',
+// 			'/images?imagePath=profile',
+// 			{
+// 				headers: {
+// 					contentType: 'multipart/form-data',
+// 				},
+// 			},
+// 			formData,
+// 		);
+// 		if (status === 200) {
+// 			imageUrl.value = data.data;
+// 		} else {
+// 			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+// 		}
+// 	} catch (error) {
+// 		console.log(error);
+// 	}
+// };
 
-watch(imagePreview, () => {
-	hostImage();
-});
+// watch(imagePreview, () => {
+// 	hostImage();
+// });
 
 const register = async () => {
 	submitted.value = true;
