@@ -6,26 +6,13 @@
 			<!-- 탭 메뉴 -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li
-						v-for="(menu, index) in menus"
-						:key="index"
-						:class="{ active: menu.active.value }"
-						class="menu__list"
-					>
-						<button
-							@click="selectMenu(menu)"
-							type="button"
-							class="button"
-							:aria-selected="menu.active.value.toString()"
-						>
+					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
+						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span
-					class="menu__bar"
-					:style="{ left: menuBarLeft, width: menuBarWidth }"
-				></span>
+				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
 			</div>
 		</div>
 
@@ -35,20 +22,12 @@
 			<!-- 카테고리 및 정렬 옵션 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button
-						type="button"
-						class="button--select"
-						@click="openCategorySelect"
-					>
+					<button type="button" class="button--select" @click="openCategorySelect">
 						<span>{{ selectCategoryValue.name }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button
-						type="button"
-						class="button--select sort"
-						@click="openSortingSelect"
-					>
+					<button type="button" class="button--select sort" @click="openSortingSelect">
 						<span>{{ selectSortingValue.name }}</span>
 					</button>
 				</div>
@@ -58,39 +37,22 @@
 		<!-- 게시글 목록 -->
 		<div class="list-wrap">
 			<!-- 글쓰기 버튼 -->
-			<button
-				type="button"
-				class="button-icon button--post _sticky"
-				:class="{ active: isStickyButton }"
-				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }"
-				@click="openPostModal"
-			>
+			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
+				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }" @click="openPostModal">
 				<svg viewBox="0 0 16 16">
 					<path :d="postBtn.first" />
 					<path :d="postBtn.second" />
 				</svg>
 				<i class="blind">글쓰기</i>
 			</button>
-			<NoContent
-				v-if="state.pagination.sort && state.posts.length === 0"
-				:item="'글'"
-			/>
-			<BoardContent
-				v-for="(item, index) in state.posts"
-				:key="index"
-				:post="item"
-			/>
+			<NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="'글'" />
+			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
 		</div>
 	</div>
 	<LoadingModal v-if="isLoading" />
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
-	<SelectDialog
-		v-if="isCategorySelectClicked || isSortingSelectClicked"
-		:title="selectTitle"
-		:list="selectList"
-		@close="closeSelect"
-		@select:value="selectedValue"
-	/>
+	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
+		@close="closeSelect" @select:value="selectedValue" />
 </template>
 
 <script setup>

@@ -48,11 +48,6 @@ const handleScrollEvent = () => {
 const handleStickyWrap = () => {
 	const scrollY = document.querySelector('.modal-body').scrollTop;
 	isStickyWrap.value = scrollY > 0;
-	if (isStickyButton.value) {
-		const stickyWrapElement = document.querySelector('.sticky-wrap');
-		StickyWrapHeight.value =
-			(stickyWrapElement?.getBoundingClientRect().height || 0) + 5 + scrollY;
-	}
 };
 
 const menuBarLeft = ref('0px');
