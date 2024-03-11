@@ -12,12 +12,12 @@
 #aab8c2
 */
 
-#app {
+/* #app {
     min-height: 100%;
     padding: 0 0 constant(safe-area-inset-bottom);
     padding: 0 0 env(safe-area-inset-bottom);
     background: #f6f6f6;
-}
+} */
 .content {
     padding-bottom: 4.9rem;
 }
