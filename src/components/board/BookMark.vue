@@ -37,6 +37,24 @@ import { onMounted, ref } from 'vue';
 import BoardContent from '@/components/board/BoardContent.vue';
 import { getBookmarkedPostApi } from '@/services/post.js';
 
+// 스크롤 관련 상태 및 이벤트 핸들러
+const isStickyWrap = ref(false);
+const handleScrollEvent = () => {
+	document.querySelector('.modal-body').addEventListener('scroll', handleStickyWrap);
+	return () => {
+		document.querySelector('.modal-body').removeEventListener('scroll', handleStickyWrap);
+	};
+};
+const handleStickyWrap = () => {
+	const scrollY = document.querySelector('.modal-body').scrollTop;
+	isStickyWrap.value = scrollY > 0;
+	if (isStickyButton.value) {
+		const stickyWrapElement = document.querySelector('.sticky-wrap');
+		StickyWrapHeight.value =
+			(stickyWrapElement?.getBoundingClientRect().height || 0) + 5 + scrollY;
+	}
+};
+
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
 
@@ -95,6 +113,7 @@ const closeModal = () => {
 
 onMounted(() => {
 	updateMenuBar();
+	handleScrollEvent();
 	fetchBookmarkList();
 });
 </script>
