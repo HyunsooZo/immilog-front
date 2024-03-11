@@ -3,12 +3,13 @@ import SignUpView from '@/views/SignUpView.vue';
 import SignInView from '@/views/SignInView.vue';
 import SearchView from '@/views/SearchView.vue';
 import HomeView from '@/views/HomeView.vue';
-import JobBoardView from '@/views/JobBoardView.vue';
-import ChatView from '@/views/ChatView.vue';
-import ChatDetailView from '@/views/ChatDetailView.vue';
 import BoardView from '@/views/BoardView.vue';
 import BoardDetailView from '@/views/BoardDetailView.vue';
 import ResultViewVue from '@/views/ResultView.vue';
+import ChatView from '@/views/ChatView.vue';
+import ChatDetailView from '@/views/ChatDetailView.vue';
+import JobBoardView from '@/views/JobBoardView.vue';
+import JobBoardDetailView from '@/views/JobBoardDetailView.vue';
 import MyPageView from '@/views/MyPageView.vue';
 import ProfileEditView from '@/views/ProfileEditView.vue';
 
@@ -39,23 +40,6 @@ const router = createRouter({
 			component: HomeView,
 		},
 		{
-			path: '/job-board',
-			name: 'JobBoard',
-			component: JobBoardView,
-		},
-		{
-			path: '/chat',
-			name: 'ChatRooms',
-			component: ChatView,
-		},
-		{
-			path: '/chat/:chatRoomId',
-			name: 'ChatDetail',
-			component: ChatDetailView,
-			props: true,
-			meta: { hideFooter: true },
-		},
-		{
 			path: '/board',
 			name: 'Board',
 			component: BoardView,
@@ -74,6 +58,28 @@ const router = createRouter({
 				titleEmphasis: route.query.titleEmphasis,
 				content: route.query.content,
 			}),
+		},
+		{
+			path: '/chat',
+			name: 'ChatRooms',
+			component: ChatView,
+		},
+		{
+			path: '/chat/:chatRoomId',
+			name: 'ChatDetail',
+			component: ChatDetailView,
+			props: true,
+			meta: { hideFooter: true },
+		},
+		{
+			path: '/job-board',
+			name: 'JobBoard',
+			component: JobBoardView,
+		},
+		{
+			path: '/job-board/:postId',
+			name: 'JobBoardDetail',
+			component: JobBoardDetailView,
 		},
 		{
 			path: '/my-page',

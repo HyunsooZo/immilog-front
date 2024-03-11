@@ -1,15 +1,16 @@
+//home, board
+const categoryList = [
+	{ name: '전체', code: 'ALL' },
+	{ name: '경력', code: 'WORKING_HOLIDAY' },
+	{ name: '영주권', code: 'GREEN_CARD' },
+	{ name: '소통', code: 'COMMUNICATION' },
+	{ name: '질문/답변', code: 'QNA' },
+];
 const sortingList = [
 	{ name: '최신순', code: 'CREATED_DATE' },
 	{ name: '좋아요순', code: 'LIKE_COUNT' },
 	{ name: '조회순', code: 'VIEW_COUNT' },
 	{ name: '댓글순', code: 'COMMENT_COUNT' },
-];
-const categoryList = [
-	{ name: '전체', code: 'ALL' },
-	{ name: '워킹홀리데이', code: 'WORKING_HOLIDAY' },
-	{ name: '영주권', code: 'GREEN_CARD' },
-	{ name: '소통', code: 'COMMUNICATION' },
-	{ name: '질문/답변', code: 'QNA' },
 ];
 
 const regions = [
@@ -35,4 +36,16 @@ const regions = [
 	{ name: '기타국가', code: 'ETC' },
 ];
 
-export { sortingList, categoryList, regions };
+// job board
+const categoryList2 = [
+	{ name: '전체', code: 'ALL' },
+	{ name: '상시채용', code: 'WORKING_HOLIDAY' },
+	{ name: '경력 무관', code: 'GREEN_CARD' },
+];
+const sortingList2 = [
+	{ name: '최신순', code: 'CREATED_DATE' },
+	{ name: '남은기간순', code: 'LIKE_COUNT' },
+	{ name: '조회순', code: 'VIEW_COUNT' },
+];
+
+export { categoryList, sortingList, regions, categoryList2, sortingList2 };
