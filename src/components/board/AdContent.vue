@@ -26,7 +26,7 @@ const initSwiper = () => {
 	const swiper = new Swiper('.swiper-container', {
 		slidesPerView: 1,
 		spaceBetween: 0,
-		effect: 'fade', //default slide
+		// effect: 'fade', //default slide
 		loop: true,
 		autoplay: {
 			delay: 3000,

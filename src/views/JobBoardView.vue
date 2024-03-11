@@ -19,6 +19,16 @@
 
 		<!-- 목록 -->
 		<div class="list-wrap">
+			<!-- 글쓰기 버튼 -->
+			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
+				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }" @click="openPostModal">
+				<svg viewBox="0 0 16 16">
+					<path :d="postBtn.first" />
+					<path :d="postBtn.second" />
+				</svg>
+				<i class="blind">글쓰기</i>
+			</button>
+			<!-- <NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="'구인/구직 글'" /> -->
 			<JobContent />
 		</div>
 	</div>
@@ -31,6 +41,8 @@ import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import JobContent from '@/components/board/JobContent.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
+// import NoContent from '@/components/board/NoContent.vue';
+import { postBtn } from '@/utils/icons';
 import { sortingList2, categoryList2 } from '@/utils/selectItems.js';
 
 // modal open/close 시 body 컨트롤
@@ -39,6 +51,39 @@ const modalOpenClass = () => {
 };
 const modalCloseClass = () => {
 	document.body.classList.remove('inactive');
+};
+
+// 스크롤 관련 상태 및 이벤트 핸들러
+const isStickyWrap = ref(false);
+const isStickyButton = ref(false);
+const StickyWrapHeight = ref(0);
+const handleScrollEvent = () => {
+	window.addEventListener('scroll', handleStickyWrap);
+	const listTopHeight = document
+		.querySelector('.list-top-wrap')
+		?.getBoundingClientRect().height;
+	window.addEventListener(
+		'scroll',
+		handleStickyButton.bind(null, listTopHeight),
+	);
+	return () => {
+		window.removeEventListener('scroll', handleStickyWrap);
+		window.removeEventListener(
+			'scroll',
+			handleStickyButton.bind(null, listTopHeight),
+		);
+	};
+};
+const handleStickyWrap = () => {
+	isStickyWrap.value = window.scrollY > 0;
+	if (isStickyButton.value) {
+		const stickyWrapElement = document.querySelector('.sticky-wrap');
+		StickyWrapHeight.value =
+			(stickyWrapElement?.getBoundingClientRect().height || 0) + 5;
+	}
+};
+const handleStickyButton = listTopHeight => {
+	isStickyButton.value = window.scrollY > listTopHeight;
 };
 
 // select 관련 메소드 (초기화)
@@ -94,4 +139,12 @@ const selectedValue = value => {
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
+onMounted(async () => {
+	handleScrollEvent();
+	// window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+	// window.removeEventListener('scroll', handleScroll);
+});
 </script>
