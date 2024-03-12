@@ -238,7 +238,6 @@
 import { computed, ref, watch } from 'vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
-import useAxios from '@/composables/useAxios.js';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
 import { resizeImage } from '@/utils/image.js';
@@ -252,7 +251,6 @@ import {
 } from '@/utils/icons.js';
 
 const router = useRouter();
-const { sendRequest } = useAxios(router);
 const isCategorySelectClicked = ref(false);
 
 const selectTitle = '카테고리 선택';
