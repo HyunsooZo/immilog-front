@@ -21,6 +21,7 @@
 
 <script setup>
 import Swiper from 'swiper/bundle';
+import { onMounted } from 'vue';
 
 const initSwiper = () => {
 	const swiper = new Swiper('.swiper-container', {
@@ -38,7 +39,6 @@ const initSwiper = () => {
 		},
 	});
 };
-import { onMounted } from 'vue';
 onMounted(initSwiper);
 </script>
 

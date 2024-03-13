@@ -79,6 +79,7 @@
 				v-for="(item, index) in state.posts"
 				:key="index"
 				:post="item"
+				:showAd="showAd(index)"
 			/>
 		</div>
 	</div>
@@ -107,6 +108,7 @@ import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { postBtn } from '@/utils/icons';
 import { sortingList, categoryList } from '@/utils/selectItems.js';
+import { showAd } from '@/utils/showAd';
 
 const router = useRouter();
 const { sendRequest } = useAxios(router);

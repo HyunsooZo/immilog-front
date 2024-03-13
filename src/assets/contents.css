@@ -2353,9 +2353,11 @@ color: #ed1651;
 	justify-content: center;
 	text-align: center;
 	background: #fff;
+	background: #00bcd4;
 }
 .item.swiper-container .swiper-slide .button {
     width: 100%;
+    min-height: 12rem;
     padding: 1.5rem 2rem;
 }
 .item.swiper-container .swiper-pagination {

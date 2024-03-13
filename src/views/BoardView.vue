@@ -6,13 +6,26 @@
 			<!-- tab button -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
-						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="menu.active.value.toString()">
+					<li
+						v-for="(menu, index) in menus"
+						:key="index"
+						:class="{ active: menu.active.value }"
+						class="menu__list"
+					>
+						<button
+							@click="selectMenu(menu)"
+							type="button"
+							class="button"
+							:aria-selected="menu.active.value.toString()"
+						>
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
+				<span
+					class="menu__bar"
+					:style="{ left: menuBarLeft, width: menuBarWidth }"
+				></span>
 			</div>
 		</div>
 
@@ -20,12 +33,20 @@
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button type="button" class="button--select" @click="openCategorySelect">
+					<button
+						type="button"
+						class="button--select"
+						@click="openCategorySelect"
+					>
 						<span>{{ selectCategoryValue.name }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button type="button" class="button--select sort" @click="openSortingSelect">
+					<button
+						type="button"
+						class="button--select sort"
+						@click="openSortingSelect"
+					>
 						<span>{{ selectSortingValue.name }}</span>
 					</button>
 				</div>
@@ -36,20 +57,35 @@
 		<!-- <BoardContent /> -->
 		<div class="list-wrap">
 			<!-- 글쓰기버튼 -->
-			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
-				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }" @click="openPostModal">
+			<button
+				type="button"
+				class="button-icon button--post _sticky"
+				:class="{ active: isStickyButton }"
+				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }"
+				@click="openPostModal"
+			>
 				<svg viewBox="0 0 16 16">
 					<path :d="postBtn.first" />
 					<path :d="postBtn.second" />
 				</svg>
 				<i class="blind">글쓰기</i>
 			</button>
-			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
+			<BoardContent
+				v-for="(item, index) in state.posts"
+				:key="index"
+				:post="item"
+			/>
+			<AdContent :showAd="showAd(index)" />
 		</div>
 	</div>
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
-	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
-		@close="closeSelect" @select:value="selectedValue" />
+	<SelectDialog
+		v-if="isCategorySelectClicked || isSortingSelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 </template>
 
 <script setup>
@@ -59,9 +95,12 @@ import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select-
 import useAxios from '@/composables/useAxios.js';
 import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/board/BoardContent.vue';
+import AdContent from '@/components/board/AdContent.vue';
+import { showAd } from '@/utils/showAd';
 import { useUserInfoStore } from '@/stores/userInfo.js';
 import { useRouter } from 'vue-router';
 import { postBtn } from '@/utils/icons.js';
+import { sortingList, categoryList } from '@/utils/selectItems';
 
 const router = useRouter();
 
@@ -144,13 +183,6 @@ const { sendRequest } = useAxios(router);
 // .category__list
 const selectCategoryValue = ref({ name: '전체', code: 'all' });
 const isCategorySelectClicked = ref(false);
-const categoryList = [
-	{ name: '전체', code: 'all' },
-	{ name: '워킹홀리데이', code: 'workingholiday' },
-	{ name: '영주권', code: 'greencard' },
-	{ name: '소통', code: 'communication' },
-	{ name: '질문/답변', code: 'qanda' },
-];
 
 const openCategorySelect = () => {
 	nextTick(() => {
@@ -164,12 +196,6 @@ const openCategorySelect = () => {
 // .sort__list
 const selectSortingValue = ref({ name: '최신순', code: 'recent' });
 const isSortingSelectClicked = ref(false);
-const sortingList = [
-	{ name: '최신순', code: 'CREATED_DATE' },
-	{ name: '좋아요순', code: 'LIKE_COUNT' },
-	{ name: '조회순', code: 'VIEW_COUNT' },
-	{ name: '댓글순', code: 'COMMENT_COUNT' },
-];
 
 const openSortingSelect = () => {
 	nextTick(() => {
@@ -220,7 +246,8 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/posts?country=${userInfo.userCountry
+			`/posts?country=${
+				userInfo.userCountry
 			}&category=${selectCategoryValue.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'N'}&page=${nextPage}`,
 			{
 				headers: {
