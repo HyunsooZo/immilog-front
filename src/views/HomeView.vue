@@ -80,6 +80,7 @@
 				:key="index"
 				:post="item"
 			/>
+			<AdContent v-if="adIndexes.includes(index)" />
 		</div>
 	</div>
 	<LoadingModal v-if="isLoading" />
@@ -107,6 +108,7 @@ import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { postBtn } from '@/utils/icons';
 import { sortingList, categoryList } from '@/utils/selectItems.js';
+import AdContent from '@/components/board/AdContent.vue';
 
 const router = useRouter();
 const { sendRequest } = useAxios(router);
@@ -316,6 +318,20 @@ const closePostModal = () => {
 // 로딩화면 관련 상태
 const isLoading = ref(false);
 
+const adIndexes = ref([]);
+
+function setRandomAdIndexes() {
+	const totalPosts = state.value.posts.length;
+	const adCount = 4; // 또는 5
+
+	while (adIndexes.value.length < adCount) {
+		const randomIndex = Math.floor(Math.random() * totalPosts);
+		if (!adIndexes.value.includes(randomIndex)) {
+			adIndexes.value.push(randomIndex);
+		}
+	}
+}
+
 onMounted(async () => {
 	updateMenuBar();
 	handleScrollEvent();
@@ -331,6 +347,7 @@ onMounted(async () => {
 		fetchBoardList('CREATED_DATE', 0);
 	}
 	window.addEventListener('scroll', handleScroll);
+	setRandomAdIndexes();
 });
 
 onUnmounted(() => {
