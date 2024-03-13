@@ -23,7 +23,7 @@
 import Swiper from 'swiper/bundle';
 
 const initSwiper = () => {
-	new Swiper('.swiper-container', {
+	const swiper = new Swiper('.swiper-container', {
 		slidesPerView: 1,
 		spaceBetween: 0,
 		// effect: 'fade', //default slide
