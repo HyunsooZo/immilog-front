@@ -2,6 +2,7 @@
 	<!-- postdialog -->
 	<div class="modal modal--full post--dialog">
 		<div class="modal-content">
+			<DatePicker v-model="selectedDate" class="datepicker" />
 			<div class="modal-header">
 				<p class="modal-title">글쓰기</p>
 				<button type="button" class="button-icon__s button--post_upload" @click="postUpload">
@@ -52,7 +53,7 @@
 						<!-- 채용마감일 -->
 						<div class="input__wrap underline-type">
 							<div class="input__item">
-								<input type="checkbox" class="input__checkbox _text" id="allDate" name="dateSelect" />
+								<input type="radio" class="input__radio" id="allDate" name="dateSelect" checked />
 								<label for="allDate" class="input__label">상시채용</label>
 							</div>
 							<div class="input__item">
@@ -64,15 +65,12 @@
 						<!-- 경력선택 -->
 						<div class="input__wrap radio-type">
 							<div class="input__item">
-								<input type="radio" class="input__radio" id="allCareer" name="careerSelect" />
+								<input type="radio" class="input__radio" id="allCareer" name="careerSelect" checked />
 								<label for="allCareer" class="input__label">경력무관</label>
 							</div>
 							<div class="input__item">
-								<input type="radio" class="input__radio" id="selCareer" name="careerSelect" @click="
-									openAlert(
-										'경력 선택 팝업',
-									)
-									" />
+								<input type="radio" class="input__radio" id="selCareer" name="careerSelect"
+									@click="openAlert('경력 선택 팝업')" />
 								<label for="selCareer" class="input__label">경력선택</label>
 							</div>
 						</div>
@@ -81,6 +79,7 @@
 
 					<!-- post -->
 					<div class="post__wrap">
+						<DatePicker v-model="selectedDate" v-if="onDatePicker" class="datepicker" />
 						<!-- title -->
 						<div class="post__title">
 							<div class="input__wrap underline-type">
@@ -199,9 +198,11 @@ import {
 	imageSelectIcon,
 	hashTagIcon,
 } from '@/utils/icons.js';
+import DatePicker from 'vue3-datepicker';
 
 const router = useRouter();
 const isCategorySelectClicked = ref(false);
+const selectedDate = ref(new Date());
 
 const selectTitle = '카테고리 선택';
 const selectedCategory = ref({ name: '소통', code: 'COMMUNICATION' });
@@ -425,3 +426,17 @@ const validateUploadPost = () => {
 	return true;
 };
 </script>
+<style scoped>
+.datepicker {
+	position: absolute;
+	/* 절대 위치 설정 */
+	z-index: 1000;
+	/* 다른 요소보다 높은 z-index 값 설정 */
+	top: 50%;
+	/* 중앙에 위치하도록 설정 (예시) */
+	left: 50%;
+	/* 중앙에 위치하도록 설정 (예시) */
+	transform: translate(-50%, -50%);
+	/* 정확히 중앙에 위치하도록 조정 */
+}
+</style>
