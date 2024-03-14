@@ -59,12 +59,12 @@
 								<div class="input__item_inner">
 									<!-- <input type="date" class="input__element" /> -->
 									<DatePicker v-model="selectedDate" :format="formatDate" :enable-time-picker="false" week-start="0"
-										position="left" placeholder="날짜를 선택하세요." auto-applyclass="datepicker" />
+										position="left" placeholder="날짜를 선택하세요." auto-applyclass="datepicker" class="select__item" />
 								</div>
 							</div>
 						</div>
 						<!-- 경력선택 -->
-						<div class="input__wrap radio-type">
+						<div class=" input__wrap radio-type">
 							<div class="input__item">
 								<input type="radio" class="input__radio" id="allCareer" name="careerSelect" checked />
 								<label for="allCareer" class="input__label">경력무관</label>
