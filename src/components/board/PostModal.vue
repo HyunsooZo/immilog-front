@@ -550,17 +550,3 @@ const validateUploadPost = () => {
 	return true;
 };
 </script>
-<style scoped>
-.datepicker {
-	position: absolute;
-	/* 절대 위치 설정 */
-	z-index: 1000;
-	/* 다른 요소보다 높은 z-index 값 설정 */
-	top: 50%;
-	/* 중앙에 위치하도록 설정 (예시) */
-	left: 50%;
-	/* 중앙에 위치하도록 설정 (예시) */
-	transform: translate(-50%, -50%);
-	/* 정확히 중앙에 위치하도록 조정 */
-}
-</style>
