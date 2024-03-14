@@ -58,7 +58,7 @@
 							<div class="input__item">
 								<div class="input__item_inner">
 									<!-- <input type="date" class="input__element" /> -->
-									<DatePicker v-model="selectedDate" class="datepicker" />
+									<DatePicker v-model="selectedDate" class="datepicker select__item" />
 								</div>
 							</div>
 						</div>
