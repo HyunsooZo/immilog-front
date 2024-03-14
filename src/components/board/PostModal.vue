@@ -2,7 +2,6 @@
 	<!-- postdialog -->
 	<div class="modal modal--full post--dialog">
 		<div class="modal-content">
-			<DatePicker v-model="selectedDate" class="datepicker" />
 			<div class="modal-header">
 				<p class="modal-title">글쓰기</p>
 				<button type="button" class="button-icon__s button--post_upload" @click="postUpload">
@@ -53,12 +52,13 @@
 						<!-- 채용마감일 -->
 						<div class="input__wrap underline-type">
 							<div class="input__item">
-								<input type="radio" class="input__radio" id="allDate" name="dateSelect" checked />
+								<input type="checkbox" class="input__checkbox _text" id="allDate" name="dateSelect" checked />
 								<label for="allDate" class="input__label">상시채용</label>
 							</div>
 							<div class="input__item">
 								<div class="input__item_inner">
-									<input type="date" class="input__element" />
+									<!-- <input type="date" class="input__element" /> -->
+									<DatePicker v-model="selectedDate" class="datepicker" />
 								</div>
 							</div>
 						</div>
@@ -79,7 +79,6 @@
 
 					<!-- post -->
 					<div class="post__wrap">
-						<DatePicker v-model="selectedDate" v-if="onDatePicker" class="datepicker" />
 						<!-- title -->
 						<div class="post__title">
 							<div class="input__wrap underline-type">
