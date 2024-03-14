@@ -55,7 +55,7 @@
 								<label for="allDate" class="input__label">상시채용</label>
 							</div>
 							<div class="input__item">
-								<!-- <DatePicker /> -->
+								<input type="date" />
 							</div>
 						</div>
 						<!-- 경력선택 -->
@@ -196,8 +196,6 @@ import {
 	imageSelectIcon,
 	hashTagIcon,
 } from '@/utils/icons.js';
-
-import DatePicker from '@/components/board/DatePicker.vue';
 
 const router = useRouter();
 const isCategorySelectClicked = ref(false);
