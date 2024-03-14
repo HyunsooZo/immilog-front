@@ -4,35 +4,24 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">글쓰기</p>
-				<button
-					type="button"
-					class="button-icon__s button--post_upload"
-					@click="postUpload"
-				>
+				<button type="button" class="button-icon__s button--post_upload" @click="postUpload">
 					<svg viewBox="0 0 16 16">
 						<path :d="postRegistrationIcon.first" />
 						<path :d="postRegistrationIcon.second" />
 					</svg>
 					<span>등록</span>
 				</button>
-				<button
-					class="button-icon button--close"
-					role="link"
-					@click="closeModal"
-				>
+				<button class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">취소</i>
 				</button>
 			</div>
 			<div class="modal-body">
 				<div class="post-wrap">
-					<!-- selectbox -->
+					<!-- 일반게시판 -->
+					<!-- 카테고리 선택 -->
 					<div class="fnc-wrap">
 						<div class="category__list">
-							<button
-								type="button"
-								class="button--select"
-								@click="openCategorySelect"
-							>
+							<button type="button" class="button--select" @click="openCategorySelect">
 								<span>{{ selectedCategory.name }}</span>
 							</button>
 						</div>
@@ -41,39 +30,51 @@
 					<div class="input-wrap">
 						<div class="input__wrap radio-type">
 							<div class="input__item">
-								<input
-									v-model="privateYn"
-									type="radio"
-									class="input__radio"
-									id="allCountries"
-									name="postSelect"
-									value="N"
-									checked
-								/>
-								<label for="allCountries" class="input__label"
-									>모든 국가에 공개</label
-								>
+								<input v-model="privateYn" type="radio" class="input__radio" id="allCountries" name="postSelect" value="N"
+									checked />
+								<label for="allCountries" class="input__label">모든 국가에 공개</label>
 							</div>
 							<div class="input__item">
-								<input
-									v-model="privateYn"
-									type="radio"
-									class="input__radio"
-									id="onlyMyCountry"
-									name="postSelect"
-									value="Y"
-									@click="
+								<input v-model="privateYn" type="radio" class="input__radio" id="onlyMyCountry" name="postSelect"
+									value="Y" @click="
 										openAlert(
 											'내 국가에만 공개 선택 시<br>같은 국가 사용자만 해당 게시물을 볼 수 있습니다.',
 										)
-									"
-								/>
-								<label for="onlyMyCountry" class="input__label"
-									>내 국가에만 공개</label
-								>
+										" />
+								<label for="onlyMyCountry" class="input__label">내 국가에만 공개</label>
 							</div>
 						</div>
 					</div>
+					<!-- //일반게시판 -->
+					<!-- 구인구직 -->
+					<div class="input-wrap">
+						<!-- 채용마감일 -->
+						<div class="input__wrap radio-type">
+							<div class="input__item">
+								<input type="radio" class="input__radio" id="allDate" name="dateSelect" checked />
+								<label for="allDate" class="input__label">상시채용</label>
+							</div>
+							<div class="input__item">
+								<!-- <DatePicker /> -->
+							</div>
+						</div>
+						<!-- 경력선택 -->
+						<div class="input__wrap radio-type">
+							<div class="input__item">
+								<input type="radio" class="input__radio" id="allCareer" name="careerSelect" checked />
+								<label for="allCareer" class="input__label">경력무관</label>
+							</div>
+							<div class="input__item">
+								<input type="radio" class="input__radio" id="selCareer" name="careerSelect" @click="
+									openAlert(
+										'경력 선택 팝업',
+									)
+									" />
+								<label for="selCareer" class="input__label">경력선택</label>
+							</div>
+						</div>
+					</div>
+					<!-- //구인구직 -->
 
 					<!-- post -->
 					<div class="post__wrap">
@@ -82,13 +83,8 @@
 							<div class="input__wrap underline-type">
 								<div class="input__item">
 									<div class="input__item_inner">
-										<input
-											v-model="title"
-											type="text"
-											class="input__element"
-											placeholder="제목을 입력해주세요."
-											autocomplete="off"
-										/>
+										<input v-model="title" type="text" class="input__element" placeholder="제목을 입력해주세요."
+											autocomplete="off" />
 									</div>
 								</div>
 							</div>
@@ -96,17 +92,9 @@
 						<!-- contents -->
 						<div class="post__content">
 							<div class="post">
-								<textarea
-									v-model="content"
-									class="text__area"
-									name="content"
-									autocomplete="off"
-									placeholder="게시글 내용을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다."
-									data-autosuggest_is-input="true"
-									ref="adjustTextarea"
-									@input="adjustTextareaHeight"
-									rows="3"
-								></textarea>
+								<textarea v-model="content" class="text__area" name="content" autocomplete="off"
+									placeholder="게시글 내용을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다." data-autosuggest_is-input="true"
+									ref="adjustTextarea" @input="adjustTextareaHeight" rows="3"></textarea>
 								<!-- 총 글자수 -->
 								<p class="write__count">
 									<i class="blind">현재 입력한 글자수</i>
@@ -117,18 +105,10 @@
 								</p>
 								<!-- file preview -->
 								<div class="attachments__wrap" v-if="isImageUploaded">
-									<div
-										class="attachments__item"
-										v-for="(image, index) in imagePreview"
-										:key="index"
-									>
+									<div class="attachments__item" v-for="(image, index) in imagePreview" :key="index">
 										<div class="item__display">
 											<img :src="image" alt="preview" />
-											<button
-												type="button"
-												class="button--del"
-												@click="removeImage(index)"
-											>
+											<button type="button" class="button--del" @click="removeImage(index)">
 												<i class="blind">삭제</i>
 											</button>
 										</div>
@@ -142,20 +122,11 @@
 											<div class="input__wrap underline-type">
 												<div class="input__item">
 													<div class="input__item_inner">
-														<input
-															v-model="hashTag"
-															type="text"
-															class="input__element"
-															placeholder="해시태그를 입력 후 등록 버튼을 클릭하세요"
-															autocomplete="off"
-														/>
+														<input v-model="hashTag" type="text" class="input__element"
+															placeholder="해시태그를 입력 후 등록 버튼을 클릭하세요" autocomplete="off" />
 													</div>
 												</div>
-												<button
-													type="button"
-													class="button button--primary"
-													@click="addTag"
-												>
+												<button type="button" class="button button--primary" @click="addTag">
 													<span>등록</span>
 												</button>
 											</div>
@@ -164,12 +135,7 @@
 										<div class="tag__item">
 											<span class="item--hash" v-for="tag in tags" :key="tag">
 												<em>{{ tag }}</em>
-												<button
-													type="button"
-													class="input__button-remove"
-													title="텍스트삭제"
-													@click="removeTag(tag)"
-												></button>
+												<button type="button" class="input__button-remove" title="텍스트삭제" @click="removeTag(tag)"></button>
 											</span>
 										</div>
 									</div>
@@ -183,13 +149,8 @@
 						<div class="item__fnc">
 							<div class="input__wrap input__attachments">
 								<div class="input__file">
-									<input
-										type="file"
-										id="file-upload"
-										multiple="multiple"
-										accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff"
-										@change="previewImage"
-									/>
+									<input type="file" id="file-upload" multiple="multiple"
+										accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff" @change="previewImage" />
 									<label for="file-upload" class="button-icon__s" role="button">
 										<svg viewBox="0 0 16 16">
 											<path :d="imageSelectIcon.first" />
@@ -202,11 +163,7 @@
 						</div>
 						<!-- 해시태그 -->
 						<div class="item__fnc">
-							<button
-								type="button"
-								class="button-icon__s"
-								@click="hashTagAreaOpen"
-							>
+							<button type="button" class="button-icon__s" @click="hashTagAreaOpen">
 								<svg viewBox="0 0 16 16">
 									<path :d="hashTagIcon" />
 								</svg>
@@ -218,19 +175,9 @@
 			</div>
 		</div>
 	</div>
-	<CustomAlert
-		v-if="alertValue"
-		:alertValue="alertValue"
-		:alertText="alertText"
-		@update:alertValue="closeAlert"
-	/>
-	<SelectDialog
-		v-if="isCategorySelectClicked"
-		:title="selectTitle"
-		:list="categoryList"
-		@close="closeSelect"
-		@select:value="selectedValue"
-	/>
+	<CustomAlert v-if="alertValue" :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+	<SelectDialog v-if="isCategorySelectClicked" :title="selectTitle" :list="categoryList" @close="closeSelect"
+		@select:value="selectedValue" />
 	<LoadingModal v-if="isLoading" />
 </template>
 
@@ -249,6 +196,8 @@ import {
 	imageSelectIcon,
 	hashTagIcon,
 } from '@/utils/icons.js';
+
+import DatePicker from '@/components/board/DatePicker.vue';
 
 const router = useRouter();
 const isCategorySelectClicked = ref(false);
