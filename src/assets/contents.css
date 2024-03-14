@@ -52,10 +52,13 @@ body {
 }
 
 /* button */
+.button-wrap + .input-wrap {
+    margin-top: .8rem !important;
+}
 .button-wrap {
     display: flex;
     justify-content: center;
-    margin:2.4rem 0;
+    margin:2.4rem 0 0;
 }
 .button-wrap.link-type {
     display: flex;
@@ -1569,7 +1572,7 @@ color: #ed1651;
 .input__wrap.radio-type .input__item {
     margin:0 .4rem
 }
-.input__label {
+:not(._text) ~ .input__label {
     display: inline-block;
     width: 100%;
     padding: .8rem 1rem;
@@ -1580,11 +1583,13 @@ color: #ed1651;
     border: 1px solid #ccc;
     border-radius: .6rem;
 }
-.input__radio:checked + .input__label {
+.input__wrap [class*=__checkbox]:checked + .input__label,
+.input__wrap [class*=__radio]:checked + .input__label {
     color: #333;
     background: #f2f2f3;
 }
-.input__radio + .input__label::before {
+.input__wrap [class*=__checkbox] + .input__label::before,
+.input__wrap [class*=__radio] + .input__label::before {
     content: '';
     display: inline-block;
     width: 1.6rem;
@@ -1596,7 +1601,8 @@ color: #ed1651;
     background-size: auto 100%;
     vertical-align: -3px;
 }
-.input__radio:checked + .input__label::before {
+.input__wrap [class*=__checkbox]:checked + .input__label::before,
+.input__wrap [class*=__radio]:checked + .input__label::before {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(51 51 51)' xmlns='http://www.w3.org/2000/svg'><path d='M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z'/></svg>");
 }
 /* 목록 상단 기능 */

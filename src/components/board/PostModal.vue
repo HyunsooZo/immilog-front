@@ -48,20 +48,23 @@
 					<!-- //일반게시판 -->
 					<!-- 구인구직 -->
 					<div class="input-wrap">
+						<em class="input__title">채용마감일</em>
 						<!-- 채용마감일 -->
-						<div class="input__wrap radio-type">
+						<div class="input__wrap underline-type">
 							<div class="input__item">
-								<input type="radio" class="input__radio" id="allDate" name="dateSelect" checked />
+								<input type="checkbox" class="input__checkbox _text" id="allDate" name="dateSelect" />
 								<label for="allDate" class="input__label">상시채용</label>
 							</div>
 							<div class="input__item">
-								<input type="date" />
+								<div class="input__item_inner">
+									<input type="date" class="input__element" />
+								</div>
 							</div>
 						</div>
 						<!-- 경력선택 -->
 						<div class="input__wrap radio-type">
 							<div class="input__item">
-								<input type="radio" class="input__radio" id="allCareer" name="careerSelect" checked />
+								<input type="radio" class="input__radio" id="allCareer" name="careerSelect" />
 								<label for="allCareer" class="input__label">경력무관</label>
 							</div>
 							<div class="input__item">
