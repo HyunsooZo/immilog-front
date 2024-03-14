@@ -2221,10 +2221,12 @@ color: #ed1651;
     margin: 2rem 2rem 0;
 }
 .post-wrap .post__wrap {
-    padding: 2.4rem 2rem 7.3rem;
+    padding: 2.4rem 2rem calc(7.4rem + constant(safe-area-inset-bottom));
+    padding: 2.4rem 2rem calc(7.4rem + env(safe-area-inset-bottom));
 }
 .post-wrap .post__wrap:only-child {
-    padding-bottom: 2.4rem;
+    padding-bottom: calc(2.4rem + constant(safe-area-inset-bottom));
+    padding-bottom: calc(2.4rem + env(safe-area-inset-bottom));
 }
 .post__wrap .post__title .input__item_inner {
     border-color: #ccc;
@@ -2325,7 +2327,8 @@ color: #ed1651;
     bottom: 0;
     display: flex;
     width: 100%;
-    padding: .8rem 1.5rem;
+    padding: .8rem 1.5rem calc(.8rem + constant(safe-area-inset-bottom));
+    padding: .8rem 1.5rem calc(.8rem + env(safe-area-inset-bottom));
     border-top: 1px solid #ccc;
     background: #fff;
 }
