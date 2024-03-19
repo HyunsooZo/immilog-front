@@ -53,7 +53,7 @@
 							<div class="tag__item">
 								<span
 									class="item--hash"
-									v-for="(index, tag) in jobBoard.tags"
+									v-for="(tag, index) in jobBoard.tags"
 									:key="index"
 								>
 									<em>{{ tag }}</em>

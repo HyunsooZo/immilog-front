@@ -998,6 +998,19 @@ strong + .button-text {
 .select--dialog .modal-body .list-wrap .item:last-child {
     border-bottom: none;
 }
+    /*  */
+.modal-content.slide-up-enter-active,
+.modal-content.slide-up-leave-active {
+	transition: transform 0.3s ease;
+}
+.modal-content.slide-up-enter-from,
+.modal-content.slide-up-leave-to {
+	transform: translateY(100%);
+}
+.modal-content.slide-up-enter-to,
+.modal-content.slide-up-leave-from {
+	transform: translateY(0);
+}
 /* reply dialog */
 .reply--dialog .modal-content {
     top: auto;
@@ -2388,6 +2401,7 @@ color: #ed1651;
 }
 .item.swiper-container .swiper-pagination-bullet-active {
 }
+
 /* 완료 */
 .msg-wrap {
     padding: 8rem 2rem 0;
