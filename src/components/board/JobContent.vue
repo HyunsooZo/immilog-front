@@ -4,9 +4,9 @@
 			<div class="item__fnc">
 				<div class="list__item">
 					<button type="button" class="list__item_button">
-						<strong class="em">회사명{{ jobBoard.company }}</strong>
-						<em>country{{ jobBoard.country }}</em>
-						<em>region{{ jobBoard.region }}</em>
+						<strong class="em">{{ jobBoard.company }}</strong>
+						<em>{{ jobBoard.country }}</em>
+						<em>{{ jobBoard.region }}</em>
 					</button>
 				</div>
 			</div>
@@ -18,8 +18,8 @@
 				@click="onJobBoardDetail(jobBoard.seq)"
 			>
 				<div class="text__item">
-					<p class="title">채용 제목{{ jobBoard.title }}</p>
-					<p class="text">채용 내용{{ jobBoard.content }}</p>
+					<p class="title">{{ jobBoard.title }}</p>
+					<p class="text">{{ jobBoard.content }}</p>
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<!-- 필수 -->
@@ -28,13 +28,13 @@
 									<em class="em">상시채용</em>
 								</span>
 								<span class="item--tag">
-									<em class="em">D-00</em>
+									<em class="em">{{ calculateDeadLine(jobBoard.deadline) }}</em>
 								</span>
 								<span class="item--tag">
 									<em>경력(0년 이상)</em>
 								</span>
 								<span class="item--tag">
-									<em>경력 무관</em>
+									<em>{{ jobBoard.experience }}</em>
 								</span>
 							</div>
 							<!-- 선택 -->
@@ -226,5 +226,13 @@ const checkIfTokenExists = () => {
 	if (!token) {
 		router.push('/sign-in');
 	}
+};
+const calculateDeadLine = deadline => {
+	const date = new Date(deadline);
+	const now = new Date();
+	const diff = date - now;
+	const day = 1000 * 60 * 60 * 24;
+	const days = Math.floor(diff / day);
+	return 'D-' + days;
 };
 </script>
