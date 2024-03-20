@@ -1609,9 +1609,46 @@ color: #ed1651;
 .input__wrap [class*=__radio]:checked + .input__label::before {
     background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(51 51 51)' xmlns='http://www.w3.org/2000/svg'><path d='M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z'/></svg>");
 }
-.input__wrap ._datepicker {
 
+.input__item_inner {
+    position: relative;
 }
+.input__wrap input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: transparent;
+    cursor: pointer;
+}
+/* .input__wrap input[type="date"]::-webkit-datetime-edit {
+    display: none;
+} */
+/* .input__wrap input[type="date"]::before {
+    content: attr(data-placeholder);
+    width: 100%;
+    height: 100%;
+} */
+.input__wrap input[type="date"]::before {
+    content: attr(data-placeholde);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #999;
+}
+/* .input__wrap input[type="date"]:not(:placeholder-shown)::before {
+    display: none;
+} */
+.input__wrap input[type="date"]:focus::before,
+.input__wrap input[type="date"]:valid::before {
+    display: none;
+ }
 /* 목록 상단 기능 */
 .fnc-wrap {
     display: flex;

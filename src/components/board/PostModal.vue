@@ -52,25 +52,30 @@
 						<!-- 채용마감일 -->
 						<div class="input__wrap underline-type">
 							<div class="input__item">
-								<input type="checkbox" class="input__checkbox _text" id="allDate" name="dateSelect" checked />
+								<input type="checkbox" class="input__checkbox _text" id="allDate" name="dateSelect" />
 								<label for="allDate" class="input__label">상시채용</label>
 							</div>
 							<div class="input__item">
 								<div class="input__item_inner">
-									<!-- <input type="date" class="input__element" /> -->
+									<input type="date" :min="minDate" v-model="DatePicker" @input="updateDate" class="input__element"
+										data-placeholde="채용마감일을 선택해주세요." />
+								</div>
+							</div>
+							<!-- <div class="input__item">
+								<div class="input__item_inner">
 									<DatePicker v-model="selectedDate" :format="formatDate" :enable-time-picker="false" week-start="0"
 										position="left" placeholder="날짜를 선택하세요." auto-applyclass="datepicker" class="select__item" />
 								</div>
-							</div>
+							</div> -->
 						</div>
 						<!-- 경력선택 -->
-						<div class=" input__wrap radio-type">
+						<div class="input__wrap radio-type">
 							<div class="input__item">
-								<input type="radio" class="input__radio" id="allCareer" name="careerSelect" checked />
+								<input type="radio" class="input__checkbox _text" id="allCareer" name="careerSelect" />
 								<label for="allCareer" class="input__label">경력무관</label>
 							</div>
 							<div class="input__item">
-								<input type="radio" class="input__radio" id="selCareer" name="careerSelect"
+								<input type="radio" class="input__checkbox" id="selCareer" name="careerSelect"
 									@click="openAlert('경력 선택 팝업')" />
 								<label for="selCareer" class="input__label">경력선택</label>
 							</div>
@@ -198,27 +203,38 @@ import {
 	imageSelectIcon,
 	hashTagIcon,
 } from '@/utils/icons.js';
-import DatePicker from 'vue3-datepicker';
+// import DatePicker from 'vue3-datepicker';
+
+// DatePicker
+const today = new Date();
+const year = today.getFullYear();
+const month = (today.getMonth() + 1).toString().padStart(2, '0');
+const day = today.getDate().toString().padStart(2, '0');
+const minDate = `${year}-${month}-${day}`;
+const DatePicker = ref('');
+const updateDate = (event) => {
+	DatePicker.value = event.target.value;
+};
 
 const router = useRouter();
 const isCategorySelectClicked = ref(false);
-const selectedDate = ref(new Date());
+// const selectedDate = ref(new Date());
 
-const formatDate = date => {
-	const year = date.getFullYear();
-	const month = date.getMonth() + 1;
-	const day = date.getDate();
+// const formatDate = date => {
+// 	const year = date.getFullYear();
+// 	const month = date.getMonth() + 1;
+// 	const day = date.getDate();
 
-	// 날짜 앞에 0을 붙여야 하는 경우
-	if (month || day < 10) {
-		const zeroDay = ('00' + day).slice(-2);
-		const zeroMonth = ('00' + month).slice(-2);
+// 	// 날짜 앞에 0을 붙여야 하는 경우
+// 	if (month || day < 10) {
+// 		const zeroDay = ('00' + day).slice(-2);
+// 		const zeroMonth = ('00' + month).slice(-2);
 
-		return `${year}.${zeroMonth}.${zeroDay}`;
-	} else {
-		return `${year}.${month}.${day}`;
-	}
-};
+// 		return `${year}.${zeroMonth}.${zeroDay}`;
+// 	} else {
+// 		return `${year}.${month}.${day}`;
+// 	}
+// };
 
 const selectTitle = '카테고리 선택';
 const selectedCategory = ref({ name: '소통', code: 'COMMUNICATION' });
@@ -443,16 +459,11 @@ const validateUploadPost = () => {
 };
 </script>
 <style scoped>
-.datepicker {
+/* .datepicker {
 	position: absolute;
-	/* 절대 위치 설정 */
 	z-index: 1000;
-	/* 다른 요소보다 높은 z-index 값 설정 */
 	top: 50%;
-	/* 중앙에 위치하도록 설정 (예시) */
 	left: 50%;
-	/* 중앙에 위치하도록 설정 (예시) */
 	transform: translate(-50%, -50%);
-	/* 정확히 중앙에 위치하도록 조정 */
-}
+} */
 </style>
