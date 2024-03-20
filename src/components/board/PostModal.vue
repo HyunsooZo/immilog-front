@@ -206,16 +206,6 @@ import {
 // import DatePicker from 'vue3-datepicker';
 
 // DatePicker
-// const today = new Date();
-// const year = today.getFullYear();
-// const month = (today.getMonth() + 1).toString().padStart(2, '0');
-// const day = today.getDate().toString().padStart(2, '0');
-// const minDate = `${year}-${month}-${day}`;
-// const DatePicker = ref('');
-// const updateDate = (event) => {
-// 	DatePicker.value = event.target.value;
-// };
-
 const today = new Date();
 const year = today.getFullYear();
 const month = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -225,7 +215,6 @@ const selectedDate = ref('');
 const updateDate = (event) => {
 	selectedDate.value = event.target.value;
 };
-
 
 const router = useRouter();
 const isCategorySelectClicked = ref(false);
