@@ -57,10 +57,9 @@
 							</div>
 							<div class="input__item">
 								<div class="input__item_inner">
-									<label v-if="!selectedDate" class="placeholder">채용마감일을 선택하세요.</label>
-									<input type="date" :min="minDate" v-model="selectedDate" @input="updateDate"
+									<label for="selectedDate" v-if="!selectedDate" class="placeholder">채용마감일을 선택하세요.</label>
+									<input type="date" id="selectedDate" :min="minDate" v-model="selectedDate" @input="updateDate"
 										class="input__element _date" />
-									<!-- data-placeholde="채용마감일을 선택하세요." -->
 								</div>
 							</div>
 						</div>
@@ -202,16 +201,27 @@ import {
 // import DatePicker from 'vue3-datepicker';
 
 // DatePicker
+// const today = new Date();
+// const year = today.getFullYear();
+// const month = (today.getMonth() + 1).toString().padStart(2, '0');
+// const day = today.getDate().toString().padStart(2, '0');
+// const minDate = `${year}-${month}-${day}`;
+// const selectedDate = ref('');
+// const updateDate = (event) => {
+// 	selectedDate.value = event.target.value;
+// };
+
+const selectedDate = ref('');
+const updateDate = (event) => {
+	selectedDate.value = event.target.value;
+};
 const today = new Date();
 const year = today.getFullYear();
 const month = (today.getMonth() + 1).toString().padStart(2, '0');
 const day = today.getDate().toString().padStart(2, '0');
 const minDate = `${year}-${month}-${day}`;
-const selectedDate = ref('');
-const updateDate = (event) => {
-	selectedDate.value = event.target.value;
-};
 
+//
 const router = useRouter();
 const isCategorySelectClicked = ref(false);
 
