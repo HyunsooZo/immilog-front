@@ -1721,7 +1721,8 @@ color: #ed1651;
     z-index: 1;
 }
 .content .list-top-wrap:first-child,
-.content .top-box + .list-top-wrap {
+.content .top-box + .list-top-wrap,
+.content .search-wrap._search+ .list-top-wrap {
     border-top: 1px solid #e9e9e9;
 }
 /* 목록 상단타이틀 */

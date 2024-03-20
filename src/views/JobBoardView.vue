@@ -1,64 +1,48 @@
 <template>
 	<div class="content">
 		<TheTopBox :title="'구인/구직'" />
+		<SearchBox />
 		<div class="list-top-wrap">
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button
-						type="button"
-						class="button--select"
-						@click="openCategorySelect"
-					>
+					<button type="button" class="button--select" @click="openCategorySelect">
 						<span>{{ selectCategoryValue.name }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button
-						type="button"
-						class="button--select sort"
-						@click="openSortingSelect"
-					>
+					<button type="button" class="button--select sort" @click="openSortingSelect">
 						<span>{{ selectSortingValue.name }}</span>
 					</button>
 				</div>
+				<!-- 글쓰기 버튼 -->
+				<button type="button" class="button-icon button--post" :class="{ active: isStickyButton }"
+					:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }" @click="openPostModal">
+					<svg viewBox="0 0 16 16">
+						<path :d="postBtn.first" />
+						<path :d="postBtn.second" />
+					</svg>
+					<i class="blind">글쓰기</i>
+				</button>
 			</div>
 		</div>
 
 		<!-- 목록 -->
 		<div class="list-wrap">
-			<!-- 글쓰기 버튼 -->
-			<button
-				type="button"
-				class="button-icon button--post _sticky"
-				:class="{ active: isStickyButton }"
-				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }"
-				@click="openPostModal"
-			>
-				<svg viewBox="0 0 16 16">
-					<path :d="postBtn.first" />
-					<path :d="postBtn.second" />
-				</svg>
-				<i class="blind">글쓰기</i>
-			</button>
 			<!-- <NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="'구인/구직 글'" /> -->
 			<div v-for="(item, index) in state.jobBoards" :key="index">
 				<JobContent :jobBoard="item" />
 			</div>
 		</div>
 	</div>
-	<SelectDialog
-		v-if="isCategorySelectClicked || isSortingSelectClicked"
-		:title="selectTitle"
-		:list="selectList"
-		@close="closeSelect"
-		@select:value="selectedValue"
-	/>
+	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
+		@close="closeSelect" @select:value="selectedValue" />
 </template>
 
 <script setup>
 import { nextTick, onMounted, ref } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
+import SearchBox from '@/components/search/SearchBox.vue';
 import JobContent from '@/components/board/JobContent.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 // import NoContent from '@/components/board/NoContent.vue';
