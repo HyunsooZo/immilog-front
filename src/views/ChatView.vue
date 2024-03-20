@@ -118,30 +118,34 @@
 							</p>
 						</div>
 					</div>
-					<div class="item__fnc">
-						<button type="button" class="list__item_button more">
-							<i class="blind">더보기</i
-							><!-- //신고, 나가기 -->
-						</button>
-						<div
-							class="item__badge"
-							v-if="
-								(amISender(chatRoom.sender) &&
-									chatRoom.unreadCountForSender > 0) ||
-								(!amISender(chatRoom.sender) &&
-									chatRoom.unreadCountForRecipient > 0)
-							"
-						>
-							<span class="text">
-								{{
-									amISender(chatRoom.sender)
-										? chatRoom.unreadCountForSender
-										: chatRoom.unreadCountForRecipient
-								}}
-							</span>
-						</div>
-					</div>
 				</button>
+				<div class="item__fnc">
+					<button
+						type="button"
+						class="list__item_button more"
+						@click.stop="test"
+					>
+						<i class="blind">더보기</i
+						><!-- //신고, 나가기 -->
+					</button>
+					<div
+						class="item__badge"
+						v-if="
+							(amISender(chatRoom.sender) &&
+								chatRoom.unreadCountForSender > 0) ||
+							(!amISender(chatRoom.sender) &&
+								chatRoom.unreadCountForRecipient > 0)
+						"
+					>
+						<span class="text">
+							{{
+								amISender(chatRoom.sender)
+									? chatRoom.unreadCountForSender
+									: chatRoom.unreadCountForRecipient
+							}}
+						</span>
+					</div>
+				</div>
 			</div>
 			<!-- // .item -->
 		</div>
@@ -244,6 +248,10 @@ const connectWebSocket = () => {
 			},
 		);
 	});
+};
+
+const test = () => {
+	console.log('test');
 };
 
 // 컴포넌트 마운트 시 초기화 및 채팅목록 불러오기
