@@ -67,5 +67,6 @@ const closeModal = () => {
 
 onMounted(() => {
 	fetchMyPostList(0);
+	modalOpenClass();
 });
 </script>

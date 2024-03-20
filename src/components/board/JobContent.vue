@@ -4,21 +4,22 @@
 			<div class="item__fnc">
 				<div class="list__item">
 					<button type="button" class="list__item_button">
-						<strong class="em">회사명{{ post.userNickName }}</strong>
-						<em>country{{ post.country }}</em>
-						<em>region{{ post.region }}</em>
-						<span v-if="post.isPublic === 'N'" class="list__private">
-							<i class="blind">내국가에만 공개 된 글</i>
-						</span>
+						<strong class="em">{{ jobBoard.company }}</strong>
+						<em>{{ jobBoard.country }}</em>
+						<em>{{ jobBoard.region }}</em>
 					</button>
 				</div>
 			</div>
 		</div>
 		<div class="text__wrap">
-			<button type="button" class="list__item_button" @click="onJobBoardDetail(post.seq)">
+			<button
+				type="button"
+				class="list__item_button"
+				@click="onJobBoardDetail(jobBoard.seq)"
+			>
 				<div class="text__item">
-					<p class="title">채용 제목{{ post.title }}</p>
-					<p class="text">채용 내용{{ post.content }}</p>
+					<p class="title">{{ jobBoard.title }}</p>
+					<p class="text">{{ jobBoard.content }}</p>
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<!-- 필수 -->
@@ -27,13 +28,13 @@
 									<em class="em">상시채용</em>
 								</span>
 								<span class="item--tag">
-									<em class="em">D-00</em>
+									<em class="em">{{ calculateDeadLine(jobBoard.deadline) }}</em>
 								</span>
 								<span class="item--tag">
 									<em>경력(0년 이상)</em>
 								</span>
 								<span class="item--tag">
-									<em>경력 무관</em>
+									<em>{{ jobBoard.experience }}</em>
 								</span>
 							</div>
 							<!-- 선택 -->
@@ -50,14 +51,18 @@
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<div class="tag__item">
-								<span class="item--hash">
-									<em>keyword{{ post.keyword }}</em>
+								<span
+									class="item--hash"
+									v-for="(tag, index) in jobBoard.tags"
+									:key="index"
+								>
+									<em>{{ tag }}</em>
 								</span>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="thumb" v-if="post.attachments.length > 0">
+				<div class="thumb" v-if="jobBoard.attachments.length > 0">
 					<img :src="thumbnail" alt="" />
 				</div>
 			</button>
@@ -66,20 +71,32 @@
 			<div class="item__fnc">
 				<p class="list__item read">
 					<i class="blind">조회수</i>
-					<span class="item__count">{{ post.viewCount }}</span>
+					<span class="item__count">{{ jobBoard.viewCount }}</span>
 				</p>
-				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
+				<button
+					type="button"
+					class="list__item_button like"
+					:class="{ active: isLiked }"
+					@click="likePost"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
-					<span class="item__count"> {{ likes }}</span>
+					<span class="item__count"> {{ jobBoard.likeCount.length }}</span>
 				</button>
 			</div>
 			<div class="item__fnc">
 				<p class="list__item past">
 					<i class="blind">작성시간</i>
-					<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
+					<span class="item__count">{{
+						timeCalculation(jobBoard.createdAt)
+					}}</span>
 				</p>
-				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
+				<button
+					type="button"
+					class="list__item_button mark"
+					:class="{ active: isBookmarked }"
+					@click="bookmarkApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -92,7 +109,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import useAxios from '@/composables/useAxios.js';
+// import useAxios from '@/composables/useAxios.js';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { timeCalculation } from '@/utils/date-time.js';
@@ -103,39 +120,44 @@ const userInfo = useUserInfoStore();
 const router = useRouter();
 
 const props = defineProps({
-	post: {
+	jobBoard: {
 		type: Object,
 		required: true,
 		default: () => ({
 			seq: 0,
 			title: '',
 			content: '',
-			userSeq: 0,
-			userProfileUrl: '',
-			userNickName: '',
-			comments: [],
+			userDto: {},
 			viewCount: 0,
 			likeCount: 0,
 			tags: [],
 			attachments: [],
 			likeUsers: [],
 			bookmarkUsers: [],
-			isPublic: '',
 			country: '',
 			region: '',
+			Industry: '',
+			deadline: '',
+			experience: '',
+			salary: '',
+			company: '',
+			companyEmail: '',
+			companyPhone: '',
+			companyAddress: '',
+			companyHomepage: '',
+			companyLogo: '',
 			status: '',
-			category: '',
 			createdAt: '',
 		}),
 	},
 });
 
-const likes = ref(props.post.likeCount);
-const likeUsers = ref(props.post.likeUsers);
-const bookmarkUsers = ref(props.post.bookmarkUsers);
+const likes = ref(props.jobBoard.likeCount);
+const likeUsers = ref(props.jobBoard.likeUsers);
+const bookmarkUsers = ref(props.jobBoard.bookmarkUsers);
 const userSeq = ref(userInfo.userSeq);
 const thumbnail = ref(
-	props.post.attachments.length > 0 ? props.post.attachments[0] : '',
+	props.jobBoard.attachments.length > 0 ? props.jobBoard.attachments[0] : '',
 );
 const isLiked = computed(() => {
 	return likeUsers.value.includes(userSeq.value);
@@ -146,15 +168,15 @@ const isBookmarked = computed(() => {
 });
 
 const onBoardDetail = () => {
-	viewApi(props.post.seq);
-	router.push(`/board/${props.post.seq}`);
+	viewApi(props.jobBoard.seq);
+	router.push(`/board/${props.jobBoard.seq}`);
 };
 
 // 좋아요 API 호출
 const likePost = () => {
 	checkIfTokenExists();
 	changeLike();
-	likeApi('posts', props.post.seq);
+	likeApi('posts', props.jobBoard.seq);
 };
 
 const changeLike = () => {
@@ -204,5 +226,13 @@ const checkIfTokenExists = () => {
 	if (!token) {
 		router.push('/sign-in');
 	}
+};
+const calculateDeadLine = deadline => {
+	const date = new Date(deadline);
+	const now = new Date();
+	const diff = date - now;
+	const day = 1000 * 60 * 60 * 24;
+	const days = Math.floor(diff / day);
+	return 'D-' + days;
 };
 </script>

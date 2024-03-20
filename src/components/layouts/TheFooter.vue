@@ -35,8 +35,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, watchEffect } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useMenuStore } from '@/stores/menu';
 import {
 	homeIcon,
@@ -46,6 +46,7 @@ import {
 	myPageIcon,
 } from '@/utils/icons.js';
 
+const route = useRoute();
 const router = useRouter();
 const iconViewBox = '0 0 16 16'; // 모든 아이콘에 적용되는 viewBox 값
 
@@ -84,7 +85,7 @@ const menuItems = ref([
 ]);
 
 // 현재, 그리고 마지막으로 활성화된 메뉴의 인덱스
-const activeItem = ref(useMenuStore().getMenu());
+const activeItem = ref(0);
 
 // 라우트 매핑과 메뉴 아이템 클릭 핸들러
 const routeMapping = {
@@ -101,4 +102,23 @@ const onMenuItemClick = index => {
 	router.push(routeMapping[index] || '/');
 	activeItem.value = index;
 };
+
+// 라우트 경로를 메뉴 인덱스에 매핑
+const routeToIndexMapping = {
+	'/': 0,
+	'/board': 1,
+	'/chat': 2,
+	'/job-board': 3,
+	'/my-page': 4,
+};
+
+// 현재 라우트가 변경될 때마다 실행되는 watchEffect
+watchEffect(() => {
+	const path = route.path;
+	const mappedIndex = routeToIndexMapping[path];
+	console.log(path);
+	if (mappedIndex !== undefined) {
+		activeItem.value = mappedIndex;
+	}
+});
 </script>

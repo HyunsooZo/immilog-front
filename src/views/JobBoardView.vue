@@ -5,12 +5,20 @@
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button type="button" class="button--select" @click="openCategorySelect">
+					<button
+						type="button"
+						class="button--select"
+						@click="openCategorySelect"
+					>
 						<span>{{ selectCategoryValue.name }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button type="button" class="button--select sort" @click="openSortingSelect">
+					<button
+						type="button"
+						class="button--select sort"
+						@click="openSortingSelect"
+					>
 						<span>{{ selectSortingValue.name }}</span>
 					</button>
 				</div>
@@ -20,8 +28,13 @@
 		<!-- 목록 -->
 		<div class="list-wrap">
 			<!-- 글쓰기 버튼 -->
-			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
-				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }" @click="openPostModal">
+			<button
+				type="button"
+				class="button-icon button--post _sticky"
+				:class="{ active: isStickyButton }"
+				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }"
+				@click="openPostModal"
+			>
 				<svg viewBox="0 0 16 16">
 					<path :d="postBtn.first" />
 					<path :d="postBtn.second" />
@@ -29,21 +42,32 @@
 				<i class="blind">글쓰기</i>
 			</button>
 			<!-- <NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="'구인/구직 글'" /> -->
-			<JobContent />
+			<div v-for="(item, index) in state.jobBoards" :key="index">
+				<JobContent :jobBoard="item" />
+			</div>
 		</div>
 	</div>
-	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
-		@close="closeSelect" @select:value="selectedValue" />
+	<SelectDialog
+		v-if="isCategorySelectClicked || isSortingSelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 </template>
 
 <script setup>
-import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import JobContent from '@/components/board/JobContent.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 // import NoContent from '@/components/board/NoContent.vue';
 import { postBtn } from '@/utils/icons';
 import { sortingList2, categoryList2 } from '@/utils/selectItems.js';
+import { getJobBoardsApi } from '@/services/jobBoard.js';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -74,6 +98,40 @@ const handleScrollEvent = () => {
 		);
 	};
 };
+
+const state = ref({
+	jobBoards: [],
+	pagination: {},
+	loading: false,
+});
+
+const currentPage = ref(0);
+const selectedCountry = ref('ALL');
+const selectedSortingMethod = ref('CREATED_DATE');
+const selectedIndustry = ref('IT');
+const selectedExperience = ref('JUNIOR');
+
+const fetchJobBoardList = async () => {
+	state.value.loading = true;
+	try {
+		const { status, data } = await getJobBoardsApi(
+			selectedCountry.value,
+			selectedSortingMethod.value,
+			selectedIndustry.value,
+			selectedExperience.value,
+			currentPage.value,
+		);
+		if (status === 200) {
+			state.value.jobBoards = data.data.content;
+			state.value.pagination = data.data.pagination;
+		}
+	} catch (error) {
+		console.log(error);
+	} finally {
+		state.value.loading = false;
+	}
+};
+
 const handleStickyWrap = () => {
 	isStickyWrap.value = window.scrollY > 0;
 	if (isStickyButton.value) {
@@ -136,15 +194,14 @@ const selectedValue = value => {
 		selectSortingValue.value = value;
 	}
 	initializeState();
-	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+	fetchJobBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
 onMounted(async () => {
+	if (localStorage.getItem('accessToken') === null) {
+		router.push('/sign-in');
+	}
 	handleScrollEvent();
-	// window.addEventListener('scroll', handleScroll);
-});
-
-onUnmounted(() => {
-	// window.removeEventListener('scroll', handleScroll);
+	fetchJobBoardList('CREATED_AT', currentPage.value);
 });
 </script>
