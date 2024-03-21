@@ -57,16 +57,11 @@
 							</div>
 							<div class="input__item">
 								<div class="input__item_inner">
-									<input type="date" :min="minDate" v-model="DatePicker" @input="updateDate" class="input__element"
-										data-placeholde="채용마감일을 선택해주세요." />
+									<label for="selectedDate" v-if="!selectedDate" class="placeholder">채용마감일을 선택하세요.</label>
+									<input type="date" id="selectedDate" :min="minDate" v-model="selectedDate" @input="updateDate"
+										class="input__element _date" />
 								</div>
 							</div>
-							<!-- <div class="input__item">
-								<div class="input__item_inner">
-									<DatePicker v-model="selectedDate" :format="formatDate" :enable-time-picker="false" week-start="0"
-										position="left" placeholder="날짜를 선택하세요." auto-applyclass="datepicker" class="select__item" />
-								</div>
-							</div> -->
 						</div>
 						<!-- 경력선택 -->
 						<div class="input__wrap radio-type">
@@ -206,35 +201,29 @@ import {
 // import DatePicker from 'vue3-datepicker';
 
 // DatePicker
+// const today = new Date();
+// const year = today.getFullYear();
+// const month = (today.getMonth() + 1).toString().padStart(2, '0');
+// const day = today.getDate().toString().padStart(2, '0');
+// const minDate = `${year}-${month}-${day}`;
+// const selectedDate = ref('');
+// const updateDate = (event) => {
+// 	selectedDate.value = event.target.value;
+// };
+
+const selectedDate = ref('');
+const updateDate = (event) => {
+	selectedDate.value = event.target.value;
+};
 const today = new Date();
 const year = today.getFullYear();
 const month = (today.getMonth() + 1).toString().padStart(2, '0');
 const day = today.getDate().toString().padStart(2, '0');
 const minDate = `${year}-${month}-${day}`;
-const DatePicker = ref('');
-const updateDate = (event) => {
-	DatePicker.value = event.target.value;
-};
 
+//
 const router = useRouter();
 const isCategorySelectClicked = ref(false);
-// const selectedDate = ref(new Date());
-
-// const formatDate = date => {
-// 	const year = date.getFullYear();
-// 	const month = date.getMonth() + 1;
-// 	const day = date.getDate();
-
-// 	// 날짜 앞에 0을 붙여야 하는 경우
-// 	if (month || day < 10) {
-// 		const zeroDay = ('00' + day).slice(-2);
-// 		const zeroMonth = ('00' + month).slice(-2);
-
-// 		return `${year}.${zeroMonth}.${zeroDay}`;
-// 	} else {
-// 		return `${year}.${month}.${day}`;
-// 	}
-// };
 
 const selectTitle = '카테고리 선택';
 const selectedCategory = ref({ name: '소통', code: 'COMMUNICATION' });
