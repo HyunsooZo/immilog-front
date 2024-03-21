@@ -9,14 +9,14 @@
 					<button
 						type="button"
 						class="button button--positive"
-						@click="closeModal(false)"
+						@click="closeModal"
 					>
 						취소
 					</button>
 					<button
 						type="button"
 						class="button button--positive"
-						@click="closeModal(true)"
+						@click="closeModalWithConfirm"
 					>
 						확인
 					</button>
@@ -29,9 +29,13 @@
 <script setup>
 const { modalText } = defineProps(['modalText']);
 
-const emits = defineEmits(['update:modalValue']);
+const emits = defineEmits(['close', 'confirm']);
 
-const closeModal = value => {
-	emits('update:modalValue', value);
+const closeModal = () => {
+	emits('close');
+};
+
+const closeModalWithConfirm = () => {
+	emits('confirm');
 };
 </script>

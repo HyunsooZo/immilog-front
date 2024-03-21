@@ -123,7 +123,7 @@
 					<button
 						type="button"
 						class="list__item_button more"
-						@click.stop="test"
+						@click.stop="openMoreModal(chatRoom.seq)"
 					>
 						<i class="blind">더보기</i
 						><!-- //신고, 나가기 -->
@@ -150,11 +150,18 @@
 			<!-- // .item -->
 		</div>
 	</div>
+	<MoreModal
+		v-if="onMoreModal"
+		:chatRoomSeq="onMoreChatRoomSeq"
+		@close="closeMoreModal"
+		@closeWithDelete="closeMoreModalAndDeleteChatRoom"
+	/>
 </template>
 
 <script setup>
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import SearchBox from '@/components/search/SearchBox.vue';
+import MoreModal from '@/components/modal/MoreModal.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 import useAxios from '@/composables/useAxios';
 import { useRouter } from 'vue-router';
@@ -250,9 +257,30 @@ const connectWebSocket = () => {
 	});
 };
 
-const test = () => {
-	console.log('test');
+// <-- 더보기 모달 관련
+const onMoreModal = ref(false);
+const onMoreChatRoomSeq = ref(-1);
+
+const openMoreModal = chatRoomSeq => {
+	onMoreChatRoomSeq.value = chatRoomSeq;
+	onMoreModal.value = true;
 };
+
+const closeMoreModal = () => {
+	onMoreModal.value = false;
+};
+
+const closeMoreModalAndDeleteChatRoom = chatRoomSeq => {
+	onMoreModal.value = false;
+	const index = chatRooms.value.findIndex(
+		chatRoom => chatRoom.seq === chatRoomSeq,
+	);
+	// 인덱스가 유효하면 해당 요소를 리스트에서 제거
+	if (index !== -1) {
+		chatRooms.value.splice(index, 1);
+	}
+};
+// -->
 
 // 컴포넌트 마운트 시 초기화 및 채팅목록 불러오기
 onMounted(async () => {

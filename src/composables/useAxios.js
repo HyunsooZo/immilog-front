@@ -92,7 +92,6 @@ const useAxios = router => {
 			router.push('/sign-in');
 		}
 	};
-
 	return {
 		sendRequest,
 	};
