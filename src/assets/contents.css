@@ -1444,6 +1444,7 @@ color: #ed1651;
     white-space: nowrap;
 	border: none;
 	background: transparent;
+    text-align: left;
 }
 /* disabled */
 .input__wrap.underline-type .input__element:disabled,
