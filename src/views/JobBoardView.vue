@@ -37,6 +37,7 @@
 	</div>
 	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
 		@close="closeSelect" @select:value="selectedValue" />
+	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
 </template>
 
 <script setup>
@@ -45,6 +46,7 @@ import TheTopBox from '@/components/search/TheTopBox.vue';
 import SearchBox from '@/components/search/SearchBox.vue';
 import JobContent from '@/components/board/JobContent.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
+import PostModal from '@/components/board/PostModal.vue';
 // import NoContent from '@/components/board/NoContent.vue';
 import { postBtn } from '@/utils/icons';
 import { sortingList2, categoryList2 } from '@/utils/selectItems.js';
@@ -81,6 +83,18 @@ const handleScrollEvent = () => {
 			handleStickyButton.bind(null, listTopHeight),
 		);
 	};
+};
+
+// PostModal 오픈 및 닫기
+const onPostModal = ref(false);
+const openPostModal = () => {
+	onPostModal.value = true;
+	modalOpenClass();
+};
+const closePostModal = () => {
+	onPostModal.value = false;
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+	modalCloseClass();
 };
 
 const state = ref({
