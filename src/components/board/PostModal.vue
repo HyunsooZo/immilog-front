@@ -54,7 +54,7 @@
 						<div class="input__wrap underline-type date-type">
 							<div class="input__item _date" :class="{ 'disabled': allDate }">
 								<div class="input__item_inner">
-									<label for="selectedDate" v-if="!selectedDate" class="placeholder">{{ placeholder1
+									<label for="selectedDate" v-if="!selectedDate" class="placeholder">{{ PlaceholderDate
 									}}</label>
 									<input type="date" class="input__element" id="selectedDate" :min="minDate" v-model="selectedDate"
 										@input="updateDate" :disabled="allDate" />
@@ -62,7 +62,7 @@
 							</div>
 							<div class="input__item">
 								<input type="checkbox" class="input__checkbox _text" id="allDate" v-model="allDate"
-									@change="updatePlaceholder1" />
+									@change="updatePlaceholderDate" />
 								<label for="allDate" class="input__label">상시채용</label>
 							</div>
 						</div>
@@ -73,14 +73,14 @@
 						<div class="input__wrap underline-type date-type">
 							<div class="input__item _date" :class="{ 'disabled': allCareer }">
 								<div class="input__item_inner">
-									<label for="selCareer" v-if="!selectedCareer" class="placeholder">{{ placeholder2 }}</label>
+									<label for="selCareer" v-if="!selectedCareer" class="placeholder">{{ PlaceholderCareer }}</label>
 									<input type="text" class="input__element" id="selCareer" v-model="selectedCareer" :disabled="allCareer"
 										@click="openAlert('경력 선택 팝업', careerOptions)" />
 								</div>
 							</div>
 							<div class="input__item">
 								<input type="checkbox" class="input__checkbox _text" id="allCareer" v-model="allCareer"
-									@change="updatePlaceholder2" />
+									@change="updatePlaceholderCareer" />
 								<label for="allCareer" class="input__label">경력무관</label>
 							</div>
 						</div>
@@ -214,8 +214,6 @@ const selectedDate = ref('');
 const selectedCareer = ref('');
 const allDate = ref(false);
 const allCareer = ref(false);
-const placeholder1 = ref('채용마감일 선택');
-const placeholder2 = ref('경력 선택');
 const updateDate = (event) => {
 	selectedDate.value = event.target.value;
 };
@@ -225,27 +223,29 @@ const month = (today.getMonth() + 1).toString().padStart(2, '0');
 const day = today.getDate().toString().padStart(2, '0');
 const minDate = `${year}-${month}-${day}`;
 
-const updatePlaceholder1 = () => {
+const PlaceholderDate = ref('날짜 선택');
+const updatePlaceholderDate = () => {
 	if (allDate.value) {
 		selectedDate.value = '';
-		placeholder1.value = '상시채용';
+		PlaceholderDate.value = '상시채용';
 	} else {
-		placeholder1.value = '채용마감일 선택';
+		PlaceholderDate.value = '날짜 선택';
 	}
 };
-const updatePlaceholder2 = () => {
+const PlaceholderCareer = ref('경력 선택');
+const updatePlaceholderCareer = () => {
 	if (allCareer.value) {
 		selectedCareer.value = '';
-		placeholder2.value = '경력무관';
+		PlaceholderCareer.value = '경력무관';
 	} else {
-		placeholder2.value = '경력 선택';
+		PlaceholderCareer.value = '경력 선택';
 	}
 };
 watch(allDate, () => {
-	updatePlaceholder1();
+	updatePlaceholderDate();
 });
 watch(allCareer, () => {
-	updatePlaceholder2();
+	updatePlaceholderCareer();
 });
 
 //
