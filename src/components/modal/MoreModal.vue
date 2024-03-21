@@ -1,14 +1,8 @@
 <template>
-	<div class="modal" tabindex="-1" role="dialog">
+	<div class="modal default--dialog" tabindex="-1" role="dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<p class="modal-title">더 보기</p>
-				<button
-					type="button"
-					class="button-icon button--close"
-					role="link"
-					@click="closeModal"
-				>
+				<button type="button" class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">닫기</i>
 				</button>
 			</div>
@@ -30,12 +24,7 @@
 			</div>
 		</div>
 	</div>
-	<ConfirmModal
-		v-if="onConfirmModal"
-		:modalText="modalText"
-		@close="closeConfirmModal"
-		@confirm="exitChatRoom"
-	/>
+	<ConfirmModal v-if="onConfirmModal" :modalText="modalText" @close="closeConfirmModal" @confirm="exitChatRoom" />
 </template>
 
 <script setup>

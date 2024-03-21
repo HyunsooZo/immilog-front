@@ -46,33 +46,42 @@
 						</div>
 					</div>
 					<!-- //일반게시판 -->
+
 					<!-- 구인구직 -->
+					<!-- 채용마감일 -->
 					<div class="input-wrap">
 						<em class="input__title">채용마감일</em>
-						<!-- 채용마감일 -->
-						<div class="input__wrap underline-type">
-							<div class="input__item">
-								<input type="checkbox" class="input__checkbox _text" id="allDate" name="dateSelect" />
-								<label for="allDate" class="input__label">상시채용</label>
-							</div>
-							<div class="input__item">
+						<div class="input__wrap underline-type date-type">
+							<div class="input__item _date" :class="{ 'disabled': allDate }">
 								<div class="input__item_inner">
-									<label for="selectedDate" v-if="!selectedDate" class="placeholder">채용마감일을 선택하세요.</label>
-									<input type="date" id="selectedDate" :min="minDate" v-model="selectedDate" @input="updateDate"
-										class="input__element _date" />
+									<label for="selectedDate" v-if="!selectedDate" class="placeholder">{{ placeholder1
+									}}</label>
+									<input type="date" class="input__element" id="selectedDate" :min="minDate" v-model="selectedDate"
+										@input="updateDate" :disabled="allDate" />
 								</div>
 							</div>
-						</div>
-						<!-- 경력선택 -->
-						<div class="input__wrap radio-type">
 							<div class="input__item">
-								<input type="radio" class="input__checkbox _text" id="allCareer" name="careerSelect" />
-								<label for="allCareer" class="input__label">경력무관</label>
+								<input type="checkbox" class="input__checkbox _text" id="allDate" v-model="allDate"
+									@change="updatePlaceholder1" />
+								<label for="allDate" class="input__label">상시채용</label>
+							</div>
+						</div>
+					</div>
+					<!-- 경력 선택 -->
+					<div class="input-wrap">
+						<em class="input__title">경력선택</em>
+						<div class="input__wrap underline-type date-type">
+							<div class="input__item _date" :class="{ 'disabled': allCareer }">
+								<div class="input__item_inner">
+									<label for="selCareer" v-if="!selectedCareer" class="placeholder">{{ placeholder2 }}</label>
+									<input type="text" class="input__element" id="selCareer" v-model="selectedCareer" :disabled="allCareer"
+										@click="openAlert('경력 선택 팝업', careerOptions)" />
+								</div>
 							</div>
 							<div class="input__item">
-								<input type="radio" class="input__checkbox" id="selCareer" name="careerSelect"
-									@click="openAlert('경력 선택 팝업')" />
-								<label for="selCareer" class="input__label">경력선택</label>
+								<input type="checkbox" class="input__checkbox _text" id="allCareer" v-model="allCareer"
+									@change="updatePlaceholder2" />
+								<label for="allCareer" class="input__label">경력무관</label>
 							</div>
 						</div>
 					</div>
@@ -201,17 +210,12 @@ import {
 // import DatePicker from 'vue3-datepicker';
 
 // DatePicker
-// const today = new Date();
-// const year = today.getFullYear();
-// const month = (today.getMonth() + 1).toString().padStart(2, '0');
-// const day = today.getDate().toString().padStart(2, '0');
-// const minDate = `${year}-${month}-${day}`;
-// const selectedDate = ref('');
-// const updateDate = (event) => {
-// 	selectedDate.value = event.target.value;
-// };
-
 const selectedDate = ref('');
+const selectedCareer = ref('');
+const allDate = ref(false);
+const allCareer = ref(false);
+const placeholder1 = ref('채용마감일 선택');
+const placeholder2 = ref('경력 선택');
 const updateDate = (event) => {
 	selectedDate.value = event.target.value;
 };
@@ -220,6 +224,29 @@ const year = today.getFullYear();
 const month = (today.getMonth() + 1).toString().padStart(2, '0');
 const day = today.getDate().toString().padStart(2, '0');
 const minDate = `${year}-${month}-${day}`;
+
+const updatePlaceholder1 = () => {
+	if (allDate.value) {
+		selectedDate.value = '';
+		placeholder1.value = '상시채용';
+	} else {
+		placeholder1.value = '채용마감일 선택';
+	}
+};
+const updatePlaceholder2 = () => {
+	if (allCareer.value) {
+		selectedCareer.value = '';
+		placeholder2.value = '경력무관';
+	} else {
+		placeholder2.value = '경력 선택';
+	}
+};
+watch(allDate, () => {
+	updatePlaceholder1();
+});
+watch(allCareer, () => {
+	updatePlaceholder2();
+});
 
 //
 const router = useRouter();
