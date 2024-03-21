@@ -1750,7 +1750,8 @@ color: #ed1651;
 }
 .content .list-top-wrap:first-child,
 .content .top-box + .list-top-wrap,
-.content .search-wrap._search+ .list-top-wrap {
+.content .top-box + .search-wrap._search + .list-wrap._chat,
+.content .top-box + .search-wrap._search + .list-top-wrap {
     border-top: 1px solid #e9e9e9;
 }
 /* 목록 상단타이틀 */
@@ -2031,21 +2032,21 @@ color: #ed1651;
     max-height: 4rem;
 }
 /* chat */
-.list-wrap.chat .item {
+.list-wrap._chat .item {
     display: flex;
     padding: 1.5rem 1rem;
 }
-.list-wrap.chat .item > .list__item_button {
+.list-wrap._chat .item > .list__item_button {
     position: relative;
     display: block;
     width: 100%;
     width: calc(100% - 24px);
     padding-left: 6rem;
 }
-.list-wrap.chat .item .info__wrap {
+.list-wrap._chat .item .info__wrap {
     margin-bottom: 0;
 }
-.list-wrap.chat .item .info__wrap .item__pic {
+.list-wrap._chat .item .info__wrap .item__pic {
     position: absolute;
     top: 50%;
     left: 0;
@@ -2054,28 +2055,28 @@ color: #ed1651;
     margin: 0;
     transform: translateY(-50%);
 }
-.list-wrap.chat .item .text__wrap [class*=list__item] .text {
+.list-wrap._chat .item .text__wrap [class*=list__item] .text {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     -webkit-line-clamp: 1;
 }
-.list-wrap.chat .item .util__wrap {
+.list-wrap._chat .item .util__wrap {
     margin-top: 0;
 }
-.list-wrap.chat .item > .item__fnc {
+.list-wrap._chat .item > .item__fnc {
     display: flex;
     flex-direction: column;
     margin-top: -1rem;
 }
-.list-wrap.chat .item > .list__item_button > .item__fnc {
+.list-wrap._chat .item > .list__item_button > .item__fnc {
     display: flex;
     flex-direction: column;
     position: absolute;
     top: -1rem;
     right: -2.4rem;
 }
-.list-wrap.chat .item .item__fnc .item__badge {
+.list-wrap._chat .item .item__fnc .item__badge {
     display: inline-flex;
     align-items: center;
     justify-content:center;
@@ -2086,14 +2087,14 @@ color: #ed1651;
     background: #ed1651;
     border-radius: 1.8rem;
 }
-.list-wrap.chat .item .item__fnc .item__badge .text {
+.list-wrap._chat .item .item__fnc .item__badge .text {
     display: inline-block;
     padding: 0 .2rem;
     line-height: 1.1rem;
     font-size: 1.1rem;
     color: #fff;
 }
-.list-wrap.chat .item .item__fnc .item__badge .text i {
+.list-wrap._chat .item .item__fnc .item__badge .text i {
     font-size: 1rem;
 }
 /* 해시태그 */

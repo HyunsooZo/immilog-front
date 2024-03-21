@@ -2,96 +2,38 @@
 	<div class="content">
 		<TheTopBox :title="'채팅'" />
 		<SearchBox />
-		<div class="list-top-wrap">
-			<!-- 카테고리 정렬 -->
-			<div class="fnc-wrap">
-				<div class="search-wrap blind" :class="{ active: isSearchOpen }">
-					<div class="input-wrap">
-						<div class="input__inner">
-							<button
-								class="button button--search"
-								role="link"
-								@click="openSearchInput"
-							>
-								<i class="blind">채팅 검색</i>
-							</button>
-							<div class="input__inner-wrap">
-								<div class="input__inner-item">
-									<input
-										v-model="searchInput"
-										type="search"
-										id="inputSrch"
-										class="input__element input__element--search"
-										placeholder="검색어를 입력 후 엔터를 눌러주세요"
-										autocomplete="off"
-										@keyup.enter="callSearchApi"
-									/>
-									<button
-										v-if="searchInput !== ''"
-										type="button"
-										class="input__button-remove"
-										title="텍스트삭제"
-										@click="initializeSearchInput"
-									></button>
-								</div>
-								<button
-									class="button button--close"
-									role="link"
-									@click="closeSearchInput"
-								>
-									<i class="blind">취소</i>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 
-		<div class="list-wrap chat">
+		<div class="list-wrap _chat">
 			<div class="item" v-for="chatRoom in chatRooms" :key="chatRoom.seq">
-				<button
-					type="button"
-					class="list__item_button"
-					@click="onChatDetail(chatRoom.seq)"
-				>
+				<button type="button" class="list__item_button" @click="onChatDetail(chatRoom.seq)">
 					<div class="info__wrap">
-						<div
-							class="item__pic pic"
-							:class="{
-								'pic--default':
-									(amISender(chatRoom.sender) &&
-										chatRoom.recipient.profileImage === '') ||
-									(amISender(chatRoom.recipient) &&
-										chatRoom.sender.profileImage === ''),
-							}"
-						>
-							<img
-								:src="
-									amISender(chatRoom.sender)
-										? chatRoom.recipient.profileImage
-										: chatRoom.sender.profileImage
-								"
-								alt=""
-								v-if="
-									(amISender(chatRoom.sender) &&
-										chatRoom.recipient.profileImage !== '') ||
-									(amISender(chatRoom.recipient) &&
-										chatRoom.sender.profileImage !== '')
-								"
-							/>
+						<div class="item__pic pic" :class="{
+							'pic--default':
+								(amISender(chatRoom.sender) &&
+									chatRoom.recipient.profileImage === '') ||
+								(amISender(chatRoom.recipient) &&
+									chatRoom.sender.profileImage === ''),
+						}">
+							<img :src="amISender(chatRoom.sender)
+								? chatRoom.recipient.profileImage
+								: chatRoom.sender.profileImage
+								" alt="" v-if="(amISender(chatRoom.sender) &&
+		chatRoom.recipient.profileImage !== '') ||
+		(amISender(chatRoom.recipient) &&
+			chatRoom.sender.profileImage !== '')
+		" />
 						</div>
 						<div class="item__fnc">
 							<div class="list__item user">
 								<em>{{
 									amISender(chatRoom.sender)
-										? chatRoom.recipient.country
-										: chatRoom.sender.country
+									? chatRoom.recipient.country
+									: chatRoom.sender.country
 								}}</em>
 								<strong>{{
 									amISender(chatRoom.sender)
-										? chatRoom.recipient.nickName
-										: chatRoom.sender.nickName
+									? chatRoom.recipient.nickName
+									: chatRoom.sender.nickName
 								}}</strong>
 							</div>
 						</div>
@@ -120,28 +62,19 @@
 					</div>
 				</button>
 				<div class="item__fnc">
-					<button
-						type="button"
-						class="list__item_button more"
-						@click.stop="openMoreModal(chatRoom.seq)"
-					>
-						<i class="blind">더보기</i
-						><!-- //신고, 나가기 -->
+					<button type="button" class="list__item_button more" @click.stop="openMoreModal(chatRoom.seq)">
+						<i class="blind">더보기</i><!-- //신고, 나가기 -->
 					</button>
-					<div
-						class="item__badge"
-						v-if="
-							(amISender(chatRoom.sender) &&
-								chatRoom.unreadCountForSender > 0) ||
-							(!amISender(chatRoom.sender) &&
-								chatRoom.unreadCountForRecipient > 0)
-						"
-					>
+					<div class="item__badge" v-if="(amISender(chatRoom.sender) &&
+						chatRoom.unreadCountForSender > 0) ||
+						(!amISender(chatRoom.sender) &&
+							chatRoom.unreadCountForRecipient > 0)
+						">
 						<span class="text">
 							{{
 								amISender(chatRoom.sender)
-									? chatRoom.unreadCountForSender
-									: chatRoom.unreadCountForRecipient
+								? chatRoom.unreadCountForSender
+								: chatRoom.unreadCountForRecipient
 							}}
 						</span>
 					</div>
@@ -150,12 +83,8 @@
 			<!-- // .item -->
 		</div>
 	</div>
-	<MoreModal
-		v-if="onMoreModal"
-		:chatRoomSeq="onMoreChatRoomSeq"
-		@close="closeMoreModal"
-		@closeWithDelete="closeMoreModalAndDeleteChatRoom"
-	/>
+	<MoreModal v-if="onMoreModal" :chatRoomSeq="onMoreChatRoomSeq" @close="closeMoreModal"
+		@closeWithDelete="closeMoreModalAndDeleteChatRoom" />
 </template>
 
 <script setup>
