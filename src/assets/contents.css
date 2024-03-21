@@ -48,7 +48,8 @@ body {
     background: #f6f6f6;
 }
 .content._full {
-    padding-bottom: 0;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* button */
@@ -1052,9 +1053,13 @@ strong + .button-text {
     background: #fff;
 }
 .content._search .search-wrap {
-    position: sticky;
+    position: fixed;
     top: 0;
+    width: 100%;
     z-index: 2;
+}
+.content._search .search-result-wrap {
+    padding-top: 6.4rem;
 }
 /* chat */
 .chat-wrap {
