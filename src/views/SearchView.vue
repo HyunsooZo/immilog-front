@@ -13,7 +13,7 @@
 							class="input__element input__element--search"
 							placeholder="검색어를 입력 후 엔터를 눌러주세요"
 							autocomplete="off"
-							@keyup.enter="callSearchApi"
+							@keyup.enter="callSearchApi(page)"
 						/>
 						<button
 							v-if="searchInput !== ''"
@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, onUnmounted, watch } from 'vue';
 import useAxios from '@/composables/useAxios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
@@ -102,17 +102,14 @@ const state = ref({
 	loading: false,
 });
 
-const emits = defineEmits(['update:searchModalValue']);
-
-// const closeSearchModal = () => {
-// 	emits('update:searchModalValue', false);
-// };
+defineEmits(['update:searchModalValue']);
 
 // 뒤로 가기 기능
 const onBack = () => {
 	router.back();
 };
 
+// <-- 검색 로딩 관련 함수
 const onLoading = () => {
 	isLoading.value = true;
 };
@@ -120,14 +117,17 @@ const onLoading = () => {
 const offLoading = () => {
 	isLoading.value = false;
 };
+// -->
 
-const callSearchApi = async () => {
+// 검색 API 호출
+const callSearchApi = async pageNumber => {
 	onLoading();
 	stackSearchHistory();
+	initializeStateIfKeywordChanged();
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/posts/search?keyword=${searchInput.value}&page=${page.value}`,
+			`/posts/search?keyword=${searchInput.value}&page=${pageNumber}`,
 			{
 				headers: {
 					contentType: 'application/json',
@@ -137,7 +137,9 @@ const callSearchApi = async () => {
 			null,
 		);
 		if (status === 200) {
-			state.value.posts = data.data.content;
+			data.data.content.forEach(element => {
+				state.value.posts.push(element);
+			});
 			state.value.pagination = data.data.pagination;
 			setTimeout(() => {
 				offLoading();
@@ -150,12 +152,14 @@ const callSearchApi = async () => {
 	}
 };
 
+// 검색 기록 재검색
 const reCallSearchApi = item => {
 	searchInput.value = item;
 	searchApiCalled.value = true;
-	callSearchApi();
+	callSearchApi(0);
 };
 
+// 검색 기록 추가
 const stackSearchHistory = () => {
 	if (!searchInput.value) return;
 
@@ -171,6 +175,7 @@ const stackSearchHistory = () => {
 	searchHistory.value = storedHistory;
 };
 
+// 검색 기록 삭제
 const removeSearchHistory = index => {
 	// 해당 인덱스의 검색 기록 삭제
 	searchHistory.value.splice(index, 1);
@@ -179,17 +184,35 @@ const removeSearchHistory = index => {
 	localStorage.setItem('searchInputs', JSON.stringify(searchHistory.value));
 };
 
+// 검색어 초기화
 const initializeSearchInput = () => {
 	searchInput.value = '';
 	searchApiCalled.value = false;
 };
 
+// 검색어 변경 여부
+const isValueSearchValueChanged = ref(false);
+
+// 검색어 변경 감지
+watch(searchInput, (oldValue, newValue) => {
+	if (oldValue !== newValue) {
+		isValueSearchValueChanged.value = true;
+	}
+});
+
+// 페이지 마운트
 onMounted(() => {
 	// 초기 검색 기록 로드
 	const storedHistory = localStorage.getItem('searchInputs');
 	if (storedHistory) {
 		searchHistory.value = JSON.parse(storedHistory);
 	}
+	window.addEventListener('scroll', handleScroll);
+});
+
+// 페이지 언마운트
+onUnmounted(() => {
+	window.removeEventListener('scroll', handleScroll);
 });
 
 const filteredSearchHistory = computed(() => {
@@ -198,7 +221,30 @@ const filteredSearchHistory = computed(() => {
 		: [];
 });
 
-// const filteredSearchResult = computed(() => {
-// 	return searchApiCalled.value ? searchResult.value : [];
-// });
+// 호출 가능 상태를 추적하는 변수
+let canCall = true;
+
+// 스크롤 이벤트 핸들러
+const handleScroll = () => {
+	if (!canCall) return; // canCall이 false면 함수를 종료
+
+	const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+	if (scrollTop + clientHeight >= scrollHeight - 10) {
+		callSearchApi(++page.value);
+		canCall = false; // 함수 호출 후 canCall을 false로 설정
+		setTimeout(() => {
+			canCall = true; // 3초 후에 canCall을 true로 변경
+		}, 3000); // 3초 후에 다시 호출할 수 있도록 설정
+	}
+};
+
+// 검색어 변경 시 초기화
+const initializeStateIfKeywordChanged = () => {
+	if (isValueSearchValueChanged.value) {
+		state.value.posts = [];
+		page.value = 0;
+		state.value.pagination = {};
+		isValueSearchValueChanged.value = false; // 초기화 후 상태 변경
+	}
+};
 </script>
