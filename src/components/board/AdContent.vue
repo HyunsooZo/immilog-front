@@ -31,15 +31,15 @@ import { onMounted } from 'vue';
 const initSwiper = () => {
 	const swiper = new Swiper('.swiper-container', {
 		slidesPerView: 1,
-		spaceBetween: 0,
-		centeredSlides: true,
 		observer: true,
 		observeParents: true,
+		centeredSlides: true,
 		autoplay: {
 			delay: 3000,
 			disableOnInteraction: false,
 			loop: true,
 			loopAdditionalSlides: 1,
+			loopPreventsSlide: true,
 		},
 		pagination: {
 			el: '.swiper-pagination',
