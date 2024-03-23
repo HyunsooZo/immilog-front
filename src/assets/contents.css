@@ -1685,10 +1685,6 @@ color: #ed1651;
 .input__wrap.date-type .input__element:disabled {
     color: #999;
 }
-.input__wrap.date-type .input__item._date .input__element:matches([type="date"]) {
-    display: inline-flex;
-    justify-content: left;
-}
 /* .input__wrap.date-type .input__element:disabled::before {
     content: attr(data-placeholder);
     position: absolute;
