@@ -33,10 +33,11 @@ const initSwiper = () => {
 		slidesPerView: 1,
 		spaceBetween: 0,
 		// effect: 'fade', //default slide
-		loop: true,
+		centeredSlides: true,
 		autoplay: {
 			delay: 3000,
 			disableOnInteraction: false,
+			loop: true,
 		},
 		pagination: {
 			el: '.swiper-pagination',

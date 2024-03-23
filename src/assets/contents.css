@@ -2438,7 +2438,6 @@ color: #ed1651;
 }
 /* swiper */
 .item.swiper-container {
-    /* overflow: hidden; */
     width: 100%;
 	height: 100%;
     padding: 0;
