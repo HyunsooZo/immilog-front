@@ -2453,10 +2453,10 @@ color: #ed1651;
 	text-align: center;
 	background: #fff;
 }
-.item.swiper-container .swiper-slide:nth-child(1) {
+.item.swiper-container .swiper-slide._ad01 {
     background: #6db4bd;
 }
-.item.swiper-container .swiper-slide:nth-child(2) {
+.item.swiper-container .swiper-slide._ad02 {
     background: #a3c48d;
 }
 .item.swiper-container .swiper-slide .button {

@@ -1,15 +1,20 @@
 <template>
 	<div class="item swiper-container">
 		<div class="swiper-wrapper">
-			<div class="swiper-slide">
+			<div class="swiper-slide _ad01">
 				<button type="button" class="button">
 					<div>광고1</div>
 				</button>
 			</div>
 			<!-- //.swiper-slide -->
-			<div class="swiper-slide">
+			<div class="swiper-slide _ad02">
 				<button type="button" class="button">
 					<div>광고2</div>
+				</button>
+			</div>
+			<div class="swiper-slide _ad03">
+				<button type="button" class="button">
+					<div>광고3</div>
 				</button>
 			</div>
 			<!-- //.swiper-slide -->
