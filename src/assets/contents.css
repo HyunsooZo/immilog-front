@@ -2326,7 +2326,7 @@ color: #ed1651;
     padding: 2.4rem 2rem calc(7.4rem + env(safe-area-inset-bottom)); */
     padding: 2.4rem 2rem 7.4rem;
 }
-.post-wrap .post__wrap:only-child {
+.post-wrap .post__wrap:last-child {
     /* padding-bottom: calc(2.4rem + constant(safe-area-inset-bottom));
     padding-bottom: calc(2.4rem + env(safe-area-inset-bottom)); */
     padding-bottom: 2.4rem;
