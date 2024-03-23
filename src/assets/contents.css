@@ -1439,6 +1439,7 @@ color: #ed1651;
 /*  */
 .input__wrap.underline-type .input__element,
 .input__wrap.underline-type .select__item {
+    display: inline-block;
     width: 100%;
     height: auto;
     min-height: 3.1rem;
