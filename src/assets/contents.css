@@ -2452,7 +2452,12 @@ color: #ed1651;
 	justify-content: center;
 	text-align: center;
 	background: #fff;
-	background: #00bcd4;
+}
+.item.swiper-container .swiper-slide:nth-child(1) {
+    background: #6db4bd;
+}
+.item.swiper-container .swiper-slide:nth-child(2) {
+    background: #a3c48d;
 }
 .item.swiper-container .swiper-slide .button {
     width: 100%;
