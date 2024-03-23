@@ -1439,6 +1439,8 @@ color: #ed1651;
 /*  */
 .input__wrap.underline-type .input__element,
 .input__wrap.underline-type .select__item {
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
     width: 100%;
     height: auto;
