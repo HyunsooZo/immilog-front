@@ -32,12 +32,14 @@ const initSwiper = () => {
 	const swiper = new Swiper('.swiper-container', {
 		slidesPerView: 1,
 		spaceBetween: 0,
-		// effect: 'fade', //default slide
 		centeredSlides: true,
+		observer: true,
+		observeParents: true,
 		autoplay: {
 			delay: 3000,
 			disableOnInteraction: false,
 			loop: true,
+			loopAdditionalSlides: 1,
 		},
 		pagination: {
 			el: '.swiper-pagination',
