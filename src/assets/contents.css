@@ -978,7 +978,8 @@ strong + .button-text {
     padding: 0;
 }
 .modal.modal--full .modal-header + .modal-body {
-    max-height: calc(100vh - 5rem);
+    max-height: calc(100vh - 5rem + constant(safe-area-inset-bottom));
+    max-height: calc(100vh - 5rem + env(safe-area-inset-bottom));
 }
 /* select dialog */
 .select--dialog .modal-content {
