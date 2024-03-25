@@ -89,7 +89,7 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import SearchBar from '@/components/search/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select--dialog
 import useAxios from '@/composables/useAxios.js';
@@ -282,6 +282,10 @@ onMounted(() => {
 	updateMenuBar();
 	fetchBoardList('CREATED_DATE', 0);
 	window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+	window.removeEventListener('scroll', handleScroll);
 });
 
 const handleScroll = () => {
