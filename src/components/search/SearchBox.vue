@@ -18,7 +18,7 @@
 							class="input__element input__element--search"
 							placeholder="검색어를 입력 후 엔터를 눌러주세요"
 							autocomplete="off"
-							@keyup.enter="callSearchApi"
+							@keyup.enter="sendSearchValue"
 						/>
 						<button
 							v-if="searchInput !== ''"
@@ -51,7 +51,21 @@ const openSearchInput = () => {
 	isSearchOpen.value = true;
 };
 const closeSearchInput = () => {
+	searchInput.value = '';
 	isSearchOpen.value = false;
+};
+
+const initializeSearchInput = () => {
+	searchInput.value = '';
+};
+
+const emit = defineEmits(['searchValue']);
+
+const sendSearchValue = () => {
+	if (searchInput.value === '') {
+		return;
+	}
+	emit('searchValue', searchInput.value);
 	searchInput.value = '';
 };
 </script>
