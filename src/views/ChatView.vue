@@ -1,7 +1,7 @@
 <template>
 	<div class="content">
 		<TheTopBox :title="'채팅'" />
-		<SearchBox @searchValue="callSearchApi" />
+		<SearchBox @searchValue="callSearchApi" @refetchChatRooms="refetch" />
 
 		<div class="list-wrap _chat">
 			<div class="item" v-for="chatRoom in chatRooms" :key="chatRoom.seq">
@@ -221,8 +221,34 @@ const closeMoreModalAndDeleteChatRoom = chatRoomSeq => {
 };
 // -->
 
-const callSearchApi = searchValue => {
-	console.log(searchValue);
+const callSearchApi = async searchValue => {
+	try {
+		const { status, data } = await sendRequest(
+			'get',
+			`/chat/rooms/search?keyword=${searchValue}`,
+			{
+				headers: {
+					contentType: 'application/json',
+					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				},
+			},
+			null,
+		);
+		if (status === 200) {
+			chatRooms.value = [];
+			data.data.forEach(chatRoom => {
+				chatRooms.value.push(chatRoom);
+			});
+		}
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const refetch = () => {
+	chatRooms.value = [];
+	chatRoomsPage.value = 0;
+	fetchChatList();
 };
 
 // 컴포넌트 마운트 시 초기화 및 채팅목록 불러오기

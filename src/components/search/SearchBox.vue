@@ -53,13 +53,14 @@ const openSearchInput = () => {
 const closeSearchInput = () => {
 	searchInput.value = '';
 	isSearchOpen.value = false;
+	emit('refetchChatRooms');
 };
 
 const initializeSearchInput = () => {
 	searchInput.value = '';
 };
 
-const emit = defineEmits(['searchValue']);
+const emit = defineEmits(['searchValue', 'refetchChatRooms']);
 
 const sendSearchValue = () => {
 	if (searchInput.value === '') {
