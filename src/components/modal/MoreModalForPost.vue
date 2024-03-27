@@ -15,13 +15,13 @@
 				<div class="list-wrap">
 					<ul>
 						<li class="item">
-							<button type="button" class="button" @click="reportUser">
-								<span>신고하기</span>
+							<button type="button" class="button" @click="editPost">
+								<span>수정</span>
 							</button>
 						</li>
 						<li class="item">
-							<button type="button" class="button" @click="exit">
-								<span>방 나가기</span>
+							<button type="button" class="button" @click="deletePost">
+								<span>삭제</span>
 							</button>
 						</li>
 					</ul>
@@ -33,7 +33,7 @@
 		v-if="onConfirmModal"
 		:modalText="modalText"
 		@close="closeConfirmModal"
-		@confirm="exitChatRoom"
+		@confirm="onDeletePost"
 	/>
 </template>
 
@@ -44,22 +44,18 @@ import useAxios from '@/composables/useAxios';
 
 const { sendRequest } = useAxios();
 const props = defineProps({
-	chatRoomSeq: Number,
+	postSeq: Number,
 });
-const emits = defineEmits(['close', 'closeWithDelete']);
+const emits = defineEmits(['close', 'delete', 'edit']);
 
 const closeModal = () => {
 	emits('close');
 };
 
-const reportUser = () => {
-	console.log('신고하기');
-};
-
-const getOutOfChatRoom = async seq => {
+const deletePost = async seq => {
 	const { status } = await sendRequest(
 		'delete',
-		`/chat/rooms/${seq}`,
+		`/posts/${seq}/delete`,
 		{
 			headers: {
 				contentType: 'application/json',
@@ -69,24 +65,20 @@ const getOutOfChatRoom = async seq => {
 		null,
 	);
 	if (status === 204) {
-		console.log('방 나가기 성공');
+		console.log('게시물 삭제 성공');
 	}
 };
 
 const onConfirmModal = ref(false);
-const modalText = ref('정말 방을 나가시겠습니까?');
+const modalText = ref('게시물을 삭제 하시겠습니까?');
 
 const closeConfirmModal = () => {
 	onConfirmModal.value = false;
 };
 
-const exitChatRoom = () => {
+const onDeletePost = () => {
 	onConfirmModal.value = false;
-	getOutOfChatRoom(props.chatRoomSeq);
-	emits('closeWithDelete', props.chatRoomSeq);
-};
-
-const exit = () => {
-	onConfirmModal.value = true;
+	deletePost(props.postSeq);
+	emits('delete', props.postSeq);
 };
 </script>

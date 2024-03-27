@@ -29,7 +29,11 @@
 						</div>
 					</div>
 					<div class="item__fnc">
-						<button type="button" class="list__item_button more">
+						<button
+							type="button"
+							class="list__item_button more"
+							@click="openMoreModal"
+						>
 							<i class="blind">더보기</i></button
 						><!-- //공유, 신고, 본인글인 경우 추가 :수정, 삭제 -->
 					</div>
@@ -319,6 +323,13 @@
 		@select:value="selectedValue"
 	/>
 	<LoadingModal v-if="isLoading" />
+	<MoreModalForPost
+		v-if="onMorePostModal"
+		:posetSeq="post.seq"
+		@close="closeMoreModal"
+		@edit="editPost"
+		@delete="deletePost"
+	/>
 </template>
 
 <script setup>
@@ -330,6 +341,7 @@ import useAxios from '@/composables/useAxios.js';
 import NoContent from '@/components/board/NoContent.vue';
 import ReplyModal from '@/components/comment/ReplyModal.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
+import MoreModalForPost from '@/components/modal/MoreModalForPost.vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { timeCalculation } from '@/utils/date-time.js';
 import { likeApi } from '@/services/post.js';
@@ -548,6 +560,42 @@ const allCommentCounts = post => {
 	});
 	return result;
 };
+
+// <-- 더보기 모달 관련
+const onMorePostModal = ref(false);
+
+const openMoreModal = () => {
+	onMorePostModal.value = true;
+};
+
+const closeMoreModal = () => {
+	onMorePostModal.value = false;
+};
+// -->
+
+// <-- 게시물 수정/삭제 관련
+const editPost = () => {};
+
+const deletePost = async () => {
+	try {
+		const { status } = await sendRequest(
+			'delete',
+			`/posts/${postSeq}/delete`,
+			{
+				headers: {
+					contentType: 'application/json',
+				},
+			},
+			null,
+		);
+		if (status === 204) {
+			router.push('/board');
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+// -->
 
 onMounted(() => {
 	detailBoard();

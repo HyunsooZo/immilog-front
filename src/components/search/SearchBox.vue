@@ -67,6 +67,5 @@ const sendSearchValue = () => {
 		return;
 	}
 	emit('searchValue', searchInput.value);
-	searchInput.value = '';
 };
 </script>
