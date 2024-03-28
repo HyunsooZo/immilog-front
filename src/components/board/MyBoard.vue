@@ -38,7 +38,7 @@ const state = ref({
 const fetchMyPostList = async page => {
 	state.value.loading = true;
 	try {
-		const { status, data } = getMyPostsApi(page);
+		const { status, data } = await getMyPostsApi(page);
 		if (status === 200) {
 			state.value.posts = data.data.content;
 		}
