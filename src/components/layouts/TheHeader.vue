@@ -27,20 +27,16 @@
 		</div>
 	</header>
 	<!-- 알림 모달 -->
-	<NotificationModal v-if="onMenu" :userSeq="userSeq" @close="onMenuClose" />
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import NotificationModal from '@/components/notification/NotificationModal.vue';
 const router = useRouter();
 
 // 뒤로 가기 기능
 const onBack = () => {
 	router.back();
 };
-
 </script>
 
 <style lang="css" scoped>
