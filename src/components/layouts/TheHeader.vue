@@ -20,16 +20,20 @@
 				type="button"
 				class="button-icon button--notice new"
 				role="link"
-				@click="onMenu"
+				@click="onMenuOpen"
 			>
 				<i class="blind">알림</i>
 			</button>
 		</div>
 	</header>
+	<!-- 알림 모달 -->
+	<Notification v-if="onMenu" :userSeq="userSeq" @close="onMenuClose" />
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import Notification from '@/components/notification/Notification';
 const router = useRouter();
 
 // 뒤로 가기 기능
@@ -37,9 +41,17 @@ const onBack = () => {
 	router.back();
 };
 
+const onMenu = ref(false);
+const userSeq = ref(0);
+
 // 알림 메뉴 열기
-const onMenu = () => {
-	// 알림 메뉴 관련 로직 추가 예정
+const onMenuOpen = () => {
+	userSeq.value = 1;
+	onMenu.value = true;
+};
+
+const onMenuClose = () => {
+	onMenu.value = false;
 };
 </script>
 
