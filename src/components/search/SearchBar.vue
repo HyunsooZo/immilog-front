@@ -1,5 +1,8 @@
 <template>
-	<SearchModal v-if="searchModalValue" @update:search-modal-value="closeSearchModal" />
+	<SearchModal
+		v-if="searchModalValue"
+		@update:search-modal-value="closeSearchModal"
+	/>
 	<!-- 검색 -->
 	<div class="search-wrap">
 		<div class="input-wrap">
@@ -19,25 +22,37 @@
 					<span>관심 있는 글 검색</span>
 				</button>
 			</div>
-			<button type="button" class="button-icon button--notice new" role="link" @click="openNotificationModal">
+			<button
+				type="button"
+				class="button-icon button--notice new"
+				role="link"
+				@click="onMenuOpen"
+			>
 				<i class="blind">알림</i>
 			</button>
 		</div>
 	</div>
+	<!-- 알림 모달 -->
+	<NotificationModal v-if="onMenu" :userSeq="userSeq" @close="onMenuClose" />
 </template>
 
 <script setup>
 import router from '@/router';
 import { ref } from 'vue';
+import NotificationModal from '@/components/notification/NotificationModal.vue';
 
-const searchModalValue = ref(false);
-const notificationModalValue = ref(false);
+const onMenu = ref(false);
+const userSeq = ref(0);
 
-const openNotificationModal = () => {
-	notificationModalValue.value = true;
+// 알림 메뉴 열기
+const onMenuOpen = () => {
+	userSeq.value = 1;
+	onMenu.value = true;
 };
 
+const onMenuClose = () => {
+	onMenu.value = false;
+};
 // 검색 페이지로 이동
 const onSearch = () => router.push(`/search`);
-
 </script>
