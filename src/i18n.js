@@ -1,24 +1,35 @@
 import { createI18n } from 'vue-i18n';
 
-const loadLocaleMessages = async () => {
-	const context = import.meta.globEager('./locales/*.json');
-	const messages = {};
+async function loadLocaleMessages() {
+	const locales = import.meta.glob('./locales/*.json');
+	const messagePromises = [];
 
-	for (const path in context) {
+	for (const path in locales) {
 		const matched = path.match(/\/locales\/(.*)\.json$/);
 		if (matched && matched.length > 1) {
 			const locale = matched[1];
-			messages[locale] = context[path].default;
+			const messagePromise = locales[path]().then(module => {
+				return { [locale]: module.default };
+			});
+			messagePromises.push(messagePromise);
 		}
 	}
 
-	return messages;
-};
+	const loadedMessages = await Promise.all(messagePromises);
+	return loadedMessages.reduce(
+		(messages, message) => ({ ...messages, ...message }),
+		{},
+	);
+}
 
-const i18n = createI18n({
-	locale: 'ko', // 기본 언어 설정
-	fallbackLocale: 'en', // 대체 언어 설정
-	messages: await loadLocaleMessages(),
-});
+async function setupI18n() {
+	const messages = await loadLocaleMessages();
+	return createI18n({
+		legacy: false,
+		locale: 'ko',
+		fallbackLocale: 'en',
+		messages,
+	});
+}
 
-export default i18n;
+export default setupI18n;

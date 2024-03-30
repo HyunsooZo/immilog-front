@@ -73,7 +73,7 @@
 			</button>
 			<NoContent
 				v-if="state.pagination.sort && state.posts.length === 0"
-				:item="'글'"
+				:item="t('homeView.post')"
 			/>
 			<BoardContent
 				v-for="(item, index) in state.posts"
@@ -109,6 +109,9 @@ import { useUserInfoStore } from '@/stores/userInfo';
 import { postBtn } from '@/utils/icons';
 import { sortingList, categoryList } from '@/utils/selectItems.js';
 import { showAd } from '@/utils/showAd';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const router = useRouter();
 const { sendRequest } = useAxios(router);

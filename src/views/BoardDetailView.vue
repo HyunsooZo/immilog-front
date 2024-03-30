@@ -132,7 +132,7 @@
 						<path :d="writeReply.first" />
 						<path :d="writeReply.second" />
 					</svg>
-					<span>댓글쓰기</span>
+					<span>{{ t('boardDetailView.writeComment') }}</span>
 				</button>
 			</div>
 			<div class="sort__list">
@@ -144,7 +144,7 @@
 					<svg viewBox="0 0 16 16">
 						<path :d="lastReply" />
 					</svg>
-					<span>마지막 댓글 보기</span>
+					<span>{{ t('boardDetailView.seeLastComments') }}</span>
 				</button>
 			</div>
 		</div>
@@ -300,7 +300,10 @@
 					class="list__item_button button-text"
 					@click="openReplyModal(index)"
 				>
-					<span>{{ comment.replies.length - 3 }}개의 대댓글 보기</span>
+					<span
+						>{{ comment.replies.length - 3
+						}}{{ t('boardDetailView.multipleComments') }}</span
+					>
 				</button>
 			</div>
 		</div>
@@ -347,6 +350,9 @@ import { timeCalculation } from '@/utils/date-time.js';
 import { likeApi } from '@/services/post.js';
 import { writeReply, lastReply } from '@/utils/icons';
 import { extractAtWordAndRest } from '@/utils/comment.js';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {

@@ -1,0 +1,10 @@
+{
+  "boardDetailView": {
+    "writeComment": "댓글 작성",
+    "seeLastComments": "마지막 댓글 보기",
+    "multipleComments": "개의 대댓글 더보기"
+  },
+  "homeView": {
+    "post": "글"
+  }
+}

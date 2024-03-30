@@ -1,0 +1,10 @@
+{
+  "boardDetailView": {
+    "writeComment": "Write a comment",
+    "seeLastComments": "See last comments",
+    "multipleComments": " More Comments"
+  },
+  "homeView": {
+    "post": "Post"
+  }
+}
