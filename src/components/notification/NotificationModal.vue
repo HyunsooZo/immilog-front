@@ -22,7 +22,7 @@
 import { onMounted } from 'vue';
 
 //사용자 고유번호
-const props = defineProps({
+defineProps({
 	userSeq: Number,
 });
 
