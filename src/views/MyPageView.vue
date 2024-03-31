@@ -4,10 +4,23 @@
 		<div class="list-wrap personal">
 			<div class="item">
 				<div class="info__wrap">
-					<button type="button" class="item__pic" :class="{ 'pic--default': !userInfo.userProfile }">
-						<img v-if="userInfo.userProfile" :src="userInfo.userProfile" alt="" />
+					<button
+						type="button"
+						class="item__pic"
+						:class="{ 'pic--default': !userInfo.userProfile }"
+					>
+						<img
+							v-if="userInfo.userProfile"
+							:src="userInfo.userProfile"
+							alt=""
+						/>
 					</button>
-					<button type="button" class="item__fnc" role="link" @click="onProfileEdit">
+					<button
+						type="button"
+						class="item__fnc"
+						role="link"
+						@click="onProfileEdit"
+					>
 						<div class="list__item">
 							<em>{{ userInfo.userCountry }}</em>
 							<em>{{ userInfo.userRegion }}</em>
@@ -23,20 +36,30 @@
 		<div class="list-wrap list--link">
 			<ul>
 				<li class="item">
-					<button type="button" class="button button-text" role="link" @click="onMyBoard">
+					<button
+						type="button"
+						class="button button-text"
+						role="link"
+						@click="onMyBoard"
+					>
 						<svg viewBox="0 0 16 16">
 							<path :d="myPostIcon" />
 						</svg>
-						<span>내 게시물</span>
+						<span>{{ t('myPageView.myPosts') }}</span>
 					</button>
 				</li>
 				<li class="item">
-					<button type="button" class="button button-text" role="link" @click="onBookmark">
+					<button
+						type="button"
+						class="button button-text"
+						role="link"
+						@click="onBookmark"
+					>
 						<svg viewBox="0 0 16 16">
 							<path fill-rule="evenodd" :d="bookmarkIcon.first" />
 							<path :d="bookmarkIcon.second" />
 						</svg>
-						<span>북마크</span>
+						<span>{{ t('myPageView.bookMark') }}</span>
 					</button>
 				</li>
 				<li class="item">
@@ -45,7 +68,7 @@
 							<path :d="settingIcon.first" />
 							<path :d="settingIcon.second" />
 						</svg>
-						<span>설정 > 비밀번호 변경, 차단사용자 목록 차단/해제</span>
+						<span>{{ t('myPageView.settings') }}</span>
 					</button>
 				</li>
 			</ul>
@@ -56,16 +79,21 @@
 							<path :d="noticeIcon.first" />
 							<path :d="noticeIcon.second" />
 						</svg>
-						<span>공지사항</span>
+						<span>{{ t('myPageView.notice') }}</span>
 					</button>
 				</li>
 				<li class="item">
-					<button type="button" class="button button-text" role="link" @click="openEmailForm">
+					<button
+						type="button"
+						class="button button-text"
+						role="link"
+						@click="openEmailForm"
+					>
 						<svg viewBox="0 0 16 16">
 							<path :d="customerCenterIcon.first" />
 							<path :d="customerCenterIcon.second" />
 						</svg>
-						<span>고객센터</span>
+						<span>{{ t('myPageView.customerService') }}</span>
 					</button>
 				</li>
 				<li class="item">
@@ -74,7 +102,7 @@
 							<path :d="logoutIcon.first" />
 							<path :d="logoutIcon.second" />
 						</svg>
-						<span>로그아웃</span>
+						<span>{{ t('myPageView.logout') }}</span>
 					</button>
 				</li>
 			</ul>
@@ -102,7 +130,9 @@ import {
 	customerCenterIcon,
 	logoutIcon,
 } from '@/utils/icons.js';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 const userInfo = useUserInfoStore();
 

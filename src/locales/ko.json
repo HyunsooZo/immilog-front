@@ -6,5 +6,38 @@
   },
   "homeView": {
     "post": "글"
+  },
+  "bookMarkView": {
+    "bookMark": "북마크"
+  },
+  "jobContent": {
+    "jobOpeningsFrequently": "상시채용",
+    "jobOpening": "수시채용",
+    "jobBoard": "구인/구직"
+  },
+  "myPageView": {
+    "myPosts": "내 게시물",
+    "bookMark": "북마크",
+    "notice": "공지사항",
+    "customerService": "고객센터",
+    "logout": "로그아웃",
+    "settings": "설정 > 비밀번호 변경, 사용자 차단, 언어설정, 알림설정"
+  },
+  "selectItems": {
+    "allCategories": "전체",
+    "workingHoliday": "워킹홀리데이",
+    "blueCard": "영주권",
+    "communication": "소통",
+    "qNA": "질문/답변",
+    "sortByRecent": "최신순",
+    "sortByComment": "댓글순",
+    "sortByView": "조회순",
+    "sortByLike": "좋아요순"
+  },
+  "noContent":{
+    "noContent1": "아직 작성된 ",
+    "noContent2": "이 없습니다.",
+    "noContent3": "쓰기 버튼을 눌러 첫 ",
+    "noContent4": "을 작성해보세요!"
   }
 }

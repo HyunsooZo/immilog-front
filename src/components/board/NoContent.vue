@@ -8,9 +8,13 @@
 				</svg>
 			</div>
 			<div class="noreply__text">
-				<p class="text__item">아직 작성된 {{ item }}이 없습니다.</p>
 				<p class="text__item">
-					{{ item }}쓰기 버튼을 눌러 {{ item }}을 남겨보세요.
+					{{ t('noContent.noContent1') }}{{ item
+					}}{{ t('noContent.noContent2') }}
+				</p>
+				<p class="text__item">
+					{{ item }}{{ t('noContent.noContent3') }} {{ item
+					}}{{ t('noContent.noContent4') }}
 				</p>
 			</div>
 		</div>
@@ -19,6 +23,9 @@
 
 <script setup>
 import { myPostIcon } from '@/utils/icons.js';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 defineProps({
 	item: {
 		type: String,

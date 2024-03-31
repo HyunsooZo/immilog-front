@@ -1,6 +1,6 @@
 <template>
 	<div class="content">
-		<TheTopBox :title="'구인/구직'" />
+		<TheTopBox :title="t('jobContent.jobBoard')" />
 		<SearchBox />
 		<div class="list-top-wrap">
 			<!-- 카테고리 정렬 -->
@@ -70,6 +70,9 @@ import { postBtn } from '@/utils/icons';
 import { sortingList2, categoryList2 } from '@/utils/selectItems.js';
 import { getJobBoardsApi } from '@/services/jobBoard.js';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const router = useRouter();
 

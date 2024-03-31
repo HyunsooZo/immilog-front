@@ -28,7 +28,7 @@
 									class="button"
 									@click="selectCategory(item)"
 								>
-									<span>{{ item.name }}</span>
+									<span>{{ t(item.name) }}</span>
 								</button>
 							</li>
 						</ul>
@@ -41,6 +41,9 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 defineProps({
 	title: {

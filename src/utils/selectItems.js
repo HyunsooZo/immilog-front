@@ -1,16 +1,16 @@
 //home, board
 const categoryList = [
-	{ name: '전체', code: 'ALL' },
-	{ name: '경력', code: 'WORKING_HOLIDAY' },
-	{ name: '영주권', code: 'GREEN_CARD' },
-	{ name: '소통', code: 'COMMUNICATION' },
-	{ name: '질문/답변', code: 'QNA' },
+	{ name: 'selectItems.allCategories', code: 'ALL' },
+	{ name: 'selectItems.workingHoliday', code: 'WORKING_HOLIDAY' },
+	{ name: 'selectItems.blueCard', code: 'GREEN_CARD' },
+	{ name: 'selectItems.communication', code: 'COMMUNICATION' },
+	{ name: 'selectItems.qNA', code: 'QNA' },
 ];
 const sortingList = [
-	{ name: '최신순', code: 'CREATED_DATE' },
-	{ name: '좋아요순', code: 'LIKE_COUNT' },
-	{ name: '조회순', code: 'VIEW_COUNT' },
-	{ name: '댓글순', code: 'COMMENT_COUNT' },
+	{ name: 'selectItems.sortByRecent', code: 'CREATED_DATE' },
+	{ name: 'selectItems.sortByLike', code: 'LIKE_COUNT' },
+	{ name: 'selectItems.sortByView', code: 'VIEW_COUNT' },
+	{ name: 'selectItems.sortByComment', code: 'COMMENT_COUNT' },
 ];
 
 const regions = [
