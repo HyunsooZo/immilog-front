@@ -95,9 +95,19 @@
 								</button>
 								<p class="list__item past">
 									<i class="blind">작성시간</i>
-									<span class="item__count">{{
-										timeCalculation(detailPost.comments[commentIndex].createdAt)
-									}}</span>
+									<span class="item__count"
+										>{{
+											timeCalculation(
+												detailPost.comments[commentIndex].createdAt,
+											).time
+										}}{{
+											t(
+												timeCalculation(
+													detailPost.comments[commentIndex].createdAt,
+												).text,
+											)
+										}}</span
+									>
 								</p>
 							</div>
 						</div>
@@ -172,7 +182,8 @@
 									<p class="list__item past">
 										<i class="blind">작성시간</i>
 										<span class="item__count">
-											{{ timeCalculation(reply.createdAt) }}
+											{{ timeCalculation(reply.createdAt).time }}
+											{{ t(timeCalculation(reply.createdAt).text) }}
 										</span>
 									</p>
 								</div>
@@ -202,6 +213,9 @@ import { useRouter } from 'vue-router';
 import { extractAtWordAndRest } from '@/utils/comment.js';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { likeApi } from '@/services/post.js';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const userInfo = useUserInfoStore();
 

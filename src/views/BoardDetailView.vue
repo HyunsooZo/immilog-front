@@ -95,9 +95,10 @@
 						</button> -->
 						<p class="list__item past">
 							<i class="blind">작성시간</i>
-							<span class="item__count">{{
-								timeCalculation(post.createdAt)
-							}}</span>
+							<span class="item__count"
+								>{{ timeCalculation(post.createdAt).time }}
+								{{ t(timeCalculation(post.createdAt).text) }}</span
+							>
 						</p>
 						<button
 							type="button"
@@ -212,9 +213,10 @@
 						</button>
 						<p class="list__item past">
 							<i class="blind">작성시간</i>
-							<span class="item__count">{{
-								timeCalculation(comment.createdAt)
-							}}</span>
+							<span class="item__count"
+								>{{ timeCalculation(comment.createdAt).time
+								}}{{ t(timeCalculation(comment.createdAt).text) }}</span
+							>
 						</p>
 					</div>
 				</div>
@@ -285,7 +287,8 @@
 							<p class="list__item past">
 								<i class="blind">작성시간</i>
 								<span class="item__count">
-									{{ timeCalculation(reply.createdAt) }}
+									{{ timeCalculation(reply.createdAt).time }}
+									{{ t(timeCalculation(reply.createdAt).text) }}
 								</span>
 							</p>
 						</div>

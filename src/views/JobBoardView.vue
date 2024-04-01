@@ -11,7 +11,7 @@
 						class="button--select"
 						@click="openCategorySelect"
 					>
-						<span>{{ selectCategoryValue.name }}</span>
+						<span>{{ t(selectCategoryValue.name) }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
@@ -20,7 +20,7 @@
 						class="button--select sort"
 						@click="openSortingSelect"
 					>
-						<span>{{ selectSortingValue.name }}</span>
+						<span>{{ t(selectSortingValue.name) }}</span>
 					</button>
 				</div>
 				<!-- 글쓰기 버튼 -->
@@ -175,8 +175,14 @@ const selectTitle = ref('');
 const selectList = ref('');
 const isCategorySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
-const selectCategoryValue = ref({ name: '전체', code: 'ALL' });
-const selectSortingValue = ref({ name: '최신순', code: 'CREATED_DATE' });
+const selectCategoryValue = ref({
+	name: 'selectItems.allCategories',
+	code: 'ALL',
+});
+const selectSortingValue = ref({
+	name: 'selectItems.sortByRecent',
+	code: 'CREATED_DATE',
+});
 
 // select 관련 메소드 (카테고리 및 정렬)
 const openCategorySelect = () => {
@@ -208,9 +214,9 @@ const closeSelect = () => {
 // select 관련 메소드 (선택된 값 처리)
 const selectedValue = value => {
 	if (categoryList2.some(c => c.code === value.code)) {
-		selectCategoryValue.value = value;
+		selectCategoryValue.value = t(value);
 	} else if (sortingList2.some(s => s.code === value.code)) {
-		selectSortingValue.value = value;
+		selectSortingValue.value = t(value);
 	}
 	initializeState();
 	fetchJobBoardList(selectSortingValue.value.code, currentPage.value);

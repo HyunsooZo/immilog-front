@@ -38,7 +38,7 @@
 						class="button--select"
 						@click="openCategorySelect"
 					>
-						<span>{{ selectCategoryValue.name }}</span>
+						<span>{{ t(selectCategoryValue.name) }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
@@ -47,7 +47,7 @@
 						class="button--select sort"
 						@click="openSortingSelect"
 					>
-						<span>{{ selectSortingValue.name }}</span>
+						<span>{{ t(selectSortingValue.name) }}</span>
 					</button>
 				</div>
 			</div>
@@ -101,6 +101,9 @@ import { useUserInfoStore } from '@/stores/userInfo.js';
 import { useRouter } from 'vue-router';
 import { postBtn } from '@/utils/icons.js';
 import { sortingList, categoryList } from '@/utils/selectItems';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const router = useRouter();
 
@@ -181,7 +184,10 @@ const currentPage = ref(0);
 const { sendRequest } = useAxios(router);
 
 // .category__list
-const selectCategoryValue = ref({ name: '전체', code: 'all' });
+const selectCategoryValue = ref({
+	name: 'selectItems.allCategories',
+	code: 'all',
+});
 const isCategorySelectClicked = ref(false);
 
 const openCategorySelect = () => {
@@ -194,7 +200,10 @@ const openCategorySelect = () => {
 };
 
 // .sort__list
-const selectSortingValue = ref({ name: '최신순', code: 'recent' });
+const selectSortingValue = ref({
+	name: 'selectItems.sortByRecent',
+	code: 'recent',
+});
 const isSortingSelectClicked = ref(false);
 
 const openSortingSelect = () => {

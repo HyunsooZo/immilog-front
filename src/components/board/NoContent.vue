@@ -26,6 +26,7 @@ import { myPostIcon } from '@/utils/icons.js';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+
 defineProps({
 	item: {
 		type: String,

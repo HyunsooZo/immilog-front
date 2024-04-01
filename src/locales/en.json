@@ -1,10 +1,99 @@
 {
   "boardDetailView": {
     "writeComment": "Write a comment",
-    "seeLastComments": "See last comments",
-    "multipleComments": " More Comments"
+    "seeLastComments": "View last comments",
+    "multipleComments": "View more replies"
   },
   "homeView": {
-    "post": "Post"
+    "post": "Post",
+    "recentPost": "Recent",
+    "popularPost": "Popular"
+  },
+  "bookMarkView": {
+    "bookMark": "Bookmark"
+  },
+  "jobContent": {
+    "jobOpeningsFrequently": "Always hiring",
+    "jobOpening": "Open hiring",
+    "jobBoard": "Job Listings"
+  },
+  "myPageView": {
+    "myPosts": "My posts",
+    "bookMark": "Bookmark",
+    "notice": "Notices",
+    "customerService": "Customer Service",
+    "logout": "Logout",
+    "settings": "Settings > Change Password, Block User, Language, Notifications"
+  },
+  "selectItems": {
+    "allCategories": "All",
+    "workingHoliday": "Working Holiday",
+    "blueCard": "Permanent Residency",
+    "communication": "Communication",
+    "qNA": "Q&A",
+    "sortByRecent": "Recent",
+    "sortByComment": "Comments",
+    "sortByView": "Views",
+    "sortByLike": "Likes"
+  },
+  "noContent": {
+    "noContent1": "No ",
+    "noContent2": "posted yet.",
+    "noContent3": "Click the write button to create your first ",
+    "noContent4": "!"
+  },
+  "country": {
+    "all": "All",
+    "korea": "Korea",
+    "japan": "Japan",
+    "australia": "Australia",
+    "newZealand": "New Zealand",
+    "malaysia": "Malaysia",
+    "singapore": "Singapore",
+    "vietnam": "Vietnam",
+    "philippines": "Philippines",
+    "indonesia": "Indonesia",
+    "taiwan": "Taiwan",
+    "thailand": "Thailand",
+    "hongKong": "Hong Kong",
+    "china": "China",
+    "india": "India",
+    "guam": "Guam",
+    "easttimor": "East Timor",
+    "laos": "Laos",
+    "myanmar": "Myanmar",
+    "cambodia": "Cambodia",
+    "saipan": "Saipan",
+    "brunai": "Brunei",
+    "ect": "Others"
+  },
+  "category2": {
+    "all": "All",
+    "jobOpeningsFrequently": "Always hiring",
+    "jobOpening": "Open for all"
+  },
+  "sorting2": {
+    "sortByRecent": "Recent",
+    "sortByDeadLine": "Comments",
+    "sortByView": "Views"
+  },
+  "createdAt": {
+    "justNow": "Just now",
+    "minutesAgo": "m ago",
+    "hoursAgo": "h ago",
+    "aDayAgo": "a day ago",
+    "daysAgo": "d ago",
+    "monthsAgo": "w ago",
+    "yearsAgo": "y ago"
+  },
+  "footer": {
+    "home": "Home",
+    "job": "Job",
+    "myPage": "My Page",
+    "myCountry": "My Country",
+    "chat": "Chat"
+  },
+  "searchBar": {
+    "keywordPlaceHolder": "Enter a keyword"
   }
 }

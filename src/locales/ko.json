@@ -5,7 +5,9 @@
     "multipleComments": "개의 대댓글 더보기"
   },
   "homeView": {
-    "post": "글"
+    "post": "글",
+    "recentPost": "최신 글",
+    "popularPost": "인기 글"
   },
   "bookMarkView": {
     "bookMark": "북마크"
@@ -34,10 +36,64 @@
     "sortByView": "조회순",
     "sortByLike": "좋아요순"
   },
-  "noContent":{
+  "noContent": {
     "noContent1": "아직 작성된 ",
     "noContent2": "이 없습니다.",
     "noContent3": "쓰기 버튼을 눌러 첫 ",
     "noContent4": "을 작성해보세요!"
+  },
+  "country": {
+    "all": "전체",
+    "korea": "한국",
+    "japan": "일본",
+    "australia": "호주",
+    "newZealand": "뉴질랜드",
+    "malaysia": "말레이시아",
+    "singapore": "싱가포르",
+    "vietnam": "베트남",
+    "philippines": "필리핀",
+    "indonesia": "인도네시아",
+    "taiwan": "대만",
+    "thailand": "태국",
+    "hongKong": "홍콩",
+    "china": "중국",
+    "india": "인도",
+    "guam": "괌",
+    "easttimor": "동티모르",
+    "laos": "라오스",
+    "myanmar": "미얀마",
+    "cambodia": "캄보디아",
+    "saipan": "사이판",
+    "brunai": "브루나이",
+    "ect": "기타"
+  },
+  "category2": {
+    "all": "전체",
+    "jobOpeningsFrequently": "상시채용",
+    "jobOpening": "경력무관"
+  },
+  "sorting2": {
+    "sortByRecent": "최신순",
+    "sortByDeadLine": "댓글순",
+    "sortByView": "조회순"
+  },
+  "createdAt":{
+    "justNow": "방금 전",
+    "minutesAgo": "분 전",
+    "hoursAgo": "시간 전",
+    "aDayAgo": "하루 전",
+    "daysAgo": "일 전",
+    "monthsAgo": "주 전",
+    "yearsAgo": "년 전"
+  },
+  "footer":{
+    "home": "홈",
+    "job": "구인/구직",
+    "myPage": "마이페이지",
+    "myCountry": "내 지역",
+    "chat": "채팅"
+  },
+  "searchBar":{
+    "keywordPlaceHoler" : "검색어를 입력하세요"
   }
 }

@@ -40,7 +40,7 @@
 						class="button--select"
 						@click="openCategorySelect"
 					>
-						<span>{{ selectCategoryValue.name }}</span>
+						<span>{{ t(selectCategoryValue.name) }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
@@ -49,7 +49,7 @@
 						class="button--select sort"
 						@click="openSortingSelect"
 					>
-						<span>{{ selectSortingValue.name }}</span>
+						<span>{{ t(selectSortingValue.name) }}</span>
 					</button>
 				</div>
 			</div>
@@ -179,8 +179,14 @@ const selectTitle = ref('');
 const selectList = ref('');
 const isCategorySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
-const selectCategoryValue = ref({ name: '전체', code: 'ALL' });
-const selectSortingValue = ref({ name: '최신순', code: 'CREATED_DATE' });
+const selectCategoryValue = ref({
+	name: 'selectItems.allCategories',
+	code: 'ALL',
+});
+const selectSortingValue = ref({
+	name: 'selectItems.sortByRecent',
+	code: 'CREATED_DATE',
+});
 const selectCountry = ref({ name: '전체', code: 'ALL' });
 
 // select 관련 메소드 (메뉴)
@@ -236,8 +242,8 @@ const selectedValue = value => {
 
 // 게시글 목록 관련 상태
 let menus = [
-	{ label: '최신글', active: ref(true) },
-	{ label: '인기글', active: ref(false) },
+	{ label: t('homeView.recentPost'), active: ref(true) },
+	{ label: t('homeView.popularPost'), active: ref(false) },
 ];
 
 // 게시글 목록 관련 반응형 객체
@@ -264,7 +270,7 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 		const { status, data } = await sendRequest(
 			'get',
 			`/posts
-			?country=${selectCountry.value.name}&
+			?country=${selectCountry.value.code}&
 			sortingMethod=${sortingMethod}&
 			isPublic=${'Y'}&
 			category=${selectCategoryValue.value.code}&

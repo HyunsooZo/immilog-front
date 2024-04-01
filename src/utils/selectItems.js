@@ -14,38 +14,38 @@ const sortingList = [
 ];
 
 const regions = [
-	{ name: '전체', code: 'ALL' },
-	{ name: '말레이시아', code: 'MALAYSIA' },
-	{ name: '싱가포르', code: 'SINGAPORE' },
-	{ name: '인도네시아', code: 'INDONESIA' },
-	{ name: '베트남', code: 'VIETNAM' },
-	{ name: '필리핀', code: 'PHILIPPINES' },
-	{ name: '태국', code: 'THAILAND' },
-	{ name: '미얀마', code: 'MYANMAR' },
-	{ name: '캄보디아', code: 'CAMBODIA' },
-	{ name: '라오스', code: 'LAOS' },
-	{ name: '브루나이', code: 'BRUNEI' },
-	{ name: '동티모르', code: 'EAST_TIMOR' },
-	{ name: '중국', code: 'CHINA' },
-	{ name: '일본', code: 'JAPAN' },
-	{ name: '대한민국', code: 'SOUTH_KOREA' },
-	{ name: '오스트레일리아', code: 'AUSTRALIA' },
-	{ name: '뉴질랜드', code: 'NEW_ZEALAND' },
-	{ name: '괌', code: 'GUAM' },
-	{ name: '사이판', code: 'SAI_PAN' },
-	{ name: '기타국가', code: 'ETC' },
+	{ name: 'country.all', code: 'ALL' },
+	{ name: 'country.malaysia', code: 'MALAYSIA' },
+	{ name: 'country.singapore', code: 'SINGAPORE' },
+	{ name: 'country.indonesia', code: 'INDONESIA' },
+	{ name: 'country.vietnam', code: 'VIETNAM' },
+	{ name: 'country.philippines', code: 'PHILIPPINES' },
+	{ name: 'country.thailand', code: 'THAILAND' },
+	{ name: 'country.myanmar', code: 'MYANMAR' },
+	{ name: 'country.cambodia', code: 'CAMBODIA' },
+	{ name: 'country.laos', code: 'LAOS' },
+	{ name: 'country.brunai', code: 'BRUNEI' },
+	{ name: 'country.easttimor', code: 'EAST_TIMOR' },
+	{ name: 'country.china', code: 'CHINA' },
+	{ name: 'country.japan', code: 'JAPAN' },
+	{ name: 'country.korea', code: 'SOUTH_KOREA' },
+	{ name: 'country.australia', code: 'AUSTRALIA' },
+	{ name: 'country.newZealand', code: 'NEW_ZEALAND' },
+	{ name: 'country.guam', code: 'GUAM' },
+	{ name: 'country.saipan', code: 'SAI_PAN' },
+	{ name: 'country.ect', code: 'ETC' },
 ];
 
 // job board
 const categoryList2 = [
-	{ name: '전체', code: 'ALL' },
-	{ name: '상시채용', code: 'WORKING_HOLIDAY' },
-	{ name: '경력 무관', code: 'GREEN_CARD' },
+	{ name: 'category2.all', code: 'ALL' },
+	{ name: 'category2.jobOpeningsFrequently', code: 'JOB_OPENINGS_FRE' },
+	{ name: 'category2.jobOpening', code: 'JOB_OPENING' },
 ];
 const sortingList2 = [
-	{ name: '최신순', code: 'CREATED_DATE' },
-	{ name: '기간임박순', code: 'LIKE_COUNT' },
-	{ name: '조회순', code: 'VIEW_COUNT' },
+	{ name: 'sorting2.sortByRecent', code: 'CREATED_DATE' },
+	{ name: 'sorting2.sortByDeadLine', code: 'DEAD_LINE' },
+	{ name: 'sorting2.sortByView', code: 'VIEW_COUNT' },
 ];
 
 export { categoryList, sortingList, regions, categoryList2, sortingList2 };

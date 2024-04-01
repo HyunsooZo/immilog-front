@@ -23,10 +23,20 @@
 			</div>
 		</div>
 		<div class="text__wrap">
-			<button type="button" class="list__item_button" @click="onBoardDetail(post.seq)">
+			<button
+				type="button"
+				class="list__item_button"
+				@click="onBoardDetail(post.seq)"
+			>
 				<div class="text__item">
-					<p class="title" v-html="highlightKeyword(post.title, post.keyword)"></p>
-					<p class="text" v-html="highlightKeyword(post.content, post.keyword)"></p>
+					<p
+						class="title"
+						v-html="highlightKeyword(post.title, post.keyword)"
+					></p>
+					<p
+						class="text"
+						v-html="highlightKeyword(post.content, post.keyword)"
+					></p>
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<div class="tag__item">
@@ -48,7 +58,12 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ post.viewCount }}</span>
 				</p>
-				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likeApi">
+				<button
+					type="button"
+					class="list__item_button like"
+					:class="{ active: isLiked }"
+					@click="likeApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count"> {{ likes }}</span>
@@ -61,9 +76,17 @@
 			<div class="item__fnc">
 				<p class="list__item past">
 					<i class="blind">작성시간</i>
-					<span class="item__count">{{ timeCalculation(post.createdAt) }}</span>
+					<span class="item__count"
+						>{{ timeCalculation(post.createdAt).time
+						}}{{ t(timeCalculation(post.createdAt).text) }}</span
+					>
 				</p>
-				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
+				<button
+					type="button"
+					class="list__item_button mark"
+					:class="{ active: isBookmarked }"
+					@click="bookmarkApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -79,6 +102,9 @@ import useAxios from '@/composables/useAxios.js';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { timeCalculation } from '@/utils/date-time.js';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
@@ -209,6 +235,9 @@ const changeBookmark = () => {
 const highlightKeyword = (text, keyword) => {
 	if (!keyword) return text;
 	const regex = new RegExp(`(${keyword})`, 'gi');
-	return text.replace(regex, '<strong class="highlight"><span>$1</span></strong>');
+	return text.replace(
+		regex,
+		'<strong class="highlight"><span>$1</span></strong>',
+	);
 };
 </script>

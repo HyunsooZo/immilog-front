@@ -8,7 +8,7 @@
 				:class="{ active: isActiveRegion(region.name) }"
 			>
 				<button type="button" class="button" @click="setActiveRegion(region)">
-					{{ region.name }}
+					{{ t(region.name) }}
 				</button>
 			</li>
 		</ul>
@@ -18,6 +18,9 @@
 <script setup>
 import { ref } from 'vue';
 import { regions } from '@/utils/selectItems';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const selectedCountry = ref('ALL');
 

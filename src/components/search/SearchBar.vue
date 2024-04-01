@@ -19,7 +19,7 @@
 			</p>
 			<div class="input__inner">
 				<button class="button button--search" role="link" @click="onSearch">
-					<span>관심 있는 글 검색</span>
+					<span>{{ t('searchBar.keywordPlaceHolder') }}</span>
 				</button>
 			</div>
 			<button
@@ -40,6 +40,9 @@
 import router from '@/router';
 import { ref } from 'vue';
 import NotificationModal from '@/components/notification/NotificationModal.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const onMenu = ref(false);
 const userSeq = ref(0);

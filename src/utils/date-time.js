@@ -5,30 +5,50 @@ const timeCalculation = localTime => {
 
 	const diffMinutes = Math.floor(diff / (1000 * 60));
 	if (diffMinutes < 10) {
-		return '방금 전';
+		return {
+			time: '',
+			text: 'createdAt.justNow',
+		};
 	} else if (diffMinutes < 60) {
-		return `${Math.ceil(diffMinutes / 10) * 10}분 전`;
+		return {
+			time: diffMinutes,
+			text: 'createdAt.minutesAgo',
+		};
 	}
 
 	const diffHours = Math.floor(diffMinutes / 60);
 	if (diffHours < 24) {
-		return `${diffHours}시간 전`;
+		return {
+			time: diffHours,
+			text: 'createdAt.hoursAgo',
+		};
 	}
 
 	const diffDays = Math.floor(diffHours / 24);
 	if (diffDays === 1) {
-		return '하루 전'; // '1일 전'은 '하루 전'으로..
+		return {
+			time: '',
+			text: 'createdAt.aDayAgo',
+		};
 	} else if (diffDays < 30) {
-		return `${diffDays}일 전`;
+		return {
+			time: diffDays,
+			text: 'createdAt.daysAgo',
+		};
 	}
 
 	const diffMonths = Math.floor(diffDays / 30);
 	if (diffMonths < 12) {
-		return `${diffMonths}개월 전`;
+		return {
+			time: diffMonths,
+			text: 'createdAt.monthsAgo',
+		};
 	}
 
 	const diffYears = Math.floor(diffDays / 365);
-	return `${diffYears}년 전`;
+	return {
+		time: diffYears,
+		text: 'createdAt.yearsAgo',
+	};
 };
-
 export { timeCalculation };

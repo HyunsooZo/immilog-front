@@ -26,8 +26,8 @@ async function setupI18n() {
 	const messages = await loadLocaleMessages();
 	return createI18n({
 		legacy: false,
-		locale: 'ko',
-		fallbackLocale: 'en',
+		locale: 'en',
+		fallbackLocale: 'ko',
 		messages,
 	});
 }

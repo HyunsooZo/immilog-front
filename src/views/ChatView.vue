@@ -67,9 +67,10 @@
 						<div class="item__fnc">
 							<p class="list__item past">
 								<i class="blind">작성시간</i>
-								<span class="item__count">{{
-									timeCalculation(chatRoom.lastChatTime)
-								}}</span>
+								<span class="item__count"
+									>{{ timeCalculation(chatRoom.lastChatTime).time
+									}}{{ t(timeCalculation(chatRoom.lastChatTime).text) }}</span
+								>
 							</p>
 						</div>
 					</div>
@@ -124,6 +125,9 @@ import { useUserInfoStore } from '@/stores/userInfo.js';
 import { timeCalculation } from '@/utils/date-time.js';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const server = import.meta.env.VITE_APP_API_URL.replace('/api/v1', '');
 const userInfo = useUserInfoStore();

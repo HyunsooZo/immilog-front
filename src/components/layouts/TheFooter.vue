@@ -45,6 +45,9 @@ import {
 	jobIcon,
 	myPageIcon,
 } from '@/utils/icons.js';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
@@ -54,31 +57,31 @@ const iconViewBox = '0 0 16 16'; // 모든 아이콘에 적용되는 viewBox 값
 const menuItems = ref([
 	// 홈 아이콘
 	{
-		label: '홈',
+		label: t('footer.home'),
 		styleClass: 'home',
 		paths: [homeIcon],
 	},
 	// 내지역 아이콘
 	{
-		label: '내지역',
+		label: t('footer.myCountry'),
 		styleClass: 'area',
 		paths: [areaIcon],
 	},
 	// 채팅 아이콘
 	{
-		label: '채팅',
+		label: t('footer.chat'),
 		styleClass: 'chat',
 		paths: [chatIcon.first, chatIcon.second],
 	},
 	// 구인/구직 아이콘
 	{
-		label: '구인/구직',
+		label: t('footer.job'),
 		styleClass: 'job',
 		paths: [jobIcon.first, jobIcon.second, jobIcon.third],
 	},
 	// 마이페이지 아이콘
 	{
-		label: '마이페이지',
+		label: t('footer.myPage'),
 		styleClass: 'my',
 		paths: [myPageIcon],
 	},

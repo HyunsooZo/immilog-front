@@ -87,9 +87,10 @@
 			<div class="item__fnc">
 				<p class="list__item past">
 					<i class="blind">작성시간</i>
-					<span class="item__count">{{
-						timeCalculation(jobBoard.createdAt)
-					}}</span>
+					<span class="item__count">
+						{{ timeCalculation(jobBoard.createdAt).time
+						}}{{ t(timeCalculation(jobBoard.createdAt).text) }}
+					</span>
 				</p>
 				<button
 					type="button"
@@ -115,6 +116,9 @@ import { useUserInfoStore } from '@/stores/userInfo';
 import { timeCalculation } from '@/utils/date-time.js';
 import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.js';
 import AdContent from '@/components/board/AdContent.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
