@@ -60,6 +60,12 @@ const props = defineProps({
 		}),
 	},
 });
+// const post = ref({
+// 	userProfileUrl: '',
+// 	userNickName: '',
+// 	country: '',
+// 	region: '',
+// });
 
 // modal close 시 body 컨트롤
 const modalCloseClass = () => {

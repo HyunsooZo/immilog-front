@@ -122,8 +122,8 @@
 				<div class="info__wrap">
 					<div class="item__fnc">
 						<div class="list__item">
-							<button type="button" class="list__item_button user"
-								:class="{ 'user--author': isAuthor(comment.user.seq) }">
+							<button type="button" class="list__item_button user" :class="{ 'user--author': isAuthor(comment.user.seq) }"
+								@click="onUserProfileDetail">
 								<!-- //원글작성자 댓글 .user--author -->
 								<em>{{ comment.user.country }}</em>
 								<strong>{{ comment.user.nickName }}</strong>
@@ -168,8 +168,8 @@
 					<div class="info__wrap">
 						<div class="item__fnc">
 							<div class="list__item">
-								<button type="button" class="list__item_button user"
-									:class="{ 'user--author': isAuthor(reply.user.seq) }">
+								<button type="button" class="list__item_button user" :class="{ 'user--author': isAuthor(reply.user.seq) }"
+									@click="onUserProfileDetail">
 									<!-- //원글작성자 댓글 .user--author -->
 									<em>{{ reply.user.country }}</em>
 									<strong>{{ reply.user.nickName }}</strong>
