@@ -4,16 +4,18 @@
 		<div class="list-wrap personal">
 			<div class="item">
 				<div class="info__wrap">
-					<div class="item__pic" :class="{ 'pic--default': !userInfo.userProfile }">
-						<img v-if="userInfo.userProfile" :src="userInfo.userProfile" alt="" />
-					</div>
 					<button type="button" class="item__fnc" role="link" @click="onProfileEdit">
-						<div class="list__item">
-							<em>{{ userInfo.userCountry }}</em>
-							<em>{{ userInfo.userRegion }}</em>
+						<div class="item__pic" :class="{ 'pic--default': !userInfo.userProfile }">
+							<img v-if="userInfo.userProfile" :src="userInfo.userProfile" alt="" />
 						</div>
-						<div class="list__item user button-text">
-							<strong>{{ userInfo.userNickname }}</strong>
+						<div class="list__item_inner">
+							<div class="list__item">
+								<em>{{ userInfo.userCountry }}</em>
+								<em>{{ userInfo.userRegion }}</em>
+							</div>
+							<div class="list__item user button-text">
+								<strong>{{ userInfo.userNickname }}</strong>
+							</div>
 						</div>
 					</button>
 				</div>

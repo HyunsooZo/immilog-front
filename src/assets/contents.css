@@ -2212,7 +2212,7 @@ color: #ed1651;
     font-size: 1.2rem;
     color: #999;
 }
-.list-wrap .item .util__wrap .item__fnc [class*=list__item] + [class*=list__item] {
+.list-wrap .item .util__wrap .item__fnc [class*=list__item] + [class*=list__item]:not(.mark) {
     margin-left: 1rem;
 }
 .list-wrap .item .item__fnc [class*=list__item].mark,
@@ -2318,6 +2318,9 @@ color: #ed1651;
     font-size: 1.6rem;
     color: #333;
 }
+.list-wrap.personal__view .button.button--primary {
+    border-color: #999;
+}
 /* 마이페이지 */
 .list-wrap.personal .item {
     padding: 2rem;
@@ -2333,6 +2336,16 @@ color: #ed1651;
 }
 .list-wrap.personal .item .info__wrap .item__fnc {
     flex: 0 1 auto;
+    flex-direction: row;
+    align-items: center;
+}
+.list-wrap.personal .item .info__wrap .item__fnc .list__item_inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.list-wrap.personal .item .info__wrap .item__fnc .list__item_inner [class^=list__item] + [class^=list__item] {
+    margin-left: 0;
 }
 .list-wrap.personal .item .info__wrap.button-text::after {
     margin: auto 0 9px 6px;
