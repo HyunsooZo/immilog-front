@@ -1085,13 +1085,9 @@ strong + .button-text {
 /*  */
 .default--dialog .modal-header {
     min-height: auto;
-    border-bottom: none;
 }
 .default--dialog .modal-body {
-    margin-top: 0;
-}
-.default--dialog .list-wrap {
-    border-top: 1px solid #e9e9e9;
+    margin: 0 0 .4rem;
 }
 .default--dialog .list-wrap .item:last-child {
     border-bottom: none;

@@ -1,23 +1,17 @@
 <template>
 	<header class="header _bg" v-if="chats.length > 0">
 		<div class="item__fnc">
-			<button
-				type="button"
-				class="button-icon button--back"
-				role="link"
-				@click="previousComponent"
-			>
+			<button type="button" class="button-icon button--back" role="link" @click="previousComponent">
 				<i class="blind">이전화면</i>
 			</button>
 		</div>
 		<div class="title">
 			<p class="list__item user">
-				<strong
-					>{{
-						amISender(chats[0].sender.seq)
-							? chats[0].recipient.nickName
-							: chats[0].sender.nickName
-					}}
+				<strong>{{
+					amISender(chats[0].sender.seq)
+					? chats[0].recipient.nickName
+					: chats[0].sender.nickName
+				}}
 				</strong>
 			</p>
 		</div>
@@ -35,46 +29,28 @@
 					<em class="user__name">
 						{{
 							amISender(chats[0].sender.seq)
-								? chats[0].recipient.nickName
-								: chats[0].sender.nickName
-						}} </em
-					>님과의 채팅을 시작해보세요.
+							? chats[0].recipient.nickName
+							: chats[0].sender.nickName
+						}} </em>님과의 채팅을 시작해보세요.
 				</p>
 			</div>
 			<!-- chat list -->
 			<div class="chat__content">
 				<ul class="chat__list">
 					<template v-for="chat in chats" :key="chat.id">
-						<li
-							class="item__notice"
-							v-if="lastDate !== formDate(chat.createdAt)"
-						>
+						<li class="item__notice" v-if="lastDate !== formDate(chat.createdAt)">
 							<span class="text">{{ getDateTime(chat.createdAt) }}</span>
 						</li>
-						<li
-							:id="`message-${chat.id}`"
-							class="item"
-							aria-label="받은 메시지"
-							data-content-type="text"
-							:class="{
-								_my: amISender(chat.sender.seq),
-							}"
-						>
+						<li :id="`message-${chat.id}`" class="item" aria-label="받은 메시지" data-content-type="text" :class="{
+							_my: amISender(chat.sender.seq),
+						}">
 							<!-- 사용자 정보 -->
 							<div class="info__wrap" v-if="!amISender(chat.sender.seq)">
-								<button
-									type="button"
-									class="item__pic"
-									:class="{
-										'pic--default': chat.sender.profileImage === '',
-									}"
-								>
-									<img
-										:src="chat.sender.profileImage"
-										alt=""
-										v-if="chat.sender.profileImage !== ''"
-									/></button
-								><!-- // 사용자 프로필 보기 -->
+								<button type="button" class="item__pic" :class="{
+									'pic--default': chat.sender.profileImage === '',
+								}" @click="onUserProfileDetail">
+									<img :src="chat.sender.profileImage" alt="" v-if="chat.sender.profileImage !== ''" />
+								</button><!-- // 사용자 프로필 보기 -->
 							</div>
 							<div class="chat__message">
 								<div class="item__wrap">
@@ -83,17 +59,13 @@
 									</div>
 								</div>
 								<div class="item__fnc">
-									<p
-										class="list__item read"
-										:class="{ active: isRead(chat.id) }"
-									>
+									<p class="list__item read" :class="{ active: isRead(chat.id) }">
 										<i class="blind">채팅 읽음 여부</i>
 										<span class="item__count" v-if="amISender(chat.sender.seq)">
 											<!-- {{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }} -->
 											<svg viewBox="0 0 16 16">
 												<path
-													d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"
-												/>
+													d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
 											</svg>
 										</span>
 										<!-- <span class="item__count" v-if="amISender(chat.sender.seq)">
@@ -102,8 +74,7 @@
 									<p class="list__item past">
 										<i class="blind">채팅 전송시간</i>
 										<span class="item__count">
-											{{ formTime(chat.createdAt) }}</span
-										>
+											{{ formTime(chat.createdAt) }}</span>
 									</p>
 								</div>
 							</div>
@@ -116,13 +87,8 @@
 				<div class="chat__inner">
 					<div class="input__wrap input__attachments">
 						<div class="input__file">
-							<input
-								type="file"
-								id="file-upload"
-								multiple="multiple"
-								accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff"
-								@change="previewImage"
-							/>
+							<input type="file" id="file-upload" multiple="multiple"
+								accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff" @change="previewImage" />
 							<label for="file-upload" class="button-icon__s" role="button">
 								<svg viewBox="0 0 16 16">
 									<path :d="imageSelectIcon.first" />
@@ -134,28 +100,14 @@
 					</div>
 					<div class="item__textarea">
 						<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
-						<textarea
-							v-model="content"
-							class="text__area"
-							name="content"
-							autocomplete="off"
-							placeholder="메시지를 입력하세요."
-							data-autosuggest_is-input="true"
-							ref="adjustTextarea"
-							@input="adjustTextareaHeight"
-							rows="1"
-						>
+						<textarea v-model="content" class="text__area" name="content" autocomplete="off" placeholder="메시지를 입력하세요."
+							data-autosuggest_is-input="true" ref="adjustTextarea" @input="adjustTextareaHeight" rows="1">
 						</textarea>
 					</div>
 					<div class="item__fnc">
-						<button
-							type="button"
-							class="button-icon__s button--send"
-							:class="{
-								active: content.trim() !== '',
-							}"
-							@click="sendMessage"
-						>
+						<button type="button" class="button-icon__s button--send" :class="{
+							active: content.trim() !== '',
+						}" @click="sendMessage">
 							<!-- 전송 버튼 아이콘 -->
 							<svg viewBox="0 0 16 16">
 								<path :d="chatSendingIcon" />
@@ -168,6 +120,7 @@
 		</div>
 		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
 	</div>
+	<UserProfileDetail @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
 </template>
 
 <script setup>
@@ -178,6 +131,7 @@ import Stomp from 'stompjs';
 import useAxios from '@/composables/useAxios';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { imageSelectIcon, chatSendingIcon } from '@/utils/icons.js';
+import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 
 const userInfo = useUserInfoStore();
 import { useRoute, useRouter } from 'vue-router';
@@ -187,6 +141,25 @@ const route = useRoute();
 
 const { sendRequest } = useAxios(router);
 const server = import.meta.env.VITE_APP_API_URL.replace('/api/v1', '');
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
+};
+
+// 프로필 보기
+const isUserProfileDetailOn = ref(false);
+const onUserProfileDetail = () => {
+	isUserProfileDetailOn.value = true;
+	modalOpenClass();
+};
+const offUserProfileDetail = () => {
+	isUserProfileDetailOn.value = false;
+	modalCloseClass();
+};
 
 // 웹소켓 관련 변수
 const socket = new SockJS(server + '/ws');
