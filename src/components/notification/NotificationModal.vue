@@ -3,16 +3,37 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">알림</p>
-				<button
-					class="button-icon button--close"
-					role="link"
-					@click="closeModal"
-				>
+				<button class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">취소</i>
 				</button>
 			</div>
 			<div class="modal-body">
-				<div class="list-wrap"></div>
+				<div class="list-wrap">
+					<div class="item">
+						<div class="text__wrap">
+							<div class="list__item">
+								<div class="text__item">
+									<p class="title">title</p>
+									<p class="text">
+										content
+										<br />
+										content
+										<br />
+										content
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="attachments__wrap">
+							<div class="attachments__item">
+								<div class="item__display">
+									<img src="@/assets/images/email-icon-logo.png" alt="" />
+								</div>
+							</div><!-- //loop -->
+						</div>
+					</div>
+					<!-- // -->
+				</div>
 			</div>
 		</div>
 	</div>

@@ -112,6 +112,7 @@ strong + .button-text {
     width: 1.8rem;
     height:1.8rem;
     background-repeat: no-repeat;
+    background-position: 50% center;
     background-size: 100%;
 }
 [class*=button-icon] + [class*=button-icon] {
@@ -225,6 +226,16 @@ strong + .button-text {
     background: #9ca7b3;
     border-radius: .6rem;
     text-align: center;
+}
+.button-wrap .button.button__s {
+    height: 3.4rem;
+    padding: 0.8rem 1rem;
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+}
+.button-wrap .button + .button {
+    margin: 0 0 0 1rem;
 }
 .button-wrap .button.button--cancle {
     flex: 0 1 30%;
@@ -892,6 +903,40 @@ strong + .button-text {
 }
 
 /* modal */
+.modal._preview .modal-content {
+    width: 80%;
+}
+.modal._preview .modal-body {
+    margin: 0;
+    padding: 0;
+}
+.modal._preview .item__pic::after {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+}
+.modal._preview .item__pic .button--close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 3rem;
+    height: 3rem;
+    padding: .5rem;
+    border-radius: .8rem;
+    background: rgb(51 51 51 / .7);
+    z-index: 1;
+}
+.modal._preview .item__pic .button--close::after {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(255 255 255)' xmlns='http://www.w3.org/2000/svg'><path d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z'/></svg>");
+}
+.modal._preview .item__pic img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 .modal {
     position: fixed;
     top: 0;
@@ -931,6 +976,10 @@ strong + .button-text {
     padding: 0 0 0 1.5rem;
     font-size: 1.4rem;
     font-weight: 500;
+}
+.modal-header .modal-title > span {
+    color: #666;
+    font-weight: 400;
 }
 .modal-header .item__fnc + .modal-title {
     padding: 0;
@@ -2241,6 +2290,34 @@ color: #ed1651;
     padding: 1rem;
     text-align: left;
 }
+/* 프로필보기 */
+.list-wrap.personal__view .item {
+    padding: 2.4rem 1.5rem 0;
+    border: 0;
+}
+.list-wrap.personal__view .item .info__wrap {
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+}
+.list-wrap.personal__view .item .info__wrap .item__pic {
+    width: 10rem;
+    height: 10rem;
+    margin-right: 0;
+}
+.list-wrap.personal__view .item .info__wrap .item__fnc {
+    margin-top: 1.5rem;
+}
+.list-wrap.personal__view .item .info__wrap [class^=list__item] {
+    font-size: 1.3rem;
+    line-height: 1.8rem;
+    text-align: center;
+}
+.list-wrap.personal__view .item .info__wrap [class^=list__item].user {
+    margin-top: .5rem;
+    font-size: 1.6rem;
+    color: #333;
+}
 /* 마이페이지 */
 .list-wrap.personal .item {
     padding: 2rem;
@@ -2359,6 +2436,9 @@ color: #ed1651;
 .attachments__wrap {
     margin-top: 2rem;
     font-size: 0;
+}
+.attachments__wrap:nth-child(1) {
+    margin-top: 0;
 }
 .attachments__wrap .item__display {
     position: relative;

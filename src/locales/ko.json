@@ -12,6 +12,9 @@
   "bookMarkView": {
     "bookMark": "북마크"
   },
+  "userProfileDetailView": {
+    "userProfileDetail": "님의 프로필"
+  },
   "jobContent": {
     "jobOpeningsFrequently": "상시채용",
     "jobOpening": "수시채용",
@@ -77,7 +80,7 @@
     "sortByDeadLine": "댓글순",
     "sortByView": "조회순"
   },
-  "createdAt":{
+  "createdAt": {
     "justNow": "방금 전",
     "minutesAgo": "분 전",
     "hoursAgo": "시간 전",
@@ -86,14 +89,14 @@
     "monthsAgo": "주 전",
     "yearsAgo": "년 전"
   },
-  "footer":{
+  "footer": {
     "home": "홈",
     "job": "구인/구직",
     "myPage": "마이페이지",
     "myCountry": "내 지역",
     "chat": "채팅"
   },
-  "searchBar":{
-    "keywordPlaceHoler" : "검색어를 입력하세요"
+  "searchBar": {
+    "keywordPlaceHoler": "검색어를 입력하세요"
   }
 }

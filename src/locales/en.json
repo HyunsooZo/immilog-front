@@ -12,6 +12,9 @@
   "bookMarkView": {
     "bookMark": "Bookmark"
   },
+  "userProfileDetailView": {
+    "userProfileDetail": "'s profile"
+  },
   "jobContent": {
     "jobOpeningsFrequently": "Always hiring",
     "jobOpening": "Open hiring",
