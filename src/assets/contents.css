@@ -1087,7 +1087,7 @@ strong + .button-text {
     min-height: auto;
 }
 .default--dialog .modal-body {
-    margin: 0 0 .4rem;
+    margin: 1rem 0;
 }
 .default--dialog .list-wrap .item:last-child {
     border-bottom: none;

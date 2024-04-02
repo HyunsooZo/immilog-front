@@ -1,16 +1,11 @@
 <template>
-	<div class="modal default--dialog" tabindex="-1" role="dialog">
+	<div class="modal default--dialog" tabindex="-1" role="dialog" @click.self="closeModal">
 		<div class="modal-content">
-			<div class="modal-header">
-				<button
-					type="button"
-					class="button-icon button--close"
-					role="link"
-					@click="closeModal"
-				>
+			<!-- <div class="modal-header">
+				<button type="button" class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">닫기</i>
 				</button>
-			</div>
+			</div> -->
 			<div class="modal-body">
 				<div class="list-wrap">
 					<ul>
@@ -29,12 +24,7 @@
 			</div>
 		</div>
 	</div>
-	<ConfirmModal
-		v-if="onConfirmModal"
-		:modalText="modalText"
-		@close="closeConfirmModal"
-		@confirm="exitChatRoom"
-	/>
+	<ConfirmModal v-if="onConfirmModal" :modalText="modalText" @close="closeConfirmModal" @confirm="exitChatRoom" />
 </template>
 
 <script setup>
