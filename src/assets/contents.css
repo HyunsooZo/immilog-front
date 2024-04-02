@@ -2319,47 +2319,40 @@ color: #ed1651;
     border-color: #999;
 }
 /* 마이페이지 */
-.list-wrap.personal .item {
+.list-wrap._personal .item {
+    display: flex;
     padding: 2rem;
 }
-.list-wrap.personal .item .info__wrap {
+.list-wrap._personal .item .info__wrap {
+    flex: 0 1 auto;
     justify-content: left;
     margin: 0;
 }
-.list-wrap.personal .item .info__wrap .item__pic {
+.list-wrap._personal .item .info__wrap .item__pic {
     width: 5rem;
     height: 5rem;
     margin-right: .8rem;
 }
-.list-wrap.personal .item .info__wrap .item__fnc {
-    flex: 0 1 auto;
-    flex-direction: row;
-    align-items: center;
-}
-.list-wrap.personal .item .info__wrap .item__fnc .list__item_inner {
+.list-wrap._personal .item .info__wrap .item__fnc {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
-.list-wrap.personal .item .info__wrap .item__fnc .list__item_inner [class^=list__item] + [class^=list__item] {
-    margin-left: 0;
-}
-.list-wrap.personal .item .info__wrap.button-text::after {
-    margin: auto 0 9px 6px;
-    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(102 102 102)' xmlns='http://www.w3.org/2000/svg'><path d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/></svg>");
-}
-.list-wrap.personal .item .info__wrap [class^=list__item] {
+.list-wrap._personal .item .info__wrap [class^=list__item] {
     font-size: 1.3rem;
     line-height: 1.8rem;
 }
-.list-wrap.personal .item .info__wrap [class^=list__item].user {
+.list-wrap._personal .item .info__wrap .list__item::before {
+    content: none;
+}
+.list-wrap._personal .item .info__wrap [class^=list__item].user {
     font-size: 1.6rem;
     color: #333;
 }
-.list-wrap.personal .item .info__wrap [class^=list__item].button-text::after {
+.list-wrap._personal .item .info__wrap [class^=list__item].button-text::after {
     margin-left: .4rem;
 }
-.list-wrap.personal .item .info__wrap [class^=list__item] * + *::before {
+.list-wrap._personal .item .info__wrap [class^=list__item] * + *::before {
     background: #999;
 }
 /*  */

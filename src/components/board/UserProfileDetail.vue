@@ -2,7 +2,7 @@
 	<div class="modal modal--full" tabindex="-1" role="dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<p class="modal-title">{{ post.userNickname }}<span>{{ t('userProfileDetailView.userProfileDetail')
+				<p class="modal-title">{{ userProfile.userNickname }}<span>{{ t('userProfileDetailView.userProfileDetail')
 				}}</span></p>
 				<button class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">취소</i>
@@ -12,17 +12,17 @@
 				<div class="list-wrap personal__view">
 					<div class="item">
 						<div class="info__wrap">
-							<button type="button" class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }" role="link"
+							<button type="button" class="item__pic" :class="{ 'pic--default': !userProfile.userProfileUrl }" role="link"
 								@click="onUserProfilePic">
-								<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
+								<img v-if="userProfile.userProfileUrl" :src="userProfile.userProfileUrl" alt="" />
 							</button>
 							<div class="item__fnc">
 								<div class="list__item">
-									<em>{{ post.country }}</em>
-									<em>{{ post.region }}</em>
+									<em>{{ userProfile.country }}</em>
+									<em>{{ userProfile.region }}</em>
 								</div>
 								<div class="list__item user">
-									<strong>{{ post.userNickname }}</strong>
+									<strong>{{ userProfile.userNickname }}</strong>
 								</div>
 							</div>
 						</div>
@@ -49,7 +49,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const props = defineProps({
-	post: {
+	userProfile: {
 		type: Object,
 		required: true,
 		default: () => ({
@@ -60,12 +60,6 @@ const props = defineProps({
 		}),
 	},
 });
-// const post = ref({
-// 	userProfileUrl: '',
-// 	userNickName: '',
-// 	country: '',
-// 	region: '',
-// });
 
 // modal close 시 body 컨트롤
 const modalCloseClass = () => {

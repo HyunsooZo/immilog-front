@@ -1,14 +1,14 @@
 <template>
 	<div class="content">
 		<!-- 개인정보 -->
-		<div class="list-wrap personal">
+		<div class="list-wrap _personal">
 			<div class="item">
-				<div class="info__wrap">
-					<button type="button" class="item__fnc" role="link" @click="onProfileEdit">
+				<button type="button" class="list__item_button" role="link" @click="onProfileEdit">
+					<div class="info__wrap">
 						<div class="item__pic" :class="{ 'pic--default': !userInfo.userProfile }">
 							<img v-if="userInfo.userProfile" :src="userInfo.userProfile" alt="" />
 						</div>
-						<div class="list__item_inner">
+						<div class="item__fnc">
 							<div class="list__item">
 								<em>{{ userInfo.userCountry }}</em>
 								<em>{{ userInfo.userRegion }}</em>
@@ -17,8 +17,8 @@
 								<strong>{{ userInfo.userNickname }}</strong>
 							</div>
 						</div>
-					</button>
-				</div>
+					</div>
+				</button>
 			</div>
 		</div>
 		<!--  -->

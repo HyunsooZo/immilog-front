@@ -6,7 +6,7 @@
 					<button class="button-icon button--close" role="link" @click="closeModal">
 						<i class="blind">취소</i>
 					</button>
-					<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
+					<img v-if="userProfile.userProfileUrl" :src="userProfile.userProfileUrl" alt="" />
 				</div>
 			</div>
 		</div>
@@ -15,7 +15,7 @@
 
 <script setup>
 const props = defineProps({
-	post: {
+	userProfile: {
 		type: Object,
 		required: true,
 		default: () => ({
