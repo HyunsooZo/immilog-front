@@ -3,7 +3,11 @@
 		<div class="sidemenu__inner">
 			<div class="sidemenu-header">
 				<div class="item__fnc">
-					<button class="button-icon button--close" role="link" @click="closeModal">
+					<button
+						class="button-icon button--close"
+						role="link"
+						@click="closeModal"
+					>
 						<i class="blind">취소</i>
 					</button>
 				</div>
@@ -13,7 +17,12 @@
 				<div class="list-wrap list--link">
 					<ul>
 						<li class="item">
-							<button type="button" class="button button-text" role="link" @click="onPicBoard">
+							<button
+								type="button"
+								class="button button-text"
+								role="link"
+								@click="onPicBoard"
+							>
 								<span>사진</span>
 							</button>
 							<div class="item__list">
@@ -27,7 +36,12 @@
 							</div>
 						</li>
 						<li class="item">
-							<button type="button" class="button button-text" role="link" @click="onLinkBoard">
+							<button
+								type="button"
+								class="button button-text"
+								role="link"
+								@click="onLinkBoard"
+							>
 								<span>링크</span>
 							</button>
 						</li>
@@ -84,8 +98,8 @@
 	</div>
 </template>
 
-<script setup>
-import { quitIcon, settingIcon } from '@/utils/icons';
+<script setup lang="ts">
+import { quitIcon, settingIcon } from '@/utils/icons.ts';
 
 //모달 닫는 에밋
 const emits = defineEmits(['close']);

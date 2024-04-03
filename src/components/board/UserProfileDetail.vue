@@ -2,9 +2,15 @@
 	<div class="modal modal--full" tabindex="-1" role="dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<p class="modal-title">{{ userProfile.userNickname }}<span>{{ t('userProfileDetailView.userProfileDetail')
-				}}</span></p>
-				<button class="button-icon button--close" role="link" @click="closeModal">
+				<p class="modal-title">
+					{{ userProfile.userNickname
+					}}<span>{{ t('userProfileDetailView.userProfileDetail') }}</span>
+				</p>
+				<button
+					class="button-icon button--close"
+					role="link"
+					@click="closeModal"
+				>
 					<i class="blind">취소</i>
 				</button>
 			</div>
@@ -12,9 +18,18 @@
 				<div class="list-wrap personal__view">
 					<div class="item">
 						<div class="info__wrap">
-							<button type="button" class="item__pic" :class="{ 'pic--default': !userProfile.userProfileUrl }" role="link"
-								@click="onUserProfilePic">
-								<img v-if="userProfile.userProfileUrl" :src="userProfile.userProfileUrl" alt="" />
+							<button
+								type="button"
+								class="item__pic"
+								:class="{ 'pic--default': !userProfile.userProfileUrl }"
+								role="link"
+								@click="onUserProfilePic"
+							>
+								<img
+									v-if="userProfile.userProfileUrl"
+									:src="userProfile.userProfileUrl"
+									alt=""
+								/>
 							</button>
 							<div class="item__fnc">
 								<div class="list__item">
@@ -30,8 +45,12 @@
 							<button class="button-text" role="link">게시글보기</button>
 						</div>
 						<div class="button-wrap">
-							<button class="button button--primary button__s" role="link">채팅</button>
-							<button class="button button--primary button__s" role="link">신고</button>
+							<button class="button button--primary button__s" role="link">
+								채팅
+							</button>
+							<button class="button button--primary button__s" role="link">
+								신고
+							</button>
 						</div>
 					</div>
 				</div>
@@ -41,7 +60,7 @@
 	<UserProfilePic @close="offUserProfilePic" v-if="isUserProfilePicOn" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import UserProfilePic from '@/components/board/UserProfilePic.vue';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';

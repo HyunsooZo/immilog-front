@@ -8,7 +8,10 @@
 			</div>
 			<div class="item">
 				<div class="info__wrap">
-					<div class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
+					<div
+						class="item__pic"
+						:class="{ 'pic--default': !post.userProfileUrl }"
+					>
 						<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
 					</div>
 					<div class="item__fnc">
@@ -19,14 +22,24 @@
 							</button>
 						</div>
 						<div class="list__item">
-							<button type="button" class="list__item_button user" @click="onUserProfileDetail">
+							<button
+								type="button"
+								class="list__item_button user"
+								@click="onUserProfileDetail"
+							>
 								<em>{{ post.region }}</em>
-								<strong>{{ post.userNickName }}</strong></button><!-- //사용자 프로필 보기 > 채팅 -->
+								<strong>{{ post.userNickName }}</strong></button
+							><!-- //사용자 프로필 보기 > 채팅 -->
 						</div>
 					</div>
 					<div class="item__fnc">
-						<button type="button" class="list__item_button more" @click="openMoreModal">
-							<i class="blind">더보기</i></button><!-- //공유, 신고, 본인글인 경우 추가 :수정, 삭제 -->
+						<button
+							type="button"
+							class="list__item_button more"
+							@click="openMoreModal"
+						>
+							<i class="blind">더보기</i></button
+						><!-- //공유, 신고, 본인글인 경우 추가 :수정, 삭제 -->
 					</div>
 				</div>
 				<div class="text__wrap">
@@ -39,7 +52,11 @@
 				</div>
 				<!-- file preview -->
 				<div class="attachments__wrap" v-if="post.attachments.length > 0">
-					<div class="attachments__item" v-for="(image, index) in post.attachments" :key="index">
+					<div
+						class="attachments__item"
+						v-for="(image, index) in post.attachments"
+						:key="index"
+					>
 						<div class="item__display">
 							<img :src="image" alt="preview" />
 						</div>
@@ -49,7 +66,12 @@
 				<div class="tag__wrap">
 					<div class="tag__inner">
 						<div class="tag__item">
-							<button v-for="tag in post.tags" :key="tag" type="button" class="button button--hash">
+							<button
+								v-for="tag in post.tags"
+								:key="tag"
+								type="button"
+								class="button button--hash"
+							>
 								<em>{{ tag }}</em>
 							</button>
 						</div>
@@ -57,8 +79,12 @@
 				</div>
 				<div class="util__wrap">
 					<div class="item__fnc">
-						<button type="button" class="list__item_button like" :class="{ active: post.likeUsers.includes(userSeq) }"
-							@click="likePost">
+						<button
+							type="button"
+							class="list__item_button like"
+							:class="{ active: post.likeUsers.includes(userSeq) }"
+							@click="likePost"
+						>
 							<i class="blind">좋아요</i>
 							<span class="item__count">{{ post.likeCount }}</span>
 						</button>
@@ -73,10 +99,17 @@
 						</button> -->
 						<p class="list__item past">
 							<i class="blind">작성시간</i>
-							<span class="item__count">{{ timeCalculation(post.createdAt).time }}
-								{{ t(timeCalculation(post.createdAt).text) }}</span>
+							<span class="item__count"
+								>{{ timeCalculation(post.createdAt).time }}
+								{{ t(timeCalculation(post.createdAt).text) }}</span
+							>
 						</p>
-						<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
+						<button
+							type="button"
+							class="list__item_button mark"
+							:class="{ active: isBookmarked }"
+							@click="bookmarkApi"
+						>
 							<!-- //활성화 .active -->
 							<i class="blind">북마크</i>
 						</button>
@@ -85,12 +118,21 @@
 			</div>
 			<!-- //.item -->
 		</div>
-		<ReplyModal v-if="replyDetailModal" :post="post" :commentIndex="replyIndex" :postIndex="postSeq"
-			@close="closeReplyModal" />
+		<ReplyModal
+			v-if="replyDetailModal"
+			:post="post"
+			:commentIndex="replyIndex"
+			:postIndex="postSeq"
+			@close="closeReplyModal"
+		/>
 		<!-- 댓글 기능버튼 -->
 		<div class="fnc-wrap">
 			<div class="button__list">
-				<button type="button" class="button-icon__s button--post" @click="openCommentWrite">
+				<button
+					type="button"
+					class="button-icon__s button--post"
+					@click="openCommentWrite"
+				>
 					<svg viewBox="0 0 16 16">
 						<path :d="writeReply.first" />
 						<path :d="writeReply.second" />
@@ -99,7 +141,11 @@
 				</button>
 			</div>
 			<div class="sort__list">
-				<button type="button" class="button-icon__s last-reply" @click="goToDown">
+				<button
+					type="button"
+					class="button-icon__s last-reply"
+					@click="goToDown"
+				>
 					<svg viewBox="0 0 16 16">
 						<path :d="lastReply" />
 					</svg>
@@ -111,7 +157,11 @@
 		<div class="list-wrap reply" v-if="post.comments.length === 0">
 			<NoContent :item="'댓글'" />
 		</div>
-		<div class="list-wrap reply" v-for="(comment, index) in post.comments" :key="comment.seq">
+		<div
+			class="list-wrap reply"
+			v-for="(comment, index) in post.comments"
+			:key="comment.seq"
+		>
 			<!-- <div class="item item--blind"> -->
 			<!-- 댓글 신고로 숨김처리 시 -->
 			<!-- <div class="blind__text">
@@ -122,8 +172,12 @@
 				<div class="info__wrap">
 					<div class="item__fnc">
 						<div class="list__item">
-							<button type="button" class="list__item_button user" :class="{ 'user--author': isAuthor(comment.user.seq) }"
-								@click="onUserProfileDetail">
+							<button
+								type="button"
+								class="list__item_button user"
+								:class="{ 'user--author': isAuthor(comment.user.seq) }"
+								@click="onUserProfileDetail"
+							>
 								<!-- //원글작성자 댓글 .user--author -->
 								<em>{{ comment.user.country }}</em>
 								<strong>{{ comment.user.nickName }}</strong>
@@ -145,31 +199,49 @@
 				</div>
 				<div class="util__wrap">
 					<div class="item__fnc">
-						<button type="button" class="list__item_button like" :class="{ active: comment.likeUsers.includes(userSeq) }"
-							@click="likeComment(comment.seq, index)">
+						<button
+							type="button"
+							class="list__item_button like"
+							:class="{ active: comment.likeUsers.includes(userSeq) }"
+							@click="likeComment(comment.seq, index)"
+						>
 							<!-- //활성화 .active -->
 							<i class="blind">좋아요</i>
 							<span class="item__count">{{ comment.upVotes }}</span>
 						</button>
-						<button type="button" class="list__item cmt" @click="openReplyWrite(index, null)">
+						<button
+							type="button"
+							class="list__item cmt"
+							@click="openReplyWrite(index, null)"
+						>
 							<span class="item__count">{{ comment.replies.length }}</span>
 						</button>
 						<p class="list__item past">
 							<i class="blind">작성시간</i>
-							<span class="item__count">{{ timeCalculation(comment.createdAt).time
-							}}{{ t(timeCalculation(comment.createdAt).text) }}</span>
+							<span class="item__count"
+								>{{ timeCalculation(comment.createdAt).time
+								}}{{ t(timeCalculation(comment.createdAt).text) }}</span
+							>
 						</p>
 					</div>
 				</div>
 			</div>
 			<!-- 대댓글 -->
-			<div class="re--reply" v-for="(reply, replyIndex) in comment.replies.slice(0, 3)" :key="reply.seq">
+			<div
+				class="re--reply"
+				v-for="(reply, replyIndex) in comment.replies.slice(0, 3)"
+				:key="reply.seq"
+			>
 				<div class="item">
 					<div class="info__wrap">
 						<div class="item__fnc">
 							<div class="list__item">
-								<button type="button" class="list__item_button user" :class="{ 'user--author': isAuthor(reply.user.seq) }"
-									@click="onUserProfileDetail">
+								<button
+									type="button"
+									class="list__item_button user"
+									:class="{ 'user--author': isAuthor(reply.user.seq) }"
+									@click="onUserProfileDetail"
+								>
 									<!-- //원글작성자 댓글 .user--author -->
 									<em>{{ reply.user.country }}</em>
 									<strong>{{ reply.user.nickName }}</strong>
@@ -186,8 +258,11 @@
 						<div class="list__item">
 							<div class="text__item">
 								<p class="text">
-									<span class="comment__user" v-if="extractAtWordAndRest(reply.content).atWord">{{
-										extractAtWordAndRest(reply.content).atWord }}</span>
+									<span
+										class="comment__user"
+										v-if="extractAtWordAndRest(reply.content).atWord"
+										>{{ extractAtWordAndRest(reply.content).atWord }}</span
+									>
 									{{ extractAtWordAndRest(reply.content).restText }}
 								</p>
 							</div>
@@ -195,17 +270,26 @@
 					</div>
 					<div class="util__wrap">
 						<div class="item__fnc">
-							<button type="button" class="list__item_button like" :class="{
-								active:
-									post.comments[index].replies[replyIndex].likeUsers.includes(
-										userSeq,
-									),
-							}" @click="likeReply(index, replyIndex)">
+							<button
+								type="button"
+								class="list__item_button like"
+								:class="{
+									active:
+										post.comments[index].replies[replyIndex].likeUsers.includes(
+											userSeq,
+										),
+								}"
+								@click="likeReply(index, replyIndex)"
+							>
 								<!-- //활성화 .active -->
 								<i class="blind">좋아요</i>
 								<span class="item__count">{{ reply.upVotes }}</span>
 							</button>
-							<button type="button" class="list__item cmt" @click="openReplyWrite(index, reply.user.nickName)"></button>
+							<button
+								type="button"
+								class="list__item cmt"
+								@click="openReplyWrite(index, reply.user.nickName)"
+							></button>
 							<p class="list__item past">
 								<i class="blind">작성시간</i>
 								<span class="item__count">
@@ -220,41 +304,66 @@
 			</div>
 			<!-- n개 이상 대댓글 더보기 -->
 			<div class="item item__more" v-if="comment.replies.length > 3">
-				<button type="button" class="list__item_button button-text" @click="openReplyModal(index)">
-					<span>{{ comment.replies.length - 3
-					}}{{ t('boardDetailView.multipleComments') }}</span>
+				<button
+					type="button"
+					class="list__item_button button-text"
+					@click="openReplyModal(index)"
+				>
+					<span
+						>{{ comment.replies.length - 3
+						}}{{ t('boardDetailView.multipleComments') }}</span
+					>
 				</button>
 			</div>
 		</div>
 	</div>
 	<!-- <SelectDialog v-if="isSortingSelectClicked" :title="selectTitle" :list="selectList" @close="closeSelect"
 		@select:value="selectedValue" /> -->
-	<ReplyWrite v-if="isCommentWriteClicked" :postSeq="post.seq" :isPostComment="true" @close="closeCommentWrite"
-		@select:value="selectedValue" />
-	<ReplyWrite v-if="isReplyWriteClicked" :commentSeq="post.comments[replyIndex].seq" :isPostComment="false"
-		:taggedUser="taggedUser" @close="closeReplyWrite" @select:value="selectedValue" />
+	<ReplyWrite
+		v-if="isCommentWriteClicked"
+		:postSeq="post.seq"
+		:isPostComment="true"
+		@close="closeCommentWrite"
+		@select:value="selectedValue"
+	/>
+	<ReplyWrite
+		v-if="isReplyWriteClicked"
+		:commentSeq="post.comments[replyIndex].seq"
+		:isPostComment="false"
+		:taggedUser="taggedUser"
+		@close="closeReplyWrite"
+		@select:value="selectedValue"
+	/>
 	<LoadingModal v-if="isLoading" />
-	<MoreModalForPost v-if="onMorePostModal" :posetSeq="post.seq" @close="closeMoreModal" @edit="editPost"
-		@delete="deletePost" />
-	<UserProfileDetail @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
+	<MoreModalForPost
+		v-if="onMorePostModal"
+		:posetSeq="post.seq"
+		@close="closeMoreModal"
+		@edit="editPost"
+		@delete="deletePost"
+	/>
+	<UserProfileDetail
+		@close="offUserProfileDetail"
+		v-if="isUserProfileDetailOn"
+	/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import ReplyWrite from '@/components/comment/ReplyWrite.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import useAxios from '@/composables/useAxios.js';
+import useAxios from '@/composables/useAxios.ts';
 import NoContent from '@/components/board/NoContent.vue';
 import ReplyModal from '@/components/comment/ReplyModal.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import MoreModalForPost from '@/components/modal/MoreModalForPost.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
-import { useUserInfoStore } from '@/stores/userInfo';
-import { timeCalculation } from '@/utils/date-time.js';
-import { likeApi } from '@/services/post.js';
-import { writeReply, lastReply } from '@/utils/icons';
-import { extractAtWordAndRest } from '@/utils/comment.js';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
+import { timeCalculation } from '@/utils/date-time.ts';
+import { likeApi } from '@/services/post.ts';
+import { writeReply, lastReply } from '@/utils/icons.ts';
+import { extractAtWordAndRest } from '@/utils/comment.ts';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -496,7 +605,7 @@ const closeMoreModal = () => {
 // -->
 
 // <-- 게시물 수정/삭제 관련
-const editPost = () => { };
+const editPost = () => {};
 
 const deletePost = async () => {
 	try {

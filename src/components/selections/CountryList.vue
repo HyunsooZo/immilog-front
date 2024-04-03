@@ -15,9 +15,9 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
-import { regions } from '@/utils/selectItems';
+import { regions } from '@/utils/selectItems.ts';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

@@ -12,7 +12,7 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import JobContent from '@/components/board/JobContent.vue';
 </script>

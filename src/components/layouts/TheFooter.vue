@@ -34,17 +34,17 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watchEffect } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useMenuStore } from '@/stores/menu';
+import { useMenuStore } from '@/stores/menu.ts';
 import {
 	homeIcon,
 	areaIcon,
 	chatIcon,
 	jobIcon,
 	myPageIcon,
-} from '@/utils/icons.js';
+} from '@/utils/icons.ts';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

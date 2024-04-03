@@ -308,21 +308,21 @@
 	<LoadingModal v-if="isLoading" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
-import { resizeImage } from '@/utils/image.js';
-import { categoryList } from '@/utils/selectItems';
-import { uploadPostApi } from '@/services/post.js';
-import { uploadImageApi } from '@/services/image.js';
+import { resizeImage } from '@/utils/image.ts';
+import { categoryList } from '@/utils/selectItems.ts';
+import { uploadPostApi } from '@/services/post.ts';
+import { uploadImageApi } from '@/services/image.ts';
 import {
 	postRegistrationIcon,
 	imageSelectIcon,
 	hashTagIcon,
-} from '@/utils/icons.js';
+} from '@/utils/icons.ts';
 // import DatePicker from 'vue3-datepicker';
 
 // DatePicker, Placeholder

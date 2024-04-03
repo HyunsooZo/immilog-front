@@ -204,15 +204,15 @@
 	/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import ReplyWrite from '@/components/comment/ReplyWrite.vue';
-import useAxios from '@/composables/useAxios';
-import { timeCalculation } from '@/utils/date-time.js';
+import useAxios from '@/composables/useAxios.ts';
+import { timeCalculation } from '@/utils/date-time.ts';
 import { useRouter } from 'vue-router';
-import { extractAtWordAndRest } from '@/utils/comment.js';
-import { useUserInfoStore } from '@/stores/userInfo';
-import { likeApi } from '@/services/post.js';
+import { extractAtWordAndRest } from '@/utils/comment.ts';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
+import { likeApi } from '@/services/post.ts';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

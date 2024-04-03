@@ -96,12 +96,12 @@
 	<!-- //.item -->
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
-import useAxios from '@/composables/useAxios.js';
+import useAxios from '@/composables/useAxios.ts';
 import { computed, ref } from 'vue';
-import { useUserInfoStore } from '@/stores/userInfo';
-import { timeCalculation } from '@/utils/date-time.js';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
+import { timeCalculation } from '@/utils/date-time.ts';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

@@ -108,13 +108,13 @@
 	<AdContent />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
-// import useAxios from '@/composables/useAxios.js';
+// import useAxios from '@/composables/useAxios.ts';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
-import { timeCalculation } from '@/utils/date-time.js';
-import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.js';
+import { timeCalculation } from '@/utils/date-time.ts';
+import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.ts';
 import AdContent from '@/components/board/AdContent.vue';
 import { useI18n } from 'vue-i18n';
 

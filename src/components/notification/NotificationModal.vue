@@ -3,7 +3,11 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">알림</p>
-				<button class="button-icon button--close" role="link" @click="closeModal">
+				<button
+					class="button-icon button--close"
+					role="link"
+					@click="closeModal"
+				>
 					<i class="blind">취소</i>
 				</button>
 			</div>
@@ -29,7 +33,8 @@
 								<div class="item__display">
 									<img src="@/assets/images/email-icon-logo.png" alt="" />
 								</div>
-							</div><!-- //loop -->
+							</div>
+							<!-- //loop -->
 						</div>
 					</div>
 					<!-- // -->
@@ -39,7 +44,7 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted } from 'vue';
 
 //사용자 고유번호

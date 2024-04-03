@@ -36,7 +36,7 @@
 	<NotificationModal v-if="onMenu" :userSeq="userSeq" @close="onMenuClose" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import router from '@/router';
 import { ref } from 'vue';
 import NotificationModal from '@/components/notification/NotificationModal.vue';

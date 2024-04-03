@@ -5,13 +5,13 @@
 	</main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import TheFooter from './components/layouts/TheFooter.vue';
-import { getCoordinate } from '@/services/geolocation.js';
-import { getUserInfo } from '@/services/userInfoFetch';
-import { useUserInfoStore } from '@/stores/userInfo.js';
+import { getCoordinate } from '@/services/geolocation.ts';
+import { getUserInfo } from '@/services/userInfoFetch.ts';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
 
 const route = useRoute();
 const hideFooter = computed(() => route.meta.hideFooter);

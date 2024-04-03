@@ -88,19 +88,19 @@
 	/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import SearchBar from '@/components/search/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select--dialog
-import useAxios from '@/composables/useAxios.js';
+import useAxios from '@/composables/useAxios.ts';
 import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/board/BoardContent.vue';
 import AdContent from '@/components/board/AdContent.vue';
-import { showAd } from '@/utils/showAd';
-import { useUserInfoStore } from '@/stores/userInfo.js';
+import { showAd } from '@/utils/showAd.ts';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { useRouter } from 'vue-router';
-import { postBtn } from '@/utils/icons.js';
-import { sortingList, categoryList } from '@/utils/selectItems';
+import { postBtn } from '@/utils/icons.ts';
+import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

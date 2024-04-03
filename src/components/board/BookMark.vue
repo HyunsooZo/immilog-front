@@ -52,10 +52,10 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import BoardContent from '@/components/board/BoardContent.vue';
-import { getBookmarkedPostApi } from '@/services/post.js';
+import { getBookmarkedPostApi } from '@/services/post.ts';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

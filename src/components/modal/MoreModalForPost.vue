@@ -37,10 +37,10 @@
 	/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import ConfirmModal from './ConfirmModal.vue';
-import useAxios from '@/composables/useAxios';
+import useAxios from '@/composables/useAxios.ts';
 
 const { sendRequest } = useAxios();
 const props = defineProps({

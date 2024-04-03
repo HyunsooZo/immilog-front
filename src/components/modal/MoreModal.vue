@@ -1,5 +1,10 @@
 <template>
-	<div class="modal default--dialog" tabindex="-1" role="dialog" @click.self="closeModal">
+	<div
+		class="modal default--dialog"
+		tabindex="-1"
+		role="dialog"
+		@click.self="closeModal"
+	>
 		<div class="modal-content">
 			<!-- <div class="modal-header">
 				<button type="button" class="button-icon button--close" role="link" @click="closeModal">
@@ -24,13 +29,18 @@
 			</div>
 		</div>
 	</div>
-	<ConfirmModal v-if="onConfirmModal" :modalText="modalText" @close="closeConfirmModal" @confirm="exitChatRoom" />
+	<ConfirmModal
+		v-if="onConfirmModal"
+		:modalText="modalText"
+		@close="closeConfirmModal"
+		@confirm="exitChatRoom"
+	/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import ConfirmModal from './ConfirmModal.vue';
-import useAxios from '@/composables/useAxios';
+import useAxios from '@/composables/useAxios.ts';
 
 const { sendRequest } = useAxios();
 const props = defineProps({

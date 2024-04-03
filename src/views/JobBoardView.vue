@@ -58,7 +58,7 @@
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import SearchBox from '@/components/search/SearchBox.vue';
@@ -66,9 +66,9 @@ import JobContent from '@/components/board/JobContent.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import PostModal from '@/components/board/PostModal.vue';
 // import NoContent from '@/components/board/NoContent.vue';
-import { postBtn } from '@/utils/icons';
-import { sortingList2, categoryList2 } from '@/utils/selectItems.js';
-import { getJobBoardsApi } from '@/services/jobBoard.js';
+import { postBtn } from '@/utils/icons.ts';
+import { sortingList2, categoryList2 } from '@/utils/selectItems.ts';
+import { getJobBoardsApi } from '@/services/jobBoard.ts';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 

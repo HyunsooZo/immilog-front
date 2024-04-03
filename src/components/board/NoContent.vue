@@ -21,8 +21,8 @@
 	</div>
 </template>
 
-<script setup>
-import { myPostIcon } from '@/utils/icons.js';
+<script setup lang="ts">
+import { myPostIcon } from '@/utils/icons.ts';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

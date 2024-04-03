@@ -24,7 +24,7 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Swiper from 'swiper/bundle';
 import { onMounted } from 'vue';
 

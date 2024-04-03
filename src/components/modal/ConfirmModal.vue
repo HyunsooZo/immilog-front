@@ -26,7 +26,7 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { modalText } = defineProps(['modalText']);
 
 const emits = defineEmits(['close', 'confirm']);

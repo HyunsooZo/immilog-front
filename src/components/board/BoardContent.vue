@@ -15,7 +15,11 @@
 					</button>
 				</div>
 				<div class="list__item">
-					<button type="button" class="list__item_button user" @click="onUserProfileDetail">
+					<button
+						type="button"
+						class="list__item_button user"
+						@click="onUserProfileDetail"
+					>
 						<em>{{ post.region }}</em>
 						<strong>{{ post.userNickName }}</strong>
 					</button>
@@ -23,7 +27,11 @@
 			</div>
 		</div>
 		<div class="text__wrap">
-			<button type="button" class="list__item_button" @click="onBoardDetail(post.seq)">
+			<button
+				type="button"
+				class="list__item_button"
+				@click="onBoardDetail(post.seq)"
+			>
 				<div class="text__item">
 					<p class="title">{{ post.title }}</p>
 					<p class="text">{{ post.content }}</p>
@@ -39,7 +47,12 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ post.viewCount }}</span>
 				</p>
-				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
+				<button
+					type="button"
+					class="list__item_button like"
+					:class="{ active: isLiked }"
+					@click="likePost"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count"> {{ likes }}</span>
@@ -52,10 +65,17 @@
 			<div class="item__fnc">
 				<p class="list__item past">
 					<i class="blind">작성시간</i>
-					<span class="item__count">{{ timeCalculation(post.createdAt).time
-					}}{{ t(timeCalculation(post.createdAt).text) }}</span>
+					<span class="item__count"
+						>{{ timeCalculation(post.createdAt).time
+						}}{{ t(timeCalculation(post.createdAt).text) }}</span
+					>
 				</p>
-				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
+				<button
+					type="button"
+					class="list__item_button mark"
+					:class="{ active: isBookmarked }"
+					@click="bookmarkApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -64,15 +84,18 @@
 	</div>
 	<!-- //.item -->
 	<AdContent v-if="showAd" />
-	<UserProfileDetail @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
+	<UserProfileDetail
+		@close="offUserProfileDetail"
+		v-if="isUserProfileDetailOn"
+	/>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
-import { timeCalculation } from '@/utils/date-time.js';
-import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.js';
+import { timeCalculation } from '@/utils/date-time.ts';
+import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.ts';
 import AdContent from '@/components/board/AdContent.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 import { useI18n } from 'vue-i18n';

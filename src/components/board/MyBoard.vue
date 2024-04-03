@@ -24,10 +24,10 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import BoardContent from '@/components/board/BoardContent.vue';
-import { getMyPostsApi } from '@/services/post.js';
+import { getMyPostsApi } from '@/services/post.ts';
 
 const state = ref({
 	posts: [],

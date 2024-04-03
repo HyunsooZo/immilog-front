@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { refreshAccessToken } from '@/services/auth.js';
+import { refreshAccessToken } from '@/services/auth.ts';
 
 // API 기본 URL 설정
 axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;

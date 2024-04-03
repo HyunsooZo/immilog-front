@@ -1,11 +1,20 @@
 <template>
 	<!-- replydialog -->
-	<div class="modal reply--dialog" tabindex="-1" role="dialog" @click.self="closeDialog">
+	<div
+		class="modal reply--dialog"
+		tabindex="-1"
+		role="dialog"
+		@click.self="closeDialog"
+	>
 		<div class="modal-content">
 			<div class="modal-header">
 				<!-- 등록 -->
 				<div class="item__fnc right">
-					<button type="button" class="button-icon__s button--post_upload" @click="commentApi">
+					<button
+						type="button"
+						class="button-icon__s button--post_upload"
+						@click="commentApi"
+					>
 						<svg viewBox="0 0 16 16">
 							<path :d="postRegistrationIcon.first" />
 							<path :d="postRegistrationIcon.second" />
@@ -13,16 +22,29 @@
 						<span>등록</span>
 					</button>
 				</div>
-				<button type="button" class="button-icon button--close" role="link" @click="closeDialog">
+				<button
+					type="button"
+					class="button-icon button--close"
+					role="link"
+					@click="closeDialog"
+				>
 					<i class="blind">닫기</i>
 				</button>
 			</div>
 			<div class="modal-body">
 				<div class="post-wrap">
 					<div class="post__wrap">
-						<textarea v-model="textareaRef" class="text__area" name="content" autocomplete="off"
-							placeholder="댓글을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다." data-autosuggest_is-input="true"
-							ref="adjustTextare" @input="adjustTextareaHeight" rows="2"></textarea>
+						<textarea
+							v-model="textareaRef"
+							class="text__area"
+							name="content"
+							autocomplete="off"
+							placeholder="댓글을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다."
+							data-autosuggest_is-input="true"
+							ref="adjustTextare"
+							@input="adjustTextareaHeight"
+							rows="2"
+						></textarea>
 
 						<!-- <textarea v-model="content" class="text__area" name="content" autocomplete="off"
 							placeholder="댓글을 입력해주세요. 다른 사용자로부터 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 될 수 있습니다."
@@ -51,17 +73,22 @@
 			</div>
 		</div>
 	</div>
-	<CustomAlert v-if="alertValue" :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+	<CustomAlert
+		v-if="alertValue"
+		:alertValue="alertValue"
+		:alertText="alertText"
+		@update:alertValue="closeAlert"
+	/>
 	<LoadingModal v-if="isLoading" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
-import useAxios from '@/composables/useAxios';
+import useAxios from '@/composables/useAxios.ts';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
-import { postRegistrationIcon } from '@/utils/icons.js';
+import { postRegistrationIcon } from '@/utils/icons.ts';
 const router = useRouter();
 
 const { sendRequest } = useAxios(router);

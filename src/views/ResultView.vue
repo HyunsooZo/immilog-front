@@ -39,9 +39,9 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { resultCircleIcon } from '@/utils/icons';
+import { resultCircleIcon } from '@/utils/icons.ts';
 
 const router = useRouter();
 

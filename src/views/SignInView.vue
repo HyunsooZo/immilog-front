@@ -11,7 +11,14 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="email" type="text" class="input__element" placeholder="이메일" id="inputEmail" required />
+							<input
+								v-model="email"
+								type="text"
+								class="input__element"
+								placeholder="이메일"
+								id="inputEmail"
+								required
+							/>
 						</div>
 					</div>
 				</div>
@@ -23,8 +30,14 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="password" type="password" class="input__element" placeholder="비밀번호" id="inputPassword"
-								required />
+							<input
+								v-model="password"
+								type="password"
+								class="input__element"
+								placeholder="비밀번호"
+								id="inputPassword"
+								required
+							/>
 						</div>
 					</div>
 				</div>
@@ -37,17 +50,28 @@
 			</div>
 
 			<div class="button-wrap">
-				<button @click="signIn" :class="{
-					'button button--positive': isValidLogin && !isLoading,
-					'button button--disabled': !isValidLogin || isLoading,
-				}" role="link" id="loginBtn">
-					로그인</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
+				<button
+					@click="signIn"
+					:class="{
+						'button button--positive': isValidLogin && !isLoading,
+						'button button--disabled': !isValidLogin || isLoading,
+					}"
+					role="link"
+					id="loginBtn"
+				>
+					로그인</button
+				><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 
 			<div class="input-wrap">
 				<div class="input__wrap">
 					<div class="input__item">
-						<input type="checkbox" class="input__checkbox _text" id="loginSave" name="loginSave" />
+						<input
+							type="checkbox"
+							class="input__checkbox _text"
+							id="loginSave"
+							name="loginSave"
+						/>
 						<label for="loginSave" class="input__label">자동로그인</label>
 					</div>
 				</div>
@@ -82,7 +106,12 @@
 			<ul>
 				<li>
 					<strong>회원이 아닌 경우</strong>
-					<button type="button" class="button-text" role="link" @click="onSignUp">
+					<button
+						type="button"
+						class="button-text"
+						role="link"
+						@click="onSignUp"
+					>
 						<strong>가입하기</strong>
 					</button>
 				</li>
@@ -90,19 +119,23 @@
 		</div>
 	</div>
 	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+		<CustomAlert
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
+		/>
 	</teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
-import useAxios from '@/composables/useAxios.js';
+import useAxios from '@/composables/useAxios.ts';
 import { computed, onMounted, ref } from 'vue';
-import { useUserInfoStore } from '@/stores/userInfo.js';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
-import { getCoordinate } from '@/services/geolocation';
-import { getUserInfo } from '@/services/userInfoFetch';
+import { getCoordinate } from '@/services/geolocation.ts';
+import { getUserInfo } from '@/services/userInfoFetch.ts';
 
 const email = ref('');
 const password = ref('');

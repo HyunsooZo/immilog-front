@@ -19,7 +19,7 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { alertText } = defineProps(['alertText']);
 
 const emits = defineEmits(['update:alertValue']);
