@@ -6,11 +6,7 @@
 					{{ userProfile.userNickname
 					}}<span>{{ t('userProfileDetailView.userProfileDetail') }}</span>
 				</p>
-				<button
-					class="button-icon button--close"
-					role="link"
-					@click="closeModal"
-				>
+				<button class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">취소</i>
 				</button>
 			</div>
@@ -18,18 +14,9 @@
 				<div class="list-wrap personal__view">
 					<div class="item">
 						<div class="info__wrap">
-							<button
-								type="button"
-								class="item__pic"
-								:class="{ 'pic--default': !userProfile.userProfileUrl }"
-								role="link"
-								@click="onUserProfilePic"
-							>
-								<img
-									v-if="userProfile.userProfileUrl"
-									:src="userProfile.userProfileUrl"
-									alt=""
-								/>
+							<button type="button" class="item__pic" :class="{ 'pic--default': !userProfile.userProfileUrl }" role="link"
+								@click="onUserProfilePic">
+								<img v-if="userProfile.userProfileUrl" :src="userProfile.userProfileUrl" alt="" />
 							</button>
 							<div class="item__fnc">
 								<div class="list__item">

@@ -3,22 +3,10 @@
 		<!-- 개인정보 -->
 		<div class="list-wrap _personal">
 			<div class="item">
-				<button
-					type="button"
-					class="list__item_button"
-					role="link"
-					@click="onProfileEdit"
-				>
+				<button type="button" class="list__item_button" role="link" @click="onProfileEdit">
 					<div class="info__wrap">
-						<div
-							class="item__pic"
-							:class="{ 'pic--default': !userInfo.userProfile }"
-						>
-							<img
-								v-if="userInfo.userProfile"
-								:src="userInfo.userProfile"
-								alt=""
-							/>
+						<div class="item__pic" :class="{ 'pic--default': !userInfo.userProfile }">
+							<img v-if="userInfo.userProfile" :src="userInfo.userProfile" alt="" />
 						</div>
 						<div class="item__fnc">
 							<div class="list__item">
@@ -26,7 +14,7 @@
 								<em>{{ userInfo.userRegion }}</em>
 							</div>
 							<div class="list__item user button-text">
-								<strong>{{ userInfo.userNickname }}</strong>
+								<strong>{{ userInfo.userNickname }} </strong>
 							</div>
 						</div>
 					</div>
@@ -37,12 +25,7 @@
 		<div class="list-wrap list--link">
 			<ul>
 				<li class="item">
-					<button
-						type="button"
-						class="button button-text"
-						role="link"
-						@click="onMyBoard"
-					>
+					<button type="button" class="button button-text" role="link" @click="onMyBoard">
 						<svg viewBox="0 0 16 16">
 							<path :d="myPostIcon" />
 						</svg>
@@ -50,12 +33,7 @@
 					</button>
 				</li>
 				<li class="item">
-					<button
-						type="button"
-						class="button button-text"
-						role="link"
-						@click="onBookmark"
-					>
+					<button type="button" class="button button-text" role="link" @click="onBookmark">
 						<svg viewBox="0 0 16 16">
 							<path fill-rule="evenodd" :d="bookmarkIcon.first" />
 							<path :d="bookmarkIcon.second" />
@@ -84,12 +62,7 @@
 					</button>
 				</li>
 				<li class="item">
-					<button
-						type="button"
-						class="button button-text"
-						role="link"
-						@click="openEmailForm"
-					>
+					<button type="button" class="button button-text" role="link" @click="openEmailForm">
 						<svg viewBox="0 0 16 16">
 							<path :d="customerCenterIcon.first" />
 							<path :d="customerCenterIcon.second" />

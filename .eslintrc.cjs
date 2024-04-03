@@ -52,7 +52,7 @@ module.exports = {
 		'plugin:@typescript-eslint/recommended', // TypeScript 권장 규칙 추가
 	],
 	rules: {
-		'linebreak-style': ['error', 'unix'] // Unix 스타일(LF)로 설정
+		'linebreak-style': ['error', 'unix'], // Unix 스타일(LF)로 설정
 		'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 		'prettier/prettier': [
