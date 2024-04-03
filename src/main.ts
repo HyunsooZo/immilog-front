@@ -6,13 +6,16 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from '@/router';
 import setupI18n from './i18n';
+const initializeApp = async () => {
+  const pinia = createPinia();
+  const app = createApp(App);
 
-const pinia = createPinia();
-const app = createApp(App);
-const i18n = await setupI18n();
+  const i18n = await setupI18n();
+  app.use(router);
+  app.use(i18n);
+  app.use(pinia);
 
-app.use(router);
-app.use(i18n);
-app.use(pinia); // Pinia를 애플리케이션에 등록
+  app.mount('#app');
+}
 
-app.mount('#app');
+initializeApp();
