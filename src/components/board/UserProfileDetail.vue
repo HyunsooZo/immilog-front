@@ -14,8 +14,8 @@
 				<div class="list-wrap personal__view">
 					<div class="item">
 						<div class="info__wrap">
-							<button type="button" class="item__pic" :class="{ 'pic--default': !userProfile.userProfileUrl }" role="link"
-								@click="onUserProfilePic">
+							<button type="button" class="item__pic" :class="{ 'pic--default': !userProfile.userProfileUrl }"
+								role="link" @click="onUserProfilePic">
 								<img v-if="userProfile.userProfileUrl" :src="userProfile.userProfileUrl" alt="" />
 							</button>
 							<div class="item__fnc">
@@ -28,10 +28,11 @@
 								</div>
 							</div>
 						</div>
-						<div class="button-wrap link-type">
-							<button class="button-text" role="link">게시글보기</button>
-						</div>
 						<div class="button-wrap">
+							<button class="button button--primary button__s" role="link">
+								게시글
+							</button>
+							<!-- 본인 프로필은 채팅, 신고 버튼 미노출 -->
 							<button class="button button--primary button__s" role="link">
 								채팅
 							</button>
