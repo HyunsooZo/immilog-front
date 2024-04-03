@@ -28,11 +28,11 @@
 								</div>
 							</div>
 						</div>
-						<div class="button-wrap link-type">
-							<button class="button-text" role="link">게시글보기</button>
-						</div>
-						<!-- 본인 프로필에서는 버튼 미노출 -->
 						<div class="button-wrap">
+							<button class="button button--primary button__s" role="link">
+								게시글
+							</button>
+							<!-- 본인 프로필은 채팅, 신고 버튼 미노출 -->
 							<button class="button button--primary button__s" role="link">
 								채팅
 							</button>
