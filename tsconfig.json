@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "target": "es2017",
     "module": "esnext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "baseUrl": ".", // 기준 디렉토리 설정
+    "paths": {
+      "@/*": ["./src/*"] // src 디렉토리에 대한 경로 별칭 설정
+    }
   }
 }

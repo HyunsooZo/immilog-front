@@ -6,31 +6,18 @@
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button
-						type="button"
-						class="button--select"
-						@click="openCategorySelect"
-					>
+					<button type="button" class="button--select" @click="openCategorySelect">
 						<span>{{ t(selectCategoryValue.name) }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button
-						type="button"
-						class="button--select sort"
-						@click="openSortingSelect"
-					>
+					<button type="button" class="button--select sort" @click="openSortingSelect">
 						<span>{{ t(selectSortingValue.name) }}</span>
 					</button>
 				</div>
 				<!-- 글쓰기 버튼 -->
-				<button
-					type="button"
-					class="button-icon button--post"
-					:class="{ active: isStickyButton }"
-					:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }"
-					@click="openPostModal"
-				>
+				<button type="button" class="button-icon button--post" :class="{ active: isStickyButton }"
+					:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }" @click="openPostModal">
 					<svg viewBox="0 0 16 16">
 						<path :d="postBtn.first" />
 						<path :d="postBtn.second" />
@@ -48,13 +35,8 @@
 			</div>
 		</div>
 	</div>
-	<SelectDialog
-		v-if="isCategorySelectClicked || isSortingSelectClicked"
-		:title="selectTitle"
-		:list="selectList"
-		@close="closeSelect"
-		@select:value="selectedValue"
-	/>
+	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
+		@close="closeSelect" @select:value="selectedValue" />
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
 </template>
 
@@ -159,7 +141,7 @@ const handleStickyWrap = () => {
 			(stickyWrapElement?.getBoundingClientRect().height || 0) + 5;
 	}
 };
-const handleStickyButton = listTopHeight => {
+const handleStickyButton = (listTopHeight: number) => {
 	isStickyButton.value = window.scrollY > listTopHeight;
 };
 
@@ -212,10 +194,10 @@ const closeSelect = () => {
 };
 
 // select 관련 메소드 (선택된 값 처리)
-const selectedValue = value => {
-	if (categoryList2.some(c => c.code === value.code)) {
+const selectedValue = (value: { code: any; }) => {
+	if (categoryList2.some((c: { code: any; }) => c.code === value.code)) {
 		selectCategoryValue.value = t(value);
-	} else if (sortingList2.some(s => s.code === value.code)) {
+	} else if (sortingList2.some((s: { code: any; }) => s.code === value.code)) {
 		selectSortingValue.value = t(value);
 	}
 	initializeState();

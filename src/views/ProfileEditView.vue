@@ -2,10 +2,7 @@
 	<LoadingModal v-if="isLoading" />
 	<TheHeader />
 	<div class="content">
-		<TheTopBox
-			:title="'프로필 수정'"
-			:text="'프로필 수정 후 확인 버튼을 눌러주세요.'"
-		/>
+		<TheTopBox :title="'프로필 수정'" :text="'프로필 수정 후 확인 버튼을 눌러주세요.'" />
 		<div class="container">
 			<!-- profileimage -->
 			<div class="input-wrap">
@@ -15,22 +12,14 @@
 					<div class="input__item">
 						<div class="input__item_inner">
 							<div class="input__file">
-								<input
-									type="file"
-									id="file-upload"
-									class="input__element"
-									@change="previewImage"
-								/>
+								<input type="file" id="file-upload" class="input__element" @change="previewImage" />
 								<label for="file-upload" class="button" role="button">
 									<span class="blind">프로필 사진 선택</span>
 								</label>
 							</div>
-							<div
-								class="item__display"
-								:class="{
-									'pic--default': !imagePreview,
-								}"
-							>
+							<div class="item__display" :class="{
+		'pic--default': !imagePreview,
+	}">
 								<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
 								<button type="reset" class="button--del" @click="removeImage">
 									<i class="blind">삭제</i>
@@ -47,43 +36,23 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input
-								v-model="userNickName"
-								type="text"
-								class="input__element"
-								placeholder="닉네임 입력(5~10자 한글, 영문, 숫자 조합)"
-								value="현수쓰"
-							/>
+							<input v-model="userNickName" type="text" class="input__element" placeholder="닉네임 입력(5~10자 한글, 영문, 숫자 조합)"
+								value="현수쓰" />
 						</div>
 					</div>
-					<button
-						type="button"
-						class="button button--primary"
-						@click="checkNickName"
-					>
+					<button type="button" class="button button--primary" @click="checkNickName">
 						중복확인
 					</button>
 				</div>
 				<!-- 에러 메시지 -->
-				<p
-					v-if="nickNameCheckDone && !isNickNameValid && isNickNameChanged"
-					class="input__error"
-					aria-live="assertive"
-				>
+				<p v-if="nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error" aria-live="assertive">
 					이미 사용중인 닉네임 입니다.
 				</p>
-				<p
-					v-if="!nickNameCheckDone && !isNickNameValid && isNickNameChanged"
-					class="input__error"
-					aria-live="assertive"
-				>
+				<p v-if="!nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error"
+					aria-live="assertive">
 					닉네임 중복체크를 진행 해주세요.
 				</p>
-				<p
-					v-if="nickNameCheckDone && isNickNameValid && isNickNameChanged"
-					class="input__text"
-					aria-live="assertive"
-				>
+				<p v-if="nickNameCheckDone && isNickNameValid && isNickNameChanged" class="input__text" aria-live="assertive">
 					사용 가능한 닉네임입니다.
 				</p>
 			</div>
@@ -94,58 +63,38 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input
-								v-model="country"
-								type="text"
-								class="input__element"
-								placeholder="지역"
-								value="대한민국"
-								disabled
-							/>
+							<input v-model="country" type="text" class="input__element" placeholder="지역" value="대한민국" disabled />
 						</div>
 					</div>
-					<button
-						type="button"
-						class="button button--primary"
-						@click="fetchLocation"
-					>
+					<button type="button" class="button button--primary" @click="fetchLocation">
 						위치가져오기
 					</button>
 				</div>
 			</div>
 
 			<div class="button-wrap">
-				<button
-					class="button"
-					role="link"
-					:class="{
-						'button--positive':
-							(!nickNameCheckDone && !isNickNameChanged) ||
-							(nickNameCheckDone && isNickNameValid) ||
-							isImageChange ||
-							country ||
-							userNickName,
-						'button--disabled':
-							(!nickNameCheckDone && !isNickNameChanged) ||
-							!nickNameCheckDone ||
-							!isImageChange ||
-							!isNickNameValid ||
-							!country ||
-							!userNickName,
-					}"
-					@click="saveProfile"
-				>
+				<button class="button" role="link" :class="{
+		'button--positive':
+			(!nickNameCheckDone && !isNickNameChanged) ||
+			(nickNameCheckDone && isNickNameValid) ||
+			isImageChange ||
+			country ||
+			userNickName,
+		'button--disabled':
+			(!nickNameCheckDone && !isNickNameChanged) ||
+			!nickNameCheckDone ||
+			!isImageChange ||
+			!isNickNameValid ||
+			!country ||
+			!userNickName,
+	}" @click="saveProfile">
 					저장
 				</button>
 			</div>
 		</div>
 	</div>
 	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert
-			:alertValue="alertValue"
-			:alertText="alertText"
-			@update:alertValue="closeAlert"
-		/>
+		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
 	</teleport>
 </template>
 
