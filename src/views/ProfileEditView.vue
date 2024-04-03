@@ -18,8 +18,8 @@
 								</label>
 							</div>
 							<div class="item__display" :class="{
-								'pic--default': !imagePreview,
-							}">
+		'pic--default': !imagePreview,
+	}">
 								<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
 								<button type="reset" class="button--del" @click="removeImage">
 									<i class="blind">삭제</i>
@@ -48,7 +48,8 @@
 				<p v-if="nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error" aria-live="assertive">
 					이미 사용중인 닉네임 입니다.
 				</p>
-				<p v-if="!nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error" aria-live="assertive">
+				<p v-if="!nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error"
+					aria-live="assertive">
 					닉네임 중복체크를 진행 해주세요.
 				</p>
 				<p v-if="nickNameCheckDone && isNickNameValid && isNickNameChanged" class="input__text" aria-live="assertive">
@@ -73,20 +74,20 @@
 
 			<div class="button-wrap">
 				<button class="button" role="link" :class="{
-					'button--positive':
-						(!nickNameCheckDone && !isNickNameChanged) ||
-						(nickNameCheckDone && isNickNameValid) ||
-						isImageChange ||
-						country ||
-						userNickName,
-					'button--disabled':
-						(!nickNameCheckDone && !isNickNameChanged) ||
-						!nickNameCheckDone ||
-						!isImageChange ||
-						!isNickNameValid ||
-						!country ||
-						!userNickName,
-				}" @click="saveProfile">
+		'button--positive':
+			(!nickNameCheckDone && !isNickNameChanged) ||
+			(nickNameCheckDone && isNickNameValid) ||
+			isImageChange ||
+			country ||
+			userNickName,
+		'button--disabled':
+			(!nickNameCheckDone && !isNickNameChanged) ||
+			!nickNameCheckDone ||
+			!isImageChange ||
+			!isNickNameValid ||
+			!country ||
+			!userNickName,
+	}" @click="saveProfile">
 					저장
 				</button>
 			</div>
@@ -130,12 +131,14 @@ const isImageChange = computed(() => {
 });
 
 // 프리뷰 이미지
-const previewImage = event => {
+const previewImage = (event: { target: any; }) => {
 	const input = event.target;
 	if (input.files && input.files[0]) {
 		const reader = new FileReader();
 		reader.onload = e => {
-			imagePreview.value = e.target.result;
+			if (e.target) {
+				imagePreview.value = e.target.result;
+			}
 			imageFile.value = input.files[0];
 		};
 		reader.readAsDataURL(input.files[0]);
@@ -165,7 +168,7 @@ const checkNickName = async () => {
 					contentType: 'multipart/form-data',
 				},
 			},
-			null,
+			undefined,
 		);
 		if (status === 200) {
 			isNickNameValid.value = data.data ? true : false;
@@ -245,7 +248,7 @@ const saveProfile = async () => {
 const alertValue = ref(false);
 const alertText = ref('');
 
-const openAlert = content => {
+const openAlert = (content: string) => {
 	alertValue.value = true;
 	alertText.value = content;
 };
@@ -256,7 +259,7 @@ const options = {
 	maximumAge: 0,
 };
 
-const errorCallback = error => {
+const errorCallback = (error: { code: any; message: any; }) => {
 	console.error(`ERROR(${error.code}): ${error.message}`);
 };
 
@@ -297,12 +300,12 @@ const fetchLocation = async () => {
 	}
 };
 
-const setCountryCoordinates = async (lat, long) => {
+const setCountryCoordinates = async (lat: number, long: number) => {
 	latitude.value = lat;
 	longitude.value = long;
 };
 
-const getCountry = async (latitude, longitude) => {
+const getCountry = async (latitude: number, longitude: number) => {
 	setCountryCoordinates(latitude, longitude);
 	try {
 		const { status, data } = await sendRequest(
@@ -313,7 +316,7 @@ const getCountry = async (latitude, longitude) => {
 					contentType: 'multipart/form-data',
 				},
 			},
-			null,
+			undefined,
 		);
 		if (status === 200) {
 			country.value = data.data.country;

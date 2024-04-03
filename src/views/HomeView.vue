@@ -6,26 +6,14 @@
 			<!-- 탭 메뉴 -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li
-						v-for="(menu, index) in menus"
-						:key="index"
-						:class="{ active: menu.active.value }"
-						class="menu__list"
-					>
-						<button
-							@click="selectMenu(menu)"
-							type="button"
-							class="button"
-							:aria-selected="menu.active.value.toString()"
-						>
+					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
+						<button @click="selectMenu(menu)" type="button" class="button"
+							:aria-selected="menu.active.value.toString()">
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span
-					class="menu__bar"
-					:style="{ left: menuBarLeft, width: menuBarWidth }"
-				></span>
+				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
 			</div>
 		</div>
 
@@ -35,20 +23,12 @@
 			<!-- 카테고리 및 정렬 옵션 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button
-						type="button"
-						class="button--select"
-						@click="openCategorySelect"
-					>
+					<button type="button" class="button--select" @click="openCategorySelect">
 						<span>{{ t(selectCategoryValue.name) }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button
-						type="button"
-						class="button--select sort"
-						@click="openSortingSelect"
-					>
+					<button type="button" class="button--select sort" @click="openSortingSelect">
 						<span>{{ t(selectSortingValue.name) }}</span>
 					</button>
 				</div>
@@ -58,40 +38,22 @@
 		<!-- 게시글 목록 -->
 		<div class="list-wrap">
 			<!-- 글쓰기 버튼 -->
-			<button
-				type="button"
-				class="button-icon button--post _sticky"
-				:class="{ active: isStickyButton }"
-				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }"
-				@click="openPostModal"
-			>
+			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
+				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }" @click="openPostModal">
 				<svg viewBox="0 0 16 16">
 					<path :d="postBtn.first" />
 					<path :d="postBtn.second" />
 				</svg>
 				<i class="blind">글쓰기</i>
 			</button>
-			<NoContent
-				v-if="state.pagination.sort && state.posts.length === 0"
-				:item="t('homeView.post')"
-			/>
-			<BoardContent
-				v-for="(item, index) in state.posts"
-				:key="index"
-				:post="item"
-				:showAd="showAd(index)"
-			/>
+			<NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="t('homeView.post')" />
+			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" :showAd="showAd(index)" />
 		</div>
 	</div>
 	<LoadingModal v-if="isLoading" />
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
-	<SelectDialog
-		v-if="isCategorySelectClicked || isSortingSelectClicked"
-		:title="selectTitle"
-		:list="selectList"
-		@close="closeSelect"
-		@select:value="selectedValue"
-	/>
+	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
+		@close="closeSelect" @select:value="selectedValue" />
 </template>
 
 <script setup lang="ts">
@@ -110,6 +72,9 @@ import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { showAd } from '@/utils/showAd.ts';
 import { useI18n } from 'vue-i18n';
+import type { ISelectItem, IState } from '@/types/interface';
+import type { IApiResponsePageable, IPost } from '@/types/api-interface';
+import axios from 'axios';
 
 const { t } = useI18n();
 
@@ -130,19 +95,17 @@ const isStickyButton = ref(false);
 const StickyWrapHeight = ref(0);
 const handleScrollEvent = () => {
 	window.addEventListener('scroll', handleStickyWrap);
-	const listTopHeight = document
-		.querySelector('.list-top-wrap')
-		?.getBoundingClientRect().height;
-	window.addEventListener(
-		'scroll',
-		handleStickyButton.bind(null, listTopHeight),
-	);
+
+	// '.list-top-wrap' 요소의 높이를 가져오기 (높이가 없다면 0으로 처리)
+	const listTopHeight: number = document.querySelector('.list-top-wrap')?.getBoundingClientRect().height || 0;
+
+	// handleStickyButton에 listTopHeight 인자 전달
+	window.addEventListener('scroll', () => handleStickyButton(listTopHeight));
+
+	// 이벤트 제거를 위한 함수 반환
 	return () => {
 		window.removeEventListener('scroll', handleStickyWrap);
-		window.removeEventListener(
-			'scroll',
-			handleStickyButton.bind(null, listTopHeight),
-		);
+		window.removeEventListener('scroll', () => handleStickyButton(listTopHeight));
 	};
 };
 const handleStickyWrap = () => {
@@ -153,7 +116,7 @@ const handleStickyWrap = () => {
 			(stickyWrapElement?.getBoundingClientRect().height || 0) + 5;
 	}
 };
-const handleStickyButton = listTopHeight => {
+const handleStickyButton = (listTopHeight: number) => {
 	isStickyButton.value = window.scrollY > listTopHeight;
 };
 
@@ -163,12 +126,23 @@ const menuBarWidth = ref('0px');
 // select 관련 메소드 (초기화)
 const initializeState = () => {
 	state.value.posts = [];
-	state.value.pagination = {};
+	state.value.pagination = {
+		sort: {
+			sorted: false,
+			unsorted: false,
+			empty: false
+		},
+		pageSize: 0,
+		pageNumber: 0,
+		offset: 0,
+		paged: false,
+		unpaged: false
+	};
 	currentPage.value = 0;
 };
 
 // select 관련 메소드 (국가 선택)
-const setCountry = value => {
+const setCountry = (value: { name: string; code: string; }) => {
 	selectCountry.value = value;
 	initializeState();
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
@@ -176,7 +150,7 @@ const setCountry = value => {
 
 // select 관련 상태 및 메소드
 const selectTitle = ref('');
-const selectList = ref('');
+const selectList = ref<ISelectItem[]>([]);
 const isCategorySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
 const selectCategoryValue = ref({
@@ -190,7 +164,7 @@ const selectSortingValue = ref({
 const selectCountry = ref({ name: '전체', code: 'ALL' });
 
 // select 관련 메소드 (메뉴)
-const selectMenu = selectedMenu => {
+const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
 	selectedMenu.active.value = true;
 	menus
 		.filter(menu => menu !== selectedMenu)
@@ -230,7 +204,7 @@ const closeSelect = () => {
 };
 
 // select 관련 메소드 (선택된 값 처리)
-const selectedValue = value => {
+const selectedValue = (value: { name: string; code: string; }) => {
 	if (categoryList.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
 	} else if (sortingList.some(s => s.code === value.code)) {
@@ -247,15 +221,26 @@ let menus = [
 ];
 
 // 게시글 목록 관련 반응형 객체
-const state = ref({
+const state = ref<IState>({
 	posts: [],
-	pagination: {},
+	pagination: {
+		sort: {
+			sorted: false,
+			unsorted: true,
+			empty: true,
+		},
+		pageSize: 10,
+		pageNumber: 0,
+		offset: 0,
+		paged: true,
+		unpaged: false,
+	},
 	loading: false,
 });
 
 // 메뉴바 관련 메소드
 const updateMenuBar = () => {
-	const activeButton = document.querySelector('.menu__list.active .button');
+	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
 	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
 	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
@@ -264,35 +249,40 @@ const updateMenuBar = () => {
 const currentPage = ref(0);
 
 // 게시글 목록 호출 메서드
-const fetchBoardList = async (sortingMethod, nextPage) => {
+const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
 	try {
-		const { status, data } = await sendRequest(
-			'get',
-			`/posts
-			?country=${selectCountry.value.code}&
-			sortingMethod=${sortingMethod}&
-			isPublic=${'Y'}&
-			category=${selectCategoryValue.value.code}&
-			page=${nextPage}`,
-			{
-				headers: {
-					contentType: 'multipart/form-data',
-				},
+		const { status, data }: IApiResponsePageable<IPost[]> = await axios.get(
+			`/posts?country=${selectCountry.value.code}
+			&sortingMethod=${sortingMethod}
+			&isPublic=Y
+			&category=${selectCategoryValue.value.code}
+			&page=${nextPage}`, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
 			},
-		);
-		if (status === 200) {
-			data.data.content.forEach(post => state.value.posts.push(post));
-			state.value.pagination = data.data.pageable;
+		});
+
+		if (status === 200 && data) {
+			const { content, pageable } = data.pageable;
+			state.value.posts = [...state.value.posts, ...content];
+			state.value.pagination = pageable;
+			console.log(data);
 		}
-	} catch (error) {
-		console.log(error);
+	} catch (error: unknown) { // 혹은 error: any
+		// error 객체가 Error 인스턴스인지 확인
+		if (error instanceof Error) {
+			console.error(error.message); // Error 메시지 접근
+		} else {
+			console.error('알 수 없는 오류가 발생했습니다.');
+		}
 	} finally {
 		setTimeout(() => {
 			state.value.loading = false;
 		}, 1000);
 	}
 };
+
 
 // 무한 스크롤 관련 메소드 (스크롤 핸들링)
 const handleScroll = () => {

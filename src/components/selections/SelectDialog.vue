@@ -1,21 +1,11 @@
 <template>
 	<!-- selectdialog -->
-	<div
-		class="modal select--dialog"
-		tabindex="-1"
-		role="dialog"
-		@click.self="closeDialog"
-	>
+	<div class="modal select--dialog" tabindex="-1" role="dialog" @click.self="closeDialog">
 		<transition name="slide-up">
 			<div class="modal-content" v-if="isVisible">
 				<div class="modal-header">
 					<p class="modal-title">{{ title }}</p>
-					<button
-						type="button"
-						class="button-icon button--close"
-						role="link"
-						@click="closeDialog"
-					>
+					<button type="button" class="button-icon button--close" role="link" @click="closeDialog">
 						<i class="blind">닫기</i>
 					</button>
 				</div>
@@ -23,11 +13,7 @@
 					<div class="list-wrap">
 						<ul>
 							<li v-for="(item, index) in list" :key="index" class="item">
-								<button
-									type="button"
-									class="button"
-									@click="selectCategory(item)"
-								>
+								<button type="button" class="button" @click="selectCategory(item)">
 									<span>{{ t(item.name) }}</span>
 								</button>
 							</li>
@@ -42,6 +28,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import type { ISelectItem } from '@/types/interface.ts';
 
 const { t } = useI18n();
 
@@ -51,7 +38,7 @@ defineProps({
 		required: true,
 	},
 	list: {
-		type: Array,
+		list: Array<ISelectItem>,
 		required: true,
 	},
 });
@@ -65,7 +52,7 @@ const closeDialog = () => {
 	emit('close');
 };
 
-const selectCategory = item => {
+const selectCategory = (item: any) => {
 	emit('select:value', item);
 	closeDialog();
 };
