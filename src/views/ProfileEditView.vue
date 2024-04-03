@@ -18,8 +18,8 @@
 								</label>
 							</div>
 							<div class="item__display" :class="{
-								'pic--default': !imagePreview,
-							}">
+		'pic--default': !imagePreview,
+	}">
 								<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
 								<button type="reset" class="button--del" @click="removeImage">
 									<i class="blind">삭제</i>
@@ -48,7 +48,8 @@
 				<p v-if="nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error" aria-live="assertive">
 					이미 사용중인 닉네임 입니다.
 				</p>
-				<p v-if="!nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error" aria-live="assertive">
+				<p v-if="!nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error"
+					aria-live="assertive">
 					닉네임 중복체크를 진행 해주세요.
 				</p>
 				<p v-if="nickNameCheckDone && isNickNameValid && isNickNameChanged" class="input__text" aria-live="assertive">
@@ -73,20 +74,20 @@
 
 			<div class="button-wrap">
 				<button class="button" role="link" :class="{
-					'button--positive':
-						(!nickNameCheckDone && !isNickNameChanged) ||
-						(nickNameCheckDone && isNickNameValid) ||
-						isImageChange ||
-						country ||
-						userNickName,
-					'button--disabled':
-						(!nickNameCheckDone && !isNickNameChanged) ||
-						!nickNameCheckDone ||
-						!isImageChange ||
-						!isNickNameValid ||
-						!country ||
-						!userNickName,
-				}" @click="saveProfile">
+		'button--positive':
+			(!nickNameCheckDone && !isNickNameChanged) ||
+			(nickNameCheckDone && isNickNameValid) ||
+			isImageChange ||
+			country ||
+			userNickName,
+		'button--disabled':
+			(!nickNameCheckDone && !isNickNameChanged) ||
+			!nickNameCheckDone ||
+			!isImageChange ||
+			!isNickNameValid ||
+			!country ||
+			!userNickName,
+	}" @click="saveProfile">
 					저장
 				</button>
 			</div>
