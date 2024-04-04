@@ -65,13 +65,8 @@ export interface IPageable {
   unpaged: boolean
 }
 
-// 공통 API 응답 인터페이스
-export interface IApiResponse<T> {
-  status: number
-  message: string
-  data: T
-}
-export interface IApiResponsePageable<T> {
+// 게시글 리스트 인터페이스
+export interface IPostList {
   status: number
   message: string
   data: {
@@ -89,18 +84,18 @@ export interface IApiResponsePageable<T> {
   }
   list: null | any[] // list 필드 추가 (실제 사용 여부에 따라 타입 조정 필요)
 }
+// 공통 API 응답 인터페이스
+export interface IApiResponse<T> {
+  status: number
+  message: string
+  data: T
+  list: stiring[] | null
+}
 
-// 게시글 목록 응답 인터페이스
-export interface IApiPostList {
-  content: IPost[]
-  pageable: IPageable
-  last: boolean
-  totalPages: number
-  totalElements: number
-  sort: ISortInfo
-  first: boolean
-  number: number
-  numberOfElements: number
-  size: number
-  empty: boolean
+//
+export interface IApiResponsePageable<T> {
+  status: number
+  message: string
+  data: IPostList
+  list: stiring[] | null
 }

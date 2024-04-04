@@ -1,4 +1,6 @@
-export type ISelectItem {
+import type { IPost, IPageable } from '@/types/api-interface.ts'
+
+export interface ISelectItem {
   name: string
   code: string
 }
@@ -16,39 +18,9 @@ export interface IUser {
   userStatus: string
 }
 
-export interface IPost {
-  seq: number
-  title: string
-  content: string
-  userSeq: number
-  userProfileUrl: string
-  userNickName: string
-  comments: string[]
-  viewCount: number
-  likeCount: number
-  tags: string[]
-  attachments: string[]
-  likeUsers: number[]
-  bookmarkUsers: number[]
-  isPublic: string
-  country: string
-  region: string
-  status: string
-  category: string
-  createdAt: string
-}
-
-export interface IPaginationInfo {
-  sort: ISortInfo
-  pageSize: number
-  pageNumber: number
-  offset: number
-  paged: boolean
-  unpaged: boolean
-}
-
 export interface IState {
-  posts: IPost[]; 
-  pagination: IPaginationInfo;
-  loading: boolean;
+  posts: IPost[]
+  pagination: IPageable
+  loading: boolean
+  last: boolean
 }

@@ -8,7 +8,7 @@
 				<ul class="menu__inner">
 					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
 						<button @click="selectMenu(menu)" type="button" class="button"
-							:aria-selected="menu.active.value.toString()">
+							:aria-selected="menu.active.value ? 'true' : 'false'">
 							{{ menu.label }}
 						</button>
 					</li>
@@ -39,7 +39,7 @@
 		<div class="list-wrap">
 			<!-- 글쓰기 버튼 -->
 			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
-				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }" @click="openPostModal">
+				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : 'auto' }" @click="openPostModal">
 				<svg viewBox="0 0 16 16">
 					<path :d="postBtn.first" />
 					<path :d="postBtn.second" />
@@ -62,7 +62,6 @@ import SearchBar from '@/components/search/SearchBar.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import CountryList from '@/components/selections/CountryList.vue';
 import BoardContent from '@/components/board/BoardContent.vue';
-import useAxios from '@/composables/useAxios.ts';
 import PostModal from '@/components/board/PostModal.vue';
 import NoContent from '@/components/board/NoContent.vue';
 import { useRouter } from 'vue-router';
@@ -74,12 +73,11 @@ import { showAd } from '@/utils/showAd.ts';
 import { useI18n } from 'vue-i18n';
 import type { ISelectItem, IState } from '@/types/interface';
 import type { IApiResponsePageable, IPost } from '@/types/api-interface';
-import axios from 'axios';
+import axios, { HttpStatusCode } from 'axios';
 
 const { t } = useI18n();
 
 const router = useRouter();
-const { sendRequest } = useAxios(router);
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -123,6 +121,25 @@ const handleStickyButton = (listTopHeight: number) => {
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
 
+// 게시글 목록 관련 반응형 객체
+const state = ref<IState>({
+	posts: [],
+	pagination: {
+		sort: {
+			sorted: false,
+			unsorted: true,
+			empty: true,
+		},
+		pageSize: 10,
+		pageNumber: 0,
+		offset: 0,
+		paged: true,
+		unpaged: false,
+	},
+	last: false,
+	loading: false,
+});
+
 // select 관련 메소드 (초기화)
 const initializeState = () => {
 	state.value.posts = [];
@@ -136,8 +153,9 @@ const initializeState = () => {
 		pageNumber: 0,
 		offset: 0,
 		paged: false,
-		unpaged: false
+		unpaged: false,
 	};
+	state.value.last = false;
 	currentPage.value = 0;
 };
 
@@ -220,24 +238,6 @@ let menus = [
 	{ label: t('homeView.popularPost'), active: ref(false) },
 ];
 
-// 게시글 목록 관련 반응형 객체
-const state = ref<IState>({
-	posts: [],
-	pagination: {
-		sort: {
-			sorted: false,
-			unsorted: true,
-			empty: true,
-		},
-		pageSize: 10,
-		pageNumber: 0,
-		offset: 0,
-		paged: true,
-		unpaged: false,
-	},
-	loading: false,
-});
-
 // 메뉴바 관련 메소드
 const updateMenuBar = () => {
 	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
@@ -252,30 +252,24 @@ const currentPage = ref(0);
 const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
 	try {
-		const { status, data }: IApiResponsePageable<IPost[]> = await axios.get(
+		const response: IApiResponsePageable<IPost> = await axios.get(
 			`/posts?country=${selectCountry.value.code}
 			&sortingMethod=${sortingMethod}
-			&isPublic=Y
-			&category=${selectCategoryValue.value.code}
+			&isPublic=Y&category=${selectCategoryValue.value.code}
 			&page=${nextPage}`, {
 			headers: {
-				'Content-Type': 'multipart/form-data',
+				'Content-Type': 'application/json',
 			},
 		});
-
-		if (status === 200 && data) {
-			const { content, pageable } = data.pageable;
-			state.value.posts = [...state.value.posts, ...content];
-			state.value.pagination = pageable;
-			console.log(data);
+		if (response.data.status === 200) {
+			state.value.last = response.data.data.last;
+			response.data.data.content.forEach((item: IPost) => {
+				state.value.posts.push(item);
+			});
+			state.value.pagination = response.data.data.pageable;
 		}
-	} catch (error: unknown) { // 혹은 error: any
-		// error 객체가 Error 인스턴스인지 확인
-		if (error instanceof Error) {
-			console.error(error.message); // Error 메시지 접근
-		} else {
-			console.error('알 수 없는 오류가 발생했습니다.');
-		}
+	} catch (error: unknown) {
+		console.error(error);
 	} finally {
 		setTimeout(() => {
 			state.value.loading = false;
@@ -294,7 +288,7 @@ const handleScroll = () => {
 
 // 무한 스크롤 관련 메소드 (데이터 추가 호출)
 const loadMoreData = async () => {
-	if (!state.value.pagination.last && !state.value.loading) {
+	if (!state.value.last && !state.value.loading) {
 		state.value.loading = true;
 		currentPage.value += 1;
 		await fetchBoardList(selectSortingValue.value.code, currentPage.value);
@@ -302,7 +296,7 @@ const loadMoreData = async () => {
 	}
 };
 
-// PostModal 오픈 및 닫기
+// <-- PostModal 오픈 및 닫기
 const onPostModal = ref(false);
 const openPostModal = () => {
 	onPostModal.value = true;
@@ -313,6 +307,7 @@ const closePostModal = () => {
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 	modalCloseClass();
 };
+// -->
 
 // 로딩화면 관련 상태
 const isLoading = ref(false);
