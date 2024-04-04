@@ -10,8 +10,8 @@ import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import TheFooter from './components/layouts/TheFooter.vue';
 import { getCoordinate } from '@/services/geolocation.ts';
-import { getUserInfo } from '@/services/userInfoFetch.ts';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
+import { getUserInfo } from './services/userInfoFetch.ts';
 
 const route = useRoute();
 const hideFooter = computed(() => route.meta.hideFooter);
@@ -20,8 +20,8 @@ onMounted(async () => {
 	await getCoordinate();
 	if (localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
 		const { status, data } = await getUserInfo(
-			localStorage.getItem('latitude'),
-			localStorage.getItem('longitude'),
+			parseFloat(localStorage.getItem('latitude') ?? '0'),
+			parseFloat(localStorage.getItem('longitude') ?? '0'),
 		);
 		if (status === 200 || status === 201) {
 			localStorage.setItem('accessToken', data.data.accessToken);
