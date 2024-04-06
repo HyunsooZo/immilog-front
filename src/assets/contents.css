@@ -1926,11 +1926,11 @@ strong + .button-text {
 }
 .list-wrap .item--noreply {
   padding: 10rem 2rem;
+  border-bottom: none;
+  background: transparent;
 }
 .list-wrap.reply .item--noreply {
   padding: 4rem 2rem;
-  border-bottom: none;
-  background: transparent;
 }
 .list-wrap .noreply__wrap .noreply__text {
   text-align: center;
