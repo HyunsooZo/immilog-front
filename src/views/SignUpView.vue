@@ -45,34 +45,6 @@
 				</p>
 			</div>
 
-			<!-- profileimage -->
-			<div class="input-wrap" style="display: none">
-				<em class="input__title">프로필 사진</em>
-				<!-- input__wrap -->
-				<div class="input__wrap input__attachments">
-					<div class="input__item">
-						<div class="input__item_inner">
-							<div class="input__file">
-								<input type="file" id="file-upload" class="input__element" @change="previewImage" />
-								<label for="file-upload" class="button button--primary" role="button">
-									<svg viewBox="0 0 16 16">
-										<path :d="profilePicSelectIcon.first" />
-										<path fill-rule="evenodd" :d="profilePicSelectIcon.second" />
-									</svg>
-									<span>프로필 사진 선택</span>
-								</label>
-							</div>
-							<div class="item__display">
-								<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
-								<button v-if="imagePreview" type="reset" class="button--del" @click="removeImage">
-									<i class="blind">삭제</i>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
 			<!-- password -->
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">비밀번호</em>
@@ -110,7 +82,7 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="country" type="text" class="input__element" placeholder="지역" value="지역" disabled />
+							<input v-model="country" type="text" class="input__element" placeholder="지역" disabled />
 						</div>
 					</div>
 				</div>
@@ -254,7 +226,7 @@ const register = async () => {
 				password: userPassword.value,
 				country: country.value,
 				region: region.value,
-				profileImage: imageUrl.value,
+				profileImage: null,
 			};
 			const { status, data } = await sendRequest(
 				'post',
@@ -303,18 +275,18 @@ const getCoordinate = async () => {
 			});
 			if (permissionResult.state === 'granted') {
 				navigator.geolocation.getCurrentPosition(
-					position => {
+					(position: GeolocationPosition) => {
 						getCountry(position.coords.latitude, position.coords.longitude);
-						useLocationStore().setLocation(
-							position.coords.latitude,
-							position.coords.longitude,
-						);
+						useLocationStore().setLocation({
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude
+						});
 					},
 					errorCallback,
 					options,
 				);
 			} else if (permissionResult.state === 'prompt') {
-				const position = await new Promise((resolve, reject) => {
+				const position = await new Promise<GeolocationPosition>((resolve, reject) => {
 					navigator.geolocation.getCurrentPosition(resolve, reject, options);
 				});
 				getCountry(position.coords.latitude, position.coords.longitude);
@@ -327,6 +299,7 @@ const getCoordinate = async () => {
 	}
 };
 
+
 const getCountry = async (latitude: number, longitude: number) => {
 	try {
 		const { status, data } = await sendRequest(
@@ -337,7 +310,7 @@ const getCountry = async (latitude: number, longitude: number) => {
 					contentType: 'multipart/form-data',
 				},
 			},
-			null,
+			undefined,
 		);
 		if (status === 200) {
 			country.value = data.data.country;
@@ -362,7 +335,7 @@ const checkNickName = async () => {
 					contentType: 'multipart/form-data',
 				},
 			},
-			null,
+			undefined,
 		);
 		if (status === 200) {
 			isNickNameValid.value = data.data ? true : false;

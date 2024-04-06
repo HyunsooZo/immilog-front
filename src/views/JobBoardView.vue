@@ -53,6 +53,7 @@ import { sortingList2, categoryList2 } from '@/utils/selectItems.ts';
 import { getJobBoardsApi } from '@/services/jobBoard.ts';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import type { ISelectItem } from '@/types/interface'
 
 const { t } = useI18n();
 
@@ -70,21 +71,29 @@ const modalCloseClass = () => {
 const isStickyWrap = ref(false);
 const isStickyButton = ref(false);
 const StickyWrapHeight = ref(0);
+let stickyButtonHandler: () => void;
+
 const handleScrollEvent = () => {
 	window.addEventListener('scroll', handleStickyWrap);
-	const listTopHeight = document
-		.querySelector('.list-top-wrap')
-		?.getBoundingClientRect().height;
-	window.addEventListener(
-		'scroll',
-		handleStickyButton.bind(null, listTopHeight),
-	);
+
+	const listTopElement = document.querySelector('.list-top-wrap') as HTMLElement;
+	let listTopHeight = listTopElement?.getBoundingClientRect().height;
+
+	const stickyButtonHandler = () => {
+		if (listTopHeight !== undefined) {
+			handleStickyButton(listTopHeight);
+		}
+	};
+
+	if (listTopHeight !== undefined) {
+		window.addEventListener('scroll', stickyButtonHandler);
+	}
+
 	return () => {
 		window.removeEventListener('scroll', handleStickyWrap);
-		window.removeEventListener(
-			'scroll',
-			handleStickyButton.bind(null, listTopHeight),
-		);
+		if (listTopHeight !== undefined) {
+			window.removeEventListener('scroll', stickyButtonHandler);
+		}
 	};
 };
 
@@ -141,6 +150,7 @@ const handleStickyWrap = () => {
 			(stickyWrapElement?.getBoundingClientRect().height || 0) + 5;
 	}
 };
+
 const handleStickyButton = (listTopHeight: number) => {
 	isStickyButton.value = window.scrollY > listTopHeight;
 };
@@ -154,7 +164,7 @@ const initializeState = () => {
 
 // select 관련 상태 및 메소드
 const selectTitle = ref('');
-const selectList = ref('');
+const selectList = ref<ISelectItem[]>([]);
 const isCategorySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
 const selectCategoryValue = ref({
@@ -194,14 +204,14 @@ const closeSelect = () => {
 };
 
 // select 관련 메소드 (선택된 값 처리)
-const selectedValue = (value: { code: any; }) => {
-	if (categoryList2.some((c: { code: any; }) => c.code === value.code)) {
-		selectCategoryValue.value = t(value);
-	} else if (sortingList2.some((s: { code: any; }) => s.code === value.code)) {
-		selectSortingValue.value = t(value);
+const selectedValue = (value: { name: string; code: string; }) => {
+	if (categoryList2.some(c => c.code === value.code)) {
+		selectCategoryValue.value = value;
+	} else if (sortingList2.some(s => s.code === value.code)) {
+		selectSortingValue.value = value;
 	}
 	initializeState();
-	fetchJobBoardList(selectSortingValue.value.code, currentPage.value);
+	fetchJobBoardList();
 };
 
 onMounted(async () => {
@@ -209,11 +219,13 @@ onMounted(async () => {
 		router.push('/sign-in');
 	}
 	handleScrollEvent();
-	fetchJobBoardList('CREATED_AT', currentPage.value);
+	fetchJobBoardList();
 });
 
 onUnmounted(() => {
 	window.removeEventListener('scroll', handleStickyWrap);
-	window.removeEventListener('scroll', handleStickyButton);
+	if (stickyButtonHandler) {
+		window.removeEventListener('scroll', stickyButtonHandler);
+	}
 });
 </script>
