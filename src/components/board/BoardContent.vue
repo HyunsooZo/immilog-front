@@ -76,6 +76,7 @@ import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.ts';
 import AdContent from '@/components/board/AdContent.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 import { useI18n } from 'vue-i18n';
+import type { IComment, IPost } from '@/types/api-interface';
 
 const { t } = useI18n();
 
@@ -102,33 +103,12 @@ const offUserProfileDetail = () => {
 
 const props = defineProps({
 	post: {
-		type: Object,
-		required: true,
-		default: () => ({
-			seq: 0,
-			title: '',
-			content: '',
-			userSeq: 0,
-			userProfileUrl: '',
-			userNickName: '',
-			comments: [],
-			viewCount: 0,
-			likeCount: 0,
-			tags: [],
-			attachments: [],
-			likeUsers: [],
-			bookmarkUsers: [],
-			isPublic: '',
-			country: '',
-			region: '',
-			status: '',
-			category: '',
-			createdAt: '',
-		}),
+		type: Object as () => IPost,
+		required: true
 	},
 	showAd: {
 		type: Boolean,
-		default: false,
+		default: false
 	},
 });
 
@@ -140,11 +120,11 @@ const thumbnail = ref(
 	props.post.attachments.length > 0 ? props.post.attachments[0] : '',
 );
 const isLiked = computed(() => {
-	return likeUsers.value.includes(userSeq.value);
+	return likeUsers.value.includes(userSeq.value ? userSeq.value : 0);
 });
 
 const isBookmarked = computed(() => {
-	return bookmarkUsers.value.includes(userSeq.value);
+	return bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0);
 });
 
 const onBoardDetail = () => {
@@ -161,13 +141,15 @@ const likePost = () => {
 
 const changeLike = () => {
 	if (isLiked.value) {
-		const index = likeUsers.value.indexOf(userSeq.value);
+		const index = likeUsers.value.indexOf(userSeq.value ?? 0);
 		if (index !== -1) {
 			likeUsers.value.splice(index, 1);
 		}
 		likes.value--;
 	} else {
-		likeUsers.value.push(userSeq.value);
+		if (userSeq.value !== null) {
+			likeUsers.value.push(userSeq.value);
+		}
 		likes.value++;
 	}
 };
@@ -184,18 +166,20 @@ const bookmarkApi = async () => {
 
 const changeBookmark = () => {
 	if (isBookmarked.value) {
-		const index = bookmarkUsers.value.indexOf(userSeq.value);
+		const index = userSeq.value !== null ? bookmarkUsers.value.indexOf(userSeq.value) : -1;
 		if (index !== -1) {
 			bookmarkUsers.value.splice(index, 1);
 		}
 	} else {
-		bookmarkUsers.value.push(userSeq.value);
+		if (userSeq.value !== null) {
+			bookmarkUsers.value.push(userSeq.value);
+		}
 	}
 };
 
-const allCommentCounts = post => {
+const allCommentCounts = (post: IPost) => {
 	let result = post.comments.length;
-	post.comments.forEach(comment => {
+	post.comments.forEach((comment: IComment) => {
 		result += comment.replies.length;
 	});
 	return result;

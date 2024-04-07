@@ -1,23 +1,17 @@
 <template>
 	<header class="header _bg" v-if="chats.length > 0">
 		<div class="item__fnc">
-			<button
-				type="button"
-				class="button-icon button--back"
-				role="link"
-				@click="previousComponent"
-			>
+			<button type="button" class="button-icon button--back" role="link" @click="previousComponent">
 				<i class="blind">이전화면</i>
 			</button>
 		</div>
 		<div class="title">
 			<p class="list__item user">
-				<strong
-					>{{
-						amISender(chats[0].sender.seq)
-							? chats[0].recipient.nickName
-							: chats[0].sender.nickName
-					}}
+				<strong>{{
+		amISender(chats[0].sender.seq)
+			? chats[0].recipient.nickName
+			: chats[0].sender.nickName
+	}}
 				</strong>
 			</p>
 		</div>
@@ -34,48 +28,29 @@
 				<p class="text">
 					<em class="user__name">
 						{{
-							amISender(chats[0].sender.seq)
-								? chats[0].recipient.nickName
-								: chats[0].sender.nickName
-						}} </em
-					>님과의 채팅을 시작해보세요.
+		amISender(chats[0].sender.seq)
+			? chats[0].recipient.nickName
+			: chats[0].sender.nickName
+	}} </em>님과의 채팅을 시작해보세요.
 				</p>
 			</div>
 			<!-- chat list -->
 			<div class="chat__content">
 				<ul class="chat__list">
 					<template v-for="chat in chats" :key="chat.id">
-						<li
-							class="item__notice"
-							v-if="lastDate !== formDate(chat.createdAt)"
-						>
+						<li class="item__notice" v-if="lastDate !== formDate(chat.createdAt)">
 							<span class="text">{{ getDateTime(chat.createdAt) }}</span>
 						</li>
-						<li
-							:id="`message-${chat.id}`"
-							class="item"
-							aria-label="받은 메시지"
-							data-content-type="text"
-							:class="{
-								_my: amISender(chat.sender.seq),
-							}"
-						>
+						<li :id="`message-${chat.id}`" class="item" aria-label="받은 메시지" data-content-type="text" :class="{
+		_my: amISender(chat.sender.seq),
+	}">
 							<!-- 사용자 정보 -->
 							<div class="info__wrap" v-if="!amISender(chat.sender.seq)">
-								<button
-									type="button"
-									class="item__pic"
-									:class="{
-										'pic--default': chat.sender.profileImage === '',
-									}"
-									@click="onUserProfileDetail"
-								>
-									<img
-										:src="chat.sender.profileImage"
-										alt=""
-										v-if="chat.sender.profileImage !== ''"
-									/></button
-								><!-- // 사용자 프로필 보기 -->
+								<button type="button" class="item__pic" :class="{
+		'pic--default': chat.sender.profileImage === '',
+	}" @click="onUserProfileDetail">
+									<img :src="chat.sender.profileImage" alt=""
+										v-if="chat.sender.profileImage !== ''" /></button><!-- // 사용자 프로필 보기 -->
 							</div>
 							<div class="chat__message">
 								<div class="item__wrap">
@@ -84,17 +59,13 @@
 									</div>
 								</div>
 								<div class="item__fnc">
-									<p
-										class="list__item read"
-										:class="{ active: isRead(chat.id) }"
-									>
+									<p class="list__item read" :class="{ active: isRead(chat.id) }">
 										<i class="blind">채팅 읽음 여부</i>
 										<span class="item__count" v-if="amISender(chat.sender.seq)">
 											<!-- {{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }} -->
 											<svg viewBox="0 0 16 16">
 												<path
-													d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"
-												/>
+													d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
 											</svg>
 										</span>
 										<!-- <span class="item__count" v-if="amISender(chat.sender.seq)">
@@ -103,8 +74,7 @@
 									<p class="list__item past">
 										<i class="blind">채팅 전송시간</i>
 										<span class="item__count">
-											{{ formTime(chat.createdAt) }}</span
-										>
+											{{ formTime(chat.createdAt) }}</span>
 									</p>
 								</div>
 							</div>
@@ -117,13 +87,8 @@
 				<div class="chat__inner">
 					<div class="input__wrap input__attachments">
 						<div class="input__file">
-							<input
-								type="file"
-								id="file-upload"
-								multiple="multiple"
-								accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff"
-								@change="previewImage"
-							/>
+							<input type="file" id="file-upload" multiple="multiple"
+								accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff" @change="previewImage" />
 							<label for="file-upload" class="button-icon__s" role="button">
 								<svg viewBox="0 0 16 16">
 									<path :d="imageSelectIcon.first" />
@@ -135,28 +100,14 @@
 					</div>
 					<div class="item__textarea">
 						<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
-						<textarea
-							v-model="content"
-							class="text__area"
-							name="content"
-							autocomplete="off"
-							placeholder="메시지를 입력하세요."
-							data-autosuggest_is-input="true"
-							ref="adjustTextarea"
-							@input="adjustTextareaHeight"
-							rows="1"
-						>
-						</textarea>
+						<textarea v-model="content" class="text__area" name="content" autocomplete="off" placeholder="메시지를 입력하세요."
+							data-autosuggest_is-input="true" ref="adjustTextarea" @input="adjustTextareaHeight" rows="1">
+			</textarea>
 					</div>
 					<div class="item__fnc">
-						<button
-							type="button"
-							class="button-icon__s button--send"
-							:class="{
-								active: content.trim() !== '',
-							}"
-							@click="sendMessage"
-						>
+						<button type="button" class="button-icon__s button--send" :class="{
+		active: content.trim() !== '',
+	}" @click="sendMessage">
 							<!-- 전송 버튼 아이콘 -->
 							<svg viewBox="0 0 16 16">
 								<path :d="chatSendingIcon" />
@@ -169,10 +120,7 @@
 		</div>
 		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
 	</div>
-	<UserProfileDetail
-		@close="offUserProfileDetail"
-		v-if="isUserProfileDetailOn"
-	/>
+	<UserProfileDetail @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
 </template>
 
 <script setup lang="ts">
@@ -184,6 +132,7 @@ import useAxios from '@/composables/useAxios.ts';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { imageSelectIcon, chatSendingIcon } from '@/utils/icons.ts';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
+import type { IChat } from '@/types/api-interface';
 
 const userInfo = useUserInfoStore();
 import { useRoute, useRouter } from 'vue-router';
@@ -221,7 +170,7 @@ const stompClient = Stomp.over(socket);
 const content = ref('');
 const pageable = ref({});
 const page = ref(0);
-let lastDate = null;
+let lastDate: string | null = null;
 
 // 채팅방 번호
 const chatRoomSeq = ref(route.params.chatRoomId);
@@ -243,20 +192,23 @@ const offSideMenu = () => {
 // 텍스트 영역 조절
 const adjustTextarea = ref(null);
 const adjustTextareaHeight = () => {
-	const textarea = adjustTextarea.value;
-	textarea.style.height = 'auto';
-	textarea.style.height = `${textarea.scrollHeight}px`;
+	const textarea = adjustTextarea.value as unknown as HTMLTextAreaElement;
+	if (textarea) {
+		textarea.style.height = 'auto';
+		textarea.style.height = `${textarea.scrollHeight}px`;
+	}
 };
 
 // textarea 높이 초기화 함수
 const resetTextareaHeight = () => {
-	if (adjustTextarea.value) {
-		adjustTextarea.value.style.height = null;
+	const textarea = adjustTextarea.value as HTMLTextAreaElement | null;
+	if (textarea) {
+		textarea.style.height = '';
 	}
 };
 
 // 채팅 내용을 담는 배열
-const chats = ref([]);
+const chats = ref<IChat[]>([]);
 const isLoading = ref(false);
 // db에 저장된 채팅 내용을 가져오는 함수
 const fetchChats = async () => {
@@ -274,12 +226,15 @@ const fetchChats = async () => {
 					Authorization: `Bearer ${userInfo.accessToken}`,
 				},
 			},
-			null,
+			{},
 		);
 		if (status === 200) {
-			data.data.content.forEach(chat => chats.value.push(chat));
-			chats.value.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-			data.data.pageable = pageable.value;
+			data.data.content.forEach((chat: IChat) => chats.value.push(chat));
+			chats.value.sort((a, b) => {
+				const dateA = new Date(a.createdAt);
+				const dateB = new Date(b.createdAt);
+				return dateA.getTime() - dateB.getTime();
+			}); data.data.pageable = pageable.value;
 			page.value = page.value + 1;
 		}
 	} catch (error) {
@@ -318,17 +273,19 @@ const connectWebSocket = () => {
 };
 
 // 메시지 읽음 상태를 업데이트하는 함수
-const updateReadStatus = readChatInfo => {
+const updateReadStatus = (readChatInfo: { chatSeq: any; }) => {
 	chats.value.forEach(chat => {
 		if (chat.id === readChatInfo.chatSeq) {
 			chat.readStatus = true;
 		}
 	});
 };
-
-const isRead = chatId => {
-	return chats.value.find(chat => chat.id === chatId).readStatus;
+// 메세지가 읽혔는지 체크 
+const isRead = (chatId: number): boolean => {
+	const chat = chats.value.find((chat: IChat) => chat.id === chatId);
+	return chat ? chat.readStatus : false;
 };
+
 // 스크롤 이벤트 리스너를 추가하는 함수
 const setupScrollListener = () => {
 	window.addEventListener('scroll', handleScroll);
@@ -351,34 +308,33 @@ onMounted(async () => {
 	setupScrollListener();
 	nextTick(() => {
 		scrollToBottom();
-		setTimeout(() => {
-			markMessagesAsRead();
-		}, 1000);
 	});
 });
 
-// 컴포넌트 언마운트 시 웹소켓 연결 해제
 onUnmounted(() => {
 	if (stompClient && stompClient.connected) {
-		stompClient.disconnect();
+		stompClient.disconnect(() => {
+			console.log('Disconnected');
+		});
 	}
 	window.removeEventListener('scroll', handleScroll);
 });
 
+
 // 사용자가 채팅 발신자인지 확인
-const amISender = senderSeq => {
+const amISender = (senderSeq: number) => {
 	return senderSeq === userInfo.userSeq;
 };
 
 // 날짜 가져오기
-const getDateTime = dateTime => {
+const getDateTime = (dateTime: any) => {
 	const result = formDate(dateTime);
 	lastDate = result;
 	return result;
 };
 
 // 날짜 리포맷팅
-const formDate = dateTime => {
+const formDate = (dateTime: string | number | Date) => {
 	const date = new Date(dateTime);
 	const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
 	const day = weekdays[date.getDay()];
@@ -390,7 +346,7 @@ const formDate = dateTime => {
 };
 
 // 시간 리포맷팅
-const formTime = dateTime => {
+const formTime = (dateTime: string | number | Date) => {
 	const date = new Date(dateTime);
 	const hours = String(date.getHours()).padStart(2, '0');
 	const minutes = String(date.getMinutes()).padStart(2, '0');
@@ -414,7 +370,7 @@ const sendMessage = () => {
 };
 
 // 채팅방에 들어갔을 때 '읽음' 상태를 서버에 보내는 함수
-const markMessagesAsRead = id => {
+const markMessagesAsRead = (id: number) => {
 	if (id) {
 		stompClient.send(
 			'/app/chat/read',
@@ -426,7 +382,7 @@ const markMessagesAsRead = id => {
 		);
 	} else {
 		// 모든 메시지를 '읽음'으로 표시
-		chats.value.forEach(chat => {
+		chats.value.forEach((chat: IChat) => {
 			if (!amISender(chat.sender.seq) && !chat.readStatus) {
 				// 읽음 상태를 서버에 보내기
 				stompClient.send(
@@ -456,7 +412,7 @@ const saveFirstMessage = () => {
 	messageLenth.value = chats.value.length;
 };
 
-const moveToFirstMessage = currentSize => {
+const moveToFirstMessage = (currentSize: number) => {
 	if (currentSize < chats.value.length) {
 		const messageElement = document.getElementById(
 			`message-${chats.value[chats.value.length - messageLenth.value].id}`,

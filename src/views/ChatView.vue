@@ -5,49 +5,36 @@
 
 		<div class="list-wrap _chat">
 			<div class="item" v-for="chatRoom in chatRooms" :key="chatRoom.seq">
-				<button
-					type="button"
-					class="list__item_button"
-					@click="onChatDetail(chatRoom.seq)"
-				>
+				<button type="button" class="list__item_button" @click="onChatDetail(chatRoom.seq)">
 					<div class="info__wrap">
-						<div
-							class="item__pic"
-							:class="{
-								'pic--default':
-									(amISender(chatRoom.sender) &&
-										chatRoom.recipient.profileImage === '') ||
-									(amISender(chatRoom.recipient) &&
-										chatRoom.sender.profileImage === ''),
-							}"
-						>
-							<img
-								:src="
-									amISender(chatRoom.sender)
-										? chatRoom.recipient.profileImage
-										: chatRoom.sender.profileImage
-								"
-								alt=""
-								v-if="
-									(amISender(chatRoom.sender) &&
-										chatRoom.recipient.profileImage !== '') ||
-									(amISender(chatRoom.recipient) &&
-										chatRoom.sender.profileImage !== '')
-								"
-							/>
+						<div class="item__pic" :class="{
+			'pic--default':
+				(amISender(chatRoom.sender) &&
+					chatRoom.recipient.profileImage === '') ||
+				(amISender(chatRoom.recipient) &&
+					chatRoom.sender.profileImage === ''),
+		}">
+							<img :src="amISender(chatRoom.sender)
+			? chatRoom.recipient.profileImage
+			: chatRoom.sender.profileImage
+			" alt="" v-if="(amISender(chatRoom.sender) &&
+			chatRoom.recipient.profileImage !== '') ||
+			(amISender(chatRoom.recipient) &&
+				chatRoom.sender.profileImage !== '')
+			" />
 						</div>
 						<div class="item__fnc">
 							<div class="list__item user">
 								<em>{{
-									amISender(chatRoom.sender)
-										? chatRoom.recipient.country
-										: chatRoom.sender.country
-								}}</em>
+			amISender(chatRoom.sender)
+				? chatRoom.recipient.country
+				: chatRoom.sender.country
+		}}</em>
 								<strong>{{
-									amISender(chatRoom.sender)
-										? chatRoom.recipient.nickName
-										: chatRoom.sender.nickName
-								}}</strong>
+				amISender(chatRoom.sender)
+					? chatRoom.recipient.nickName
+					: chatRoom.sender.nickName
+			}}</strong>
 							</div>
 						</div>
 					</div>
@@ -67,38 +54,27 @@
 						<div class="item__fnc">
 							<p class="list__item past">
 								<i class="blind">작성시간</i>
-								<span class="item__count"
-									>{{ timeCalculation(chatRoom.lastChatTime).time
-									}}{{ t(timeCalculation(chatRoom.lastChatTime).text) }}</span
-								>
+								<span class="item__count">{{ timeCalculation(chatRoom.lastChatTime).time
+									}}{{ t(timeCalculation(chatRoom.lastChatTime).text) }}</span>
 							</p>
 						</div>
 					</div>
 				</button>
 				<div class="item__fnc">
-					<button
-						type="button"
-						class="list__item_button more"
-						@click.stop="openMoreModal(chatRoom.seq)"
-					>
-						<i class="blind">더보기</i
-						><!-- //신고, 나가기 -->
+					<button type="button" class="list__item_button more" @click.stop="openMoreModal(chatRoom.seq)">
+						<i class="blind">더보기</i><!-- //신고, 나가기 -->
 					</button>
-					<div
-						class="item__badge"
-						v-if="
-							(amISender(chatRoom.sender) &&
-								chatRoom.unreadCountForSender > 0) ||
-							(!amISender(chatRoom.sender) &&
-								chatRoom.unreadCountForRecipient > 0)
-						"
-					>
+					<div class="item__badge" v-if="(amISender(chatRoom.sender) &&
+			chatRoom.unreadCountForSender > 0) ||
+			(!amISender(chatRoom.sender) &&
+				chatRoom.unreadCountForRecipient > 0)
+			">
 						<span class="text">
 							{{
-								amISender(chatRoom.sender)
-									? chatRoom.unreadCountForSender
-									: chatRoom.unreadCountForRecipient
-							}}
+			amISender(chatRoom.sender)
+				? chatRoom.unreadCountForSender
+				: chatRoom.unreadCountForRecipient
+		}}
 						</span>
 					</div>
 				</div>
@@ -106,12 +82,8 @@
 			<!-- // .item -->
 		</div>
 	</div>
-	<MoreModal
-		v-if="onMoreModal"
-		:chatRoomSeq="onMoreChatRoomSeq"
-		@close="closeMoreModal"
-		@closeWithDelete="closeMoreModalAndDeleteChatRoom"
-	/>
+	<MoreModal v-if="onMoreModal" :chatRoomSeq="onMoreChatRoomSeq" @close="closeMoreModal"
+		@closeWithDelete="closeMoreModalAndDeleteChatRoom" />
 </template>
 
 <script setup lang="ts">
@@ -126,6 +98,7 @@ import { timeCalculation } from '@/utils/date-time.ts';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import { useI18n } from 'vue-i18n';
+import { IChatRoom, IUser } from '@/types/api-interface';
 
 const { t } = useI18n();
 
@@ -137,12 +110,12 @@ const socket = new SockJS(server + '/ws');
 const stompClient = Stomp.over(socket);
 
 // 채팅 목록 및 상세보기 관련 상태
-const chatRooms = ref([]);
+const chatRooms = ref<IChatRoom[]>([]);
 const chatRoomsPage = ref(0);
 const page = ref({});
 
 // 채팅 상세보기 관련 메서드
-const onChatDetail = seq => {
+const onChatDetail = (seq: number) => {
 	router.push('/chat/' + seq);
 };
 
@@ -158,10 +131,10 @@ const fetchChatList = async () => {
 					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 				},
 			},
-			null,
+			{},
 		);
 		if (status === 200) {
-			data.data.content.forEach(chatRoom => {
+			data.data.content.forEach((chatRoom: { seq: number; sender: { seq: number; nickName: string; email: string; profileImage: string; reportedCount: number | null; reportedDate: string | null; country: string; region: string; userRole: string; userStatus: string; }; recipient: { seq: number; nickName: string; email: string; profileImage: string; reportedCount: number | null; reportedDate: string | null; country: string; region: string; userRole: string; userStatus: string; }; lastChat: string; unreadCountForSender: number; unreadCountForRecipient: number; lastChatTime: string; }) => {
 				chatRooms.value.push(chatRoom);
 			});
 			page.value = data.data.pageable;
@@ -172,14 +145,14 @@ const fetchChatList = async () => {
 };
 
 // 사용자가 채팅 발신자인지 확인
-const amISender = sender => {
+const amISender = (sender: IUser) => {
 	const userSeq = userInfo.userSeq;
 	return sender.seq === userSeq;
 };
 
-const updateChatRoomList = updateChatRoom => {
+const updateChatRoomList = (updateChatRoom: IChatRoom) => {
 	const index = chatRooms.value.findIndex(
-		room => room.id === updateChatRoom.id,
+		room => room.seq === updateChatRoom.seq,
 	);
 	if (index !== -1) {
 		chatRooms.value.splice(index, 1);
@@ -204,7 +177,7 @@ const connectWebSocket = () => {
 const onMoreModal = ref(false);
 const onMoreChatRoomSeq = ref(-1);
 
-const openMoreModal = chatRoomSeq => {
+const openMoreModal = (chatRoomSeq: number) => {
 	onMoreChatRoomSeq.value = chatRoomSeq;
 	onMoreModal.value = true;
 };
@@ -213,7 +186,7 @@ const closeMoreModal = () => {
 	onMoreModal.value = false;
 };
 
-const closeMoreModalAndDeleteChatRoom = chatRoomSeq => {
+const closeMoreModalAndDeleteChatRoom = (chatRoomSeq: number) => {
 	onMoreModal.value = false;
 	const index = chatRooms.value.findIndex(
 		chatRoom => chatRoom.seq === chatRoomSeq,
@@ -225,7 +198,7 @@ const closeMoreModalAndDeleteChatRoom = chatRoomSeq => {
 };
 // -->
 
-const callSearchApi = async searchValue => {
+const callSearchApi = async (searchValue: any) => {
 	try {
 		const { status, data } = await sendRequest(
 			'get',
@@ -236,11 +209,11 @@ const callSearchApi = async searchValue => {
 					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 				},
 			},
-			null,
+			{},
 		);
 		if (status === 200) {
 			chatRooms.value = [];
-			data.data.forEach(chatRoom => {
+			data.data.forEach((chatRoom: { seq: number; sender: { seq: number; nickName: string; email: string; profileImage: string; reportedCount: number | null; reportedDate: string | null; country: string; region: string; userRole: string; userStatus: string; }; recipient: { seq: number; nickName: string; email: string; profileImage: string; reportedCount: number | null; reportedDate: string | null; country: string; region: string; userRole: string; userStatus: string; }; lastChat: string; unreadCountForSender: number; unreadCountForRecipient: number; lastChatTime: string; }) => {
 				chatRooms.value.push(chatRoom);
 			});
 		}
@@ -267,7 +240,9 @@ onMounted(async () => {
 // 컴포넌트 언마운트 시 웹소켓 연결 해제
 onUnmounted(() => {
 	if (stompClient && stompClient.connected) {
-		stompClient.disconnect();
+		stompClient.disconnect(() => {
+			console.log('Disconnected');
+		});
 	}
 });
 </script>

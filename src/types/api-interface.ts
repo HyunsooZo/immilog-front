@@ -48,6 +48,28 @@ export interface IPost {
   createdAt: string
 }
 
+export interface IChatRoom {
+  seq: number
+  sender: IUser
+  recipient: IUser
+  lastChat: string
+  unreadCountForSender: number
+  unreadCountForRecipient: number
+  lastChatTime: string
+}
+
+// 채팅 인터페이스
+export interface IChat {
+  id: number
+  chatRoomSeq: number
+  content: string
+  sender: IUser
+  recipient: IUser
+  readStatus: boolean
+  attachments: string[]
+  createdAt: string
+}
+
 // 정렬 정보 인터페이스
 export interface ISortInfo {
   sorted: boolean
@@ -92,7 +114,6 @@ export interface IApiResponse<T> {
   list: stiring[] | null
 }
 
-//
 export interface IApiResponsePageable<T> {
   status: number
   message: string

@@ -6,26 +6,14 @@
 			<!-- tab button -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li
-						v-for="(menu, index) in menus"
-						:key="index"
-						:class="{ active: menu.active.value }"
-						class="menu__list"
-					>
-						<button
-							@click="selectMenu(menu)"
-							type="button"
-							class="button"
-							:aria-selected="menu.active.value.toString()"
-						>
+					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
+						<button @click="selectMenu(menu)" type="button" class="button"
+							:aria-selected="menu.active.value.toString()">
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span
-					class="menu__bar"
-					:style="{ left: menuBarLeft, width: menuBarWidth }"
-				></span>
+				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
 			</div>
 		</div>
 
@@ -33,20 +21,12 @@
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button
-						type="button"
-						class="button--select"
-						@click="openCategorySelect"
-					>
+					<button type="button" class="button--select" @click="openCategorySelect">
 						<span>{{ t(selectCategoryValue.name) }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button
-						type="button"
-						class="button--select sort"
-						@click="openSortingSelect"
-					>
+					<button type="button" class="button--select sort" @click="openSortingSelect">
 						<span>{{ t(selectSortingValue.name) }}</span>
 					</button>
 				</div>
@@ -57,35 +37,21 @@
 		<!-- <BoardContent /> -->
 		<div class="list-wrap">
 			<!-- 글쓰기버튼 -->
-			<button
-				type="button"
-				class="button-icon button--post _sticky"
-				:class="{ active: isStickyButton }"
-				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }"
-				@click="openPostModal"
-			>
+			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
+				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }" @click="openPostModal">
 				<svg viewBox="0 0 16 16">
 					<path :d="postBtn.first" />
 					<path :d="postBtn.second" />
 				</svg>
 				<i class="blind">글쓰기</i>
 			</button>
-			<BoardContent
-				v-for="(item, index) in state.posts"
-				:key="index"
-				:post="item"
-			/>
+			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
 			<AdContent :showAd="showAd(index)" />
 		</div>
 	</div>
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
-	<SelectDialog
-		v-if="isCategorySelectClicked || isSortingSelectClicked"
-		:title="selectTitle"
-		:list="selectList"
-		@close="closeSelect"
-		@select:value="selectedValue"
-	/>
+	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
+		@close="closeSelect" @select:value="selectedValue" />
 </template>
 
 <script setup lang="ts">
@@ -102,6 +68,8 @@ import { useRouter } from 'vue-router';
 import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { useI18n } from 'vue-i18n';
+import type { IState } from '@/types/interface';
+import type { IPageable } from '@/types/api-interface';
 
 const { t } = useI18n();
 
@@ -144,7 +112,7 @@ const handleStickyWrap = () => {
 			(stickyWrapElement?.getBoundingClientRect().height || 0) + 5;
 	}
 };
-const handleStickyButton = listTopHeight => {
+const handleStickyButton = (listTopHeight: number) => {
 	isStickyButton.value = window.scrollY > listTopHeight;
 };
 
@@ -160,7 +128,7 @@ let menus = [
 	{ label: '관심지역', active: ref(false) },
 ];
 
-const selectMenu = selectedMenu => {
+const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
 	selectedMenu.active.value = true;
 	menus
 		.filter(menu => menu !== selectedMenu)
@@ -215,13 +183,26 @@ const openSortingSelect = () => {
 	modalOpenClass();
 };
 
-const state = ref({
+// 게시글 목록 관련 반응형 객체
+const state = ref<IState>({
 	posts: [],
-	pagination: {},
+	pagination: {
+		sort: {
+			sorted: false,
+			unsorted: true,
+			empty: true,
+		},
+		pageSize: 10,
+		pageNumber: 0,
+		offset: 0,
+		paged: true,
+		unpaged: false,
+	},
+	last: false,
 	loading: false,
 });
 
-const selectedValue = value => {
+const selectedValue = (value: { name: string; code: string; }) => {
 	if (categoryList.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
 	} else if (sortingList.some(s => s.code === value.code)) {
@@ -236,27 +217,27 @@ const closeSelect = () => {
 	modalCloseClass();
 };
 
-const inquireBoardList = (category, sorting) => {
+const inquireBoardList = (category: { name: string; code: string; }, sorting: { name: string; code: string; }) => {
 	console.log(category, sorting);
 	console.log('inquireBoardList');
 };
 
+// 무한 스크롤 관련 메소드 (데이터 추가 호출)
 const loadMoreData = async () => {
-	if (!state.value.pagination.last && !state.value.loading) {
+	if (!state.value.last && !state.value.loading) {
 		state.value.loading = true;
-		const nextPage = state.value.pagination.pageNumber + 1;
-		await fetchBoardList('CREATED_DATE', nextPage); // await 추가
+		currentPage.value += 1;
+		await fetchBoardList(selectSortingValue.value.code, currentPage.value);
 		state.value.loading = false; // fetchBoardList 호출 후 loading 상태 변경
 	}
 };
 
-const fetchBoardList = async (sortingMethod, nextPage) => {
+const fetchBoardList = async (sortingMethod: string | { name: string; code: string; }, nextPage: number) => {
 	state.value.loading = true;
 	try {
 		const { status, data } = await sendRequest(
 			'get',
-			`/posts?country=${
-				userInfo.userCountry
+			`/posts?country=${userInfo.userCountry
 			}&category=${selectCategoryValue.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'N'}&page=${nextPage}`,
 			{
 				headers: {
@@ -266,7 +247,7 @@ const fetchBoardList = async (sortingMethod, nextPage) => {
 			},
 		);
 		if (status === 200) {
-			data.data.content.forEach(post => state.value.posts.push(post));
+			data.data.content.forEach((post: any) => state.value.posts.push(post));
 			state.value.pagination = data.data.pageable;
 		}
 	} catch (error) {
