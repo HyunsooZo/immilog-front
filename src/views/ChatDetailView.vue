@@ -84,6 +84,40 @@
 			</div>
 			<!-- chat write -->
 			<div class="chat__write">
+				<div class="list-wrap list--link _preview">
+					<div class="item__list">
+						<div class="thumb">
+							<img src="@/assets/images/email-icon-logo.png" alt="" />
+							<button type="button" class="button--del" @click="removeImage(index)">
+								<i class="blind">삭제</i>
+							</button>
+						</div>
+						<div class="thumb">
+							<img src="@/assets/images/icon-google-480.png" alt="" />
+							<button type="button" class="button--del" @click="removeImage(index)">
+								<i class="blind">삭제</i>
+							</button>
+						</div>
+						<div class="thumb">
+							<img src="@/assets/images/icon-google-480.png" alt="" />
+							<button type="button" class="button--del" @click="removeImage(index)">
+								<i class="blind">삭제</i>
+							</button>
+						</div>
+						<div class="thumb">
+							<img src="@/assets/images/icon-google-480.png" alt="" />
+							<button type="button" class="button--del" @click="removeImage(index)">
+								<i class="blind">삭제</i>
+							</button>
+						</div>
+						<div class="thumb">
+							<img src="@/assets/images/icon-google-480.png" alt="" />
+							<button type="button" class="button--del" @click="removeImage(index)">
+								<i class="blind">삭제</i>
+							</button>
+						</div>
+					</div>
+				</div>
 				<div class="chat__inner">
 					<div class="input__wrap input__attachments">
 						<div class="input__file">

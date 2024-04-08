@@ -3,26 +3,17 @@
 		<div class="sidemenu__inner">
 			<div class="sidemenu-header">
 				<div class="item__fnc">
-					<button
-						class="button-icon button--close"
-						role="link"
-						@click="closeModal"
-					>
+					<button class="button-icon button--close" role="link" @click="closeModal">
 						<i class="blind">취소</i>
 					</button>
 				</div>
 			</div>
 			<div class="sidemenu-body">
 				<div class="title">채팅방 메뉴</div>
-				<div class="list-wrap list--link">
+				<div class="list-wrap list--link _preview">
 					<ul>
 						<li class="item">
-							<button
-								type="button"
-								class="button button-text"
-								role="link"
-								@click="onPicBoard"
-							>
+							<button type="button" class="button button-text" role="link" @click="onPicBoard">
 								<span>사진</span>
 							</button>
 							<div class="item__list">
@@ -36,12 +27,7 @@
 							</div>
 						</li>
 						<li class="item">
-							<button
-								type="button"
-								class="button button-text"
-								role="link"
-								@click="onLinkBoard"
-							>
+							<button type="button" class="button button-text" role="link" @click="onLinkBoard">
 								<span>링크</span>
 							</button>
 						</li>
