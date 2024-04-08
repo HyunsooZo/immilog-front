@@ -10,7 +10,7 @@
 			</div>
 			<div class="sidemenu-body">
 				<div class="title">채팅방 메뉴</div>
-				<div class="list-wrap list--link _preview">
+				<div class="list-wrap list--link item_preview">
 					<ul>
 						<li class="item">
 							<button type="button" class="button button-text" role="link" @click="onPicBoard">

@@ -1286,7 +1286,7 @@ strong + .button-text {
 .chat-wrap .chat__write .input__file [class*='button-icon'] svg {
   fill: #999;
 }
-.chat__write .list-wrap.list--link._preview {
+.chat__write .list-wrap.item_preview {
   margin: 1rem 0 0 1rem;
   border-top: none;
   overflow: auto hidden;
@@ -1294,60 +1294,60 @@ strong + .button-text {
   scroll-snap-stop: normal;
   scroll-behavior: smooth;
 }
-.chat__write .list-wrap.list--link._preview .item__list {
+.chat__write .list-wrap.item_preview .item__list {
   display: inline-block;
   width: max-content;
 }
-.chat__write .list-wrap.list--link._preview .item__list .thumb {
+.chat__write .list-wrap.item_preview .item__list .thumb {
   display: inline-flex;
   width: 7rem;
   height: 7rem;
   max-width: inherit;
 }
-.chat__write .list-wrap.list--link._preview .item__list .thumb::after {
+.chat__write .list-wrap.item_preview .item__list .thumb::after {
   content: none;
 }
-.list-wrap.list--link._preview {
+.list-wrap.item_preview {
   margin: 0;
   line-height: 0;
 }
-.list-wrap.list--link._preview ul {
+.list-wrap.item_preview ul {
   background: transparent;
 }
-.list-wrap.list--link._preview .item:not(:last-child) {
+.list-wrap.item_preview .item:not(:last-child) {
   margin-bottom: 0.5rem;
   border: none;
 }
-.list-wrap.list--link._preview li.item .button-text {
+.list-wrap.item_preview li.item .button-text {
   padding: 1rem 3.2rem 1rem 1rem;
 }
-.list-wrap._preview .item__list {
+.list-wrap.item_preview .item__list {
   display: flex;
   overflow: hidden;
   margin: 0 1rem 0 0;
 }
-.list-wrap._preview .item__list .thumb {
+.list-wrap.item_preview .item__list .thumb {
   flex: 1 0 calc(25% - 0.3rem);
   position: relative;
   max-width: calc(25% - 0.3rem);
   border: 1px solid #e9e9e9;
   border-radius: 0.6rem;
 }
-.list-wrap._preview .item__list .thumb:after {
+.list-wrap.item_preview .item__list .thumb:after {
   content: '';
   display: block;
   padding-bottom: 100%;
 }
-.list-wrap._preview .item__list .thumb + .thumb {
+.list-wrap.item_preview .item__list .thumb + .thumb {
   margin-left: 0.4rem;
 }
-.list-wrap._preview .item__list .thumb img {
+.list-wrap.item_preview .item__list .thumb img {
   object-fit: cover;
   position: absolute;
   top: 0;
   left: 0;
 }
-.list-wrap._preview .item__list .thumb .button--del {
+.list-wrap.item_preview .item__list .thumb .button--del {
   position: absolute;
   top: 0;
   right: 0;
@@ -1358,7 +1358,7 @@ strong + .button-text {
   background: rgb(51 51 51 / 0.7);
   z-index: 1;
 }
-.list-wrap._preview .item__list .thumb .button--del::after {
+.list-wrap.item_preview .item__list .thumb .button--del::after {
   content: '';
   display: inline-block;
   width: 1.2rem;

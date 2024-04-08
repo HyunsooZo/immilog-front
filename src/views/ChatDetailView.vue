@@ -84,7 +84,7 @@
 			</div>
 			<!-- chat write -->
 			<div class="chat__write">
-				<div class="list-wrap list--link _preview">
+				<div class="list-wrap item_preview">
 					<div class="item__list">
 						<div class="thumb">
 							<img src="@/assets/images/email-icon-logo.png" alt="" />
