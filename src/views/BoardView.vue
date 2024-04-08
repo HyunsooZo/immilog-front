@@ -7,8 +7,7 @@
 			<div class="menu-wrap">
 				<ul class="menu__inner">
 					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
-						<button @click="selectMenu(menu)" type="button" class="button"
-							:aria-selected="menu.active.value.toString()">
+						<button @click="selectMenu(menu)" type="button" class="button" :aria-selected="Boolean(menu.active.value)">
 							{{ menu.label }}
 						</button>
 					</li>
@@ -38,7 +37,7 @@
 		<div class="list-wrap">
 			<!-- 글쓰기버튼 -->
 			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
-				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : null }" @click="openPostModal">
+				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : 'auto' }" @click="openPostModal">
 				<svg viewBox="0 0 16 16">
 					<path :d="postBtn.first" />
 					<path :d="postBtn.second" />
@@ -68,7 +67,7 @@ import { useRouter } from 'vue-router';
 import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { useI18n } from 'vue-i18n';
-import type { IState } from '@/types/interface';
+import { ISelectItem, type IState } from '@/types/interface';
 import type { IPageable } from '@/types/api-interface';
 
 const { t } = useI18n();
@@ -89,20 +88,19 @@ const isStickyButton = ref(false);
 const StickyWrapHeight = ref(0);
 onMounted(() => {
 	window.addEventListener('scroll', handleStickyWrap);
-	const listTopHeight = document
-		.querySelector('.list-top-wrap')
-		?.getBoundingClientRect().height;
-	window.addEventListener(
-		'scroll',
-		handleStickyButton.bind(null, listTopHeight),
-	);
-	return () => {
-		window.removeEventListener('scroll', handleStickyWrap);
-		window.removeEventListener(
-			'scroll',
-			handleStickyButton.bind(null, listTopHeight),
-		);
-	};
+	const listTopElement = document.querySelector('.list-top-wrap') as HTMLElement | null;
+	let listTopHeight = listTopElement?.getBoundingClientRect().height;
+
+	if (typeof listTopHeight === 'number') {
+		let boundHandleStickyButton = handleStickyButton.bind(null, listTopHeight);
+
+		window.addEventListener('scroll', boundHandleStickyButton);
+
+		return () => {
+			window.removeEventListener('scroll', handleStickyWrap);
+			window.removeEventListener('scroll', boundHandleStickyButton);
+		};
+	}
 });
 const handleStickyWrap = () => {
 	isStickyWrap.value = window.scrollY > 0;
@@ -139,15 +137,14 @@ const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
 		updateMenuBar();
 	});
 };
-
 const updateMenuBar = () => {
-	const activeButton = document.querySelector('.menu__list.active .button');
+	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
 	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
 	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
 
 const selectTitle = ref('');
-const selectList = ref('');
+const selectList = ref<ISelectItem[]>([]);
 const currentPage = ref(0);
 const { sendRequest } = useAxios(router);
 

@@ -87,8 +87,9 @@
 				<div class="chat__inner">
 					<div class="input__wrap input__attachments">
 						<div class="input__file">
-							<input type="file" id="file-upload" multiple="multiple"
+							<input type="file" id="file-upload" multiple
 								accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff" @change="previewImage" />
+
 							<label for="file-upload" class="button-icon__s" role="button">
 								<svg viewBox="0 0 16 16">
 									<path :d="imageSelectIcon.first" />
