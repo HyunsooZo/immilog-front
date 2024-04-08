@@ -37,7 +37,7 @@
 		<div class="list-wrap">
 			<!-- 글쓰기버튼 -->
 			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
-				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : 'auto' }" @click="openPostModal">
+				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : '' }" @click="openPostModal">
 				<svg viewBox="0 0 16 16">
 					<path :d="postBtn.first" />
 					<path :d="postBtn.second" />
