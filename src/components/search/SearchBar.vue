@@ -1,5 +1,5 @@
 <template>
-	<SearchModal v-if="searchModalValue" @update:search-modal-value="closeSearchModal" />
+	<!-- <SearchModal v-if="searchModalValue" @update:search-modal-value="closeSearchModal" /> -->
 	<!-- 검색 -->
 	<div class="search-wrap">
 		<div class="input-wrap">

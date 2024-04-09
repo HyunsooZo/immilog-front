@@ -7,11 +7,7 @@
 		</div>
 		<div class="title">
 			<p class="list__item user">
-				<strong>{{
-		amISender(chats[0].sender.seq)
-			? chats[0].recipient.nickName
-			: chats[0].sender.nickName
-	}}
+				<strong>{{ amISender(chats[0].sender.seq) ? chats[0].recipient.nickName : chats[0].sender.nickName }}
 				</strong>
 			</p>
 		</div>
@@ -27,11 +23,8 @@
 			<div class="chat__msg" v-if="chats.length == 0">
 				<p class="text">
 					<em class="user__name">
-						{{
-		amISender(chats[0].sender.seq)
-			? chats[0].recipient.nickName
-			: chats[0].sender.nickName
-	}} </em>님과의 채팅을 시작해보세요.
+						{{ amISender(chats[0].sender.seq) ? chats[0].recipient.nickName : chats[0].sender.nickName }}
+					</em>님과의 채팅을 시작해보세요.
 				</p>
 			</div>
 			<!-- chat list -->
@@ -41,14 +34,12 @@
 						<li class="item__notice" v-if="lastDate !== formDate(chat.createdAt)">
 							<span class="text">{{ getDateTime(chat.createdAt) }}</span>
 						</li>
-						<li :id="`message-${chat.id}`" class="item" aria-label="받은 메시지" data-content-type="text" :class="{
-		_my: amISender(chat.sender.seq),
-	}">
+						<li :id="`message-${chat.id}`" class="item" aria-label="받은 메시지" data-content-type="text"
+							:class="{ _my: amISender(chat.sender.seq), }">
 							<!-- 사용자 정보 -->
 							<div class="info__wrap" v-if="!amISender(chat.sender.seq)">
-								<button type="button" class="item__pic" :class="{
-		'pic--default': chat.sender.profileImage === '',
-	}" @click="onUserProfileDetail">
+								<button type="button" class="item__pic" :class="{ 'pic--default': chat.sender.profileImage === '', }"
+									@click="onUserProfileDetail">
 									<img :src="chat.sender.profileImage" alt=""
 										v-if="chat.sender.profileImage !== ''" /></button><!-- // 사용자 프로필 보기 -->
 							</div>
@@ -84,40 +75,7 @@
 			</div>
 			<!-- chat write -->
 			<div class="chat__write">
-				<div class="list-wrap item_preview">
-					<div class="item__list">
-						<div class="thumb">
-							<img src="@/assets/images/email-icon-logo.png" alt="" />
-							<button type="button" class="button--del" @click="removeImage(index)">
-								<i class="blind">삭제</i>
-							</button>
-						</div>
-						<div class="thumb">
-							<img src="@/assets/images/icon-google-480.png" alt="" />
-							<button type="button" class="button--del" @click="removeImage(index)">
-								<i class="blind">삭제</i>
-							</button>
-						</div>
-						<div class="thumb">
-							<img src="@/assets/images/icon-google-480.png" alt="" />
-							<button type="button" class="button--del" @click="removeImage(index)">
-								<i class="blind">삭제</i>
-							</button>
-						</div>
-						<div class="thumb">
-							<img src="@/assets/images/icon-google-480.png" alt="" />
-							<button type="button" class="button--del" @click="removeImage(index)">
-								<i class="blind">삭제</i>
-							</button>
-						</div>
-						<div class="thumb">
-							<img src="@/assets/images/icon-google-480.png" alt="" />
-							<button type="button" class="button--del" @click="removeImage(index)">
-								<i class="blind">삭제</i>
-							</button>
-						</div>
-					</div>
-				</div>
+				<chat-image-preview :chatImages="chatImages" v-if="hasChatImageAttached" @removeImage="deleteChatImage" />
 				<div class="chat__inner">
 					<div class="input__wrap input__attachments">
 						<div class="input__file">
@@ -136,13 +94,11 @@
 					<div class="item__textarea">
 						<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
 						<textarea v-model="content" class="text__area" name="content" autocomplete="off" placeholder="메시지를 입력하세요."
-							data-autosuggest_is-input="true" ref="adjustTextarea" @input="adjustTextareaHeight" rows="1">
-			</textarea>
+							data-autosuggest_is-input="true" ref="adjustTextarea" @input="adjustTextareaHeight" rows="1"></textarea>
 					</div>
 					<div class="item__fnc">
-						<button type="button" class="button-icon__s button--send" :class="{
-		active: content.trim() !== '',
-	}" @click="sendMessage">
+						<button type="button" class="button-icon__s button--send" :class="{ active: content.trim() !== '', }"
+							@click="sendMessage">
 							<!-- 전송 버튼 아이콘 -->
 							<svg viewBox="0 0 16 16">
 								<path :d="chatSendingIcon" />
@@ -156,22 +112,27 @@
 		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
 	</div>
 	<UserProfileDetail @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
+	<teleport to="#modal" v-if="alertValue">
+		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+	</teleport>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import SideMenu from '@/components/settings/SideMenu.vue';
+import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
+import ChatImagePreview from '@/components/chat/ChatImagePreview.vue';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import useAxios from '@/composables/useAxios.ts';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { imageSelectIcon, chatSendingIcon } from '@/utils/icons.ts';
-import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 import type { IChat } from '@/types/api-interface';
+import { useRoute, useRouter } from 'vue-router';
+import { computed } from 'vue';
 
 const userInfo = useUserInfoStore();
-import { useRoute, useRouter } from 'vue-router';
-
 const router = useRouter();
 const route = useRoute();
 
@@ -442,6 +403,7 @@ const scrollToBottom = () => {
 };
 
 const messageLenth = ref(0);
+
 // 로드 전 첫 채팅메세지 위치 기억하는 함수
 const saveFirstMessage = () => {
 	messageLenth.value = chats.value.length;
@@ -457,4 +419,49 @@ const moveToFirstMessage = (currentSize: number) => {
 		}
 	}
 };
+
+// <-- 첨부파일 관련
+const chatImages = ref<String[]>([]);
+
+// 이미지 미리보기
+const previewImage = (event: any) => {
+	if (chatImages.value.length >= 3) {
+		openAlert('사진은 최대 3개 까지만 전송 할 수 있습니다.');
+		return;
+	}
+	const file = event.target.files[0];
+	const reader = new FileReader();
+	reader.onload = () => {
+		chatImages.value.push(reader.result as string);
+	};
+	reader.readAsDataURL(file);
+};
+
+// 프리뷰 삭제
+const deleteChatImage = (index: number) => {
+	chatImages.value = [
+		...Array.from(chatImages.value).slice(0, index),
+		...Array.from(chatImages.value).slice(index + 1)
+	];
+}
+// 이미지 첨부 여부
+const hasChatImageAttached = computed(() => {
+	return chatImages.value.length > 0;
+});
+// -->
+
+// <-- 알럿 관련
+const alertValue = ref(false);
+const alertText = ref('');
+
+const openAlert = (content: string) => {
+	alertValue.value = true;
+	alertText.value = content;
+};
+
+const closeAlert = () => {
+	alertValue.value = false;
+};
+// -->
+
 </script>

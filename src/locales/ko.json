@@ -26,7 +26,7 @@
     "notice": "공지사항",
     "customerService": "고객센터",
     "logout": "로그아웃",
-    "settings": "설정 > 비밀번호 변경, 사용자 차단, 언어설정, 알림설정"
+    "settings": "설정"
   },
   "selectItems": {
     "allCategories": "전체",

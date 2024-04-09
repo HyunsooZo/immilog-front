@@ -26,7 +26,7 @@
     "notice": "Notices",
     "customerService": "Customer Service",
     "logout": "Logout",
-    "settings": "Settings > Change Password, Block User, Language, Notifications"
+    "settings": "Settings"
   },
   "selectItems": {
     "allCategories": "All",
