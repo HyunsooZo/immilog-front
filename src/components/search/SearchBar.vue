@@ -1,19 +1,16 @@
 <template>
-	<SearchModal
-		v-if="searchModalValue"
-		@update:search-modal-value="closeSearchModal"
-	/>
+	<SearchModal v-if="searchModalValue" @update:search-modal-value="closeSearchModal" />
 	<!-- 검색 -->
 	<div class="search-wrap">
 		<div class="input-wrap">
-			<p class="logo-wrap">
+			<p class="logo-wrap" style="display: none;">
 				<em class="header-logo">
 					<span>K</span>
-					<span>o</span>
-					<span>M</span>
-					<span>e</span>
-					<span>e</span>
+					<span>a</span>
 					<span>t</span>
+					<span>h</span>
+					<span>e</span>
+					<span>r</span>
 				</em>
 				<!-- <img src="@/assets/images/icon-logo.png" alt="ko-meet" @click="onHome" /> -->
 			</p>
@@ -22,12 +19,7 @@
 					<span>{{ t('searchBar.keywordPlaceHolder') }}</span>
 				</button>
 			</div>
-			<button
-				type="button"
-				class="button-icon button--notice new"
-				role="link"
-				@click="onMenuOpen"
-			>
+			<button type="button" class="button-icon button--notice new" role="link" @click="onMenuOpen">
 				<i class="blind">알림</i>
 			</button>
 		</div>

@@ -3,25 +3,15 @@
 	<header class="header">
 		<!-- 뒤로 가기 버튼 -->
 		<div class="item__fnc">
-			<button
-				type="button"
-				class="button-icon button--back"
-				role="link"
-				@click="onBack"
-			>
+			<button type="button" class="button-icon button--back" role="link" @click="onBack">
 				<i class="blind">이전화면</i>
 			</button>
 		</div>
 		<!-- 로고/타이틀 -->
-		<h1 class="title"><em class="header-logo">KoMeet</em></h1>
+		<h1 class="title"><em class="header-logo">Kather</em></h1>
 		<!-- 알림 버튼 -->
 		<div class="item__fnc">
-			<button
-				type="button"
-				class="button-icon button--notice new"
-				role="link"
-				@click="onMenuOpen"
-			>
+			<button type="button" class="button-icon button--notice new" role="link" @click="onMenuOpen">
 				<i class="blind">알림</i>
 			</button>
 		</div>
