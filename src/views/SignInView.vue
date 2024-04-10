@@ -108,15 +108,16 @@ const email = ref('');
 const password = ref('');
 const router = useRouter();
 const { sendRequest } = useAxios(router);
-const isValidLogin = computed(() => email.value && password.value);
-const isLoading = ref(false);
-const alertValue = ref(false);
-const alertText = ref('');
 
+// 로그인 버튼 활성화 여부
+const isValidLogin = computed(() => email.value && password.value);
+
+// 회원가입 화면으로 이동
 const onSignUp = () => {
 	router.push({ name: 'SignUp' });
 };
 
+// 로그인
 const signIn = async () => {
 	onLoading();
 	try {
@@ -137,17 +138,7 @@ const signIn = async () => {
 		);
 
 		if (status === 200) {
-			useUserInfoStore().setUserInfo(
-				data.data.userSeq,
-				data.data.accessToken,
-				data.data.refreshToken,
-				data.data.nickname,
-				data.data.email,
-				data.data.country,
-				data.data.region,
-				data.data.userProfileUrl,
-				data.data.isLocationMatch,
-			);
+			storeUserInfo(data);
 			localStorage.setItem('accessToken', data.data.accessToken);
 			localStorage.setItem('refreshToken', data.data.refreshToken);
 			setTimeout(() => {
@@ -170,7 +161,11 @@ const signIn = async () => {
 	}
 };
 
-const openAlert = content => {
+// <-- 알럿 관련
+const alertValue = ref(false);
+const alertText = ref('');
+
+const openAlert = (content: string) => {
 	alertValue.value = true;
 	alertText.value = content;
 };
@@ -178,6 +173,10 @@ const openAlert = content => {
 const closeAlert = () => {
 	alertValue.value = false;
 };
+// -->
+
+// <-- 로딩 관련
+const isLoading = ref(false);
 
 const onLoading = () => {
 	isLoading.value = true;
@@ -186,14 +185,30 @@ const onLoading = () => {
 const offLoading = () => {
 	isLoading.value = false;
 };
+// -->
 
+// <-- 사용자 정보 저장
+const storeUserInfo = (data: any) => {
+	useUserInfoStore().setUserInfo(
+		data.data.userSeq,
+		data.data.accessToken,
+		data.data.refreshToken,
+		data.data.nickname,
+		data.data.email,
+		data.data.country,
+		data.data.region,
+		data.data.userProfileUrl,
+		data.data.isLocationMatch,
+	);
+}
+// -->
 onMounted(async () => {
 	if (localStorage.getItem('accessToken')) {
 		await getCoordinate();
 		if (localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
 			const { status, data } = await getUserInfo(
-				localStorage.getItem('latitude'),
-				localStorage.getItem('longitude'),
+				parseFloat(localStorage.getItem('latitude') ?? '0'),
+				parseFloat(localStorage.getItem('longitude') ?? '0'),
 			);
 			if (status === 200 || status === 201) {
 				localStorage.setItem('accessToken', data.data.accessToken);
