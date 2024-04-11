@@ -1,5 +1,3 @@
-const criteria = 7;
-
-export const showAd = index => {
-	return index % criteria === 0 && index !== 0;
-};
+export const showAd = (index: number) => {
+  return index % 7 === 0 && index !== 0
+}

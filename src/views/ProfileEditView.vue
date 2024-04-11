@@ -110,7 +110,7 @@ import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const { sendRequest } = useAxios();
+const { sendRequest } = useAxios(router);
 const nickNameCheckDone = ref(false);
 const isNickNameValid = ref(false);
 const userInfo = useUserInfoStore();
@@ -186,7 +186,7 @@ const hostImage = async () => {
 	try {
 		const formData = new FormData();
 		const resizedImage = await resizeImage(imageFile.value, 0.5);
-		formData.append('multipartFile', resizedImage);
+		formData.append('multipartFile', resizedImage as Blob);
 		const { status, data } = await sendRequest(
 			'post',
 			'/images?imagePath=profile',
@@ -245,6 +245,7 @@ const saveProfile = async () => {
 	}
 };
 
+// <-- 알럿 관련
 const alertValue = ref(false);
 const alertText = ref('');
 
@@ -252,6 +253,12 @@ const openAlert = (content: string) => {
 	alertValue.value = true;
 	alertText.value = content;
 };
+
+const closeAlert = () => {
+	alertText.value = '';
+	alertValue.value = false;
+};
+// -->
 
 const options = {
 	enableHighAccuracy: true,
@@ -272,19 +279,19 @@ const fetchLocation = async () => {
 			});
 			if (permissionResult.state === 'granted') {
 				navigator.geolocation.getCurrentPosition(
-					position => {
+					(position: GeolocationPosition) => {
 						getCountry(position.coords.latitude, position.coords.longitude);
-						useLocationStore().setLocation(
-							position.coords.latitude,
-							position.coords.longitude,
-						);
+						useLocationStore().setLocation({
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude
+						});
 						isLoading.value = false;
 					},
 					errorCallback,
 					options,
 				);
 			} else if (permissionResult.state === 'prompt') {
-				const position = await new Promise((resolve, reject) => {
+				const position = await new Promise<GeolocationPosition>((resolve, reject) => {
 					navigator.geolocation.getCurrentPosition(resolve, reject, options);
 				});
 				getCountry(position.coords.latitude, position.coords.longitude);

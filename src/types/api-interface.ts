@@ -87,6 +87,58 @@ export interface IPageable {
   unpaged: boolean
 }
 
+// 검색결과 인터페이스
+export interface ISearchResult {
+  seq: number
+  title: string
+  content: string
+  userSeq: number
+  likeCount: number
+  viewCount: number
+  isPublic: string
+  userProfileUrl: string
+  userNickName: string
+  commentCounts: number
+  tags: string[]
+  attachments: string[]
+  likeUsers: number[]
+  bookmarkUsers: number[]
+  country: string
+  region: string
+  category: string
+  status: string
+  keyword: string
+  createdAt: string
+}
+
+// 구인구직 인터페이스
+export interface IJobPost {
+  seq: number
+  title: string
+  content: string
+  user: UserDto
+  viewCount: number
+  likeCount: number
+  tags: string[]
+  attachments: string[]
+  likeUsers: number[]
+  bookmarkUsers: number[]
+  country: Countries
+  region: string
+  industry: Industry
+  deadline: string | Date
+  experience: Experience
+  salary: string
+  company: string
+  companyEmail: string
+  companyPhone: string
+  companyAddress: string
+  companyHomepage: string
+  companyLogo: string
+  status: PostStatus
+  createdAt: string | Date
+}
+
 // 게시글 리스트 인터페이스
 export interface IPostList {
   status: number

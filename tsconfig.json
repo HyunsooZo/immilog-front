@@ -8,9 +8,10 @@
     "strict": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "baseUrl": ".", // 기준 디렉토리 설정
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"] // src 디렉토리에 대한 경로 별칭 설정
+      "@/*": ["./src/*"]
     }
-  }
+  },
+  "include": ["src/**/*", "src/**/*.ts"]
 }

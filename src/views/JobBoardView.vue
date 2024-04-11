@@ -54,6 +54,7 @@ import { getJobBoardsApi } from '@/services/jobBoard.ts';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import type { ISelectItem } from '@/types/interface'
+import type { IJobPost, IPageable } from '@/types/api-interface';
 
 const { t } = useI18n();
 
@@ -110,8 +111,8 @@ const closePostModal = () => {
 };
 
 const state = ref({
-	jobBoards: [],
-	pagination: {},
+	jobBoards: [] as IJobPost[],
+	pagination: {} as IPageable,
 	loading: false,
 });
 
@@ -157,8 +158,8 @@ const handleStickyButton = (listTopHeight: number) => {
 
 // select 관련 메소드 (초기화)
 const initializeState = () => {
-	state.value.posts = [];
-	state.value.pagination = {};
+	state.value.jobBoards = [] as IJobPost[];
+	state.value.pagination = {} as IPageable;
 	currentPage.value = 0;
 };
 
