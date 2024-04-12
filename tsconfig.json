@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "baseUrl": ".",
+    "types": ["vite/client", "pinia-plugin-persistedstate"],
     "paths": {
       "@/*": ["./src/*"]
     }

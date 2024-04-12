@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { PropType, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { ISelectItem } from '@/types/interface.ts';
 
@@ -38,8 +38,9 @@ defineProps({
 		required: true,
 	},
 	list: {
-		list: Array<ISelectItem>,
+		type: Array as PropType<ISelectItem[]>,
 		required: true,
+		default: () => []
 	},
 });
 
@@ -52,7 +53,7 @@ const closeDialog = () => {
 	emit('close');
 };
 
-const selectCategory = (item: any) => {
+const selectCategory = (item: ISelectItem) => {
 	emit('select:value', item);
 	closeDialog();
 };

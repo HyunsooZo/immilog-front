@@ -12,11 +12,7 @@
 			</div>
 		</div>
 		<div class="text__wrap">
-			<button
-				type="button"
-				class="list__item_button"
-				@click="onJobBoardDetail(jobBoard.seq)"
-			>
+			<button type="button" class="list__item_button" @click="onBoardDetail">
 				<div class="text__item">
 					<p class="title">{{ jobBoard.title }}</p>
 					<p class="text">{{ jobBoard.content }}</p>
@@ -51,11 +47,7 @@
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<div class="tag__item">
-								<span
-									class="item--hash"
-									v-for="(tag, index) in jobBoard.tags"
-									:key="index"
-								>
+								<span class="item--hash" v-for="(tag, index) in jobBoard.tags" :key="index">
 									<em>{{ tag }}</em>
 								</span>
 							</div>
@@ -73,12 +65,7 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ jobBoard.viewCount }}</span>
 				</p>
-				<button
-					type="button"
-					class="list__item_button like"
-					:class="{ active: isLiked }"
-					@click="likePost"
-				>
+				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count"> {{ jobBoard.likeCount.length }}</span>
@@ -92,12 +79,7 @@
 						}}{{ t(timeCalculation(jobBoard.createdAt).text) }}
 					</span>
 				</p>
-				<button
-					type="button"
-					class="list__item_button mark"
-					:class="{ active: isBookmarked }"
-					@click="bookmarkApi"
-				>
+				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -200,7 +182,7 @@ const bookmarkApi = async () => {
 	checkIfTokenExists();
 	changeBookmark();
 	try {
-		postBookmarkdApi();
+		postBookmarkdApi(props.jobBoard.seq);
 	} catch (error) {
 		console.log(error);
 	}
@@ -231,10 +213,10 @@ const checkIfTokenExists = () => {
 		router.push('/sign-in');
 	}
 };
-const calculateDeadLine = deadline => {
+const calculateDeadLine = (deadline: string | number | Date) => {
 	const date = new Date(deadline);
 	const now = new Date();
-	const diff = date - now;
+	const diff: number = date.getTime() - now.getTime();
 	const day = 1000 * 60 * 60 * 24;
 	const days = Math.floor(diff / day);
 	return 'D-' + days;

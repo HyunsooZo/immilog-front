@@ -93,4 +93,12 @@ const emits = defineEmits(['close']);
 const closeModal = () => {
 	emits('close');
 };
+
+const onPicBoard = () => {
+
+}
+
+const onLinkBoard = () => {
+
+}
 </script>
