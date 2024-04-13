@@ -74,7 +74,7 @@
 								<div class="input__item_inner">
 									<label for="selCareer" v-if="!selectedCareer" class="placeholder">{{ PlaceholderCareer }}</label>
 									<input type="text" class="input__element" id="selCareer" v-model="selectedCareer"
-										:disabled="allCareer" @click="openAlert('경력 선택 팝업', careerOptions)" />
+										:disabled="allCareer" @click="openAlert('경력 선택 팝업')" />
 								</div>
 							</div>
 							<div class="input__item">
@@ -207,6 +207,8 @@ import {
 	imageSelectIcon,
 	hashTagIcon,
 } from '@/utils/icons.ts';
+import { ISelectItem } from '@/types/interface';
+import { IApiResponse, IImage } from '@/types/api-interface';
 // import DatePicker from 'vue3-datepicker';
 
 // DatePicker, Placeholder
@@ -254,7 +256,7 @@ const isCategorySelectClicked = ref(false);
 
 const selectTitle = '카테고리 선택';
 const selectedCategory = ref({ name: '소통', code: 'COMMUNICATION' });
-const selectedValue = value => {
+const selectedValue = (value: ISelectItem) => {
 	selectedCategory.value = value;
 };
 
@@ -293,9 +295,11 @@ const adjustTextarea = ref(null);
 const currentCharCount = ref(0);
 const maxCharCount = 500;
 const adjustTextareaHeight = () => {
-	const textarea = adjustTextarea.value;
-	textarea.style.height = 'auto';
-	textarea.style.height = `${textarea.scrollHeight}px`;
+	const textarea = adjustTextarea.value as unknown as HTMLTextAreaElement;
+	if (textarea) {
+		textarea.style.height = 'auto';
+		textarea.style.height = `${textarea.scrollHeight}px`;
+	}
 	// update character count
 	currentCharCount.value = content.value.length;
 	if (currentCharCount.value > maxCharCount) {
@@ -308,25 +312,30 @@ watch(content, () => {
 
 // 이미지 관련 변수
 const isImageUploaded = computed(() => imagePreview.value.length > 0);
-const imageFile = ref([]);
-const imagePreview = ref([]);
-const imagePaths = ref([]);
+const imageFile = ref<File[]>([]);
+const imagePreview = ref<string[]>([]);
+const imagePaths = ref<string[]>([]);
 
-// 프리뷰 이미지
-const previewImage = (event: any) => {
-	const input = event.target;
+// 프리뷰 이미지 처리 함수
+const previewImage = (event: Event) => {
+	const input = event.target as HTMLInputElement; // 타입 단언을 사용하여 HTMLInputElement로 변환
+	if (!input.files || input.files.length === 0) {
+		openAlert('파일이 선택되지 않았습니다.');
+		return;
+	}
 	if (imagePreview.value.length > 2) {
 		openAlert('이미지는 최대 3개까지만 등록이 가능합니다.');
 		return;
 	}
-	if (input.files && input.files[0]) {
-		const reader = new FileReader();
-		reader.onload = e => {
-			imagePreview.value.push(e.target.result);
-			imageFile.value.push(input.files[0]);
-		};
-		reader.readAsDataURL(input.files[0]);
-	}
+	const file = input.files[0];
+	const reader = new FileReader();
+	reader.onload = (e: ProgressEvent<FileReader>) => {
+		const result = e.target?.result;
+		if (typeof result === 'string') {
+			imagePreview.value.push(result);
+		}
+	};
+	reader.readAsDataURL(file);
 };
 
 // 미리보기 삭제
@@ -388,13 +397,14 @@ const imageUpload = async () => {
 				new File([resizedImage], file.name, { type: file.type }),
 			);
 		}
-		const { status, data } = await uploadImageApi(`content`, formData);
-		if (status === 200) {
-			data.data.forEach(image => {
+		const response: IApiResponse<IImage> = await uploadImageApi(`content`, formData);
+		if (response.status === 200) {
+			response.data.imageUrl.forEach(image => {
 				imagePaths.value.push(image);
 			});
 		} else {
 			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+			return;
 		}
 	} catch (error) {
 		console.log(error);
@@ -409,15 +419,11 @@ const postUpload = async () => {
 	}
 	onLoading();
 	if (imageFile.value.length > 0) {
-		const { status } = await imageUpload();
-		if (status !== 200) {
-			offLoading();
-			return;
-		}
+		await imageUpload();
 	}
 	try {
 		const form = createImageForm();
-		const { status } = await uploadPostApi('content', form);
+		const { status } = await uploadPostApi(form);
 		if (status === 201 || status === 200) {
 			setTimeout(() => {
 				offLoading();

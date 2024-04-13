@@ -139,6 +139,10 @@ export interface IJobPost {
   createdAt: string | Date
 }
 
+export interface IImage {
+  imageUrl: string[]
+}
+
 // 게시글 리스트 인터페이스
 export interface IPostList {
   status: number

@@ -43,17 +43,22 @@ const { t } = useI18n();
 // 스크롤 관련 상태 및 이벤트 핸들러
 const isStickyWrap = ref(false);
 const handleScrollEvent = () => {
-	document
-		.querySelector('.modal-body')
-		.addEventListener('scroll', handleStickyWrap);
+	window.addEventListener('scroll', handleStickyWrap);
+
+	// '.list-top-wrap' 요소의 높이를 가져오기 (높이가 없다면 0으로 처리)
+	const listTopHeight: number = document.querySelector('.list-top-wrap')?.getBoundingClientRect().height || 0;
+
+	// handleStickyButton에 listTopHeight 인자 전달
+	window.addEventListener('scroll', () => handleStickyButton(listTopHeight));
+
+	// 이벤트 제거를 위한 함수 반환
 	return () => {
-		document
-			.querySelector('.modal-body')
-			.removeEventListener('scroll', handleStickyWrap);
+		window.removeEventListener('scroll', handleStickyWrap);
+		window.removeEventListener('scroll', () => handleStickyButton(listTopHeight));
 	};
 };
 const handleStickyWrap = () => {
-	const scrollY = document.querySelector('.modal-body').scrollTop;
+	const scrollY = document.querySelector('.modal-body')?.scrollTop ?? 0;
 	isStickyWrap.value = scrollY > 0;
 };
 
@@ -61,7 +66,7 @@ const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
 
 // select 관련 메소드 (메뉴)
-const selectMenu = selectedMenu => {
+const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
 	selectedMenu.active.value = true;
 	menus
 		.filter(menu => menu !== selectedMenu)

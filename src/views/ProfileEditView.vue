@@ -17,9 +17,7 @@
 									<span class="blind">프로필 사진 선택</span>
 								</label>
 							</div>
-							<div class="item__display" :class="{
-		'pic--default': !imagePreview,
-	}">
+							<div class="item__display" :class="{ 'pic--default': !imagePreview }">
 								<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
 								<button type="reset" class="button--del" @click="removeImage">
 									<i class="blind">삭제</i>
