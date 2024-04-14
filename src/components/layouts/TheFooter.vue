@@ -4,28 +4,15 @@
 		<ul class="util-item-wrap">
 			<!-- 메뉴 아이템을 반복적으로 렌더링 -->
 			<li v-for="(item, index) in menuItems" :key="index" class="util__item">
-				<button
-					type="button"
-					:class="{
-						active: activeItem === index,
-						item: true,
-						[item.styleClass]: true,
-					}"
-					@click="onMenuItemClick(index)"
-				>
+				<button type="button" :class="{
+				active: activeItem === index,
+				item: true,
+				[item.styleClass]: true,
+			}" @click="onMenuItemClick(index)">
 					<!-- SVG 아이콘 렌더링 -->
-					<svg
-						:width="16"
-						:height="16"
-						:viewBox="iconViewBox"
-						aria-hidden="true"
-					>
+					<svg :width="16" :height="16" :viewBox="iconViewBox" aria-hidden="true">
 						<!-- 다중 패스 지원 -->
-						<path
-							v-for="(path, pathIndex) in item.paths"
-							:key="pathIndex"
-							:d="path"
-						/>
+						<path v-for="(path, pathIndex) in item.paths" :key="pathIndex" :d="path" />
 					</svg>
 					<span>{{ item.label }}</span>
 				</button>
@@ -91,7 +78,7 @@ const menuItems = ref([
 const activeItem = ref(0);
 
 // 라우트 매핑과 메뉴 아이템 클릭 핸들러
-const routeMapping = {
+const routeMapping: Record<number, string> = {
 	0: '/',
 	1: '/board',
 	2: '/chat',
@@ -100,14 +87,14 @@ const routeMapping = {
 };
 
 // 메뉴 아이템 클릭 핸들러
-const onMenuItemClick = index => {
+const onMenuItemClick = (index: number) => {
 	useMenuStore().setMenu(index);
 	router.push(routeMapping[index] || '/');
 	activeItem.value = index;
 };
 
 // 라우트 경로를 메뉴 인덱스에 매핑
-const routeToIndexMapping = {
+const routeToIndexMapping: { [key: string]: number } = {
 	'/': 0,
 	'/board': 1,
 	'/chat': 2,

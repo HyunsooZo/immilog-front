@@ -11,7 +11,7 @@
 		<h1 class="title"><em class="header-logo">Kather</em></h1>
 		<!-- 알림 버튼 -->
 		<div class="item__fnc">
-			<button type="button" class="button-icon button--notice new" role="link" @click="onMenuOpen">
+			<button type="button" class="button-icon button--notice new" role="link" @click="">
 				<i class="blind">알림</i>
 			</button>
 		</div>
@@ -28,7 +28,3 @@ const onBack = () => {
 	router.back();
 };
 </script>
-
-<style lang="css" scoped>
-/* 여기에 필요한 CSS 스타일 추가 */
-</style>

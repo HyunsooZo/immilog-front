@@ -1,10 +1,5 @@
 <template>
-	<div
-		class="modal default--dialog"
-		tabindex="-1"
-		role="dialog"
-		@click.self="closeModal"
-	>
+	<div class="modal default--dialog" tabindex="-1" role="dialog" @click.self="closeModal">
 		<div class="modal-content">
 			<!-- <div class="modal-header">
 				<button type="button" class="button-icon button--close" role="link" @click="closeModal">
@@ -29,20 +24,18 @@
 			</div>
 		</div>
 	</div>
-	<ConfirmModal
-		v-if="onConfirmModal"
-		:modalText="modalText"
-		@close="closeConfirmModal"
-		@confirm="exitChatRoom"
-	/>
+	<ConfirmModal v-if="onConfirmModal" :modalText="modalText" @close="closeConfirmModal" @confirm="exitChatRoom" />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import ConfirmModal from './ConfirmModal.vue';
 import useAxios from '@/composables/useAxios.ts';
+import { useRouter } from 'vue-router';
 
-const { sendRequest } = useAxios();
+const router = useRouter();
+
+const { sendRequest } = useAxios(router);
 const props = defineProps({
 	chatRoomSeq: Number,
 });
@@ -56,7 +49,7 @@ const reportUser = () => {
 	console.log('신고하기');
 };
 
-const getOutOfChatRoom = async seq => {
+const getOutOfChatRoom = async (seq: number | undefined) => {
 	const { status } = await sendRequest(
 		'delete',
 		`/chat/rooms/${seq}`,
@@ -66,7 +59,7 @@ const getOutOfChatRoom = async seq => {
 				AUTHORIZATION: `Bearer ${localStorage.getItem('accessToken')}`,
 			},
 		},
-		null,
+		undefined,
 	);
 	if (status === 204) {
 		console.log('방 나가기 성공');

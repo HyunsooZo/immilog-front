@@ -421,7 +421,7 @@ const moveToFirstMessage = (currentSize: number) => {
 };
 
 // <-- 첨부파일 관련
-const chatImages = ref<String[]>([]);
+const chatImages = ref<string[]>([]);
 
 // 이미지 미리보기
 const previewImage = (event: any) => {

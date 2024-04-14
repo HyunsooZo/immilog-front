@@ -5,7 +5,7 @@ axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL
 const token = localStorage.getItem('accessToken')
 
 // 좋아요 API 요청 함수
-export const likeApi = async (path, seq) => {
+export const likeApi = async (path: string, seq: number) => {
   // 토큰 미제공 시 인증되지 않음 반환
   if (!token) {
     return { status: 'unauthenticated' }

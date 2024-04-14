@@ -15,7 +15,7 @@
 						<ul class="menu__inner">
 							<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
 								<button @click="selectMenu(menu)" type="button" class="button"
-									:aria-selected="menu.active.value.toString()">
+									:aria-selected="menu.active.value ? 'true' : 'false'">
 									{{ menu.label }}
 								</button>
 							</li>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, nextTick } from 'vue';
 import BoardContent from '@/components/board/BoardContent.vue';
 import { getBookmarkedPostApi } from '@/services/post.ts';
 import { useI18n } from 'vue-i18n';
@@ -49,12 +49,12 @@ const handleScrollEvent = () => {
 	const listTopHeight: number = document.querySelector('.list-top-wrap')?.getBoundingClientRect().height || 0;
 
 	// handleStickyButton에 listTopHeight 인자 전달
-	window.addEventListener('scroll', () => handleStickyButton(listTopHeight));
+	// window.addEventListener('scroll', () => handleStickyButton(listTopHeight));
 
 	// 이벤트 제거를 위한 함수 반환
 	return () => {
 		window.removeEventListener('scroll', handleStickyWrap);
-		window.removeEventListener('scroll', () => handleStickyButton(listTopHeight));
+		// window.removeEventListener('scroll', () => handleStickyButton(listTopHeight));
 	};
 };
 const handleStickyWrap = () => {
@@ -85,7 +85,7 @@ let menus = [
 ];
 // 메뉴바 관련 메소드
 const updateMenuBar = () => {
-	const activeButton = document.querySelector('.menu__list.active .button');
+	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
 	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
 	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };

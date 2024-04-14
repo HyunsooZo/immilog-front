@@ -216,8 +216,9 @@ const selectedDate = ref('');
 const selectedCareer = ref('');
 const allDate = ref(false);
 const allCareer = ref(false);
-const updateDate = (event: { target: { value: string; }; }) => {
-	selectedDate.value = event.target.value;
+const updateDate = (event: Event) => {
+	const inputElement = event.target as HTMLInputElement;
+	selectedDate.value = inputElement.value;
 };
 const today = new Date();
 const year = today.getFullYear();

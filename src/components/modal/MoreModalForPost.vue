@@ -2,12 +2,7 @@
 	<div class="modal default--dialog" tabindex="-1" role="dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button
-					type="button"
-					class="button-icon button--close"
-					role="link"
-					@click="closeModal"
-				>
+				<button type="button" class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">닫기</i>
 				</button>
 			</div>
@@ -15,12 +10,12 @@
 				<div class="list-wrap">
 					<ul>
 						<li class="item">
-							<button type="button" class="button" @click="editPost">
+							<button type="button" class="button" @click="editPost(postSeq ?? 0)">
 								<span>수정</span>
 							</button>
 						</li>
 						<li class="item">
-							<button type="button" class="button" @click="deletePost">
+							<button type="button" class="button" @click="deletePost(postSeq ?? 0)">
 								<span>삭제</span>
 							</button>
 						</li>
@@ -29,20 +24,17 @@
 			</div>
 		</div>
 	</div>
-	<ConfirmModal
-		v-if="onConfirmModal"
-		:modalText="modalText"
-		@close="closeConfirmModal"
-		@confirm="onDeletePost"
-	/>
+	<ConfirmModal v-if="onConfirmModal" :modalText="modalText" @close="closeConfirmModal" @confirm="onDeletePost" />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import ConfirmModal from './ConfirmModal.vue';
 import useAxios from '@/composables/useAxios.ts';
+import { useRouter } from 'vue-router';
 
-const { sendRequest } = useAxios();
+const router = useRouter();
+const { sendRequest } = useAxios(router);
 const props = defineProps({
 	postSeq: Number,
 });
@@ -52,7 +44,11 @@ const closeModal = () => {
 	emits('close');
 };
 
-const deletePost = async seq => {
+const editPost = (seq: number) => {
+
+};
+
+const deletePost = async (seq: number) => {
 	const { status } = await sendRequest(
 		'delete',
 		`/posts/${seq}/delete`,
@@ -62,7 +58,7 @@ const deletePost = async seq => {
 				AUTHORIZATION: `Bearer ${localStorage.getItem('accessToken')}`,
 			},
 		},
-		null,
+		undefined,
 	);
 	if (status === 204) {
 		console.log('게시물 삭제 성공');
@@ -78,7 +74,7 @@ const closeConfirmModal = () => {
 
 const onDeletePost = () => {
 	onConfirmModal.value = false;
-	deletePost(props.postSeq);
+	deletePost(props.postSeq ?? 0);
 	emits('delete', props.postSeq);
 };
 </script>
