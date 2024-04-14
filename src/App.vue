@@ -18,10 +18,12 @@ const hideFooter = computed(() => route.meta.hideFooter);
 
 onMounted(async () => {
 	await getCoordinate();
-	if (localStorage.getItem('latitude') && localStorage.getItem('longitude')) {
+	const lat = localStorage.getItem('latitude');
+	const lon = localStorage.getItem('longitude');
+	if (lat && lon) {
 		const { status, data } = await getUserInfo(
-			parseFloat(localStorage.getItem('latitude') ?? '0'),
-			parseFloat(localStorage.getItem('longitude') ?? '0'),
+			parseFloat(lat ? lat : '0'),
+			parseFloat(lon ? lon : '0'),
 		);
 		if (status === 200 || status === 201) {
 			localStorage.setItem('accessToken', data.data.accessToken);

@@ -58,7 +58,8 @@ const handleScrollEvent = () => {
 	};
 };
 const handleStickyWrap = () => {
-	const scrollY = document.querySelector('.modal-body')?.scrollTop ?? 0;
+	const modalBody = document.querySelector('.modal-body')?.scrollTop;
+	const scrollY = modalBody ? modalBody : 0;
 	isStickyWrap.value = scrollY > 0;
 };
 

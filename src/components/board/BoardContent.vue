@@ -141,7 +141,7 @@ const likePost = () => {
 
 const changeLike = () => {
 	if (isLiked.value) {
-		const index = likeUsers.value.indexOf(userSeq.value ?? 0);
+		const index = likeUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
 		if (index !== -1) {
 			likeUsers.value.splice(index, 1);
 		}

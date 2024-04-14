@@ -10,12 +10,12 @@
 				<div class="list-wrap">
 					<ul>
 						<li class="item">
-							<button type="button" class="button" @click="editPost(postSeq ?? 0)">
+							<button type="button" class="button" @click="editPost(postSeq ? postSeq : 0)">
 								<span>수정</span>
 							</button>
 						</li>
 						<li class="item">
-							<button type="button" class="button" @click="deletePost(postSeq ?? 0)">
+							<button type="button" class="button" @click="deletePost(postSeq ? postSeq : 0)">
 								<span>삭제</span>
 							</button>
 						</li>
@@ -74,7 +74,7 @@ const closeConfirmModal = () => {
 
 const onDeletePost = () => {
 	onConfirmModal.value = false;
-	deletePost(props.postSeq ?? 0);
+	deletePost(props.postSeq ? props.postSeq : 0);
 	emits('delete', props.postSeq);
 };
 </script>
