@@ -226,8 +226,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- <SelectDialog v-if="isSortingSelectClicked" :title="selectTitle" :list="selectList" @close="closeSelect"
-		@select:value="selectedValue" /> -->
 	<ReplyWrite v-if="isCommentWriteClicked" :postSeq="post.seq" :isPostComment="true" @close="closeCommentWrite"
 		@select:value="selectedValue" />
 	<ReplyWrite v-if="isReplyWriteClicked" :commentSeq="post.comments[replyIndex].seq" :isPostComment="false"
@@ -360,8 +358,6 @@ const userSeq = ref(userInfo.userSeq);
 const likeUsers = ref(post.value.likeUsers);
 const likeCount = ref(post.value.likeCount);
 const bookmarkUsers = ref(post.value.bookmarkUsers);
-const token = localStorage.getItem('accessToken');
-
 const isBookmarked = computed(() => {
 	return bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0);
 });
@@ -387,15 +383,16 @@ const likePost = async () => {
 };
 const likeComment = async (seq: any, index: string | number) => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
-	if (updatedPost.comments[index].likeUsers.includes(userSeq.value)) {
-		updatedPost.comments[index].upVotes--;
-		const userIndex = updatedPost.comments[index].likeUsers.indexOf(
+	const comment = updatedPost.comments[index];
+	if (comment.likeUsers.includes(userSeq.value)) {
+		comment.upVotes--;
+		const userIndex = comment.likeUsers.indexOf(
 			userSeq.value,
 		);
-		updatedPost.comments[index].likeUsers.splice(userIndex, 1);
+		comment.likeUsers.splice(userIndex, 1);
 	} else {
-		updatedPost.comments[index].upVotes++;
-		updatedPost.comments[index].likeUsers.push(userSeq.value);
+		comment.upVotes++;
+		comment.likeUsers.push(userSeq.value);
 	}
 
 	// 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
@@ -414,24 +411,15 @@ const likeComment = async (seq: any, index: string | number) => {
 
 const likeReply = async (index: string | number, replyIndex: string | number) => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
-	if (
-		updatedPost.comments[index].replies[replyIndex].likeUsers.includes(
-			userSeq.value,
-		)
-	) {
-		updatedPost.comments[index].replies[replyIndex].upVotes--;
-		const userIndex = updatedPost.comments[index].replies[
-			replyIndex
-		].likeUsers.indexOf(userSeq.value);
-		updatedPost.comments[index].replies[replyIndex].likeUsers.splice(
-			userIndex,
-			1,
-		);
+	const comment = updatedPost.comments[index];
+	const reply = comment.replies[replyIndex];
+	if (reply.likeUsers.includes(userSeq.value)) {
+		reply.upVotes--;
+		const userIndex = reply.likeUsers.indexOf(userSeq.value);
+		reply.likeUsers.splice(userIndex, 1,);
 	} else {
-		updatedPost.comments[index].replies[replyIndex].upVotes++;
-		updatedPost.comments[index].replies[replyIndex].likeUsers.push(
-			userSeq.value,
-		);
+		reply.upVotes++;
+		reply.replies[replyIndex].likeUsers.push(userSeq.value);
 	}
 
 	// 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트

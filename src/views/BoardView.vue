@@ -44,8 +44,10 @@
 				</svg>
 				<i class="blind">글쓰기</i>
 			</button>
-			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
-			<AdContent :showAd="showAd(index)" />
+			<div v-for="(item, index) in state.posts" :key="index">
+				<BoardContent :post="item" />
+				<AdContent :showAd="showAd(index)" />
+			</div>
 		</div>
 	</div>
 	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
@@ -68,7 +70,6 @@ import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { useI18n } from 'vue-i18n';
 import { ISelectItem, type IState } from '@/types/interface';
-import type { IPageable } from '@/types/api-interface';
 
 const { t } = useI18n();
 
