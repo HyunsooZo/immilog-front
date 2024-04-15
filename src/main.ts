@@ -1,21 +1,22 @@
-import '@/assets/common.css';
-import '@/assets/contents.css';
+import '@/assets/common.css'
+import '@/assets/contents.css'
 
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
-import App from './App.vue';
-import router from '@/router';
-import setupI18n from './i18n';
-const initializeApp = async () => {
-  const pinia = createPinia();
-  const app = createApp(App);
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from './App.vue'
+import router from '@/router'
+import setupI18n from './i18n'
 
-  const i18n = await setupI18n();
-  app.use(router);
-  app.use(i18n);
-  app.use(pinia);
+const initializeApp = async (): Promise<void> => {
+  const pinia = createPinia()
+  const app = createApp(App)
 
-  app.mount('#app');
+  const i18n = await setupI18n()
+  app.use(router)
+  app.use(i18n)
+  app.use(pinia)
+
+  app.mount('#app')
 }
 
-initializeApp();
+initializeApp()

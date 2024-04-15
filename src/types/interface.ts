@@ -24,3 +24,13 @@ export interface IState {
   loading: boolean
   last: boolean
 }
+
+export interface ILocation {
+  latitude: number | null
+  longitude: number | null
+}
+
+export interface ICountry {
+  country: string | null
+  region: string | null
+}
