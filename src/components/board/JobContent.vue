@@ -87,7 +87,6 @@
 		</div>
 	</div>
 	<!-- //.item -->
-	<AdContent />
 </template>
 
 <script setup lang="ts">

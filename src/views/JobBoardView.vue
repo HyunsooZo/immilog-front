@@ -32,6 +32,7 @@
 			<!-- <NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="'구인/구직 글'" /> -->
 			<div v-for="(item, index) in state.jobBoards" :key="index">
 				<JobContent :jobBoard="item" />
+				<AdContent :showAd="showAd(index)" />
 			</div>
 		</div>
 	</div>
@@ -47,12 +48,14 @@ import SearchBox from '@/components/search/SearchBox.vue';
 import JobContent from '@/components/board/JobContent.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import PostModal from '@/components/board/PostModal.vue';
+import AdContent from '@/components/board/AdContent.vue';
 // import NoContent from '@/components/board/NoContent.vue';
 import { postBtn } from '@/utils/icons.ts';
 import { sortingList2, categoryList2 } from '@/utils/selectItems.ts';
 import { getJobBoardsApi } from '@/services/jobBoard.ts';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { showAd } from '@/utils/showAd';
 import type { ISelectItem } from '@/types/interface'
 import type { IJobPost, IPageable } from '@/types/api-interface';
 
