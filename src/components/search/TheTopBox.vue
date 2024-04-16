@@ -34,5 +34,3 @@ const isEmptyOrNull = (value: string) => {
 	return value || value === '';
 };
 </script>
-
-<style lang="scss" scoped></style>

@@ -237,16 +237,8 @@
 </template>
 
 <script setup lang="ts">
-import TheHeader from '@/components/layouts/TheHeader.vue';
-import ReplyWrite from '@/components/comment/ReplyWrite.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import useAxios from '@/composables/useAxios.ts';
-import NoContent from '@/components/board/NoContent.vue';
-import ReplyModal from '@/components/comment/ReplyModal.vue';
-import LoadingModal from '@/components/loading/LoadingModal.vue';
-import MoreModalForPost from '@/components/modal/MoreModalForPost.vue';
-import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { timeCalculation } from '@/utils/date-time.ts';
 import { likeApi } from '@/services/post.ts';
@@ -254,6 +246,14 @@ import { writeReply, lastReply } from '@/utils/icons.ts';
 import { extractAtWordAndRest } from '@/utils/comment.ts';
 import { useI18n } from 'vue-i18n';
 import type { IPost, IComment } from '@/types/api-interface';
+import TheHeader from '@/components/layouts/TheHeader.vue';
+import ReplyWrite from '@/components/comment/ReplyWrite.vue';
+import useAxios from '@/composables/useAxios.ts';
+import NoContent from '@/components/board/NoContent.vue';
+import ReplyModal from '@/components/comment/ReplyModal.vue';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
+import MoreModalForPost from '@/components/modal/MoreModalForPost.vue';
+import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 
 const { t } = useI18n();
 

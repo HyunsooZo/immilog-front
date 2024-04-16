@@ -96,16 +96,16 @@
 </template>
 
 <script setup lang="ts">
-import TheHeader from '@/components/layouts/TheHeader.vue';
-import TheTopBox from '@/components/search/TheTopBox.vue';
+import { computed, onMounted, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { useLocationStore } from '@/stores/location.ts';
-import { computed, onMounted, ref } from 'vue';
 import { resizeImage } from '@/utils/image.ts';
-import useAxios from '@/composables/useAxios.ts';
-import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import useAxios from '@/composables/useAxios.ts';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
+import TheHeader from '@/components/layouts/TheHeader.vue';
+import TheTopBox from '@/components/search/TheTopBox.vue';
 
 const { t } = useI18n();
 

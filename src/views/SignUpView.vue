@@ -97,18 +97,17 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import useAxios from '@/composables/useAxios.ts';
 import { onMounted } from 'vue';
-import TheTopBox from '@/components/search/TheTopBox.vue';
-import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
-import { useLocationStore } from '@/stores/location.ts';
-import CustomAlert from '@/components/modal/CustomAlert.vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { useLocationStore } from '@/stores/location.ts';
+import useAxios from '@/composables/useAxios.ts';
+import TheTopBox from '@/components/search/TheTopBox.vue';
+import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
 
 const { t } = useI18n();
 
-const imagePreview = ref('');
 const emailRegister = ref('');
 const userNickName = ref('');
 const userPassword = ref('');
@@ -116,8 +115,6 @@ const userPasswordConfirm = ref('');
 const submitted = ref(false);
 const country = ref(t('signUpView.noLocationInfo'));
 const region = ref('');
-// const imageUrl = ref('');
-// const imageFile = ref(null);
 const isLoading = ref(false);
 const isNickNameValid = ref(false);
 const alertValue = ref(false);

@@ -58,14 +58,7 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
-import SearchBar from '@/components/search/SearchBar.vue';
-import SelectDialog from '@/components/selections/SelectDialog.vue';
-import CountryList from '@/components/selections/CountryList.vue';
-import BoardContent from '@/components/board/BoardContent.vue';
-import PostModal from '@/components/board/PostModal.vue';
-import NoContent from '@/components/board/NoContent.vue';
 import { useRouter } from 'vue-router';
-import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
@@ -73,7 +66,14 @@ import { showAd } from '@/utils/showAd.ts';
 import { useI18n } from 'vue-i18n';
 import type { ISelectItem, IState } from '@/types/interface';
 import type { IApiResponsePageable, IPost } from '@/types/api-interface';
-import axios, { HttpStatusCode } from 'axios';
+import SearchBar from '@/components/search/SearchBar.vue';
+import SelectDialog from '@/components/selections/SelectDialog.vue';
+import CountryList from '@/components/selections/CountryList.vue';
+import BoardContent from '@/components/board/BoardContent.vue';
+import PostModal from '@/components/board/PostModal.vue';
+import NoContent from '@/components/board/NoContent.vue';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
+import axios from 'axios';
 
 const { t } = useI18n();
 

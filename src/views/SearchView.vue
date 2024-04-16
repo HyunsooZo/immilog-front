@@ -49,12 +49,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed, onUnmounted, watch } from 'vue';
+import type { ISearchResult, IPageable } from '@/types/api-interface';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import useAxios from '@/composables/useAxios.ts';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
-import { useRouter } from 'vue-router';
 import SearchResult from '@/components/board/SearchResult.vue';
-import type { ISearchResult, IPageable } from '@/types/api-interface';
-import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 

@@ -97,14 +97,14 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import useAxios from '@/composables/useAxios.ts';
 import { computed, onMounted, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
-import CustomAlert from '@/components/modal/CustomAlert.vue';
-import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { getCoordinate } from '@/services/geolocation.ts';
 import { getUserInfo } from '@/services/userInfoFetch.ts';
 import { useI18n } from 'vue-i18n';
+import useAxios from '@/composables/useAxios.ts';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
 
 const { t } = useI18n();
 

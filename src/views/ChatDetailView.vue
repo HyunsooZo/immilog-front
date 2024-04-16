@@ -119,6 +119,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
+import { imageSelectIcon, chatSendingIcon } from '@/utils/icons.ts';
+import type { IChat } from '@/types/api-interface';
+import { useRoute, useRouter } from 'vue-router';
+import { computed } from 'vue';
 import SideMenu from '@/components/settings/SideMenu.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 import ChatImagePreview from '@/components/chat/ChatImagePreview.vue';
@@ -126,11 +131,6 @@ import CustomAlert from '@/components/modal/CustomAlert.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import useAxios from '@/composables/useAxios.ts';
-import { useUserInfoStore } from '@/stores/userInfo.ts';
-import { imageSelectIcon, chatSendingIcon } from '@/utils/icons.ts';
-import type { IChat } from '@/types/api-interface';
-import { useRoute, useRouter } from 'vue-router';
-import { computed } from 'vue';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();

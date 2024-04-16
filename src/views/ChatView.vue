@@ -87,18 +87,20 @@
 </template>
 
 <script setup lang="ts">
-import TheTopBox from '@/components/search/TheTopBox.vue';
-import SearchBox from '@/components/search/SearchBox.vue';
-import MoreModal from '@/components/modal/MoreModal.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
-import useAxios from '@/composables/useAxios.ts';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { timeCalculation } from '@/utils/date-time.ts';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
 import { useI18n } from 'vue-i18n';
 import { IChatRoom, IUser } from '@/types/api-interface';
+import TheTopBox from '@/components/search/TheTopBox.vue';
+import SearchBox from '@/components/search/SearchBox.vue';
+import MoreModal from '@/components/modal/MoreModal.vue';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import useAxios from '@/composables/useAxios.ts';
+
+
 
 const { t } = useI18n();
 

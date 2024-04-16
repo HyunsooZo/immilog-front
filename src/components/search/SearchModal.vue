@@ -53,11 +53,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import type { ISearchResult } from '@/types/api-interface';
 import useAxios from '@/composables/useAxios.ts';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
-import { useRouter } from 'vue-router';
 import SearchResult from '../board/SearchResult.vue';
-import type { ISearchResult } from '@/types/api-interface';
+
 const router = useRouter();
 
 const { sendRequest } = useAxios(router);
@@ -166,8 +167,4 @@ const filteredSearchHistory = computed(() => {
 		? searchHistory.value
 		: [];
 });
-
-// const filteredSearchResult = computed(() => {
-// 	return searchApiCalled.value ? searchResult.value : [];
-// });
 </script>

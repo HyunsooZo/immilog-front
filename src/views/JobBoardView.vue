@@ -49,7 +49,6 @@ import JobContent from '@/components/board/JobContent.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import PostModal from '@/components/board/PostModal.vue';
 import AdContent from '@/components/board/AdContent.vue';
-// import NoContent from '@/components/board/NoContent.vue';
 import { postBtn } from '@/utils/icons.ts';
 import { sortingList2, categoryList2 } from '@/utils/selectItems.ts';
 import { getJobBoardsApi } from '@/services/jobBoard.ts';
