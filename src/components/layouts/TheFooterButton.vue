@@ -3,14 +3,8 @@
 	<div class="footer">
 		<div class="button-wrap">
 			<!-- 회원가입 버튼 -->
-			<button
-				@click="props.onClick"
-				:class="buttonClasses"
-				:disabled="!props.condition"
-				role="link"
-				id="registerBtn"
-			>
-				회원가입
+			<button @click="props.onClick" :class="buttonClasses" :disabled="!props.condition" role="link" id="registerBtn">
+				{{ t('theFooterButton.register') }}
 			</button>
 		</div>
 	</div>
@@ -18,6 +12,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 // props 정의
 const props = defineProps({

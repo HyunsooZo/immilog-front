@@ -123,8 +123,8 @@ const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
 
 let menus = [
-	{ label: '내지역', active: ref(true) },
-	{ label: '관심지역', active: ref(false) },
+	{ label: t('postView.myCountry'), active: ref(true) },
+	{ label: t('postView.interestCountry'), active: ref(false) },
 ];
 
 const selectMenu = (selectedMenu: { active: any; label?: string; }) => {

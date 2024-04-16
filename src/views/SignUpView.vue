@@ -1,59 +1,59 @@
 <template>
 	<div class="content TheFooterButton">
 		<!-- //TheFooterButton -->
-		<TheTopBox :title="'회원가입'" :text="'정보를 입력한 후 회원가입 버튼을 눌러주세요.'" />
+		<TheTopBox :title="t('signUpView.signUp')" :text="t('signUpView.enterInformation')" />
 		<!-- 회원가입 -->
 		<div class="container">
 			<!-- e-mail -->
 			<div class="input-wrap" aria-label="required">
-				<em class="input__title">이메일</em>
+				<em class="input__title">{{ t('signUpView.email') }}</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type email-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="emailRegister" type="text" class="input__element" placeholder="이메일 입력" required />
+							<input v-model="emailRegister" type="text" class="input__element"
+								:placeholder="t('signUpView.emailPlaceHolder')" required />
 						</div>
 					</div>
 				</div>
 				<!-- 에러 메시지 -->
 				<p v-if="submitted && !isValidEmail" class="input__error" aria-live="assertive">
-					이메일 형식이 올바르지 않습니다.
+					{{ t('signUpView.invalidEmailFormat') }}
 				</p>
 			</div>
-
 			<!-- nickname -->
 			<div class="input-wrap" aria-label="required">
-				<em class="input__title">닉네임</em>
+				<em class="input__title">{{ t('signUpView.nickname') }}</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userNickName" type="text" class="input__element" placeholder="닉네임 입력(5~10자 한글, 영문, 숫자 조합)"
-								required />
+							<input v-model="userNickName" type="text" class="input__element"
+								:placeholder="t('signUpView.nicknamePlaceHolder')" required />
 						</div>
 					</div>
 					<button type="button" class="button button--primary" @click="checkNickName">
-						중복확인
+						{{ t('signUpView.duplicationCheck') }}
 					</button>
 				</div>
 				<!-- 에러 메시지 -->
 				<p v-if="nickNameCheckDone && !isNickNameValid" class="input__error" aria-live="assertive">
-					이미 사용중인 닉네임 입니다.
+					{{ t('signUpView.alreadyInUse') }}
 				</p>
 				<p v-if="nickNameCheckDone && isNickNameValid" class="input__text" aria-live="assertive">
-					사용 가능한 닉네임입니다.
+					{{ t('signUpView.availableNickname') }}
 				</p>
 			</div>
 
 			<!-- password -->
 			<div class="input-wrap" aria-label="required">
-				<em class="input__title">비밀번호</em>
+				<em class="input__title">{{ t('signUpView.password') }}</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
 							<input v-model="userPassword" type="password" class="input__element"
-								placeholder="비밀번호 입력(8~20자 영문, 숫자, 특수문자 조합)" required />
+								:placeholder="t('signUpView.passwordPlaceHolder')" required />
 						</div>
 					</div>
 				</div>
@@ -61,28 +61,28 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userPasswordConfirm" type="password" class="input__element" placeholder="비밀번호 확인"
-								required />
+							<input v-model="userPasswordConfirm" type="password" class="input__element"
+								:placeholder="t('signUpView.passwordConfirm')" required />
 						</div>
 					</div>
 				</div>
 				<!-- 에러 메시지 -->
 				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
-					비밀번호가 일치하지 않습니다.
+					{{ t('signUpView.passwordNotMatch') }}
 				</p>
 				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
-					비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.
+					{{ t('signUpView.passwordFormatNotMeet') }}
 				</p>
 			</div>
 
 			<!-- country -->
 			<div class="input-wrap" aria-label="required">
-				<em class="input__title">접속 국가</em>
+				<em class="input__title">{{ t('signUpView.country') }}</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="country" type="text" class="input__element" placeholder="지역" disabled />
+							<input v-model="country" type="text" class="input__element" disabled />
 						</div>
 					</div>
 				</div>
@@ -104,8 +104,9 @@ import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
 import { useLocationStore } from '@/stores/location.ts';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import { useRouter } from 'vue-router';
-import { profilePicSelectIcon } from '@/utils/icons.ts';
-// import { resizeImage } from '@/utils/image';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const imagePreview = ref('');
 const emailRegister = ref('');
@@ -113,7 +114,7 @@ const userNickName = ref('');
 const userPassword = ref('');
 const userPasswordConfirm = ref('');
 const submitted = ref(false);
-const country = ref('국가정보없음');
+const country = ref(t('signUpView.noLocationInfo'));
 const region = ref('');
 // const imageUrl = ref('');
 // const imageFile = ref(null);
@@ -133,30 +134,6 @@ const isValidEmail = computed(() => {
 	return emailRegex.test(emailRegister.value);
 });
 
-// 프리뷰 이미지
-// const previewImage = event => {
-// 	const input = event.target;
-// 	if (input.files && input.files[0]) {
-// 		const reader = new FileReader();
-// 		reader.onload = e => {
-// 			imagePreview.value = e.target.result;
-// 			imageFile.value = input.files[0];
-// 		};
-// 		reader.readAsDataURL(input.files[0]);
-// 	}
-// };
-
-// // 미리보기 삭제
-// const removeImage = () => {
-// 	// 비어있는 이미지로 설정
-// 	imagePreview.value = '';
-// 	// input 엘리먼트의 값을 비워줌
-// 	const input = document.getElementById('file-upload');
-// 	if (input) {
-// 		input.value = '';
-// 	}
-// };
-
 //입력값 검증
 const fullFilled = computed(() => {
 	return (
@@ -167,38 +144,6 @@ const fullFilled = computed(() => {
 	);
 });
 
-// const hostImage = async () => {
-// 	if (!imagePreview.value) {
-// 		return;
-// 	}
-// 	try {
-// 		const formData = new FormData();
-// 		const resizedImage = await resizeImage(imageFile.value, 0.5);
-// 		formData.append('multipartFile', resizedImage);
-// 		const { status, data } = await sendRequest(
-// 			'post',
-// 			'/images?imagePath=profile',
-// 			{
-// 				headers: {
-// 					contentType: 'multipart/form-data',
-// 				},
-// 			},
-// 			formData,
-// 		);
-// 		if (status === 200) {
-// 			imageUrl.value = data.data;
-// 		} else {
-// 			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
-// 		}
-// 	} catch (error) {
-// 		console.log(error);
-// 	}
-// };
-
-// watch(imagePreview, () => {
-// 	hostImage();
-// });
-
 const register = async () => {
 	submitted.value = true;
 	passwordValidationCheck();
@@ -207,7 +152,7 @@ const register = async () => {
 		return;
 	}
 	if (!isNickNameValid.value) {
-		openAlert('닉네임 중복체크를 해주세요.');
+		openAlert(t('signUpView.doDuplicationCheck'));
 	}
 	if (
 		emailRegister.value &&
@@ -316,9 +261,7 @@ const getCountry = async (latitude: number, longitude: number) => {
 			country.value = data.data.country;
 			region.value = data.data.region;
 		} else {
-			openAlert(
-				'지역정보를 가져오는데 실패했습니다. 위치권한 설정을 확인해주세요.',
-			);
+			openAlert(t('signUpView.failedToFetchLocationInfo'));
 		}
 	} catch (error) {
 		console.log(error);
@@ -374,9 +317,8 @@ const onResult = () => {
 	router.push({
 		name: 'Result',
 		query: {
-			titleEmphasis: '회원가입 인증 이메일을 전송했습니다.',
-			content:
-				'입력하신 이메일을 통하여 <br>이메일 인증을 완료하신 후 <br>아래 버튼을 눌러 로그인을 진행해주세요.',
+			titleEmphasis: t('signUpView.signUpVerificationEmailHasBeenSent'),
+			content: t('signUpView.thruVerificationEmail'),
 		},
 	});
 };

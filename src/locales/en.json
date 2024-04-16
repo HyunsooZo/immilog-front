@@ -98,5 +98,71 @@
   },
   "searchBar": {
     "keywordPlaceHolder": "Enter a keyword"
+  },
+  "signInView": {
+    "email": "Email",
+    "emailPlaceHolder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceHolder": "Enter your password",
+    "passwordReset": "Reset Password",
+    "or": "or",
+    "signIn": "Sign In",
+    "autoSignIn": "Auto Sign-In",
+    "googleLogin": "Google Login",
+    "kakaoTalkLogin": "KakaoTalk Login",
+    "naverLogin": "Naver Login",
+    "ifYouDoNotHaveAnAccount": "Don't have an account?",
+    "signUp": "Sign Up",
+    "failedToSignIn": "Failed to sign in. Please check your email and password.",
+    "failedToConnect": "Failed to connect to the server. Please try again."
+  },
+  "signUpView": {
+    "signUp": "Sign Up",
+    "enterInformation": "Enter your information and click the sign up button.",
+    "email": "Email",
+    "emailPlaceHolder": "Enter your email",
+    "invalidEmailFormat": "Invalid email format.",
+    "nickname": "Nickname",
+    "nicknamePlaceHolder": "Enter nickname (5-10 characters, combination of Korean, English, and numbers)",
+    "duplicationCheck": "Check for duplicates",
+    "alreadyInUse": "Nickname already in use.",
+    "availableNickname:": "Nickname available.",
+    "password": "Password",
+    "passwordPlaceHolder": "Enter password (combination of letters, numbers, and special characters, 8-20 characters)",
+    "passwordConfirm": "Confirm password",
+    "passwordNotMatch": "Passwords do not match.",
+    "passwordFormatNotMeet": "Password must be 8-20 characters long and include letters, numbers, and special characters.",
+    "country": "Country of Access",
+    "doDuplicationCheck": "Please check for nickname duplicates.",
+    "signUpVerificationEmailHasBeenSent": "A sign-up verification email has been sent.",
+    "thruVerificationEmail": "Complete the email verification through the email you entered <br>then click the button below to proceed with login.",
+    "noLocationInfo": "No location information.",
+    "failedToFetchLocationInfo": "Failed to fetch location information. Please try again."
+  },
+  "theFooterButton": {
+    "register": "Sign Up"
+  },
+  "searchView": {
+    "searchPlaceHolder": "Enter a keyword and press Enter",
+    "cancel": "Cancel"
+  },
+  "resultView": {
+    "confirm": "Confirm"
+  },
+  "profileEditView": {
+    "profileEdit": "Edit Profile",
+    "profileEditText": "After editing your profile, please press the confirm button.",
+    "nicknameChange": "Change Nickname",
+    "nicknameChangePlaceHolder": "Enter nickname (5-10 characters, combination of Korean, English, and numbers)",
+    "changeCountry": "Change Country of Access",
+    "country": "Country of Access",
+    "fetchLocation": "Fetch Location Info",
+    "save": "Save",
+    "failedToUploadImage": "Failed to upload image. Please try again.",
+    "failedToFetchLocationInfo": "Failed to fetch location information. Please check location permissions and try again."
+  },
+  "postView": {
+    "myCountry": "My Country",
+    "interestCountry": "Interest Country"
   }
 }

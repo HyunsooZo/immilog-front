@@ -7,7 +7,7 @@
 				<div class="input__inner">
 					<div class="input__inner-item">
 						<input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
-							placeholder="검색어를 입력 후 엔터를 눌러주세요" autocomplete="off" @keyup.enter="callSearchApi(page)" />
+							:placeholder="t('searchView.searchPlaceHolder')" autocomplete="off" @keyup.enter="callSearchApi(page)" />
 						<button v-if="searchInput !== ''" type="reset" class="input__button-remove" title="텍스트삭제"
 							@click="initializeSearchInput"></button>
 					</div>
@@ -54,6 +54,10 @@ import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
 import SearchResult from '@/components/board/SearchResult.vue';
 import type { ISearchResult, IPageable } from '@/types/api-interface';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
 const router = useRouter();
 
 const { sendRequest } = useAxios(router);

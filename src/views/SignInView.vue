@@ -6,25 +6,26 @@
 		<div class="container">
 			<!-- email -->
 			<div class="input-wrap">
-				<em class="input__title">이메일</em>
+				<em class="input__title">{{ t('signInView.email') }}</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="email" type="text" class="input__element" placeholder="이메일" id="inputEmail" required />
+							<input v-model="email" type="text" class="input__element" :placeholder="t('signInView.emailPlaceHolder')"
+								id="inputEmail" required />
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- password -->
 			<div class="input-wrap">
-				<em class="input__title">비밀번호</em>
+				<em class="input__title">{{ t('signInView.password') }}</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="password" type="password" class="input__element" placeholder="비밀번호" id="inputPassword"
-								required />
+							<input v-model="password" type="password" class="input__element"
+								:placeholder="t('signInView.passwordPlaceHolder')" id="inputPassword" required />
 						</div>
 					</div>
 				</div>
@@ -32,7 +33,7 @@
 
 			<div class="button-wrap link-type">
 				<button type="button" class="button-text">
-					<strong>비밀번호 재설정</strong>
+					<strong>{{ t('signInView.passwordReset') }}</strong>
 				</button>
 			</div>
 
@@ -41,14 +42,14 @@
 		'button button--positive': isValidLogin && !isLoading,
 		'button button--disabled': !isValidLogin || isLoading,
 	}" role="link" id="loginBtn">
-					로그인</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
+					{{ t('signInView.signIn') }}</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 
 			<div class="input-wrap">
 				<div class="input__wrap">
 					<div class="input__item">
 						<input type="checkbox" class="input__checkbox _text" id="loginSave" name="loginSave" />
-						<label for="loginSave" class="input__label">자동로그인</label>
+						<label for="loginSave" class="input__label">{{ t('signInView.autoSignIn') }}</label>
 					</div>
 				</div>
 			</div>
@@ -57,22 +58,22 @@
 		<!-- signin -->
 		<div class="signin-group-wrap">
 			<div class="title--small">
-				<span>or login with</span>
+				<span>{{ t('signInView.or') }}</span>
 			</div>
 			<ul class="signin-group">
 				<li class="item">
 					<button type="button" class="button-icon button--signin-google">
-						<i class="blind">구글 로그인</i>
+						<i class="blind">{{ t('signInView.googleLogin') }}</i>
 					</button>
 				</li>
 				<li class="item">
 					<button type="button" class="button-icon button--signin-kakao">
-						<i class="blind">카카오톡 로그인</i>
+						<i class="blind">{{ t('signInView.kakaoTalkLogin') }}</i>
 					</button>
 				</li>
 				<li class="item">
 					<button type="button" class="button-icon button--signin-naver">
-						<i class="blind">네이버 로그인</i>
+						<i class="blind">{{ t('signInView.naverLogin') }}</i>
 					</button>
 				</li>
 			</ul>
@@ -81,9 +82,9 @@
 		<div class="container">
 			<ul>
 				<li>
-					<strong>회원이 아닌 경우</strong>
+					<strong>{{ t('signInView.ifYouDoNotHaveAnAccount') }}</strong>
 					<button type="button" class="button-text" role="link" @click="onSignUp">
-						<strong>가입하기</strong>
+						<strong>{{ t('signInView.signUp') }}</strong>
 					</button>
 				</li>
 			</ul>
@@ -103,6 +104,9 @@ import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { getCoordinate } from '@/services/geolocation.ts';
 import { getUserInfo } from '@/services/userInfoFetch.ts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const email = ref('');
 const password = ref('');
@@ -147,13 +151,11 @@ const signIn = async () => {
 			}, 2000);
 		} else {
 			password.value = '';
-			openAlert(
-				'로그인에 실패했습니다. <br/> 이메일과 비밀번호를 확인해 주세요.',
-			);
+			openAlert(t('signInView.failedToSignIn'));
 		}
 	} catch (error) {
 		console.log(error);
-		openAlert('서버와의 통신에 실패했습니다.');
+		openAlert(t('signInView.failedToConnect'));
 	} finally {
 		setTimeout(() => {
 			offLoading();

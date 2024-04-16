@@ -33,7 +33,7 @@
 
 		<div class="button-wrap">
 			<button class="button button--primary" role="link" @click="onLogin">
-				확인
+				{{ t('resultView.confirm') }}
 			</button>
 		</div>
 	</div>
@@ -42,6 +42,9 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { resultCircleIcon } from '@/utils/icons.ts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const router = useRouter();
 

@@ -2,12 +2,10 @@
 	<LoadingModal v-if="isLoading" />
 	<TheHeader />
 	<div class="content">
-		<TheTopBox :title="'프로필 수정'" :text="'프로필 수정 후 확인 버튼을 눌러주세요.'" />
+		<TheTopBox :title="t('profileEditView.profileEdit')" :text="t('profileEditView.profileEditText')" />
 		<div class="container">
 			<!-- profileimage -->
 			<div class="input-wrap">
-				<!-- <em class="input__title">프로필 사진</em> -->
-				<!-- input__wrap -->
 				<div class="input__wrap input__attachments _edit">
 					<div class="input__item">
 						<div class="input__item_inner">
@@ -29,43 +27,44 @@
 			</div>
 			<!-- nickname -->
 			<div class="input-wrap">
-				<em class="input__title">닉네임 변경</em>
+				<em class="input__title">{{ t('profilEditView.nicknameChange') }}</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
 							<input v-model="userNickName" type="text" class="input__element"
-								placeholder="닉네임 입력(5~10자 한글, 영문, 숫자 조합)" />
+								:placeholder="t('profilEditView.nicknameChangePlaceHolder')" />
 						</div>
 					</div>
 					<button type="button" class="button button--primary" @click="checkNickName">
-						중복확인
+						{{ t('signUpView.duplicationCheck') }}
 					</button>
 				</div>
 				<!-- 에러 메시지 -->
 				<p v-if="nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error" aria-live="assertive">
-					이미 사용중인 닉네임 입니다.
+					{{ t('signUpView.alreadyInUse') }}
 				</p>
 				<p v-if="!nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error"
 					aria-live="assertive">
-					닉네임 중복체크를 진행 해주세요.
+					{{ t('signUpView.doDuplicationCheck') }}
 				</p>
 				<p v-if="nickNameCheckDone && isNickNameValid && isNickNameChanged" class="input__text" aria-live="assertive">
-					사용 가능한 닉네임입니다.
+					{{ t('signUpView.availableNickname') }}
 				</p>
 			</div>
 			<!-- country -->
 			<div class="input-wrap">
-				<em class="input__title">접속 국가 변경</em>
+				<em class="input__title">{{ t('profilEditView.changeCountry') }}</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="country" type="text" class="input__element" placeholder="지역" disabled />
+							<input v-model="country" type="text" class="input__element" :placeholder="t('profileEditView.country')"
+								disabled />
 						</div>
 					</div>
 					<button type="button" class="button button--primary" @click="fetchLocation">
-						위치가져오기
+						{{ t('profilEditView.fetchLocation') }}
 					</button>
 				</div>
 			</div>
@@ -86,7 +85,7 @@
 			!country ||
 			!userNickName,
 	}" @click="saveProfile">
-					저장
+					{{ t('profileEditView.save') }}
 				</button>
 			</div>
 		</div>
@@ -106,6 +105,9 @@ import { resizeImage } from '@/utils/image.ts';
 import useAxios from '@/composables/useAxios.ts';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const router = useRouter();
 const { sendRequest } = useAxios(router);
@@ -198,7 +200,7 @@ const hostImage = async () => {
 		if (status === 200) {
 			imagePreview.value = data.data;
 		} else {
-			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+			openAlert(t('profilEditView.failedToUploadImage'));
 		}
 	} catch (error) {
 		console.log(error);
@@ -326,9 +328,7 @@ const getCountry = async (latitude: number, longitude: number) => {
 		if (status === 200) {
 			country.value = data.data.country;
 		} else {
-			openAlert(
-				'지역정보를 가져오는데 실패했습니다. 위치권한 설정을 확인해주세요.',
-			);
+			openAlert(t('profilEditView.failedToFetchLocationInfo'));
 		}
 	} catch (error) {
 		console.log(error);
