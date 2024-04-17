@@ -48,9 +48,9 @@
 					<!-- //일반게시판 -->
 
 					<!-- 구인구직 -->
-					<!-- 채용기간 -->
+					<!-- 채용마감일 -->
 					<div class="input-wrap">
-						<em class="input__title">채용기간</em>
+						<em class="input__title">채용마감일</em>
 						<div class="input__wrap underline-type date-type">
 							<div class="input__item _date" :class="{ disabled: allDate }">
 								<div class="input__item_inner">
