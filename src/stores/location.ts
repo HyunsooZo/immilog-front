@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { ILocation, ICountry } from '@/types/interface'
+import type { ILocation, ICountry } from '@/types/interface.ts'
 
 // 위치 정보를 위한 Pinia 스토어
 export const useLocationStore = defineStore('location', {
@@ -9,9 +9,9 @@ export const useLocationStore = defineStore('location', {
   }),
   actions: {
     // 위치 설정 메서드
-    setLocation({ latitude, longitude }: { latitude: number; longitude: number }): void {
-      this.latitude = latitude
-      this.longitude = longitude
+    setLocation(location: ILocation): void {
+      this.latitude = location.latitude
+      this.longitude = location.longitude
     }
   }
 })

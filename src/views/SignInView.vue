@@ -39,9 +39,9 @@
 
 			<div class="button-wrap">
 				<button @click="signIn" :class="{
-		'button button--positive': isValidLogin && !isLoading,
-		'button button--disabled': !isValidLogin || isLoading,
-	}" role="link" id="loginBtn">
+					'button button--positive': isValidLogin && !isLoading,
+					'button button--disabled': !isValidLogin || isLoading,
+				}" role="link" id="loginBtn">
 					{{ t('signInView.signIn') }}</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 
@@ -105,6 +105,10 @@ import { useI18n } from 'vue-i18n';
 import useAxios from '@/composables/useAxios.ts';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
+import { IUserInfo } from '@/types/interface';
+import { AxiosResponse } from 'axios';
+import { IApiResponse } from '@/types/api-interface';
+import axios from 'axios';
 
 const { t } = useI18n();
 
@@ -125,26 +129,25 @@ const onSignUp = () => {
 const signIn = async () => {
 	onLoading();
 	try {
-		const { status, data } = await sendRequest(
-			'post',
+		const requestForm = {
+			email: email.value,
+			password: password.value,
+			latitude: localStorage.getItem('latitude'),
+			longitude: localStorage.getItem('longitude'),
+		}
+		const response: IApiResponse<IUserInfo> = await axios.post(
 			'/users/sign-in',
+			requestForm,
 			{
 				headers: {
-					contentType: 'multipart/form-data',
+					contentType: 'application/json',
 				},
-			},
-			{
-				email: email.value,
-				password: password.value,
-				latitude: localStorage.getItem('latitude'),
-				longitude: localStorage.getItem('longitude'),
 			},
 		);
 
-		if (status === 200) {
-			storeUserInfo(data);
-			localStorage.setItem('accessToken', data.data.accessToken);
-			localStorage.setItem('refreshToken', data.data.refreshToken);
+		if (response.status === 200) {
+			useUserInfoStore().setUserInfo(response.data);
+			setToken(response.data);
 			setTimeout(() => {
 				offLoading();
 				router.push({ name: 'Home' });
@@ -189,45 +192,24 @@ const offLoading = () => {
 };
 // -->
 
-// <-- 사용자 정보 저장
-const storeUserInfo = (data: any) => {
-	useUserInfoStore().setUserInfo(
-		data.data.userSeq,
-		data.data.accessToken,
-		data.data.refreshToken,
-		data.data.nickname,
-		data.data.email,
-		data.data.country,
-		data.data.region,
-		data.data.userProfileUrl,
-		data.data.isLocationMatch,
-	);
+const setToken = (data: IUserInfo) => {
+	localStorage.setItem('accessToken', data.accessToken ? data.accessToken : '');
+	localStorage.setItem('refreshToken', data.refreshToken ? data.refreshToken : '');
 }
-// -->
+
 onMounted(async () => {
 	if (localStorage.getItem('accessToken')) {
 		await getCoordinate();
 		const lat = localStorage.getItem('latitude');
 		const lon = localStorage.getItem('longitude');
 		if (lat && lon) {
-			const { status, data } = await getUserInfo(
+			const response: IApiResponse<IUserInfo> = await getUserInfo(
 				parseFloat(lat ? lat : '0'),
 				parseFloat(lon ? lon : '0'),
 			);
-			if (status === 200 || status === 201) {
-				localStorage.setItem('accessToken', data.data.accessToken);
-				localStorage.setItem('refreshToken', data.data.refreshToken);
-				useUserInfoStore().setUserInfo(
-					data.data.userSeq,
-					data.data.accessToken,
-					data.data.refreshToken,
-					data.data.nickname,
-					data.data.email,
-					data.data.country,
-					data.data.region,
-					data.data.userProfileUrl,
-					data.data.isLocationMatch,
-				);
+			if (response.status === 200 || response.status === 201) {
+				setToken(response.data);
+				useUserInfoStore().setUserInfo(response.data);
 			}
 		}
 		router.push({ name: 'Home' });

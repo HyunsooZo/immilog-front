@@ -34,3 +34,15 @@ export interface ICountry {
   country: string | null
   region: string | null
 }
+
+export interface IUserInfo {
+  userSeq: number | null
+  accessToken: string | null
+  refreshToken: string | null
+  nickname: string | null
+  email: string | null
+  country: string | null
+  region: string | null
+  userProfile: string | null
+  isLocationMatch: boolean
+}

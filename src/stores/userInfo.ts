@@ -1,3 +1,4 @@
+import { IUserInfo } from '@/types/interface.ts'
 import { defineStore } from 'pinia'
 
 interface UserInfoState {
@@ -25,26 +26,16 @@ export const useUserInfoStore = defineStore('userInfo', {
     isLocationMatch: false
   }),
   actions: {
-    setUserInfo(
-      userSeq: number | null,
-      accessToken: string | null,
-      refreshToken: string | null,
-      nickname: string | null,
-      email: string | null,
-      country: string | null,
-      region: string | null,
-      userProfile: string | null,
-      isLocationMatch: boolean
-    ): void {
-      this.userSeq = userSeq
-      this.accessToken = accessToken
-      this.refreshToken = refreshToken
-      this.userNickname = nickname
-      this.userEmail = email
-      this.userCountry = country
-      this.userRegion = region
-      this.userProfile = userProfile
-      this.isLocationMatch = isLocationMatch
+    setUserInfo(userInfo: IUserInfo): void {
+      this.userSeq = userInfo.userSeq
+      this.accessToken = userInfo.accessToken
+      this.refreshToken = userInfo.refreshToken
+      this.userNickname = userInfo.nickname
+      this.userEmail = userInfo.email
+      this.userCountry = userInfo.country
+      this.userRegion = userInfo.region
+      this.userProfile = userInfo.userProfile
+      this.isLocationMatch = userInfo.isLocationMatch
     },
     signOut(): void {
       this.userSeq = null
