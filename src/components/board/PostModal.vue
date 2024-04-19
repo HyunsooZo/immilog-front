@@ -68,7 +68,7 @@
 					</div>
 					<!-- 경력 선택 -->
 					<div class="input-wrap">
-						<em class="input__title">경력선택</em>
+						<em class="input__title">경력</em>
 						<div class="input__wrap underline-type date-type">
 							<div class="input__item _date" :class="{ disabled: allCareer }">
 								<div class="input__item_inner">
