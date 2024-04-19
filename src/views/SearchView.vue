@@ -49,12 +49,14 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed, onUnmounted, watch } from 'vue';
-import type { ISearchResult, IPageable } from '@/types/api-interface';
+import type { ISearchResult, IPageable, IApiResponse, IApiPostSearchResult, IApiResponsePageable, IPostList } from '@/types/api-interface';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import useAxios from '@/composables/useAxios.ts';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SearchResult from '@/components/board/SearchResult.vue';
+import axios from 'axios';
+import { applicationJsonWithToken } from '@/utils/header';
 
 const { t } = useI18n();
 
@@ -97,24 +99,17 @@ const callSearchApi = async (pageNumber: number) => {
 	stackSearchHistory();
 	initializeStateIfKeywordChanged();
 	try {
-		const { status, data } = await sendRequest(
-			'get',
+		const response: IPostList<IApiPostSearchResult> = await axios.get(
 			`/posts/search?keyword=${searchInput.value}&page=${pageNumber}`,
-			{
-				headers: {
-					contentType: 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-				},
-			},
-			undefined,
+			applicationJsonWithToken,
 		);
-		if (status === 200) {
-			data.data.content.forEach((element: any) => {
-				data.data.content.forEach((element: ISearchResult) => {
+		if (response.status === 200) {
+			response.data.content.forEach((element: any) => {
+				response.data.content.forEach((element: ISearchResult) => {
 					state.value.posts.push(element);
 				});
 			});
-			state.value.pagination = data.data.pagination;
+			state.value.pagination = response.data.pageable;
 			setTimeout(() => {
 				offLoading();
 			}, 1500);

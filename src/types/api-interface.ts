@@ -116,18 +116,18 @@ export interface IJobPost {
   seq: number
   title: string
   content: string
-  user: UserDto
+  user: IUser
   viewCount: number
   likeCount: number
   tags: string[]
   attachments: string[]
   likeUsers: number[]
   bookmarkUsers: number[]
-  country: Countries
+  country: string
   region: string
-  industry: Industry
+  industry: string
   deadline: string | Date
-  experience: Experience
+  experience: string
   salary: string
   company: string
   companyEmail: string
@@ -135,7 +135,7 @@ export interface IJobPost {
   companyAddress: string
   companyHomepage: string
   companyLogo: string
-  status: PostStatus
+  status: string
   createdAt: string | Date
 }
 
@@ -144,7 +144,7 @@ export interface IImage {
 }
 
 // 게시글 리스트 인터페이스
-export interface IPostList {
+export interface IPostList<T> {
   status: number
   message: string
   data: {
@@ -162,17 +162,46 @@ export interface IPostList {
   }
   list: null | any[] // list 필드 추가 (실제 사용 여부에 따라 타입 조정 필요)
 }
+
+export interface IApiLocation {
+  country: string
+  region: string
+}
+
+export interface IApiPostSearchResult {
+  seq: number
+  title: string
+  content: string
+  userSeq: number
+  likeCount: number
+  viewCount: number
+  isPublic: string
+  userProfileUrl: string
+  userNickName: string
+  commentCounts: number
+  tags: string[]
+  attachments: string[]
+  likeUsers: number[]
+  bookmarkUsers: number[]
+  country: string
+  region: string
+  category: string
+  status: string
+  keyword: string
+  createdAt: string
+}
+
 // 공통 API 응답 인터페이스
 export interface IApiResponse<T> {
   status: number
   message: string
   data: T
-  list: stiring[] | null
+  list: string[] | null
 }
 
 export interface IApiResponsePageable<T> {
   status: number
   message: string
-  data: IPostList
-  list: stiring[] | null
+  data: T[]
+  list: string[] | null
 }

@@ -109,6 +109,7 @@ import { IUserInfo } from '@/types/interface';
 import { AxiosResponse } from 'axios';
 import { IApiResponse } from '@/types/api-interface';
 import axios from 'axios';
+import { applicationJson } from '@/utils/header';
 
 const { t } = useI18n();
 
@@ -138,11 +139,7 @@ const signIn = async () => {
 		const response: IApiResponse<IUserInfo> = await axios.post(
 			'/users/sign-in',
 			requestForm,
-			{
-				headers: {
-					contentType: 'application/json',
-				},
-			},
+			applicationJson,
 		);
 
 		if (response.status === 200) {

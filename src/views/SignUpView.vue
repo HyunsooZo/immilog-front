@@ -105,6 +105,9 @@ import useAxios from '@/composables/useAxios.ts';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
+import axios from 'axios';
+import { IApiLocation, IApiResponse } from '@/types/api-interface';
+import { applicationJson } from '@/utils/header';
 
 const { t } = useI18n();
 
@@ -151,15 +154,7 @@ const register = async () => {
 	if (!isNickNameValid.value) {
 		openAlert(t('signUpView.doDuplicationCheck'));
 	}
-	if (
-		emailRegister.value &&
-		userNickName.value &&
-		userPassword.value &&
-		userPasswordConfirm.value &&
-		passwordValidation.value &&
-		passwordMatch.value &&
-		isNickNameValid.value
-	) {
+	if (overAllValidationCheck()) {
 		try {
 			isLoading.value = true;
 			const formData = {
@@ -170,23 +165,20 @@ const register = async () => {
 				region: region.value,
 				profileImage: null,
 			};
-			const { status, data } = await sendRequest(
-				'post',
+			const reponse: IApiResponse<void> = await axios.post(
 				'/users',
+				formData,
 				{
 					headers: {
 						contentType: 'multipart/form-data',
 					},
 				},
-				formData,
 			);
 
-			if (status === 201) {
-				console.log(data.data);
-				console.dir(data.data);
+			if (reponse.status === 201) {
 				onResult();
 			} else {
-				openAlert(data.message);
+				openAlert(reponse.message);
 				returnSubmitValues();
 			}
 		} catch (error) {
@@ -244,19 +236,13 @@ const getCoordinate = async () => {
 
 const getCountry = async (latitude: number, longitude: number) => {
 	try {
-		const { status, data } = await sendRequest(
-			'get',
+		const response: IApiResponse<IApiLocation> = await axios.get(
 			`/locations?latitude=${latitude}&longitude=${longitude}`,
-			{
-				headers: {
-					contentType: 'multipart/form-data',
-				},
-			},
-			undefined,
+			applicationJson,
 		);
-		if (status === 200) {
-			country.value = data.data.country;
-			region.value = data.data.region;
+		if (response.status === 200) {
+			country.value = response.data.country;
+			region.value = response.data.region;
 		} else {
 			openAlert(t('signUpView.failedToFetchLocationInfo'));
 		}
@@ -265,20 +251,24 @@ const getCountry = async (latitude: number, longitude: number) => {
 	}
 };
 
+const overAllValidationCheck = () => {
+	return emailRegister.value &&
+		userNickName.value &&
+		userPassword.value &&
+		userPasswordConfirm.value &&
+		passwordValidation.value &&
+		passwordMatch.value &&
+		isNickNameValid.value
+};
+
 const checkNickName = async () => {
 	try {
-		const { status, data } = await sendRequest(
-			'get',
+		const response: IApiResponse<Boolean> = await axios.get(
 			`/users/nicknames?nickname=${userNickName.value}`,
-			{
-				headers: {
-					contentType: 'multipart/form-data',
-				},
-			},
-			undefined,
+			applicationJson,
 		);
-		if (status === 200) {
-			isNickNameValid.value = data.data ? true : false;
+		if (response.status === 200) {
+			isNickNameValid.value = response.data ? true : false;
 			nickNameCheckDone.value = true;
 		}
 	} catch (error) {
