@@ -8,33 +8,33 @@
 				<button type="button" class="list__item_button" @click="onChatDetail(chatRoom.seq)">
 					<div class="info__wrap">
 						<div class="item__pic" :class="{
-			'pic--default':
-				(amISender(chatRoom.sender) &&
-					chatRoom.recipient.profileImage === '') ||
-				(amISender(chatRoom.recipient) &&
-					chatRoom.sender.profileImage === ''),
-		}">
+							'pic--default':
+								(amISender(chatRoom.sender) &&
+									chatRoom.recipient.profileImage === '') ||
+								(amISender(chatRoom.recipient) &&
+									chatRoom.sender.profileImage === ''),
+						}">
 							<img :src="amISender(chatRoom.sender)
-			? chatRoom.recipient.profileImage
-			: chatRoom.sender.profileImage
-			" alt="" v-if="(amISender(chatRoom.sender) &&
-			chatRoom.recipient.profileImage !== '') ||
-			(amISender(chatRoom.recipient) &&
-				chatRoom.sender.profileImage !== '')
-			" />
+								? chatRoom.recipient.profileImage
+								: chatRoom.sender.profileImage
+								" alt="" v-if="(amISender(chatRoom.sender) &&
+									chatRoom.recipient.profileImage !== '') ||
+									(amISender(chatRoom.recipient) &&
+										chatRoom.sender.profileImage !== '')
+								" />
 						</div>
 						<div class="item__fnc">
 							<div class="list__item user">
 								<em>{{
-			amISender(chatRoom.sender)
-				? chatRoom.recipient.country
-				: chatRoom.sender.country
-		}}</em>
+									amISender(chatRoom.sender)
+										? chatRoom.recipient.country
+										: chatRoom.sender.country
+								}}</em>
 								<strong>{{
-				amISender(chatRoom.sender)
-					? chatRoom.recipient.nickName
-					: chatRoom.sender.nickName
-			}}</strong>
+									amISender(chatRoom.sender)
+										? chatRoom.recipient.nickName
+										: chatRoom.sender.nickName
+								}}</strong>
 							</div>
 						</div>
 					</div>
@@ -65,16 +65,16 @@
 						<i class="blind">더보기</i><!-- //신고, 나가기 -->
 					</button>
 					<div class="item__badge" v-if="(amISender(chatRoom.sender) &&
-			chatRoom.unreadCountForSender > 0) ||
-			(!amISender(chatRoom.sender) &&
-				chatRoom.unreadCountForRecipient > 0)
-			">
+						chatRoom.unreadCountForSender > 0) ||
+						(!amISender(chatRoom.sender) &&
+							chatRoom.unreadCountForRecipient > 0)
+					">
 						<span class="text">
 							{{
-			amISender(chatRoom.sender)
-				? chatRoom.unreadCountForSender
-				: chatRoom.unreadCountForRecipient
-		}}
+								amISender(chatRoom.sender)
+									? chatRoom.unreadCountForSender
+									: chatRoom.unreadCountForRecipient
+							}}
 						</span>
 					</div>
 				</div>
@@ -87,27 +87,26 @@
 </template>
 
 <script setup lang="ts">
+import type { IChatRoom, IUser } from '@/types/interface';
+import type { IApiChatRoom, IApiChatRoomList } from '@/types/api-interface';
+import { applicationJsonWithToken } from '@/utils/header';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { timeCalculation } from '@/utils/date-time.ts';
 import { useI18n } from 'vue-i18n';
-import { IChatRoom, IUser } from '@/types/api-interface';
+import axios, { AxiosResponse } from 'axios';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import SearchBox from '@/components/search/SearchBox.vue';
 import MoreModal from '@/components/modal/MoreModal.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import useAxios from '@/composables/useAxios.ts';
-
-
 
 const { t } = useI18n();
 
 const server = import.meta.env.VITE_APP_API_URL.replace('/api/v1', '');
 const userInfo = useUserInfoStore();
 const router = useRouter();
-const { sendRequest } = useAxios(router);
 const socket = new SockJS(server + '/ws');
 const stompClient = Stomp.over(socket);
 
@@ -124,22 +123,15 @@ const onChatDetail = (seq: number) => {
 // 채팅목록 불러오기
 const fetchChatList = async () => {
 	try {
-		const { status, data } = await sendRequest(
-			'get',
+		const response: AxiosResponse<IApiChatRoom> = await axios.get(
 			`/chat/rooms?page=${chatRoomsPage.value}`,
-			{
-				headers: {
-					contentType: 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-				},
-			},
-			{},
+			applicationJsonWithToken,
 		);
-		if (status === 200) {
-			data.data.content.forEach((chatRoom: { seq: number; sender: { seq: number; nickName: string; email: string; profileImage: string; reportedCount: number | null; reportedDate: string | null; country: string; region: string; userRole: string; userStatus: string; }; recipient: { seq: number; nickName: string; email: string; profileImage: string; reportedCount: number | null; reportedDate: string | null; country: string; region: string; userRole: string; userStatus: string; }; lastChat: string; unreadCountForSender: number; unreadCountForRecipient: number; lastChatTime: string; }) => {
+		if (response.status === 200) {
+			response.data.data.content.forEach((chatRoom: IChatRoom) => {
 				chatRooms.value.push(chatRoom);
 			});
-			page.value = data.data.pageable;
+			page.value = response.data.data.pageable;
 		}
 	} catch (error) {
 		console.error(error);
@@ -202,20 +194,13 @@ const closeMoreModalAndDeleteChatRoom = (chatRoomSeq: number) => {
 
 const callSearchApi = async (searchValue: any) => {
 	try {
-		const { status, data } = await sendRequest(
-			'get',
+		const response: AxiosResponse<IApiChatRoomList> = await axios.get(
 			`/chat/rooms/search?keyword=${searchValue}`,
-			{
-				headers: {
-					contentType: 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-				},
-			},
-			{},
+			applicationJsonWithToken,
 		);
-		if (status === 200) {
+		if (response.status === 200) {
 			chatRooms.value = [];
-			data.data.forEach((chatRoom: { seq: number; sender: { seq: number; nickName: string; email: string; profileImage: string; reportedCount: number | null; reportedDate: string | null; country: string; region: string; userRole: string; userStatus: string; }; recipient: { seq: number; nickName: string; email: string; profileImage: string; reportedCount: number | null; reportedDate: string | null; country: string; region: string; userRole: string; userStatus: string; }; lastChat: string; unreadCountForSender: number; unreadCountForRecipient: number; lastChatTime: string; }) => {
+			response.data.data.forEach((chatRoom: IChatRoom) => {
 				chatRooms.value.push(chatRoom);
 			});
 		}
@@ -232,7 +217,7 @@ const refetch = () => {
 
 // 컴포넌트 마운트 시 초기화 및 채팅목록 불러오기
 onMounted(async () => {
-	if (localStorage.getItem('accessToken') === null) {
+	if (userInfo.accessToken) {
 		router.push('/sign-in');
 	}
 	await fetchChatList();

@@ -42,21 +42,23 @@
 </template>
 
 <script setup lang="ts">
+import type { IJobPost, ISelectItem } from '@/types/interface'
+import type { IApiJobPost, IPageable } from '@/types/api-interface';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { postBtn } from '@/utils/icons.ts';
+import { sortingList2, categoryList2 } from '@/utils/selectItems.ts';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { showAd } from '@/utils/showAd';
+import { useUserInfoStore } from '@/stores/userInfo';
+import { applicationJson } from '@/utils/header';
+import axios, { AxiosResponse } from 'axios';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import SearchBox from '@/components/search/SearchBox.vue';
 import JobContent from '@/components/board/JobContent.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import PostModal from '@/components/board/PostModal.vue';
 import AdContent from '@/components/board/AdContent.vue';
-import { postBtn } from '@/utils/icons.ts';
-import { sortingList2, categoryList2 } from '@/utils/selectItems.ts';
-import { getJobBoardsApi } from '@/services/jobBoard.ts';
-import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
-import { showAd } from '@/utils/showAd';
-import type { ISelectItem } from '@/types/interface'
-import type { IJobPost, IPageable } from '@/types/api-interface';
 
 const { t } = useI18n();
 
@@ -69,6 +71,8 @@ const modalOpenClass = () => {
 const modalCloseClass = () => {
 	document.body.classList.remove('inactive');
 };
+
+const userInfo = useUserInfoStore();
 
 // 스크롤 관련 상태 및 이벤트 핸들러
 const isStickyWrap = ref(false);
@@ -108,7 +112,6 @@ const openPostModal = () => {
 };
 const closePostModal = () => {
 	onPostModal.value = false;
-	// fetchBoardList(selectSortingValue.value.code, currentPage.value);
 	modalCloseClass();
 };
 
@@ -127,16 +130,17 @@ const selectedExperience = ref('JUNIOR');
 const fetchJobBoardList = async () => {
 	state.value.loading = true;
 	try {
-		const { status, data } = await getJobBoardsApi(
-			selectedCountry.value,
-			selectedSortingMethod.value,
-			selectedIndustry.value,
-			selectedExperience.value,
-			currentPage.value,
+		const response: AxiosResponse<IApiJobPost> = await axios.post(
+			`/job-boards?country=${selectedCountry.value}` +
+			`&sortingMethod=${selectedSortingMethod.value}` +
+			`&industry=${selectedIndustry.value}` +
+			`&experience=${selectedExperience.value}` +
+			`&page=${currentPage.value}`,
+			applicationJson,
 		);
-		if (status === 200) {
-			state.value.jobBoards = data.data.content;
-			state.value.pagination = data.data.pagination;
+		if (response.status === 200) {
+			state.value.jobBoards = response.data.data.content;
+			state.value.pagination = response.data.data.pageable;
 		}
 	} catch (error) {
 		console.log(error);
@@ -207,7 +211,7 @@ const closeSelect = () => {
 };
 
 // select 관련 메소드 (선택된 값 처리)
-const selectedValue = (value: { name: string; code: string; }) => {
+const selectedValue = (value: ISelectItem) => {
 	if (categoryList2.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
 	} else if (sortingList2.some(s => s.code === value.code)) {
@@ -218,7 +222,7 @@ const selectedValue = (value: { name: string; code: string; }) => {
 };
 
 onMounted(async () => {
-	if (localStorage.getItem('accessToken') === null) {
+	if (userInfo.accessToken) {
 		router.push('/sign-in');
 	}
 	handleScrollEvent();

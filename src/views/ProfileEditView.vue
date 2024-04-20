@@ -71,20 +71,20 @@
 
 			<div class="button-wrap">
 				<button class="button" role="link" :class="{
-		'button--positive':
-			(!nickNameCheckDone && !isNickNameChanged) ||
-			(nickNameCheckDone && isNickNameValid) ||
-			isImageChange ||
-			country ||
-			userNickName,
-		'button--disabled':
-			(!nickNameCheckDone && !isNickNameChanged) ||
-			!nickNameCheckDone ||
-			!isImageChange ||
-			!isNickNameValid ||
-			!country ||
-			!userNickName,
-	}" @click="saveProfile">
+					'button--positive':
+						(!nickNameCheckDone && !isNickNameChanged) ||
+						(nickNameCheckDone && isNickNameValid) ||
+						isImageChange ||
+						country ||
+						userNickName,
+					'button--disabled':
+						(!nickNameCheckDone && !isNickNameChanged) ||
+						!nickNameCheckDone ||
+						!isImageChange ||
+						!isNickNameValid ||
+						!country ||
+						!userNickName,
+				}" @click="saveProfile">
 					{{ t('profileEditView.save') }}
 				</button>
 			</div>
@@ -96,13 +96,16 @@
 </template>
 
 <script setup lang="ts">
+import type { IApiImage, IApiLocation, IApiResponse } from '@/types/api-interface';
+import type { ILocation } from '@/types/interface';
+import { applicationJson, applicationJsonWithToken, multipartFormData } from '@/utils/header';
 import { computed, onMounted, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { useLocationStore } from '@/stores/location.ts';
 import { resizeImage } from '@/utils/image.ts';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import useAxios from '@/composables/useAxios.ts';
+import axios, { AxiosResponse } from 'axios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
@@ -110,7 +113,6 @@ import TheTopBox from '@/components/search/TheTopBox.vue';
 const { t } = useI18n();
 
 const router = useRouter();
-const { sendRequest } = useAxios(router);
 const nickNameCheckDone = ref(false);
 const isNickNameValid = ref(false);
 const userInfo = useUserInfoStore();
@@ -160,15 +162,9 @@ const checkNickName = async () => {
 		return;
 	}
 	try {
-		const { status, data } = await sendRequest(
-			'get',
+		const { status, data } = await axios.get(
 			`/users/nicknames?nickname=${userNickName.value}`,
-			{
-				headers: {
-					contentType: 'multipart/form-data',
-				},
-			},
-			undefined,
+			applicationJson,
 		);
 		if (status === 200) {
 			isNickNameValid.value = data.data ? true : false;
@@ -187,18 +183,13 @@ const hostImage = async () => {
 		const formData = new FormData();
 		const resizedImage = await resizeImage(imageFile.value, 0.5);
 		formData.append('multipartFile', resizedImage as Blob);
-		const { status, data } = await sendRequest(
-			'post',
+		const response: AxiosResponse<IApiImage> = await axios.post(
 			'/images?imagePath=profile',
-			{
-				headers: {
-					contentType: 'multipart/form-data',
-				},
-			},
 			formData,
+			multipartFormData,
 		);
-		if (status === 200) {
-			imagePreview.value = data.data;
+		if (response.status === 200) {
+			imagePreview.value = response.data.data;
 		} else {
 			openAlert(t('profilEditView.failedToUploadImage'));
 		}
@@ -223,18 +214,12 @@ const saveProfile = async () => {
 		longitude: longitude.value,
 	};
 	try {
-		const { status } = await sendRequest(
-			'patch',
+		const response: AxiosResponse<IApiResponse> = await axios.post(
 			'/users/information',
-			{
-				headers: {
-					contentType: 'json/application',
-					Authorization: `Bearer ${userInfo.accessToken}`,
-				},
-			},
 			formData,
+			applicationJsonWithToken,
 		);
-		if (status === 200) {
+		if (response.status === 200) {
 			userInfo.userNickname = userNickName.value;
 			userInfo.userCountry = country.value;
 			userInfo.userProfile = imagePreview.value;
@@ -280,7 +265,10 @@ const fetchLocation = async () => {
 			if (permissionResult.state === 'granted') {
 				navigator.geolocation.getCurrentPosition(
 					(position: GeolocationPosition) => {
-						getCountry(position.coords.latitude, position.coords.longitude);
+						getCountry({
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude
+						});
 						useLocationStore().setLocation({
 							latitude: position.coords.latitude,
 							longitude: position.coords.longitude
@@ -294,7 +282,10 @@ const fetchLocation = async () => {
 				const position = await new Promise<GeolocationPosition>((resolve, reject) => {
 					navigator.geolocation.getCurrentPosition(resolve, reject, options);
 				});
-				getCountry(position.coords.latitude, position.coords.longitude);
+				getCountry({
+					latitude: position.coords.latitude,
+					longitude: position.coords.longitude
+				});
 				isLoading.value = false;
 			} else if (permissionResult.state === 'denied') {
 				console.error('Geolocation permission denied.');
@@ -307,26 +298,23 @@ const fetchLocation = async () => {
 	}
 };
 
-const setCountryCoordinates = async (lat: number, long: number) => {
-	latitude.value = lat;
-	longitude.value = long;
+const setCountryCoordinates = async (location: ILocation) => {
+	latitude.value = location.latitude ? location.latitude : 0.0;
+	longitude.value = location.longitude ? location.longitude : 0.0;
 };
 
-const getCountry = async (latitude: number, longitude: number) => {
-	setCountryCoordinates(latitude, longitude);
+const getCountry = async (location: ILocation) => {
+	setCountryCoordinates({
+		latitude: location.latitude,
+		longitude: location.longitude
+	});
 	try {
-		const { status, data } = await sendRequest(
-			'get',
-			`/locations?latitude=${latitude}&longitude=${longitude}`,
-			{
-				headers: {
-					contentType: 'multipart/form-data',
-				},
-			},
-			undefined,
+		const response: AxiosResponse<IApiLocation> = await axios.get(
+			`/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
+			multipartFormData,
 		);
-		if (status === 200) {
-			country.value = data.data.country;
+		if (response.status === 200) {
+			country.value = response.data.data.country;
 		} else {
 			openAlert(t('profilEditView.failedToFetchLocationInfo'));
 		}

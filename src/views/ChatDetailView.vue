@@ -121,22 +121,22 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { imageSelectIcon, chatSendingIcon } from '@/utils/icons.ts';
-import type { IChat } from '@/types/api-interface';
+import type { IApiChat } from '@/types/api-interface';
+import type { IChat } from '@/types/interface';
 import { useRoute, useRouter } from 'vue-router';
 import { computed } from 'vue';
+import { applicationJsonWithToken } from '@/utils/header';
+import axios, { AxiosResponse } from 'axios';
 import SideMenu from '@/components/settings/SideMenu.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 import ChatImagePreview from '@/components/chat/ChatImagePreview.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import useAxios from '@/composables/useAxios.ts';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
 const route = useRoute();
-
-const { sendRequest } = useAxios(router);
 const server = import.meta.env.VITE_APP_API_URL.replace('/api/v1', '');
 
 // modal open/close 시 body 컨트롤
@@ -213,24 +213,18 @@ const fetchChats = async () => {
 	}
 	try {
 		isLoading.value = true;
-		const { status, data } = await sendRequest(
-			'get',
+		const response: AxiosResponse<IApiChat> = await axios.get(
 			`/chat/rooms/${chatRoomSeq.value}?page=${page.value}`,
-			{
-				headers: {
-					contentType: 'application/json',
-					Authorization: `Bearer ${userInfo.accessToken}`,
-				},
-			},
-			{},
+			applicationJsonWithToken,
 		);
-		if (status === 200) {
-			data.data.content.forEach((chat: IChat) => chats.value.push(chat));
+		if (response.status === 200) {
+			response.data.data.content.forEach((chat: IChat) => chats.value.push(chat));
 			chats.value.sort((a, b) => {
 				const dateA = new Date(a.createdAt);
 				const dateB = new Date(b.createdAt);
 				return dateA.getTime() - dateB.getTime();
-			}); data.data.pageable = pageable.value;
+			});
+			pageable.value = response.data.data.pageable;
 			page.value = page.value + 1;
 		}
 	} catch (error) {

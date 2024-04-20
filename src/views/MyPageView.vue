@@ -164,7 +164,6 @@ const openEmailForm = () => {
 	window.location.href = mailtoLink;
 };
 
-
 // 로그아웃 처리
 const signOut = () => {
 	localStorage.removeItem('accessToken');

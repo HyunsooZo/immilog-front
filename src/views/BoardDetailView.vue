@@ -188,7 +188,7 @@
 							<div class="text__item">
 								<p class="text">
 									<span class="comment__user" v-if="extractAtWordAndRest(reply.content).atWord">{{
-					extractAtWordAndRest(reply.content).atWord }}</span>
+										extractAtWordAndRest(reply.content).atWord }}</span>
 									{{ extractAtWordAndRest(reply.content).restText }}
 								</p>
 							</div>
@@ -197,9 +197,9 @@
 					<div class="util__wrap">
 						<div class="item__fnc">
 							<button type="button" class="list__item_button like" :class="{
-					active:
-						post.comments[index].replies[replyIndex].likeUsers.includes(userSeq ? userSeq : 0),
-				}" @click="likeReply(index, replyIndex)">
+								active:
+									post.comments[index].replies[replyIndex].likeUsers.includes(userSeq ? userSeq : 0),
+							}" @click="likeReply(index, replyIndex)">
 								<!-- //활성화 .active -->
 								<i class="blind">좋아요</i>
 								<span class="item__count">{{ reply.upVotes }}</span>
@@ -237,6 +237,8 @@
 </template>
 
 <script setup lang="ts">
+import type { IPost, IComment } from '@/types/interface';
+import { applicationJson, applicationJsonWithToken } from '@/utils/header';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
@@ -245,10 +247,9 @@ import { likeApi } from '@/services/post.ts';
 import { writeReply, lastReply } from '@/utils/icons.ts';
 import { extractAtWordAndRest } from '@/utils/comment.ts';
 import { useI18n } from 'vue-i18n';
-import type { IPost, IComment } from '@/types/api-interface';
+import axios, { AxiosResponse } from 'axios';
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import ReplyWrite from '@/components/comment/ReplyWrite.vue';
-import useAxios from '@/composables/useAxios.ts';
 import NoContent from '@/components/board/NoContent.vue';
 import ReplyModal from '@/components/comment/ReplyModal.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
@@ -280,8 +281,6 @@ const isAuthor = (userSeq: number) => {
 	return userSeq === post.value.userSeq;
 };
 const router = useRouter();
-
-const { sendRequest } = useAxios(router);
 
 const route = useRoute();
 const isLoading = ref(false);
@@ -374,7 +373,10 @@ const likePost = async () => {
 	}
 	post.value = updatedPost;
 
-	const response = await likeApi('posts', post.value.seq);
+	const response = await axios.patch(
+		`posts/post.value.seq/like`,
+		applicationJsonWithToken,
+	);
 	if (response.status === 401) {
 		router.push('/sign-in');
 	} else if (response.status !== 204) {
@@ -437,20 +439,15 @@ const likeReply = async (index: string | number, replyIndex: string | number) =>
 
 const detailBoard = async () => {
 	try {
-		const { status, data } = await sendRequest(
-			'get',
+		const response = await axios.get(
 			`/posts/${route.params.postId}`,
-			{
-				headers: {
-					contentType: 'application/json',
-				},
-			},
+			applicationJson,
 		);
-		if (status === 200) {
-			post.value = data.data;
-			likeCount.value = data.data.likeCount;
-			likeUsers.value = data.data.likeUsers;
-			bookmarkUsers.value = data.data.bookmarkUsers;
+		if (response.status === 200) {
+			post.value = response.data.data;
+			likeCount.value = response.data.data.likeCount;
+			likeUsers.value = response.data.data.likeUsers;
+			bookmarkUsers.value = response.data.data.bookmarkUsers;
 		}
 	} catch (error) {
 		console.log(error);
@@ -486,17 +483,11 @@ const editPost = () => { };
 
 const deletePost = async () => {
 	try {
-		const { status } = await sendRequest(
-			'delete',
+		const response: AxiosResponse<void> = await axios.delete(
 			`/posts/${postSeq}/delete`,
-			{
-				headers: {
-					contentType: 'application/json',
-				},
-			},
-			undefined,
+			applicationJsonWithToken,
 		);
-		if (status === 204) {
+		if (response.status === 204) {
 			router.push('/board');
 		}
 	} catch (error) {

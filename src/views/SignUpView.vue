@@ -96,18 +96,18 @@
 </template>
 
 <script setup lang="ts">
+import type { IApiBoolean, IApiLocation } from '@/types/api-interface';
+import type { IError, ILocation } from '@/types/interface';
 import { computed, ref, watch } from 'vue';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useLocationStore } from '@/stores/location.ts';
-import useAxios from '@/composables/useAxios.ts';
+import { applicationJson } from '@/utils/header';
+import axios, { AxiosResponse } from 'axios';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
-import axios from 'axios';
-import { IApiLocation, IApiResponse } from '@/types/api-interface';
-import { applicationJson } from '@/utils/header';
 
 const { t } = useI18n();
 
@@ -126,7 +126,6 @@ const nickNameCheckDone = ref(false);
 const passwordValidation = ref(false);
 const passwordMatch = ref(false);
 const router = useRouter();
-const { sendRequest } = useAxios(router);
 
 const isValidEmail = computed(() => {
 	// 간단한 이메일 형식 체크 정규 표현식
@@ -165,20 +164,16 @@ const register = async () => {
 				region: region.value,
 				profileImage: null,
 			};
-			const reponse: IApiResponse<void> = await axios.post(
+			const response: AxiosResponse<void> = await axios.post(
 				'/users',
 				formData,
-				{
-					headers: {
-						contentType: 'multipart/form-data',
-					},
-				},
+				applicationJson,
 			);
 
-			if (reponse.status === 201) {
+			if (response.status === 201) {
 				onResult();
 			} else {
-				openAlert(reponse.message);
+				openAlert(response.statusText);
 				returnSubmitValues();
 			}
 		} catch (error) {
@@ -197,7 +192,7 @@ const options = {
 	maximumAge: 0,
 };
 
-const errorCallback = (error: { code: any; message: any; }) => {
+const errorCallback = (error: IError) => {
 	console.error(`ERROR(${error.code}): ${error.message}`);
 };
 
@@ -210,7 +205,10 @@ const getCoordinate = async () => {
 			if (permissionResult.state === 'granted') {
 				navigator.geolocation.getCurrentPosition(
 					(position: GeolocationPosition) => {
-						getCountry(position.coords.latitude, position.coords.longitude);
+						getCountry({
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude
+						});
 						useLocationStore().setLocation({
 							latitude: position.coords.latitude,
 							longitude: position.coords.longitude
@@ -223,7 +221,11 @@ const getCoordinate = async () => {
 				const position = await new Promise<GeolocationPosition>((resolve, reject) => {
 					navigator.geolocation.getCurrentPosition(resolve, reject, options);
 				});
-				getCountry(position.coords.latitude, position.coords.longitude);
+				getCountry({
+					latitude: position.coords.latitude,
+					longitude: position.coords.longitude
+				}
+				);
 			} else if (permissionResult.state === 'denied') {
 				console.error('Geolocation permission denied.');
 			}
@@ -234,15 +236,15 @@ const getCoordinate = async () => {
 };
 
 
-const getCountry = async (latitude: number, longitude: number) => {
+const getCountry = async (location: ILocation) => {
 	try {
-		const response: IApiResponse<IApiLocation> = await axios.get(
-			`/locations?latitude=${latitude}&longitude=${longitude}`,
+		const response: AxiosResponse<IApiLocation> = await axios.get(
+			`/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
 			applicationJson,
 		);
 		if (response.status === 200) {
-			country.value = response.data.country;
-			region.value = response.data.region;
+			country.value = response.data.data.country;
+			region.value = response.data.data.region;
 		} else {
 			openAlert(t('signUpView.failedToFetchLocationInfo'));
 		}
@@ -263,12 +265,12 @@ const overAllValidationCheck = () => {
 
 const checkNickName = async () => {
 	try {
-		const response: IApiResponse<Boolean> = await axios.get(
+		const response: AxiosResponse<IApiBoolean> = await axios.get(
 			`/users/nicknames?nickname=${userNickName.value}`,
 			applicationJson,
 		);
 		if (response.status === 200) {
-			isNickNameValid.value = response.data ? true : false;
+			isNickNameValid.value = response.data.data ? true : false;
 			nickNameCheckDone.value = true;
 		}
 	} catch (error) {

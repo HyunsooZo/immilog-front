@@ -11,4 +11,10 @@ const applicationJsonWithToken = {
   }
 }
 
-export { applicationJson, applicationJsonWithToken }
+const multipartFormData = {
+  headers: {
+    contentType: 'multipart/form-data'
+  }
+}
+
+export { applicationJson, applicationJsonWithToken, multipartFormData }

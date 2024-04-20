@@ -48,22 +48,19 @@
 </template>
 
 <script setup lang="ts">
+import type { IApiSearchResult, IPageable } from '@/types/api-interface';
+import type { ISearchResult } from '@/types/interface';
 import { onMounted, ref, computed, onUnmounted, watch } from 'vue';
-import type { ISearchResult, IPageable, IPostSearchResult, IApiPosts } from '@/types/api-interface';
+import { applicationJsonWithToken } from '@/utils/header';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import useAxios from '@/composables/useAxios.ts';
+import axios, { AxiosResponse } from 'axios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SearchResult from '@/components/board/SearchResult.vue';
-import axios from 'axios';
-import { applicationJsonWithToken } from '@/utils/header';
-import { AxiosResponse } from 'axios';
 
 const { t } = useI18n();
 
 const router = useRouter();
-
-const { sendRequest } = useAxios(router);
 
 const searchInput = ref('');
 const searchResult = ref<ISearchResult[]>([]);
@@ -100,7 +97,7 @@ const callSearchApi = async (pageNumber: number) => {
 	stackSearchHistory();
 	initializeStateIfKeywordChanged();
 	try {
-		const response: AxiosResponse<IApiPosts<IPostSearchResult>> = await axios.get(
+		const response: AxiosResponse<IApiSearchResult> = await axios.get(
 			`/posts/search?keyword=${searchInput.value}&page=${pageNumber}`,
 			applicationJsonWithToken,
 		);

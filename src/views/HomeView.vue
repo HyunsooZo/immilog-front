@@ -57,6 +57,8 @@
 </template>
 
 <script setup lang="ts">
+import type { IPost, ISelectItem, IState } from '@/types/interface';
+import type { IApiPosts } from '@/types/api-interface';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
@@ -64,8 +66,7 @@ import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { showAd } from '@/utils/showAd.ts';
 import { useI18n } from 'vue-i18n';
-import type { ISelectItem, IState } from '@/types/interface';
-import type { IApiResponsePageable, IPost } from '@/types/api-interface';
+import axios, { AxiosResponse } from 'axios';
 import SearchBar from '@/components/search/SearchBar.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import CountryList from '@/components/selections/CountryList.vue';
@@ -73,7 +74,6 @@ import BoardContent from '@/components/board/BoardContent.vue';
 import PostModal from '@/components/board/PostModal.vue';
 import NoContent from '@/components/board/NoContent.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
-import axios from 'axios';
 
 const { t } = useI18n();
 
@@ -252,7 +252,7 @@ const currentPage = ref(0);
 const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
 	try {
-		const response: IApiResponsePageable<IPost> = await axios.get(
+		const response: AxiosResponse<IApiPosts> = await axios.get(
 			`/posts?country=${selectCountry.value.code}
 			&sortingMethod=${sortingMethod}
 			&isPublic=Y&category=${selectCategoryValue.value.code}

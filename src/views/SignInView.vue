@@ -42,7 +42,8 @@
 					'button button--positive': isValidLogin && !isLoading,
 					'button button--disabled': !isValidLogin || isLoading,
 				}" role="link" id="loginBtn">
-					{{ t('signInView.signIn') }}</button><!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
+					{{ t('signInView.signIn') }}</button>
+				<!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 
 			<div class="input-wrap">
@@ -96,27 +97,24 @@
 </template>
 
 <script setup lang="ts">
+import type { IUserInfo } from '@/types/interface';
+import type { IApiUserInfo } from '@/types/api-interface';
 import { useRouter } from 'vue-router';
 import { computed, onMounted, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { getCoordinate } from '@/services/geolocation.ts';
 import { getUserInfo } from '@/services/userInfoFetch.ts';
 import { useI18n } from 'vue-i18n';
-import useAxios from '@/composables/useAxios.ts';
+import { applicationJson } from '@/utils/header';
+import axios, { AxiosResponse } from 'axios';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
-import { IUserInfo } from '@/types/interface';
-import { AxiosResponse } from 'axios';
-import { IApiResponse, IApiUserInfo } from '@/types/api-interface';
-import axios from 'axios';
-import { applicationJson } from '@/utils/header';
 
 const { t } = useI18n();
 
 const email = ref('');
 const password = ref('');
 const router = useRouter();
-const { sendRequest } = useAxios(router);
 
 // 로그인 버튼 활성화 여부
 const isValidLogin = computed(() => email.value && password.value);

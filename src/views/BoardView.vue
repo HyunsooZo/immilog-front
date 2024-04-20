@@ -59,21 +59,21 @@
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { showAd } from '@/utils/showAd.ts';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
-import { useRouter } from 'vue-router';
 import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { useI18n } from 'vue-i18n';
-import { ISelectItem, type IState } from '@/types/interface';
+import { ISelectItem, ISelectMenu, type IState } from '@/types/interface';
 import SearchBar from '@/components/search/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select--dialog
-import useAxios from '@/composables/useAxios.ts';
 import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/board/BoardContent.vue';
 import AdContent from '@/components/board/AdContent.vue';
+import axios from 'axios';
+import { applicationJsonWithToken } from '@/utils/header';
+import { AxiosResponse } from 'axios';
+import { IApiPosts } from '@/types/api-interface';
 
 const { t } = useI18n();
-
-const router = useRouter();
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -127,7 +127,7 @@ let menus = [
 	{ label: t('postView.interestCountry'), active: ref(false) },
 ];
 
-const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
+const selectMenu = (selectedMenu: ISelectMenu) => {
 	selectedMenu.active.value = true;
 	menus
 		.filter(menu => menu !== selectedMenu)
@@ -147,7 +147,6 @@ const updateMenuBar = () => {
 const selectTitle = ref('');
 const selectList = ref<ISelectItem[]>([]);
 const currentPage = ref(0);
-const { sendRequest } = useAxios(router);
 
 // .category__list
 const selectCategoryValue = ref({
@@ -200,7 +199,7 @@ const state = ref<IState>({
 	loading: false,
 });
 
-const selectedValue = (value: { name: string; code: string; }) => {
+const selectedValue = (value: ISelectItem) => {
 	if (categoryList.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
 	} else if (sortingList.some(s => s.code === value.code)) {
@@ -215,7 +214,7 @@ const closeSelect = () => {
 	modalCloseClass();
 };
 
-const inquireBoardList = (category: { name: string; code: string; }, sorting: { name: string; code: string; }) => {
+const inquireBoardList = (category: ISelectItem, sorting: ISelectItem) => {
 	console.log(category, sorting);
 	console.log('inquireBoardList');
 };
@@ -230,23 +229,20 @@ const loadMoreData = async () => {
 	}
 };
 
-const fetchBoardList = async (sortingMethod: string | { name: string; code: string; }, nextPage: number) => {
+const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
 	try {
-		const { status, data } = await sendRequest(
-			'get',
-			`/posts?country=${userInfo.userCountry
-			}&category=${selectCategoryValue.value.code.toUpperCase()}&sortingMethod=${sortingMethod}&isPublic=${'N'}&page=${nextPage}`,
-			{
-				headers: {
-					contentType: 'multipart/application/json',
-					Authorization: `Bearer ${userInfo.accessToken}`,
-				},
-			},
+		const response: AxiosResponse<IApiPosts> = await axios.get(
+			`/posts?country=${userInfo.userCountry}` +
+			`&category=${selectCategoryValue.value.code.toUpperCase()}` +
+			`&sortingMethod=${sortingMethod}` +
+			`&isPublic=${'N'}` +
+			`&page=${nextPage}`,
+			applicationJsonWithToken,
 		);
-		if (status === 200) {
-			data.data.content.forEach((post: any) => state.value.posts.push(post));
-			state.value.pagination = data.data.pageable;
+		if (response.status === 200) {
+			response.data.data.content.forEach((post: any) => state.value.posts.push(post));
+			state.value.pagination = response.data.data.pageable;
 		}
 	} catch (error) {
 		console.log(error);
@@ -256,13 +252,13 @@ const fetchBoardList = async (sortingMethod: string | { name: string; code: stri
 };
 
 watch([selectSortingValue, selectCategoryValue], () => {
-	fetchBoardList(selectCategoryValue.value, currentPage.value);
+	fetchBoardList(selectCategoryValue.value.code, currentPage.value);
 });
 
 watch(
 	() => userInfo.userCountry,
 	() => {
-		fetchBoardList(selectCategoryValue.value, currentPage.value);
+		fetchBoardList(selectCategoryValue.value.code, currentPage.value);
 	},
 );
 

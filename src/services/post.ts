@@ -10,7 +10,6 @@ export const likeApi = async (path: string, seq: number) => {
   if (!token) {
     return { status: 'unauthenticated' }
   }
-
   try {
     // 요청 구성
     const config = createConfig('patch', `/${path}/${seq}/like`, null)
@@ -25,7 +24,7 @@ export const likeApi = async (path: string, seq: number) => {
 }
 
 // view 업데이트 API 요청 함수
-export const viewApi = async (seq) => {
+export const viewApi = async (seq: any) => {
   if (!token) {
     return { status: 'unauthenticated' }
   }
@@ -53,7 +52,7 @@ export const getBookmarkedPostApi = async () => {
   }
 }
 
-export const postBookmarkdApi = async (seq) => {
+export const postBookmarkdApi = async (seq: any) => {
   if (!token) {
     return { status: 'unauthenticated' }
   }
@@ -67,7 +66,7 @@ export const postBookmarkdApi = async (seq) => {
   }
 }
 
-export const getMyPostsApi = async (page) => {
+export const getMyPostsApi = async (page: number) => {
   if (!token) {
     return { status: 'unauthenticated' }
   }
@@ -81,7 +80,7 @@ export const getMyPostsApi = async (page) => {
   }
 }
 
-export const uploadPostApi = async (param) => {
+export const uploadPostApi = async (param: any) => {
   if (!token) {
     return { status: 'unauthenticated' }
   }
@@ -95,7 +94,7 @@ export const uploadPostApi = async (param) => {
   }
 }
 
-const createConfig = (method, url, data) => {
+const createConfig = (method: string, url: string, data: null) => {
   return {
     method,
     url,
