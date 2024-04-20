@@ -37,10 +37,10 @@
 							<div class="input__item">
 								<input v-model="privateYn" type="radio" class="input__radio" id="onlyMyCountry" name="postSelect"
 									value="Y" @click="
-					openAlert(
-						'내 국가에만 공개 선택 시<br>같은 국가 사용자만 해당 게시물을 볼 수 있습니다.',
-					)
-					" />
+										openAlert(
+											'내 국가에만 공개 선택 시<br>같은 국가 사용자만 해당 게시물을 볼 수 있습니다.',
+										)
+										" />
 								<label for="onlyMyCountry" class="input__label">내 국가에만 공개</label>
 							</div>
 						</div>
@@ -208,10 +208,11 @@ import {
 	hashTagIcon,
 } from '@/utils/icons.ts';
 import { ISelectItem } from '@/types/interface';
-import { IApiResponse, IImage } from '@/types/api-interface';
-// import DatePicker from 'vue3-datepicker';
+import { IApiImage } from '@/types/api-interface';
+import { AxiosResponse } from 'axios';
+import { useUserInfoStore } from '@/stores/userInfo';
 
-// DatePicker, Placeholder
+const userInfo = useUserInfoStore();
 const selectedDate = ref('');
 const selectedCareer = ref('');
 const allDate = ref(false);
@@ -398,9 +399,9 @@ const imageUpload = async () => {
 				new File([resizedImage], file.name, { type: file.type }),
 			);
 		}
-		const response: IApiResponse<IImage> = await uploadImageApi(`content`, formData);
+		const response: AxiosResponse<IApiImage> = await uploadImageApi(`content`, formData);
 		if (response.status === 200) {
-			response.data.imageUrl.forEach(image => {
+			response.data.data.imageUrl.forEach(image => {
 				imagePaths.value.push(image);
 			});
 		} else {
@@ -451,8 +452,7 @@ const offLoading = () => {
 
 // 토큰 존재여부 체크 함수
 const checkIfTokenExists = () => {
-	const token = localStorage.getItem('accessToken');
-	if (!token) {
+	if (!userInfo.accessToken) {
 		router.push('/sign-in');
 	}
 };

@@ -35,7 +35,7 @@ export interface ICountry {
   region: string | null
 }
 
-export interface IUserInfo {
+export interface IApiUserInfo {
   userSeq: number | null
   accessToken: string | null
   refreshToken: string | null

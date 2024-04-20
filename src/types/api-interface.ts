@@ -144,23 +144,30 @@ export interface IImage {
 }
 
 // 게시글 리스트 인터페이스
-export interface IPostList<T> {
+export interface IApiPosts<T> extends IApiResponse {
   status: number
   message: string
+  data: IPagenation<T>
+}
+
+export interface IApiUserInfo extends IApiResponse {
   data: {
-    content: T[]
-    pageable: IPageable
-    last: boolean
-    totalPages: number
-    totalElements: number
-    sort: ISortInfo
-    first: boolean
-    number: number
-    numberOfElements: number
-    size: number
-    empty: boolean
+    userSeq: number | null
+    accessToken: string | null
+    refreshToken: string | null
+    nickname: string | null
+    email: string | null
+    country: string | null
+    region: string | null
+    userProfile: string | null
+    isLocationMatch: boolean
   }
-  list: null | any[] // list 필드 추가 (실제 사용 여부에 따라 타입 조정 필요)
+}
+
+export interface IApiImage extends IApiResponse {
+  data: {
+    imageUrl: string[]
+  }
 }
 
 export interface IApiLocation {
@@ -168,7 +175,7 @@ export interface IApiLocation {
   region: string
 }
 
-export interface IApiPostSearchResult {
+export interface IPostSearchResult {
   seq: number
   title: string
   content: string
@@ -192,16 +199,21 @@ export interface IApiPostSearchResult {
 }
 
 // 공통 API 응답 인터페이스
-export interface IApiResponse<T> {
+export interface IApiResponse {
   status: number
   message: string
-  data: T
-  list: string[] | null
 }
 
-export interface IApiResponsePageable<T> {
-  status: number
-  message: string
-  data: T[]
-  list: string[] | null
+export interface IPagenation<T> {
+  content: T[]
+  pageable: IPageable
+  last: boolean
+  totalPages: number
+  totalElements: number
+  sort: ISortInfo
+  first: boolean
+  number: number
+  numberOfElements: number
+  size: number
+  empty: boolean
 }

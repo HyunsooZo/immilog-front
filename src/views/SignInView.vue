@@ -107,7 +107,7 @@ import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { IUserInfo } from '@/types/interface';
 import { AxiosResponse } from 'axios';
-import { IApiResponse } from '@/types/api-interface';
+import { IApiResponse, IApiUserInfo } from '@/types/api-interface';
 import axios from 'axios';
 import { applicationJson } from '@/utils/header';
 
@@ -136,15 +136,16 @@ const signIn = async () => {
 			latitude: localStorage.getItem('latitude'),
 			longitude: localStorage.getItem('longitude'),
 		}
-		const response: IApiResponse<IUserInfo> = await axios.post(
+		const response: AxiosResponse<IApiUserInfo> = await axios.post(
 			'/users/sign-in',
 			requestForm,
 			applicationJson,
 		);
 
+		console.log(response);
 		if (response.status === 200) {
-			useUserInfoStore().setUserInfo(response.data);
-			setToken(response.data);
+			useUserInfoStore().setUserInfo(response.data.data);
+			setToken(response.data.data);
 			setTimeout(() => {
 				offLoading();
 				router.push({ name: 'Home' });
@@ -200,13 +201,13 @@ onMounted(async () => {
 		const lat = localStorage.getItem('latitude');
 		const lon = localStorage.getItem('longitude');
 		if (lat && lon) {
-			const response: IApiResponse<IUserInfo> = await getUserInfo(
+			const response: AxiosResponse<IApiUserInfo> = await getUserInfo(
 				parseFloat(lat ? lat : '0'),
 				parseFloat(lon ? lon : '0'),
 			);
 			if (response.status === 200 || response.status === 201) {
-				setToken(response.data);
-				useUserInfoStore().setUserInfo(response.data);
+				setToken(response.data.data);
+				useUserInfoStore().setUserInfo(response.data.data);
 			}
 		}
 		router.push({ name: 'Home' });
