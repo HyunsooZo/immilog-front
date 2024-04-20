@@ -51,7 +51,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { showAd } from '@/utils/showAd';
 import { useUserInfoStore } from '@/stores/userInfo';
-import { applicationJson } from '@/utils/header';
+import { applicationJson, applicationJsonWithToken } from '@/utils/header';
 import axios, { AxiosResponse } from 'axios';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import SearchBox from '@/components/search/SearchBox.vue';
@@ -136,7 +136,7 @@ const fetchJobBoardList = async () => {
 			`&industry=${selectedIndustry.value}` +
 			`&experience=${selectedExperience.value}` +
 			`&page=${currentPage.value}`,
-			applicationJson,
+			applicationJsonWithToken,
 		);
 		if (response.status === 200) {
 			state.value.jobBoards = response.data.data.content;
@@ -222,7 +222,7 @@ const selectedValue = (value: ISelectItem) => {
 };
 
 onMounted(async () => {
-	if (userInfo.accessToken) {
+	if (!userInfo.accessToken) {
 		router.push('/sign-in');
 	}
 	handleScrollEvent();

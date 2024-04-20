@@ -69,12 +69,14 @@ import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/board/BoardContent.vue';
 import AdContent from '@/components/board/AdContent.vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 import { applicationJsonWithToken } from '@/utils/header';
 import { AxiosResponse } from 'axios';
 import { IApiPosts } from '@/types/api-interface';
 
 const { t } = useI18n();
 
+const router = useRouter();
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
 	document.body.classList.add('inactive');
@@ -263,6 +265,9 @@ watch(
 );
 
 onMounted(() => {
+	if (!userInfo.accessToken) {
+		router.push('/sign-in');
+	}
 	updateMenuBar();
 	fetchBoardList('CREATED_DATE', 0);
 	window.addEventListener('scroll', handleScroll);
