@@ -68,15 +68,15 @@
 				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
-					<span class="item__count"> {{ jobBoard.likeCount.length }}</span>
+					<span class="item__count"> {{ jobBoard.likeCount }}</span>
 				</button>
 			</div>
 			<div class="item__fnc">
 				<p class="list__item past">
 					<i class="blind">작성시간</i>
 					<span class="item__count">
-						{{ timeCalculation(jobBoard.createdAt).time
-						}}{{ t(timeCalculation(jobBoard.createdAt).text) }}
+						{{ timeCalculation(jobBoard.createdAt.toString()).time
+						}}{{ t(timeCalculation(jobBoard.createdAt.toString()).text) }}
 					</span>
 				</p>
 				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
@@ -91,13 +91,12 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-// import useAxios from '@/composables/useAxios.ts';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { timeCalculation } from '@/utils/date-time.ts';
 import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.ts';
-import AdContent from '@/components/board/AdContent.vue';
 import { useI18n } from 'vue-i18n';
+import { IJobPost } from '@/types/interface';
 
 const { t } = useI18n();
 
@@ -106,7 +105,7 @@ const router = useRouter();
 
 const props = defineProps({
 	jobBoard: {
-		type: Object,
+		type: Object as () => IJobPost,
 		required: true,
 		default: () => ({
 			seq: 0,
@@ -145,11 +144,11 @@ const thumbnail = ref(
 	props.jobBoard.attachments.length > 0 ? props.jobBoard.attachments[0] : '',
 );
 const isLiked = computed(() => {
-	return likeUsers.value.includes(userSeq.value);
+	return likeUsers.value.includes(userSeq.value ? userSeq.value : 0);
 });
 
 const isBookmarked = computed(() => {
-	return bookmarkUsers.value.includes(userSeq.value);
+	return bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0);
 });
 
 const onBoardDetail = () => {
@@ -166,13 +165,13 @@ const likePost = () => {
 
 const changeLike = () => {
 	if (isLiked.value) {
-		const index = likeUsers.value.indexOf(userSeq.value);
+		const index = likeUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
 		if (index !== -1) {
 			likeUsers.value.splice(index, 1);
 		}
 		likes.value--;
 	} else {
-		likeUsers.value.push(userSeq.value);
+		likeUsers.value.push(userSeq.value ? userSeq.value : 0);
 		likes.value++;
 	}
 };
@@ -189,22 +188,14 @@ const bookmarkApi = async () => {
 
 const changeBookmark = () => {
 	if (isBookmarked.value) {
-		const index = bookmarkUsers.value.indexOf(userSeq.value);
+		const index = bookmarkUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
 		if (index !== -1) {
 			bookmarkUsers.value.splice(index, 1);
 		}
 	} else {
-		bookmarkUsers.value.push(userSeq.value);
+		bookmarkUsers.value.push(userSeq.value ? userSeq.value : 0);
 	}
 };
-
-// const allCommentCounts = post => {
-// 	let result = post.comments.length;
-// 	post.comments.forEach(comment => {
-// 		result += comment.replies.length;
-// 	});
-// 	return result;
-// };
 
 const checkIfTokenExists = () => {
 	const token = localStorage.getItem('accessToken');

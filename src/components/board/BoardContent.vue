@@ -76,7 +76,7 @@ import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.ts';
 import AdContent from '@/components/board/AdContent.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 import { useI18n } from 'vue-i18n';
-import type { IComment, IPost } from '@/types/api-interface';
+import type { IComment, IPost } from '@/types/interface';
 
 const { t } = useI18n();
 

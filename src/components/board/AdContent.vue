@@ -34,12 +34,12 @@ const initSwiper = () => {
 		observer: true,
 		observeParents: true,
 		centeredSlides: true,
+		loop: true,
+		loopAdditionalSlides: 1,
+		loopPreventsSliding: true,
 		autoplay: {
 			delay: 3000,
-			disableOnInteraction: false,
-			loop: true,
-			loopAdditionalSlides: 1,
-			loopPreventsSlide: true,
+			disableOnInteraction: false
 		},
 		pagination: {
 			el: '.swiper-pagination',
@@ -47,6 +47,7 @@ const initSwiper = () => {
 		},
 	});
 };
+
 onMounted(initSwiper);
 </script>
 

@@ -10,6 +10,17 @@ export interface ISelectItem {
   code: string
 }
 
+export interface IImage {
+  imageUrl: string[]
+}
+
+// 정렬 정보 인터페이스
+export interface ISortInfo {
+  sorted: boolean
+  unsorted: boolean
+  empty: boolean
+}
+
 export interface IChatRoom {
   seq: number
   sender: IUser

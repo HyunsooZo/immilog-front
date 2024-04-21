@@ -58,14 +58,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import useAxios from '@/composables/useAxios.ts';
+import { postRegistrationIcon } from '@/utils/icons.ts';
+import { applicationJsonWithToken } from '@/utils/header';
+import axios, { AxiosResponse } from 'axios';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
-import { useRouter } from 'vue-router';
-import { postRegistrationIcon } from '@/utils/icons.ts';
-const router = useRouter();
-
-const { sendRequest } = useAxios(router);
 
 const alertValue = ref(false);
 const alertText = ref('');
@@ -135,19 +132,17 @@ const commentApi = async () => {
 
 const callCommentApi = async () => {
 	try {
-		await sendRequest(
-			'post',
+		const requestForm = {
+			content: textareaRef.value,
+		}
+		const response: AxiosResponse<void> = await axios.post(
 			`/comments/posts/${props.postSeq}`,
-			{
-				headers: {
-					contentType: 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-				},
-			},
-			{
-				content: textareaRef.value,
-			},
+			requestForm,
+			applicationJsonWithToken,
 		);
+		if (response.status === 201) {
+			console.log('댓글 등록 성공');
+		}
 	} catch (error) {
 		openAlert('서버와의 통신에 실패했습니다.');
 		console.log(error);
@@ -155,19 +150,17 @@ const callCommentApi = async () => {
 };
 const callReplyApi = async () => {
 	try {
-		await sendRequest(
-			'post',
+		const requestForm = {
+			content: textareaRef.value,
+		}
+		const response: AxiosResponse<void> = await axios.post(
 			`/replies/comments/${props.commentSeq}`,
-			{
-				headers: {
-					contentType: 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-				},
-			},
-			{
-				content: textareaRef.value,
-			},
+			requestForm,
+			applicationJsonWithToken,
 		);
+		if (response.status === 201) {
+			console.log('대댓글 등록 성공');
+		}
 	} catch (error) {
 		openAlert('서버와의 통신에 실패했습니다.');
 		console.log(error);

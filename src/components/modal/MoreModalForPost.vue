@@ -10,12 +10,12 @@
 				<div class="list-wrap">
 					<ul>
 						<li class="item">
-							<button type="button" class="button" @click="editPost(postSeq ? postSeq : 0)">
+							<button type="button" class="button" @click="editPost()">
 								<span>수정</span>
 							</button>
 						</li>
 						<li class="item">
-							<button type="button" class="button" @click="deletePost(postSeq ? postSeq : 0)">
+							<button type="button" class="button" @click="deletePost()">
 								<span>삭제</span>
 							</button>
 						</li>
@@ -29,12 +29,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import ConfirmModal from './ConfirmModal.vue';
-import useAxios from '@/composables/useAxios.ts';
 import { useRouter } from 'vue-router';
+import { applicationJsonWithToken } from '@/utils/header';
+import axios, { AxiosResponse } from 'axios';
+import ConfirmModal from './ConfirmModal.vue';
 
 const router = useRouter();
-const { sendRequest } = useAxios(router);
 const props = defineProps({
 	postSeq: Number,
 });
@@ -44,24 +44,21 @@ const closeModal = () => {
 	emits('close');
 };
 
-const editPost = (seq: number) => {
+const editPost = () => {
 
 };
 
-const deletePost = async (seq: number) => {
-	const { status } = await sendRequest(
-		'delete',
-		`/posts/${seq}/delete`,
-		{
-			headers: {
-				contentType: 'application/json',
-				AUTHORIZATION: `Bearer ${localStorage.getItem('accessToken')}`,
-			},
-		},
-		undefined,
-	);
-	if (status === 204) {
-		console.log('게시물 삭제 성공');
+const deletePost = async () => {
+	try {
+		const response: AxiosResponse<void> = await axios.delete(
+			`/posts/${props.postSeq}/delete`,
+			applicationJsonWithToken,
+		);
+		if (response.status === 204) {
+			router.push('/board');
+		}
+	} catch (error) {
+		console.log(error);
 	}
 };
 
@@ -74,7 +71,7 @@ const closeConfirmModal = () => {
 
 const onDeletePost = () => {
 	onConfirmModal.value = false;
-	deletePost(props.postSeq ? props.postSeq : 0);
+	deletePost();
 	emits('delete', props.postSeq);
 };
 </script>

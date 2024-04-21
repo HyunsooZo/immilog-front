@@ -23,20 +23,10 @@
 			</div>
 		</div>
 		<div class="text__wrap">
-			<button
-				type="button"
-				class="list__item_button"
-				@click="onBoardDetail(post.seq)"
-			>
+			<button type="button" class="list__item_button" @click="onBoardDetail">
 				<div class="text__item">
-					<p
-						class="title"
-						v-html="highlightKeyword(post.title, post.keyword)"
-					></p>
-					<p
-						class="text"
-						v-html="highlightKeyword(post.content, post.keyword)"
-					></p>
+					<p class="title" v-html="highlightKeyword(post.title, post.keyword)"></p>
+					<p class="text" v-html="highlightKeyword(post.content, post.keyword)"></p>
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<div class="tag__item">
@@ -58,12 +48,7 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ post.viewCount }}</span>
 				</p>
-				<button
-					type="button"
-					class="list__item_button like"
-					:class="{ active: isLiked }"
-					@click="likeApi"
-				>
+				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likeApi">
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count"> {{ likes }}</span>
@@ -76,17 +61,10 @@
 			<div class="item__fnc">
 				<p class="list__item past">
 					<i class="blind">작성시간</i>
-					<span class="item__count"
-						>{{ timeCalculation(post.createdAt).time
-						}}{{ t(timeCalculation(post.createdAt).text) }}</span
-					>
+					<span class="item__count">{{ timeCalculation(post.createdAt).time
+						}}{{ t(timeCalculation(post.createdAt).text) }}</span>
 				</p>
-				<button
-					type="button"
-					class="list__item_button mark"
-					:class="{ active: isBookmarked }"
-					@click="bookmarkApi"
-				>
+				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -103,6 +81,10 @@ import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { timeCalculation } from '@/utils/date-time.ts';
 import { useI18n } from 'vue-i18n';
+import type { ISearchResult } from '@/types/interface';
+import axios from 'axios';
+import { applicationJsonWithToken } from '@/utils/header';
+import { AxiosResponse } from 'axios';
 
 const { t } = useI18n();
 
@@ -112,7 +94,7 @@ const { sendRequest } = useAxios(router);
 
 const props = defineProps({
 	post: {
-		type: Object,
+		type: Object as () => ISearchResult,
 		required: true,
 		default: () => ({
 			seq: 0,
@@ -147,11 +129,11 @@ const thumbnail = ref(
 	props.post.attachments.length > 0 ? props.post.attachments[0] : '',
 );
 const isLiked = computed(() => {
-	return likeUsers.value.includes(userSeq.value);
+	return likeUsers.value.includes(userSeq.value ? userSeq.value : 0);
 });
 
 const isBookmarked = computed(() => {
-	return bookmarkUsers.value.includes(userSeq.value);
+	return bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0);
 });
 
 const onBoardDetail = () => {
@@ -167,11 +149,10 @@ const likeApi = async () => {
 	}
 	changeLike();
 	try {
-		await sendRequest('patch', `/posts/${props.post.seq}/like`, {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-			},
-		});
+		const response: AxiosResponse<void> = await axios.patch(
+			`/posts/${props.post.seq}/like`,
+			applicationJsonWithToken,
+		);
 	} catch (error) {
 		console.log(error);
 	}
@@ -179,12 +160,12 @@ const likeApi = async () => {
 
 const increaseViewCount = async () => {
 	try {
-		await sendRequest('patch', `/posts/${props.post.seq}/view`, {
-			headers: {
-				contentType: 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-			},
-		});
+		const response: AxiosResponse<void> = await axios.patch(
+			`/posts/${props.post.seq}/view`,
+			applicationJsonWithToken);
+		if (response.status === 200 || response.status === 203 || response.status === 204) {
+			props.post.viewCount++;
+		}
 	} catch (error) {
 		console.log(error);
 	}
@@ -192,13 +173,13 @@ const increaseViewCount = async () => {
 
 const changeLike = () => {
 	if (isLiked.value) {
-		const index = likeUsers.value.indexOf(userSeq.value);
+		const index = likeUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
 		if (index !== -1) {
 			likeUsers.value.splice(index, 1);
 		}
 		likes.value--;
 	} else {
-		likeUsers.value.push(userSeq.value);
+		likeUsers.value.push(userSeq.value ? userSeq.value : 0);
 		likes.value++;
 	}
 };
@@ -211,11 +192,10 @@ const bookmarkApi = async () => {
 	}
 	changeBookmark();
 	try {
-		await sendRequest('post', `/bookmarks/posts/${props.post.seq}`, {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-			},
-		});
+		await axios.post(
+			`/bookmarks/posts/${props.post.seq}`,
+			applicationJsonWithToken,
+		);
 	} catch (error) {
 		console.log(error);
 	}
@@ -223,16 +203,16 @@ const bookmarkApi = async () => {
 
 const changeBookmark = () => {
 	if (isBookmarked.value) {
-		const index = bookmarkUsers.value.indexOf(userSeq.value);
+		const index = bookmarkUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
 		if (index !== -1) {
 			bookmarkUsers.value.splice(index, 1);
 		}
 	} else {
-		bookmarkUsers.value.push(userSeq.value);
+		bookmarkUsers.value.push(userSeq.value ? userSeq.value : 0);
 	}
 };
 
-const highlightKeyword = (text, keyword) => {
+const highlightKeyword = (text: string, keyword: string): string => {
 	if (!keyword) return text;
 	const regex = new RegExp(`(${keyword})`, 'gi');
 	return text.replace(

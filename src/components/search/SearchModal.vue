@@ -54,10 +54,14 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import type { ISearchResult } from '@/types/api-interface';
+import { IState, type ISearchResult } from '@/types/interface';
 import useAxios from '@/composables/useAxios.ts';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SearchResult from '../board/SearchResult.vue';
+import axios from 'axios';
+import { applicationJsonWithToken } from '@/utils/header';
+import { AxiosResponse } from 'axios';
+import { IApiSearchResult, IPageable } from '@/types/api-interface';
 
 const router = useRouter();
 
@@ -71,9 +75,10 @@ const isLoading = ref(false);
 const page = ref(0);
 
 const state = ref({
-	posts: [],
-	pagination: {},
+	posts: [] as ISearchResult[],
+	pagination: {} as IPageable,
 	loading: false,
+	last: false,
 });
 
 const emits = defineEmits(['update:searchModalValue']);
@@ -94,20 +99,17 @@ const callSearchApi = async () => {
 	onLoading();
 	stackSearchHistory();
 	try {
-		const { status, data } = await sendRequest(
-			'get',
+		const response: AxiosResponse<IApiSearchResult> = await axios.get(
 			`/posts/search?keyword=${searchInput.value}&page=${page.value}`,
-			{
-				headers: {
-					contentType: 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-				},
-			},
-			undefined,
+			applicationJsonWithToken,
 		);
-		if (status === 200) {
-			state.value.posts = data.data.content;
-			state.value.pagination = data.data.pagination;
+		if (response.status === 200) {
+			response.data.data.content.forEach((element: any) => {
+				response.data.data.content.forEach((element: ISearchResult) => {
+					state.value.posts.push(element);
+				});
+			});
+			state.value.pagination = response.data.data.pageable;
 			setTimeout(() => {
 				offLoading();
 			}, 1500);
