@@ -214,7 +214,7 @@ const saveProfile = async () => {
 		longitude: longitude.value,
 	};
 	try {
-		const response: AxiosResponse<IApiResponse> = await axios.post(
+		const response: AxiosResponse<IApiResponse> = await axios.patch(
 			'/users/information',
 			formData,
 			applicationJsonWithToken,

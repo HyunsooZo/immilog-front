@@ -130,7 +130,7 @@ const selectedExperience = ref('JUNIOR');
 const fetchJobBoardList = async () => {
 	state.value.loading = true;
 	try {
-		const response: AxiosResponse<IApiJobPost> = await axios.post(
+		const response: AxiosResponse<IApiJobPost> = await axios.get(
 			`/job-boards?country=${selectedCountry.value}` +
 			`&sortingMethod=${selectedSortingMethod.value}` +
 			`&industry=${selectedIndustry.value}` +
