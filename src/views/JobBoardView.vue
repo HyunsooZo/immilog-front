@@ -38,7 +38,7 @@
 	</div>
 	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
 		@close="closeSelect" @select:value="selectedValue" />
-	<PostModal v-if="onPostModal" @onPostModal:value="closePostModal" />
+	<PostModal v-if="onPostModal" :isJobBoard=true @onPostModal:value="closePostModal" />
 </template>
 
 <script setup lang="ts">

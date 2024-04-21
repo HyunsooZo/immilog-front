@@ -19,7 +19,7 @@
 				<div class="post-wrap">
 					<!-- 일반게시판 -->
 					<!-- 카테고리 선택 -->
-					<div class="fnc-wrap">
+					<div class="fnc-wrap" v-if="!isJobBoard">
 						<div class="category__list">
 							<button type="button" class="button--select" @click="openCategorySelect">
 								<span>{{ selectedCategory.name }}</span>
@@ -27,7 +27,7 @@
 						</div>
 					</div>
 					<!-- 공개 권한 선택 -->
-					<div class="input-wrap">
+					<div class="input-wrap" v-if="!isJobBoard">
 						<div class="input__wrap radio-type">
 							<div class="input__item">
 								<input v-model="privateYn" type="radio" class="input__radio" id="allCountries" name="postSelect"
@@ -49,7 +49,7 @@
 
 					<!-- 구인구직 -->
 					<!-- 채용마감일 -->
-					<div class="input-wrap">
+					<div class="input-wrap" v-if="isJobBoard">
 						<em class="input__title">채용마감일</em>
 						<div class="input__wrap underline-type date-type">
 							<div class="input__item _date" :class="{ disabled: allDate }">
@@ -67,7 +67,7 @@
 						</div>
 					</div>
 					<!-- 경력 선택 -->
-					<div class="input-wrap">
+					<div class="input-wrap" v-if="isJobBoard">
 						<em class="input__title">경력</em>
 						<div class="input__wrap underline-type date-type">
 							<div class="input__item _date" :class="{ disabled: allCareer }">
@@ -313,6 +313,10 @@ const isImageUploaded = computed(() => imagePreview.value.length > 0);
 const imageFile = ref<File[]>([]);
 const imagePreview = ref<string[]>([]);
 const imagePaths = ref<string[]>([]);
+
+const props = defineProps<{
+	isJobBoard: boolean;
+}>()
 
 // 프리뷰 이미지 처리 함수
 const previewImage = (event: Event) => {
