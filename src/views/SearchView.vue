@@ -54,10 +54,12 @@ import { onMounted, ref, computed, onUnmounted, watch } from 'vue';
 import { applicationJsonWithToken } from '@/utils/header';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { useUserInfoStore } from '@/stores/userInfo';
 import axios, { AxiosResponse } from 'axios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SearchResult from '@/components/board/SearchResult.vue';
 
+const userInfo = useUserInfoStore();
 const { t } = useI18n();
 
 const router = useRouter();
@@ -99,7 +101,7 @@ const callSearchApi = async (pageNumber: number) => {
 	try {
 		const response: AxiosResponse<IApiSearchResult> = await axios.get(
 			`/posts/search?keyword=${searchInput.value}&page=${pageNumber}`,
-			applicationJsonWithToken,
+			applicationJsonWithToken
 		);
 		if (response.status === 200) {
 			response.data.data.content.forEach((element: any) => {

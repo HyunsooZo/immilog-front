@@ -37,7 +37,6 @@ export const getUserInfo = async (latitude: number, longitude: number): Promise<
         // 재시도
         return getUserInfo(latitude, longitude)
       } else {
-        localStorage.removeItem('accessToken')
         return { status: 401, error: 'Unauthorized' }
       }
     } else {

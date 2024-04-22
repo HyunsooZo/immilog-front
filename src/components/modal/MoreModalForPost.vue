@@ -30,8 +30,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { applicationJsonWithToken } from '@/utils/header';
-import axios, { AxiosResponse } from 'axios';
 import ConfirmModal from './ConfirmModal.vue';
 
 const router = useRouter();
@@ -49,17 +47,8 @@ const editPost = () => {
 };
 
 const deletePost = async () => {
-	try {
-		const response: AxiosResponse<void> = await axios.delete(
-			`/posts/${props.postSeq}/delete`,
-			applicationJsonWithToken,
-		);
-		if (response.status === 204) {
-			router.push('/board');
-		}
-	} catch (error) {
-		console.log(error);
-	}
+	onConfirmModal.value = true;
+
 };
 
 const onConfirmModal = ref(false);
@@ -71,7 +60,6 @@ const closeConfirmModal = () => {
 
 const onDeletePost = () => {
 	onConfirmModal.value = false;
-	deletePost();
 	emits('delete', props.postSeq);
 };
 </script>

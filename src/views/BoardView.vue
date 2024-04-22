@@ -50,7 +50,7 @@
 			</div>
 		</div>
 	</div>
-	<PostModal v-if="onPostModal" :isJobBoard=false  @onPostModal:value="closePostModal" />
+	<PostModal v-if="onPostModal" :isJobBoard=false @onPostModal:value="closePostModal" />
 	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
 		@close="closeSelect" @select:value="selectedValue" />
 </template>

@@ -24,7 +24,7 @@
 								<strong>{{ post.userNickName }}</strong></button><!-- //사용자 프로필 보기 > 채팅 -->
 						</div>
 					</div>
-					<div class="item__fnc">
+					<div class="item__fnc" v-if="post.userSeq === userInfo.userSeq">
 						<button type="button" class="list__item_button more" @click="openMoreModal">
 							<i class="blind">더보기</i></button><!-- //공유, 신고, 본인글인 경우 추가 :수정, 삭제 -->
 					</div>
@@ -375,7 +375,7 @@ const likePost = async () => {
 
 	const response = await axios.patch(
 		`posts/post.value.seq/like`,
-		applicationJsonWithToken,
+		applicationJsonWithToken
 	);
 	if (response.status === 401) {
 		router.push('/sign-in');
@@ -483,12 +483,13 @@ const editPost = () => { };
 
 const deletePost = async () => {
 	try {
-		const response: AxiosResponse<void> = await axios.delete(
+		const response: AxiosResponse<void> = await axios.patch(
 			`/posts/${postSeq}/delete`,
+			{},
 			applicationJsonWithToken,
 		);
 		if (response.status === 204) {
-			router.push('/board');
+			router.push('/');
 		}
 	} catch (error) {
 		console.log(error);

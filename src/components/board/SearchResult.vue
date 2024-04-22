@@ -151,7 +151,7 @@ const likeApi = async () => {
 	try {
 		const response: AxiosResponse<void> = await axios.patch(
 			`/posts/${props.post.seq}/like`,
-			applicationJsonWithToken,
+			applicationJsonWithToken
 		);
 	} catch (error) {
 		console.log(error);
@@ -162,7 +162,8 @@ const increaseViewCount = async () => {
 	try {
 		const response: AxiosResponse<void> = await axios.patch(
 			`/posts/${props.post.seq}/view`,
-			applicationJsonWithToken);
+			applicationJsonWithToken
+		);
 		if (response.status === 200 || response.status === 203 || response.status === 204) {
 			props.post.viewCount++;
 		}
@@ -194,7 +195,7 @@ const bookmarkApi = async () => {
 	try {
 		await axios.post(
 			`/bookmarks/posts/${props.post.seq}`,
-			applicationJsonWithToken,
+			applicationJsonWithToken
 		);
 	} catch (error) {
 		console.log(error);

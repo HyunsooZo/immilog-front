@@ -60,10 +60,12 @@
 import { ref } from 'vue';
 import { postRegistrationIcon } from '@/utils/icons.ts';
 import { applicationJsonWithToken } from '@/utils/header';
+import { useUserInfoStore } from '@/stores/userInfo';
 import axios, { AxiosResponse } from 'axios';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 
+const userInfo = useUserInfoStore();
 const alertValue = ref(false);
 const alertText = ref('');
 const isLoading = ref(false);
@@ -138,7 +140,7 @@ const callCommentApi = async () => {
 		const response: AxiosResponse<void> = await axios.post(
 			`/comments/posts/${props.postSeq}`,
 			requestForm,
-			applicationJsonWithToken,
+			applicationJsonWithToken
 		);
 		if (response.status === 201) {
 			console.log('댓글 등록 성공');
@@ -156,7 +158,7 @@ const callReplyApi = async () => {
 		const response: AxiosResponse<void> = await axios.post(
 			`/replies/comments/${props.commentSeq}`,
 			requestForm,
-			applicationJsonWithToken,
+			applicationJsonWithToken
 		);
 		if (response.status === 201) {
 			console.log('대댓글 등록 성공');

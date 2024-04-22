@@ -30,8 +30,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { applicationJsonWithToken } from '@/utils/header';
+import { useUserInfoStore } from '@/stores/userInfo';
 import axios from 'axios';
 import ConfirmModal from './ConfirmModal.vue';
+
+const userInfo = useUserInfoStore();
 
 const props = defineProps({
 	chatRoomSeq: Number,
@@ -49,7 +52,7 @@ const reportUser = () => {
 const getOutOfChatRoom = async () => {
 	const { status } = await axios.delete(
 		`/chat/rooms/${props.chatRoomSeq}`,
-		applicationJsonWithToken,
+		applicationJsonWithToken
 	);
 	if (status === 204) {
 		console.log('방 나가기 성공');
