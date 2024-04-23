@@ -16,7 +16,7 @@ const sortingList: ISelectItem[] = [
   { name: 'selectItems.sortByComment', code: 'COMMENT_COUNT' }
 ]
 
-const regions: ISelectItem[] = [
+const countries: ISelectItem[] = [
   { name: 'country.all', code: 'ALL' },
   { name: 'country.malaysia', code: 'MALAYSIA' },
   { name: 'country.singapore', code: 'SINGAPORE' },
@@ -40,15 +40,31 @@ const regions: ISelectItem[] = [
 ]
 
 // job board
-const categoryList2: ISelectItem[] = [
-  { name: 'category2.all', code: 'ALL' },
-  { name: 'category2.jobOpeningsFrequently', code: 'JOB_OPENINGS_FRE' },
-  { name: 'category2.jobOpening', code: 'JOB_OPENING' }
+const experienceList: ISelectItem[] = [
+  { name: 'experience.all', code: 'ALL' },
+  { name: 'experience.junior', code: 'JUNIOR' },
+  { name: 'experience.junior2', code: 'JUNIOR2' },
+  { name: 'experience.middle', code: 'MIDDLE' },
+  { name: 'experience.senior', code: 'SENIOR' },
+  { name: 'experience.director', code: 'DIRECTOR' },
+  { name: 'experience.executive', code: 'EXECUTIVE' }
 ]
 const sortingList2: ISelectItem[] = [
   { name: 'sorting2.sortByRecent', code: 'CREATED_DATE' },
   { name: 'sorting2.sortByDeadLine', code: 'DEAD_LINE' },
   { name: 'sorting2.sortByView', code: 'VIEW_COUNT' }
 ]
+const industryList: ISelectItem[] = [
+  { name: 'industry.all', code: 'ALL' },
+  { name: 'industry.IT', code: 'IT' },
+  { name: 'industry.marketing', code: 'MARKETING' },
+  { name: 'industry.design', code: 'DESIGN' },
+  { name: 'industry.sales', code: 'SALES' },
+  { name: 'industry.finance', code: 'FINANCE' },
+  { name: 'industry.hr', code: 'HR' },
+  { name: 'industry.service', code: 'SERVICE' },
+  { name: 'industry.architecture', code: 'ARCHITECTURE' },
+  { name: 'industry.etc', code: 'ETC' }
+]
 
-export { categoryList, sortingList, regions, categoryList2, sortingList2 }
+export { categoryList, sortingList, sortingList2, countries, experienceList, industryList }

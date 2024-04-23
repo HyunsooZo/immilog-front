@@ -19,7 +19,7 @@
 
 		<div class="list-top-wrap">
 			<!-- 서브 메뉴 -->
-			<CountryList @select:country="setCountry" />
+			<SubMenuList :subMenus="countries" @select:country="setCountry" />
 			<!-- 카테고리 및 정렬 옵션 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
@@ -69,11 +69,12 @@ import { useI18n } from 'vue-i18n';
 import axios, { AxiosResponse } from 'axios';
 import SearchBar from '@/components/search/SearchBar.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
-import CountryList from '@/components/selections/CountryList.vue';
 import BoardContent from '@/components/board/BoardContent.vue';
 import PostModal from '@/components/board/PostModal.vue';
 import NoContent from '@/components/board/NoContent.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
+import SubMenuList from '@/components/selections/SubMenuList.vue';
+import { countries } from '@/utils/selectItems.ts';
 
 const { t } = useI18n();
 

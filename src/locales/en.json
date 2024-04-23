@@ -70,10 +70,26 @@
     "brunai": "Brunei",
     "ect": "Others"
   },
-  "category2": {
+  "experience": {
     "all": "All",
-    "jobOpeningsFrequently": "Always hiring",
-    "jobOpening": "Open for all"
+    "junior": "Junior",
+    "junior2": "Junior (1y+)",
+    "middle": "Middle (5y+)",
+    "senior": "Senior (8y+)",
+    "director": "Director",
+    "executive": "Executive"
+  },
+  "industry": {
+    "all": "All",
+    "IT": "IT",
+    "marketing": "Marketing",
+    "design": "Design",
+    "sales": "Sales",
+    "finance": "Finance",
+    "hr": "HR",
+    "service": "Service",
+    "architecture": "Architecture",
+    "etc": "Others"
   },
   "sorting2": {
     "sortByRecent": "Recent",
@@ -164,5 +180,9 @@
   "postView": {
     "myCountry": "My Country",
     "interestCountry": "Interest Country"
+  },
+  "subMenuList": {
+    "industry": "Industry",
+    "sorting": "Sorting Method"
   }
 }

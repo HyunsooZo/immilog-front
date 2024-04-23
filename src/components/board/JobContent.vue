@@ -87,6 +87,7 @@
 		</div>
 	</div>
 	<!-- //.item -->
+	<AdContent v-if="showAd" />
 </template>
 
 <script setup lang="ts">
@@ -97,6 +98,7 @@ import { timeCalculation } from '@/utils/date-time.ts';
 import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.ts';
 import { useI18n } from 'vue-i18n';
 import { IJobPost } from '@/types/interface';
+import AdContent from './AdContent.vue';
 
 const { t } = useI18n();
 
@@ -133,6 +135,10 @@ const props = defineProps({
 			status: '',
 			createdAt: '',
 		}),
+	},
+	showAd: {
+		type: Boolean,
+		default: false
 	},
 });
 
