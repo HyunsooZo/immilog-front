@@ -456,7 +456,7 @@ const offLoading = () => {
 
 // 토큰 존재여부 체크 함수
 const checkIfTokenExists = () => {
-	if (!userInfo.accessToken) {
+	if (!localStorage.getItem('accessToken')) {
 		router.push('/sign-in');
 	}
 };

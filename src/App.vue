@@ -23,8 +23,9 @@ onMounted(async () => {
 	await getCoordinate();
 	const latitude = localStorage.getItem('latitude');
 	const longitude = localStorage.getItem('longitude');
-	if (localStorage.get('accessToken') &&
-		localStorage.get('refreshToken')) {
+	const accessToken = localStorage.getItem('accessToken');
+	const refreshToken = localStorage.getItem('refreshToken');
+	if (accessToken && refreshToken) {
 		const response: AxiosResponse<IApiUserInfo> = await axios.post(
 			`/api/v1/auth/user?latitude=${latitude ? latitude : 0.0}&longitude=${longitude ? longitude : 0.0}`,
 			applicationJsonWithToken
@@ -32,7 +33,7 @@ onMounted(async () => {
 		if (response.status === 200 || response.status === 201) {
 			localStorage.setItem('accessToken', response.data.data.accessToken as string);
 			localStorage.setItem('refreshToken', response.data.data.refreshToken as string);
-			useUserInfoStore().setUserInfo(response.data.data);
+			userInfo.setUserInfo(response.data.data);
 		}
 	}
 });

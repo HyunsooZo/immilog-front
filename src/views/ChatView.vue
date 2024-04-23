@@ -217,7 +217,7 @@ const refetch = () => {
 
 // 컴포넌트 마운트 시 초기화 및 채팅목록 불러오기
 onMounted(async () => {
-	if (!userInfo.accessToken) {
+	if (!localStorage.getItem('accessToken')) {
 		router.push('/sign-in');
 	}
 	await fetchChatList();

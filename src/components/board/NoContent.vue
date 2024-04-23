@@ -13,8 +13,7 @@
 					}}{{ t('noContent.noContent2') }}
 				</p>
 				<p class="text__item">
-					{{ item }}{{ t('noContent.noContent3') }} {{ item
-					}}{{ t('noContent.noContent4') }}
+					{{ t('noContent.noContent3') }}
 				</p>
 			</div>
 		</div>

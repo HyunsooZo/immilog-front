@@ -30,6 +30,7 @@
 
 		<!-- 목록 -->
 		<div class="list-wrap">
+			<NoContent v-if="state.jobBoards.length === 0" :item="t('jobContent.jobBoard')" />
 			<!-- <NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="'구인/구직 글'" /> -->
 			<div v-for="(item, index) in state.jobBoards" :key="index">
 				<JobContent :jobBoard="item" :showAd="showAd(index)" />
@@ -59,6 +60,7 @@ import JobContent from '@/components/board/JobContent.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import PostModal from '@/components/board/PostModal.vue';
 import SubMenuList from '@/components/selections/SubMenuList.vue';
+import NoContent from '@/components/board/NoContent.vue';
 
 const { t } = useI18n();
 
@@ -232,7 +234,7 @@ const selectedValue = (value: ISelectItem) => {
 };
 
 onMounted(async () => {
-	if (!userInfo.accessToken) {
+	if (!localStorage.getItem('accessToken')) {
 		router.push('/sign-in');
 	}
 	handleScrollEvent();

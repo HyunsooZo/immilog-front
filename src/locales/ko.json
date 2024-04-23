@@ -42,8 +42,7 @@
   "noContent": {
     "noContent1": "아직 작성된 ",
     "noContent2": "이 없습니다.",
-    "noContent3": "쓰기 버튼을 눌러 첫 ",
-    "noContent4": "을 작성해보세요!"
+    "noContent3": "첫 게시물을 작성해보세요!"
   },
   "country": {
     "all": "전체",

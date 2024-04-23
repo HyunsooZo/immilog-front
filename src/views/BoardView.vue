@@ -46,7 +46,6 @@
 			</button>
 			<div v-for="(item, index) in state.posts" :key="index">
 				<BoardContent :post="item" />
-				<AdContent :showAd="showAd(index)" />
 			</div>
 		</div>
 	</div>
@@ -67,7 +66,6 @@ import SearchBar from '@/components/search/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select--dialog
 import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/board/BoardContent.vue';
-import AdContent from '@/components/board/AdContent.vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { applicationJsonWithToken } from '@/utils/header';
@@ -265,7 +263,7 @@ watch(
 );
 
 onMounted(() => {
-	if (!userInfo.accessToken) {
+	if (!localStorage.getItem('accessToken')) {
 		router.push('/sign-in');
 	}
 	updateMenuBar();

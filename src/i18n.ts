@@ -8,7 +8,7 @@ async function loadLocaleMessages() {
     const matched = path.match(/\/locales\/(.*)\.json$/)
     if (matched && matched.length > 1) {
       const locale = matched[1]
-      const messagePromise = locales[path]().then((module) => {
+      const messagePromise = locales[path]().then((module: any) => {
         return { [locale]: module.default }
       })
       messagePromises.push(messagePromise)

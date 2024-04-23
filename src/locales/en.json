@@ -42,8 +42,7 @@
   "noContent": {
     "noContent1": "No ",
     "noContent2": "posted yet.",
-    "noContent3": "Click the write button to create your first ",
-    "noContent4": "!"
+    "noContent3": "Click the write button to create first post!"
   },
   "country": {
     "all": "All",
