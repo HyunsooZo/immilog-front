@@ -89,7 +89,7 @@
 <script setup lang="ts">
 import type { IChatRoom, IUser } from '@/types/interface';
 import type { IApiChatRoom, IApiChatRoomList } from '@/types/api-interface';
-import { applicationJsonWithToken } from '@/utils/header';
+import { applicationJsonWithToken, webSocketURL } from '@/utils/header';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
@@ -104,10 +104,9 @@ import Stomp from 'stompjs';
 
 const { t } = useI18n();
 
-const server = import.meta.env.VITE_APP_API_URL.replace('/api/v1', '');
 const userInfo = useUserInfoStore();
 const router = useRouter();
-const socket = new SockJS(server + '/ws');
+const socket = new SockJS(webSocketURL + '/ws');
 const stompClient = Stomp.over(socket);
 
 // 채팅 목록 및 상세보기 관련 상태

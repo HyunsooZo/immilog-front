@@ -183,7 +183,7 @@ const userSeq = userInfo.userSeq;
 
 const router = useRouter();
 
-const { sendRequest } = useAxios(router);
+const { quest } = useAxios(router);
 
 const props = defineProps({
 	post: {

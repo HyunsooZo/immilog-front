@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
+    "noEmit": true,
     "allowImportingTsExtensions": true,
     "target": "es2017",
-    "module": "esnext",
+    "module": "NodeNext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "moduleResolution": "node16",
+    "moduleResolution": "NodeNext",
     "baseUrl": ".",
-    "types": ["vite/client", "pinia-plugin-persistedstate"],
+    "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"]
     }

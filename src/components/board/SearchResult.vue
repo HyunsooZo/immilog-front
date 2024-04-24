@@ -76,7 +76,6 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import useAxios from '@/composables/useAxios.ts';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { timeCalculation } from '@/utils/date-time.ts';
@@ -90,7 +89,6 @@ const { t } = useI18n();
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
-const { sendRequest } = useAxios(router);
 
 const props = defineProps({
 	post: {

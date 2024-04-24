@@ -125,7 +125,7 @@ import type { IApiChat } from '@/types/api-interface';
 import type { IChat } from '@/types/interface';
 import { useRoute, useRouter } from 'vue-router';
 import { computed } from 'vue';
-import { applicationJsonWithToken } from '@/utils/header';
+import { applicationJsonWithToken,webSocketURL } from '@/utils/header';
 import axios, { AxiosResponse } from 'axios';
 import SideMenu from '@/components/settings/SideMenu.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
@@ -137,7 +137,6 @@ import Stomp from 'stompjs';
 const userInfo = useUserInfoStore();
 const router = useRouter();
 const route = useRoute();
-const server = import.meta.env.VITE_APP_API_URL.replace('/api/v1', '');
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -159,7 +158,7 @@ const offUserProfileDetail = () => {
 };
 
 // 웹소켓 관련 변수
-const socket = new SockJS(server + '/ws');
+const socket = new SockJS(webSocketURL + '/ws');
 const stompClient = Stomp.over(socket);
 
 // 채팅 컨텐츠 및 페이지 관련 변수

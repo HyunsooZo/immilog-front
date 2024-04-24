@@ -11,7 +11,7 @@ const extractAtWordAndRest = (text: string): ExtractResult => {
   if (match) {
     // '@'로 시작하는 단어를 찾았다면
     const atWord = match[0].replace('@', '') // '@'로 시작하는 단어
-    const restText = text.slice(match.index + atWord.length + 1).trim() // 나머지 텍스트
+    const restText = text.slice((match.index ? match.index : 0) + atWord.length + 1).trim() // 나머지 텍스트
 
     return { atWord, restText }
   } else {

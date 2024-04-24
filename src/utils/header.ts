@@ -17,4 +17,6 @@ const multipartFormData = {
   }
 }
 
-export { applicationJson, applicationJsonWithToken, multipartFormData }
+const webSocketURL = 'https://api.ko-meet-back.com'
+
+export { applicationJson, applicationJsonWithToken, multipartFormData, webSocketURL }

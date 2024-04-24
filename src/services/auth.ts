@@ -41,4 +41,7 @@ export const refreshAccessToken = async (): Promise<RefreshResponse> => {
       error: 'Error refreshing token'
     }
   }
+
+  localStorage.removeItem('accessToken')
+  return { status: 500, error: 'Unknown error' }
 }
