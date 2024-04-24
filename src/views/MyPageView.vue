@@ -167,7 +167,13 @@ const openEmailForm = () => {
 // 로그아웃 처리
 const signOut = () => {
 	userInfo.signOut();
+	removeTokens();
 	router.push('/sign-in');
+};
+
+const removeTokens = () => {
+	localStorage.removeItem('accessToken');
+	localStorage.removeItem('refreshToken');
 };
 
 // 사용자 정보 확인 후 로그인 페이지로 리다이렉트

@@ -162,7 +162,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import ReplyWrite from '@/components/comment/ReplyWrite.vue';
-import useAxios from '@/composables/useAxios.ts';
 import { timeCalculation } from '@/utils/date-time.ts';
 import { useRouter } from 'vue-router';
 import { extractAtWordAndRest } from '@/utils/comment.ts';
@@ -172,7 +171,6 @@ import { useI18n } from 'vue-i18n';
 import axios from 'axios';
 import { applicationJsonWithToken } from '@/utils/header';
 import { AxiosResponse } from 'axios';
-import { IPost } from '@/types/interface';
 import { IApiPostDetail } from '@/types/api-interface';
 
 const { t } = useI18n();
@@ -182,8 +180,6 @@ const userInfo = useUserInfoStore();
 const userSeq = userInfo.userSeq;
 
 const router = useRouter();
-
-const { quest } = useAxios(router);
 
 const props = defineProps({
 	post: {

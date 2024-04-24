@@ -34,6 +34,7 @@ export const refreshAccessToken = async (): Promise<RefreshResponse> => {
     // 에러가 발생하면 콘솔에 에러를 출력하고,
     // 에러 응답이 있는 경우 해당 상태 코드와 함께 에러 메시지를 반환하거나,
     // 그렇지 않은 경우 HTTP 상태 코드 500과 함께 에러 메시지를 반환.
+    removeTokens()
     const axiosError = error as AxiosError
     console.error(axiosError)
     return {
@@ -41,7 +42,11 @@ export const refreshAccessToken = async (): Promise<RefreshResponse> => {
       error: 'Error refreshing token'
     }
   }
-
-  localStorage.removeItem('accessToken')
+  removeTokens()
   return { status: 500, error: 'Unknown error' }
+}
+
+const removeTokens = () => {
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('refreshToken')
 }

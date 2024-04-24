@@ -1,67 +1,78 @@
-// 이메일 도메인 선택
+// 이메일 도메인 선택 로직
 const mailSelect = () => {
-	const selectElement = document.getElementById('emailSelect') as HTMLSelectElement;
-	const inputElement = document.getElementById('emailInput') as HTMLInputElement;
-	const selectedOption = selectElement.options[selectElement.selectedIndex].value;
+  const selectElement = document.getElementById('emailSelect') as HTMLSelectElement
+  const inputElement = document.getElementById('emailInput') as HTMLInputElement
+  const selectedOption = selectElement.options[selectElement.selectedIndex].value
 
-	if (selectedOption === 'dInput') {
-		selectElement.style.display = 'none';
-		inputElement.style.display = 'block';
-	} else {
-		selectElement.style.display = 'block';
-		inputElement.style.display = 'none';
-	}
-};
+  if (selectedOption === 'dInput') {
+    selectElement.style.display = 'none'
+    inputElement.style.display = 'block'
+  } else {
+    selectElement.style.display = 'block'
+    inputElement.style.display = 'none'
+  }
+}
 
-$(function () {
-  // input focus
-  $('.input__element').on('focus', function () {
-    $(this).parents('.input__item').addClass('input--focus');
-  });
-  $('.input__element').on('blur', function () {
-    $(this).parents('.input__item').removeClass('input--focus');
-  });
+document.addEventListener('DOMContentLoaded', function () {
+  // Input focus 로직
+  const inputElements = document.querySelectorAll('.input__element') as NodeListOf<HTMLInputElement>
+  inputElements.forEach((input) => {
+    input.addEventListener('focus', function () {
+      this.closest('.input__item')?.classList.add('input--focus')
+    })
+    input.addEventListener('blur', function () {
+      this.closest('.input__item')?.classList.remove('input--focus')
+    })
+  })
 
-  // input file image preview
-  const imgTarget = $('.filepreview-type .input__element');
-  imgTarget.on('change', function () {
-    const parent = $(this).parent();
-    const existingImage = parent.siblings('.item__display img');
-    const displayImage = $('<img class="file-thumb">');
+  // 이미지 미리보기 로직
+  const imgTargets = document.querySelectorAll(
+    '.filepreview-type .input__element'
+  ) as NodeListOf<HTMLInputElement>
+  imgTargets.forEach((imgTarget) => {
+    imgTarget.addEventListener('change', function () {
+      const parent = this.parentElement
+      const existingImage = parent?.nextElementSibling?.querySelector('img')
+      const displayImage = document.createElement('img')
+      displayImage.className = 'file-thumb'
 
-    parent.siblings('.item__display').find('img').remove();
+      parent?.nextElementSibling?.querySelector('img')?.remove()
 
-    if (window.FileReader) {
-      if (!$(this)[0].files || !$(this)[0].files[0].type.match(/image\//)) return;
+      if (window.FileReader) {
+        if (!this.files || !this.files[0].type.match(/image\//)) return
 
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const src = e.target?.result as string;
-        displayImage.attr('src', src);
-        parent.siblings('.item__display').prepend(displayImage);
-      };
-      reader.readAsDataURL($(this)[0].files[0]);
-    } else {
-      if (this.value === '') return;
+        const reader = new FileReader()
+        reader.onload = function (e) {
+          const src = e.target?.result as string
+          displayImage.src = src
+          parent?.nextElementSibling?.prepend(displayImage)
+        }
+        reader.readAsDataURL(this.files[0])
+      } else {
+        if (this.value === '') return
 
-      $(this)[0].select();
-      $(this)[0].blur();
-      const imgSrc = document.selection.createRange().text;
-      displayImage[0].style.filter =
-        "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\"" +
-        imgSrc +
-        '")';
-      parent.siblings('.item__display').prepend(displayImage);
-    }
+        window.getSelection()?.toString()
+        displayImage.style.filter =
+          "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\"" +
+          this.value +
+          '")'
+        parent?.nextElementSibling?.prepend(displayImage)
+      }
 
-    // 이미지 업로드 후 재선택 가능하도록 input value 초기화
-    $(this).val('');
-  });
+      // 이미지 업로드 후 재선택 가능하도록 input value 초기화
+      this.value = ''
+    })
+  })
 
-  // input file image delete
-  $('.filepreview-type .button--del').on('click', function () {
-    const imgTarget = $('.filepreview-type .input__element');
-    imgTarget.val('');
-    $('.item__display').find('img').remove();
-  });
-});
+  // 이미지 삭제 로직
+  const delButtons = document.querySelectorAll('.filepreview-type .button--del')
+  delButtons.forEach((button) => {
+    button.addEventListener('click', function () {
+      const imgTarget = document.querySelector(
+        '.filepreview-type .input__element'
+      ) as HTMLInputElement
+      imgTarget.value = ''
+      document.querySelector('.item__display')?.querySelector('img')?.remove()
+    })
+  })
+})
