@@ -137,7 +137,7 @@ const fetchJobBoardList = async () => {
 			`&industry=${selectIndustryValue.value.code}` +
 			`&experience=${selectExperienceValue.value.code}` +
 			`&page=${currentPage.value}`,
-			applicationJsonWithToken
+			applicationJsonWithToken(localStorage.getItem('accessToken')),
 		);
 		if (response.status === 200) {
 			state.value.jobBoards = response.data.data.content;

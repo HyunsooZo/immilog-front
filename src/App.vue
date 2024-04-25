@@ -6,35 +6,38 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, nextTick, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { getCoordinate } from '@/services/geolocation.ts';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { IApiUserInfo } from './types/api-interface.ts';
-import axios, { AxiosResponse } from 'axios';
+import { fetchUserInfo } from './services/auth.ts';
+import { AxiosResponse } from 'axios';
 import TheFooter from './components/layouts/TheFooter.vue';
-import { applicationJsonWithToken } from './utils/header.ts';
+import router from './router/index.ts';
+
 
 const route = useRoute();
 const hideFooter = computed(() => route.meta.hideFooter);
 const userInfo = useUserInfoStore();
 
+const init = async () => {
+	const response: AxiosResponse<IApiUserInfo> | any = await fetchUserInfo(localStorage.getItem('accessToken'));
+	if (response.data.status === 200 || response.status === 201) {
+		localStorage.setItem('accessToken', response.data.data.accessToken as string);
+		localStorage.setItem('refreshToken', response.data.data.refreshToken as string);
+		userInfo.setUserInfo(response.data.data);
+		return true;
+	} else {
+		return false;
+	}
+}
+
 onMounted(async () => {
 	await getCoordinate();
-	const latitude = localStorage.getItem('latitude');
-	const longitude = localStorage.getItem('longitude');
-	const accessToken = localStorage.getItem('accessToken');
-	const refreshToken = localStorage.getItem('refreshToken');
-	if (accessToken && refreshToken) {
-		const response: AxiosResponse<IApiUserInfo> = await axios.post(
-			`/api/v1/auth/user?latitude=${latitude ? latitude : 0.0}&longitude=${longitude ? longitude : 0.0}`,
-			applicationJsonWithToken
-		);
-		if (response.status === 200 || response.status === 201) {
-			localStorage.setItem('accessToken', response.data.data.accessToken as string);
-			localStorage.setItem('refreshToken', response.data.data.refreshToken as string);
-			userInfo.setUserInfo(response.data.data);
-		}
+	if (!await init()) {
+		await nextTick()
+		router.push('/login');
 	}
 });
 </script>

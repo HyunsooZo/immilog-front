@@ -75,6 +75,7 @@ import NoContent from '@/components/board/NoContent.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SubMenuList from '@/components/selections/SubMenuList.vue';
 import { countries } from '@/utils/selectItems.ts';
+import { fetchUserInfo } from '@/services/auth';
 
 const { t } = useI18n();
 

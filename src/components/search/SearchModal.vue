@@ -97,7 +97,7 @@ const callSearchApi = async () => {
 	try {
 		const response: AxiosResponse<IApiSearchResult> = await axios.get(
 			`/posts/search?keyword=${searchInput.value}&page=${page.value}`,
-			applicationJsonWithToken
+			applicationJsonWithToken(localStorage.getItem('accessToken')),
 		);
 		if (response.status === 200) {
 			response.data.data.content.forEach((element: any) => {

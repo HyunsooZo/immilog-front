@@ -214,7 +214,7 @@ const fetchChats = async () => {
 		isLoading.value = true;
 		const response: AxiosResponse<IApiChat> = await axios.get(
 			`/chat/rooms/${chatRoomSeq.value}?page=${page.value}`,
-			applicationJsonWithToken
+			applicationJsonWithToken(localStorage.getItem('accessToken')),
 		);
 		if (response.status === 200) {
 			response.data.data.content.forEach((chat: IChat) => chats.value.push(chat));

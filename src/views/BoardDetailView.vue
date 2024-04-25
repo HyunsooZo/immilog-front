@@ -375,7 +375,7 @@ const likePost = async () => {
 
 	const response = await axios.patch(
 		`posts/post.value.seq/like`,
-		applicationJsonWithToken
+		applicationJsonWithToken(localStorage.getItem('accessToken')),
 	);
 	if (response.status === 401) {
 		router.push('/sign-in');
@@ -486,7 +486,7 @@ const deletePost = async () => {
 		const response: AxiosResponse<void> = await axios.patch(
 			`/posts/${postSeq}/delete`,
 			{},
-			applicationJsonWithToken,
+			applicationJsonWithToken(localStorage.getItem('accessToken')),
 		);
 		if (response.status === 204) {
 			router.push('/');

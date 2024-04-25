@@ -124,7 +124,7 @@ const fetchChatList = async () => {
 	try {
 		const response: AxiosResponse<IApiChatRoom> = await axios.get(
 			`/chat/rooms?page=${chatRoomsPage.value}`,
-			applicationJsonWithToken
+			applicationJsonWithToken(localStorage.getItem('accessToken')),
 		);
 		if (response.status === 200) {
 			response.data.data.content.forEach((chatRoom: IChatRoom) => {
@@ -195,7 +195,7 @@ const callSearchApi = async (searchValue: any) => {
 	try {
 		const response: AxiosResponse<IApiChatRoomList> = await axios.get(
 			`/chat/rooms/search?keyword=${searchValue}`,
-			applicationJsonWithToken
+			applicationJsonWithToken(localStorage.getItem('accessToken')),
 		);
 		if (response.status === 200) {
 			chatRooms.value = [];

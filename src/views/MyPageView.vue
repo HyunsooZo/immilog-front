@@ -177,7 +177,7 @@ const removeTokens = () => {
 };
 
 // 사용자 정보 확인 후 로그인 페이지로 리다이렉트
-onMounted(() => {
+onMounted(async () => {
 	if (!userInfo.userNickname) {
 		router.push({ name: 'SignIn' });
 	}

@@ -1,52 +1,73 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
+import { IApiUserInfo, IApiRefreshToken } from '@/types/api-interface.ts'
+import { applicationJsonWithToken } from '@/utils/header.ts'
 
-interface RefreshResponse {
-  status: number
-  error?: string
+let isInProgress = false
+export const fetchUserInfo = async (accessToken: string | null | undefined) => {
+  if (!accessToken) {
+    throw new Error('No access token found.')
+  }
+  if (!isInProgress) {
+    isInProgress = true
+    const latitude = localStorage.getItem('latitude') || '0'
+    const longitude = localStorage.getItem('longitude') || '0'
+    try {
+      const response: AxiosResponse<IApiUserInfo> = await axios.get(
+        `/auth/user?latitude=${latitude}&longitude=${longitude}`,
+        applicationJsonWithToken(accessToken)
+      )
+      if (response.status === 200 || response.data.status === 200) {
+        isInProgress = false
+        return response
+      } else {
+        await refreshAccessToken()
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError
+      if (axiosError.response?.status === 401) {
+        await refreshAccessToken()
+      }
+      isInProgress = false
+      throw error
+    }
+  }
 }
 
-// Token을 새로고침하는 함수입니다.
-export const refreshAccessToken = async (): Promise<RefreshResponse> => {
-  // Local Storage에서 refreshToken을 가져옴.
+export const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem('refreshToken')
-
-  // refreshToken이 없다면, 401 상태와 에러 메시지를 반환.
   if (!refreshToken) {
-    return { status: 401, error: 'No refresh token' }
+    throw new Error('No refresh token found.')
   }
-
   try {
-    // axios를 사용하여 token 새로고침 API를 호출합니다.
-    const refreshResponse = await axios.get(`/auth/refresh?token=${refreshToken}`, {
-      headers: { 'Content-Type': 'application/json' }
-    })
-
-    // 응답이 성공적이면 (HTTP 상태 코드 200),
-    // 새로운 accessToken과 refreshToken을 Local Storage에 저장.
-    if (refreshResponse.status === 200) {
-      localStorage.setItem('accessToken', refreshResponse.data.data.accessToken)
-      localStorage.setItem('refreshToken', refreshResponse.data.data.refreshToken)
-
-      // 성공적으로 처리되었음을 나타내는 HTTP 상태 코드 200을 반환.
-      return { status: 200 }
+    const response: AxiosResponse<IApiRefreshToken> = await axios.get(
+      `/auth/refresh?token=${refreshToken}`
+    )
+    if (response.status === 200 && response.data.status === 200) {
+      await setTokens(response)
+      return fetchUserInfo(response.data.data.accessToken)
+    } else {
+      isInProgress = false
+      removeTokens()
     }
   } catch (error) {
-    // 에러가 발생하면 콘솔에 에러를 출력하고,
-    // 에러 응답이 있는 경우 해당 상태 코드와 함께 에러 메시지를 반환하거나,
-    // 그렇지 않은 경우 HTTP 상태 코드 500과 함께 에러 메시지를 반환.
+    isInProgress = false
     removeTokens()
-    const axiosError = error as AxiosError
-    console.error(axiosError)
-    return {
-      status: axiosError.response?.status || 500,
-      error: 'Error refreshing token'
-    }
+    throw error
   }
-  removeTokens()
-  return { status: 500, error: 'Unknown error' }
 }
 
 const removeTokens = () => {
   localStorage.removeItem('accessToken')
   localStorage.removeItem('refreshToken')
+}
+
+const setTokens = async (response: AxiosResponse<IApiRefreshToken>) => {
+  localStorage.setItem('accessToken', response.data.data.accessToken)
+  localStorage.setItem('refreshToken', response.data.data.refreshToken)
+  if (
+    localStorage.getItem('accessToken') === response.data.data.accessToken &&
+    localStorage.getItem('refreshToken') === response.data.data.refreshToken
+  ) {
+    isInProgress = false
+  }
 }

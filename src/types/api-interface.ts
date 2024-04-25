@@ -87,3 +87,10 @@ export interface IPagenation<T> {
   size: number
   empty: boolean
 }
+
+export interface IApiRefreshToken extends IApiResponse {
+  data: {
+    refreshToken: string
+    accessToken: string
+  }
+}

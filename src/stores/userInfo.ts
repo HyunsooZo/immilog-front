@@ -26,7 +26,10 @@ export const useUserInfoStore = defineStore('userInfo', {
     isLocationMatch: false
   }),
   actions: {
-    setUserInfo(userInfo: IUserInfo): void {
+    setUserInfo(userInfo: IUserInfo | null | undefined): void {
+      if (!userInfo) {
+        return
+      }
       this.userSeq = userInfo.userSeq
       this.accessToken = userInfo.accessToken
       this.refreshToken = userInfo.refreshToken

@@ -4,12 +4,12 @@ const applicationJson = {
   }
 }
 
-const applicationJsonWithToken = {
+const applicationJsonWithToken = (accessToken: string | null | undefined) => ({
   headers: {
-    contentType: 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${accessToken ? accessToken : ''}`
   }
-}
+})
 
 const multipartFormData = {
   headers: {
