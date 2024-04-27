@@ -82,7 +82,7 @@
 			</ul>
 		</div>
 		<BookMark @update:bookmarkValue="offBookMark" v-if="isBookmarkOn" />
-		<MyBoard @close="offMyBoard" v-if="isMyBoardOn" />
+		<UserBoard :userSeq="userInfo.userSeq ? userInfo.userSeq : 0" @close="offUserBoard" v-if="isUserBoardOn" />
 	</div>
 	<teleport to="#modal" v-if="modalValue">
 		<ConfirmModal :modalText="modalText" @modalValue="closeModal" />
@@ -91,7 +91,7 @@
 
 <script setup lang="ts">
 import BookMark from '@/components/board/BookMark.vue';
-import MyBoard from '@/components/board/MyBoard.vue';
+import UserBoard from '@/components/board/UserBoard.vue';
 import ConfirmModal from '@/components/modal/ConfirmModal.vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { onMounted, ref } from 'vue';
@@ -122,13 +122,13 @@ const modalCloseClass = () => {
 const onProfileEdit = () => router.push(`/profile-edit`);
 
 // 내 게시물 표시 상태
-const isMyBoardOn = ref(false);
+const isUserBoardOn = ref(false);
 const onMyBoard = () => {
-	isMyBoardOn.value = true;
+	isUserBoardOn.value = true;
 	modalOpenClass();
 };
-const offMyBoard = () => {
-	isMyBoardOn.value = false;
+const offUserBoard = () => {
+	isUserBoardOn.value = false;
 	modalCloseClass();
 };
 

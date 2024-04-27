@@ -37,7 +37,7 @@ onMounted(async () => {
 	await getCoordinate();
 	if (!await init()) {
 		await nextTick()
-		router.push('/login');
+		router.push('/sign-in');
 	}
 });
 </script>

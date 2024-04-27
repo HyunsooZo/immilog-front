@@ -46,17 +46,20 @@
 		</div>
 	</div>
 	<UserProfilePic :userProfile=userProfile @close="offUserProfilePic" v-if="isUserProfilePicOn" />
+	<UserBoard :userSeq=userProfile.userSeq @close="offUserBoard" v-if="isUserBoardOn" />
 </template>
 
 <script setup lang="ts">
 import UserProfilePic from '@/components/board/UserProfilePic.vue';
 import router from '@/router';
-import { IApiChatRoom, IApiChatStart } from '@/types/api-interface';
+import { IApiChatStart } from '@/types/api-interface';
 import { IOtherUserInfo } from '@/types/interface';
 import { applicationJsonWithToken } from '@/utils/header';
 import axios, { AxiosResponse } from 'axios';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useUserInfoStore } from '@/stores/userInfo';
+import UserBoard from './UserBoard.vue';
 
 const { t } = useI18n();
 
@@ -73,6 +76,11 @@ const props = defineProps({
 		}),
 	},
 });
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
 
 // modal close 시 body 컨트롤
 const modalCloseClass = () => {
@@ -106,5 +114,28 @@ const onChatRoom = async () => {
 	if (response.data.status === 200) {
 		router.push(`/chat/${response.data.data}`);
 	}
-}; 
+};
+
+// 내 게시물 표시 상태
+const isUserBoardOn = ref(false);
+const onUserBoard = () => {
+	isUserBoardOn.value = true;
+	modalOpenClass();
+};
+const offUserBoard = () => {
+	isUserBoardOn.value = false;
+	modalCloseClass();
+};
+
+onMounted(() => {
+	if (!useUserInfoStore().userSeq) {
+		closeModal();
+		router.push('/sign-in');
+	}
+	if (props.userProfile.userSeq === useUserInfoStore().userSeq) {
+		closeModal();
+		router.push('/my-page');
+	}
+});
+
 </script>
