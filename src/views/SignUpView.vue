@@ -242,7 +242,7 @@ const getCountry = async (location: ILocation) => {
 			`/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
 			applicationJson,
 		);
-		if (response.status === 200) {
+		if (response.data.status === 200) {
 			country.value = response.data.data.country;
 			region.value = response.data.data.region;
 		} else {

@@ -64,7 +64,7 @@
 	</div>
 	<!-- //.item -->
 	<AdContent v-if="showAd" />
-	<UserProfileDetail @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
+	<UserProfileDetail :userProfile=postAuthorInfo @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
 </template>
 
 <script setup lang="ts">
@@ -76,7 +76,7 @@ import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.ts';
 import AdContent from '@/components/board/AdContent.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 import { useI18n } from 'vue-i18n';
-import type { IComment, IPost } from '@/types/interface';
+import { IOtherUserInfo, type IComment, type IPost } from '@/types/interface';
 
 const { t } = useI18n();
 
@@ -191,4 +191,12 @@ const checkIfTokenExists = () => {
 		router.push('/sign-in');
 	}
 };
+
+const postAuthorInfo = ref<IOtherUserInfo>({
+	userSeq: props.post.userSeq,
+	userProfileUrl: props.post.userProfileUrl,
+	userNickName: props.post.userNickName,
+	country: props.post.country,
+	region: props.post.region,
+})
 </script>

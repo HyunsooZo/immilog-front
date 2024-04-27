@@ -22,6 +22,10 @@ export interface IApiChatRoom extends IApiResponse {
   data: IPagenation<IChatRoom>
 }
 
+export interface IApiChatStart extends IApiResponse {
+  data: IPagenation<IChatRoom>
+}
+
 export interface IApiChatRoomList extends IApiResponse {
   data: IChatRoom[]
 }

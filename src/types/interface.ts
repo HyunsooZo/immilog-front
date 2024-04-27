@@ -150,6 +150,14 @@ export interface IError {
   message: any
 }
 
+export interface IOtherUserInfo {
+  userSeq: number
+  userProfileUrl: string | null
+  userNickName: string
+  country: string
+  region: string
+}
+
 // 구인구직 인터페이스
 export interface IJobPost {
   seq: number
