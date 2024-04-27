@@ -29,7 +29,7 @@
 							</div>
 						</div>
 						<div class="button-wrap">
-							<button class="button button--primary button__s" role="link">
+							<button class="button button--primary button__s" role="link" @click="onUserBoard">
 								{{ t('userProfileDetail.posts') }}
 							</button>
 							<!-- 본인 프로필은 채팅, 신고 버튼 미노출 -->
