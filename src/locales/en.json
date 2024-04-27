@@ -183,5 +183,10 @@
   "subMenuList": {
     "industry": "Industry",
     "sorting": "Sorting Method"
+  },
+  "userProfileDetail": {
+    "posts": "Posts",
+    "chat": "Chat",
+    "report": "Report"
   }
 }
