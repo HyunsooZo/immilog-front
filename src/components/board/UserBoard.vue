@@ -18,12 +18,11 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import BoardContent from '@/components/board/BoardContent.vue';
-import axios from 'axios';
 import { applicationJsonWithToken } from '@/utils/header';
-import { AxiosResponse } from 'axios';
 import { IApiPosts } from '@/types/api-interface';
 import { IState } from '@/types/interface';
+import BoardContent from '@/components/board/BoardContent.vue';
+import axios, { AxiosResponse } from 'axios';
 
 const props = defineProps<{
 	userSeq: number;

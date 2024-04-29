@@ -66,20 +66,6 @@ export const postBookmarkdApi = async (seq: any) => {
   }
 }
 
-export const getMyPostsApi = async (page: number) => {
-  if (!token) {
-    return { status: 'unauthenticated' }
-  }
-  try {
-    const config = createConfig('get', `/posts/my?page=${page}`, null)
-    const response = await axios(config)
-    return { status: response.status, data: response.data }
-  } catch (error) {
-    console.log(error)
-    return { status: 'error', error }
-  }
-}
-
 export const uploadPostApi = async (param: any) => {
   if (!token) {
     return { status: 'unauthenticated' }

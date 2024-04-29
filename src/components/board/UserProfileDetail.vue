@@ -36,7 +36,7 @@
 							<button class="button button--primary button__s" role="link" @click="onChatRoom">
 								{{ t('userProfileDetail.chat') }}
 							</button>
-							<button class="button button--primary button__s" role="link">
+							<button class="button button--primary button__s" role="link" @click="onReport">
 								{{ t('userProfileDetail.report') }}
 							</button>
 						</div>
@@ -125,6 +125,55 @@ const onUserBoard = () => {
 const offUserBoard = () => {
 	isUserBoardOn.value = false;
 	modalCloseClass();
+};
+
+
+// <-- 알럿 관련
+const alertValue = ref(false);
+const alertText = ref('');
+
+const openAlert = (content: string) => {
+	alertValue.value = true;
+	alertText.value = content;
+};
+
+const closeAlert = () => {
+	alertValue.value = false;
+};
+// -->
+
+const requestForm = ref({
+	reason: '',
+	description: '',
+});
+
+const reportPopUpValue = ref(false);
+
+const onReportPopUp = () => {
+	reportPopUpValue.value = true;
+}
+
+const setReportReason = (reason: string, description: string) => {
+	requestForm.value.reason = reason;
+	requestForm.value.description = description;
+};
+
+const reportApi = async (requestForm: { reason: string, description: string }) => {
+
+	try {
+		const response: AxiosResponse<void> = await axios.patch(
+			`/users/${props.userProfile.userSeq}/report`,
+			requestForm,
+			applicationJsonWithToken(localStorage.getItem('accessToken')),
+		);
+
+		if (response.status === 204) {
+			openAlert('신고가 접수되었습니다.');
+		}
+	} catch (error) {
+		openAlert('신고 접수에 실패했습니다.');
+		console.log(error);
+	}
 };
 
 onMounted(() => {
