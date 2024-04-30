@@ -161,6 +161,14 @@ const removeSearchHistory = (index: number) => {
 const initializeSearchInput = () => {
 	searchInput.value = '';
 	searchApiCalled.value = false;
+	initializeState();
+};
+
+// State 초기화
+const initializeState = () => {
+	state.value.posts = [];
+	page.value = 0;
+	state.value.pagination = {} as IPageable;
 };
 
 // 검색어 변경 여부
@@ -170,6 +178,13 @@ const isValueSearchValueChanged = ref(false);
 watch(searchInput, (oldValue, newValue) => {
 	if (oldValue !== newValue) {
 		isValueSearchValueChanged.value = true;
+	}
+});
+
+// 검색어 빈값일 경우 초기화
+watch(searchInput, (newValue) => {
+	if (newValue === '') {
+		initializeState();
 	}
 });
 
