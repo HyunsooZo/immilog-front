@@ -637,7 +637,7 @@ strong + .button-text {
 
 /* 검색 */
 .search-wrap {
-  padding: 1.4rem 0 1rem;
+  padding: 1.4rem 0 0.6rem;
   background: #fff;
 }
 .search-wrap .logo-wrap {
@@ -1139,6 +1139,7 @@ strong + .button-text {
   position: fixed;
   top: 0;
   width: 100%;
+  padding-bottom: 1rem;
   z-index: 2;
 }
 .content._search .search-result-wrap {
