@@ -1142,7 +1142,10 @@ strong + .button-text {
   z-index: 2;
 }
 .content._search .search-result-wrap {
-  padding-top: 5.4rem;
+  padding-top: 6.4rem;
+}
+.content._search .search-result-wrap .list-wrap {
+  margin-top: -1rem;
 }
 /* chat */
 .chat-wrap {
