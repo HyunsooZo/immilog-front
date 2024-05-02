@@ -188,5 +188,36 @@
     "posts": "게시글",
     "chat": "채팅",
     "report": "신고"
+  },
+  "bookMark": {
+    "post": "게시글",
+    "jobBoard": "구인/구직"
+  },
+  "postModal": {
+    "writePost": "글 작성",
+    "register": "등록",
+    "public": "모든 국가에 공개",
+    "private": "내 국가에만 공개",
+    "privateDescription": "내 국가에만 공개 선택 시 해당 국가 사용자만 게시물을 볼 수 있습니다.",
+    "deadLine": "채용 마감일",
+    "jobOpeningsFrequently": "상시채용",
+    "experience": "경력",
+    "selectExperienceAlert": "경력을 선택해주세요.",
+    "noExperience": "경력 무관",
+    "titlePlaceHolder": "제목을 입력해주세요.",
+    "contentPlaceHolder": "게시물 내용을 입력해주세요. 일정 횟수 이상의 신고를 받을 경우 자동으로 숨김 처리됩니다.",
+    "enterHashtag": "해시태그를 입력 후 등록 버튼을 눌러주세요.",
+    "selectExperience": "경력 선택",
+    "selectDate": "날짜 선택",
+    "selectCategory": "카테고리 선택",
+    "communication": "소통",
+    "fileHasntBeenUploaded": "파일이 업로드 되지 않았습니다.",
+    "imageUpTo3": "이미지는 최대 3장까지 업로드 가능합니다.",
+    "tageUpTo8": "태그는 최대 8개까지 등록 가능합니다.",
+    "uploadImage": "이미지를 업로드 해주세요.",
+    "failedToUploadImage": "이미지 업로드에 실패했습니다. 다시 시도해주세요.",
+    "postingSucceed": "게시물이 등록되었습니다.",
+    "enterTitle": "제목을 입력해주세요.",
+    "enterContent": "내용을 입력해주세요."
   }
 }
