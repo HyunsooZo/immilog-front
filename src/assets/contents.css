@@ -302,6 +302,7 @@ strong + .button-text {
   min-height: 5rem;
   background: #fff;
   border-bottom: 1px solid #e9e9e9;
+  box-sizing: content-box;
   z-index: 10;
 }
 .header .title {
@@ -317,7 +318,7 @@ strong + .button-text {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: animateLogo 5s linear infinite;
-  font: 500 1.8rem / 5rem 'LeckerliOne';
+  font: 500 1.8rem / 2rem 'LeckerliOne';
 }
 @keyframes animateLogo {
   to {
@@ -636,7 +637,7 @@ strong + .button-text {
 
 /* 검색 */
 .search-wrap {
-  padding: 1.4rem 0 1rem;
+  padding: 1.4rem 0 0.6rem;
   background: #fff;
 }
 .search-wrap .logo-wrap {
@@ -1138,10 +1139,14 @@ strong + .button-text {
   position: fixed;
   top: 0;
   width: 100%;
+  padding-bottom: 1rem;
   z-index: 2;
 }
 .content._search .search-result-wrap {
   padding-top: 6.4rem;
+}
+.content._search .search-result-wrap .list-wrap {
+  margin-top: -1rem;
 }
 /* chat */
 .chat-wrap {

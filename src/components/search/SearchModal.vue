@@ -54,15 +54,12 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
 import type { ISearchResult } from '@/types/interface';
-import { useUserInfoStore } from '@/stores/userInfo';
+import { applicationJsonWithToken } from '@/utils/header';
+import { IApiSearchResult, IPageable } from '@/types/api-interface';
+import axios, { AxiosResponse } from 'axios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SearchResult from '../board/SearchResult.vue';
-import axios from 'axios';
-import { applicationJsonWithToken } from '@/utils/header';
-import { AxiosResponse } from 'axios';
-import { IApiSearchResult, IPageable } from '@/types/api-interface';
 
-const userInfo = useUserInfoStore();
 const searchInput = ref('');
 const searchHistory = ref<String[]>([]);
 const searchResult = ref<ISearchResult[]>([]);
@@ -79,10 +76,12 @@ const state = ref({
 
 const emits = defineEmits(['update:searchModalValue']);
 
+// 모달 닫기
 const closeSearchModal = () => {
 	emits('update:searchModalValue', false);
 };
 
+// <-- 로딩 관련
 const onLoading = () => {
 	isLoading.value = true;
 };
@@ -90,7 +89,9 @@ const onLoading = () => {
 const offLoading = () => {
 	isLoading.value = false;
 };
+// --> 
 
+// 검색 api호출
 const callSearchApi = async () => {
 	onLoading();
 	stackSearchHistory();
@@ -117,12 +118,14 @@ const callSearchApi = async () => {
 	}
 };
 
+// 검색 api 재호출
 const reCallSearchApi = (item: string) => {
 	searchInput.value = item;
 	searchApiCalled.value = true;
 	callSearchApi();
 };
 
+// 히스토리 쌓기
 const stackSearchHistory = () => {
 	if (!searchInput.value) return;
 
@@ -147,6 +150,7 @@ const removeSearchHistory = (index: number) => {
 	localStorage.setItem('searchInputs', JSON.stringify(searchHistory.value));
 };
 
+// 검색어 초기화
 const initializeSearchInput = () => {
 	searchInput.value = '';
 	searchApiCalled.value = false;

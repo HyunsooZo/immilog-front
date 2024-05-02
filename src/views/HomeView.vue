@@ -66,6 +66,9 @@ import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { showAd } from '@/utils/showAd.ts';
 import { useI18n } from 'vue-i18n';
+import { countries } from '@/utils/selectItems.ts';
+import { useHomeCategoryStore } from '@/stores/category.ts';
+import { useHomeSortingStore } from '@/stores/sorting.ts';
 import axios, { AxiosResponse } from 'axios';
 import SearchBar from '@/components/search/SearchBar.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
@@ -74,12 +77,13 @@ import PostModal from '@/components/board/PostModal.vue';
 import NoContent from '@/components/board/NoContent.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SubMenuList from '@/components/selections/SubMenuList.vue';
-import { countries } from '@/utils/selectItems.ts';
-import { fetchUserInfo } from '@/services/auth';
 
 const { t } = useI18n();
 
 const router = useRouter();
+
+const homeCategory = useHomeCategoryStore();
+const homeSorting = useHomeSortingStore();
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -173,13 +177,13 @@ const selectTitle = ref('');
 const selectList = ref<ISelectItem[]>([]);
 const isCategorySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
-const selectCategoryValue = ref({
-	name: 'selectItems.allCategories',
-	code: 'ALL',
+const selectCategoryValue = ref<ISelectItem>({
+	name: homeCategory.name ? homeCategory.name : 'selectItems.allCategories',
+	code: homeCategory.code ? homeCategory.code : 'ALL',
 });
-const selectSortingValue = ref({
-	name: 'selectItems.sortByRecent',
-	code: 'CREATED_DATE',
+const selectSortingValue = ref<ISelectItem>({
+	name: homeSorting.name ? homeSorting.name : 'selectItems.sortByRecent',
+	code: homeSorting.code ? homeSorting.code : 'CREATED_DATE',
 });
 const selectCountry = ref({ name: '전체', code: 'ALL' });
 
@@ -224,11 +228,13 @@ const closeSelect = () => {
 };
 
 // select 관련 메소드 (선택된 값 처리)
-const selectedValue = (value: { name: string; code: string; }) => {
+const selectedValue = (value: ISelectItem) => {
 	if (categoryList.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
+		homeCategory.setCategory(value)
 	} else if (sortingList.some(s => s.code === value.code)) {
 		selectSortingValue.value = value;
+		homeSorting.setSorting(value);
 	}
 	initializeState();
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
