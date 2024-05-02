@@ -188,5 +188,36 @@
     "posts": "Posts",
     "chat": "Chat",
     "report": "Report"
+  },
+  "bookMark": {
+    "post": "Post",
+    "jobBoard": "Job Board"
+  },
+  "postModal": {
+    "writePost": "Write Post",
+    "register": "Register",
+    "public": "Public",
+    "private": "Private",
+    "privateDescription": "When selecting private, only users from the same country can view the post.",
+    "deadLine": "DeadLine",
+    "jobOpeningsFrequently": "Always hiring",
+    "experience": "Experience",
+    "selectExperienceAlert": "Select Experience",
+    "noExperience": "No Experience",
+    "titlePlaceHolder": "Enter a title",
+    "contentPlaceHolder": "Enter post content. If a certain number of reports are received, the post will be automatically hidden.",
+    "enterHashtag": "Enter a hashtag and click the register button.",
+    "selectExperience": "Select Experience",
+    "selectDate": "Select Date",
+    "selectCategory": "Select Category",
+    "communication": "Communication",
+    "fileHasntBeenUploaded": "File has not been uploaded.",
+    "imageUpTo3": "You can upload up to 3 images.",
+    "tageUpTo8": "You can enter up to 8 hashtags.",
+    "uploadImage": "Please upload an image.",
+    "failedToUploadImage": "Failed to upload image. Please try again.",
+    "postingSucceed": "Posting Succeed",
+    "enterTitle": "Please enter a title.",
+    "enterContent": "Please enter content."
   }
 }

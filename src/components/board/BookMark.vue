@@ -81,8 +81,8 @@ const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
 
 // 게시글 목록 관련 상태
 let menus = [
-	{ label: '게시글', active: ref(true) },
-	{ label: '구인/구직', active: ref(false) },
+	{ label: t('bookMark.post'), active: ref(true) },
+	{ label: t('bookMark.jobBoard'), active: ref(false) },
 ];
 // 메뉴바 관련 메소드
 const updateMenuBar = () => {

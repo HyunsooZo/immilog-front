@@ -3,13 +3,13 @@
 	<div class="modal modal--full post--dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<p class="modal-title">글쓰기</p>
+				<p class="modal-title">{{ t('postModal.writePost') }}</p>
 				<button type="button" class="button-icon__s button--post_upload" @click="postUpload">
 					<svg viewBox="0 0 16 16">
 						<path :d="postRegistrationIcon.first" />
 						<path :d="postRegistrationIcon.second" />
 					</svg>
-					<span>등록</span>
+					<span>{{ t('postModal.register') }}</span>
 				</button>
 				<button class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">취소</i>
@@ -32,16 +32,14 @@
 							<div class="input__item">
 								<input v-model="privateYn" type="radio" class="input__radio" id="allCountries" name="postSelect"
 									value="N" checked />
-								<label for="allCountries" class="input__label">모든 국가에 공개</label>
+								<label for="allCountries" class="input__label">{{ t('postModal.public') }}</label>
 							</div>
 							<div class="input__item">
 								<input v-model="privateYn" type="radio" class="input__radio" id="onlyMyCountry" name="postSelect"
 									value="Y" @click="
-										openAlert(
-											'내 국가에만 공개 선택 시<br>같은 국가 사용자만 해당 게시물을 볼 수 있습니다.',
-										)
+										openAlert(t('postModal.privateDescription'))
 										" />
-								<label for="onlyMyCountry" class="input__label">내 국가에만 공개</label>
+								<label for="onlyMyCountry" class="input__label">{{ t('postModal.private') }}</label>
 							</div>
 						</div>
 					</div>
@@ -50,7 +48,7 @@
 					<!-- 구인구직 -->
 					<!-- 채용마감일 -->
 					<div class="input-wrap" v-if="isJobBoard">
-						<em class="input__title">채용마감일</em>
+						<em class="input__title">{{ t('postModal.deadLine') }}</em>
 						<div class="input__wrap underline-type date-type">
 							<div class="input__item _date" :class="{ disabled: allDate }">
 								<div class="input__item_inner">
@@ -62,25 +60,25 @@
 							<div class="input__item">
 								<input type="checkbox" class="input__checkbox _text" id="allDate" v-model="allDate"
 									@change="updatePlaceholderDate" />
-								<label for="allDate" class="input__label">상시채용</label>
+								<label for="allDate" class="input__label">{{ t('postModal.jobOpeningsErequently') }}</label>
 							</div>
 						</div>
 					</div>
 					<!-- 경력 선택 -->
 					<div class="input-wrap" v-if="isJobBoard">
-						<em class="input__title">경력</em>
+						<em class="input__title">{{ t('postModal.experience') }}</em>
 						<div class="input__wrap underline-type date-type">
 							<div class="input__item _date" :class="{ disabled: allCareer }">
 								<div class="input__item_inner">
 									<label for="selCareer" v-if="!selectedCareer" class="placeholder">{{ PlaceholderCareer }}</label>
 									<input type="text" class="input__element" id="selCareer" v-model="selectedCareer"
-										:disabled="allCareer" @click="openAlert('경력 선택 팝업')" />
+										:disabled="allCareer" @click="openAlert(t('postModal.selectExperienceAlert'))" />
 								</div>
 							</div>
 							<div class="input__item">
 								<input type="checkbox" class="input__checkbox _text" id="allCareer" v-model="allCareer"
 									@change="updatePlaceholderCareer" />
-								<label for="allCareer" class="input__label">경력무관</label>
+								<label for="allCareer" class="input__label">{{ t('postModal.noExperience') }}</label>
 							</div>
 						</div>
 					</div>
@@ -93,8 +91,8 @@
 							<div class="input__wrap underline-type">
 								<div class="input__item">
 									<div class="input__item_inner">
-										<input v-model="title" type="text" class="input__element" placeholder="제목을 입력해주세요."
-											autocomplete="off" />
+										<input v-model="title" type="text" class="input__element"
+											:placeholder="t('postModal.titlePlaceHolder')" autocomplete="off" />
 									</div>
 								</div>
 							</div>
@@ -103,8 +101,8 @@
 						<div class="post__content">
 							<div class="post">
 								<textarea v-model="content" class="text__area" name="content" autocomplete="off"
-									placeholder="게시글 내용을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다." data-autosuggest_is-input="true"
-									ref="adjustTextarea" @input="adjustTextareaHeight" rows="3"></textarea>
+									:placeholder="t('postModal.contentPlaceHolder')" data-autosuggest_is-input="true" ref="adjustTextarea"
+									@input="adjustTextareaHeight" rows="3"></textarea>
 								<!-- 총 글자수 -->
 								<p class="write__count">
 									<i class="blind">현재 입력한 글자수</i>
@@ -133,11 +131,11 @@
 												<div class="input__item">
 													<div class="input__item_inner">
 														<input v-model="hashTag" type="text" class="input__element"
-															placeholder="해시태그를 입력 후 등록 버튼을 클릭하세요" autocomplete="off" />
+															:placeholder="t('postModal.enterHashtag')" autocomplete="off" />
 													</div>
 												</div>
 												<button type="button" class="button button--primary" @click="addTag">
-													<span>등록</span>
+													<span>{{ t('postModal.register') }}</span>
 												</button>
 											</div>
 										</div>
@@ -207,6 +205,9 @@ import axios, { AxiosResponse } from 'axios';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const userInfo = useUserInfoStore();
 const selectedDate = ref('');
@@ -227,18 +228,18 @@ const PlaceholderDate = ref('날짜 선택');
 const updatePlaceholderDate = () => {
 	if (allDate.value) {
 		selectedDate.value = '';
-		PlaceholderDate.value = '상시채용';
+		PlaceholderDate.value = t('postModal.jobOpeningsFrequently');
 	} else {
-		PlaceholderDate.value = '날짜 선택';
+		PlaceholderDate.value = t('postModal.selectDate');
 	}
 };
-const PlaceholderCareer = ref('경력 선택');
+const PlaceholderCareer = ref(t('postModal.selectExperience'));
 const updatePlaceholderCareer = () => {
 	if (allCareer.value) {
 		selectedCareer.value = '';
-		PlaceholderCareer.value = '경력무관';
+		PlaceholderCareer.value = t('postModal.noExperience');
 	} else {
-		PlaceholderCareer.value = '경력 선택';
+		PlaceholderCareer.value = t('postModal.selectExperience');
 	}
 };
 watch(allDate, () => {
@@ -252,8 +253,8 @@ watch(allCareer, () => {
 const router = useRouter();
 const isCategorySelectClicked = ref(false);
 
-const selectTitle = '카테고리 선택';
-const selectedCategory = ref({ name: '소통', code: 'COMMUNICATION' });
+const selectTitle = t('postModal.selectCategory');
+const selectedCategory = ref({ name: t('postModal.communication'), code: 'COMMUNICATION' });
 const selectedValue = (value: ISelectItem) => {
 	selectedCategory.value = value;
 };
@@ -322,11 +323,11 @@ const props = defineProps<{
 const previewImage = (event: Event) => {
 	const input = event.target as HTMLInputElement; // 타입 단언을 사용하여 HTMLInputElement로 변환
 	if (!input.files || input.files.length === 0) {
-		openAlert('파일이 선택되지 않았습니다.');
+		openAlert(t('postModal.fileHasntBeenUploaded'));
 		return;
 	}
 	if (imagePreview.value.length > 2) {
-		openAlert('이미지는 최대 3개까지만 등록이 가능합니다.');
+		openAlert(t('postModal.imageUpTo3'));
 		return;
 	}
 	const file = input.files[0];
@@ -366,7 +367,7 @@ const removeSpecialCharacters = (str: string) => {
 // 태그 추가 및 제거 메서드
 const addTag = () => {
 	if (tags.value.length > 7) {
-		openAlert('태그는 최대 8개까지만 등록이 가능합니다.');
+		openAlert(t('postModal.tageUpTo8'));
 		return;
 	}
 	const sanitizedTag = removeSpecialCharacters(hashTag.value);
@@ -387,7 +388,7 @@ const hashTagAreaOpen = () => {
 // 이미지 업로드 함수
 const imageUpload = async () => {
 	if (imageFile.value.length === 0) {
-		openAlert('이미지를 업로드 해주세요.');
+		openAlert(t('postModal.uploadImage'));
 		return;
 	}
 	try {
@@ -409,7 +410,7 @@ const imageUpload = async () => {
 				imagePaths.value.push(image);
 			});
 		} else {
-			openAlert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+			openAlert(t('postModal.failedToUploadImage'));
 			return;
 		}
 	} catch (error) {
@@ -433,7 +434,7 @@ const postUpload = async () => {
 		if (status === 201 || status === 200) {
 			setTimeout(() => {
 				offLoading();
-				openAlert('게시글이 등록되었습니다.');
+				openAlert(t('postModal.postingSucceed'));
 				closeModal();
 			}, 1000);
 		}
@@ -475,11 +476,11 @@ const createImageForm = () => {
 
 const validateUploadPost = () => {
 	if (!title.value) {
-		openAlert('제목을 입력해주세요.');
+		openAlert(t('postModal.enterTitle'));
 		return false;
 	}
 	if (!content.value) {
-		openAlert('내용을 입력해주세요.');
+		openAlert(t('postModal.enterContent'));
 		return false;
 	}
 	return true;
