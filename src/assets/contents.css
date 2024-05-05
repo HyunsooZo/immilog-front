@@ -631,7 +631,6 @@ strong + .button-text {
 .sticky-wrap.active {
   position: sticky;
   top: 0;
-  top: 0;
   width: 100%;
   z-index: 2;
 }
