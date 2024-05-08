@@ -3,11 +3,10 @@ const applicationJson = {
     contentType: 'application/json'
   }
 }
-
 const applicationJsonWithToken = (accessToken: string | null | undefined) => ({
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${accessToken ? accessToken : ''}`
+    Authorization: `Bearer ${accessToken ? accessToken.toString() : ''}`
   }
 })
 

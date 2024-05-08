@@ -374,7 +374,8 @@ const likePost = async () => {
 	post.value = updatedPost;
 
 	const response = await axios.patch(
-		`posts/post.value.seq/like`,
+		`posts/${post.value.seq}/like`,
+		{},
 		applicationJsonWithToken(localStorage.getItem('accessToken')),
 	);
 	if (response.status === 401) {
