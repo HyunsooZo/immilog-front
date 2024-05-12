@@ -4,7 +4,7 @@
 	<div class="content">
 		<TheTopBox :title="t('profileEditView.profileEdit')" :text="t('profileEditView.profileEditText')" />
 		<div class="container">
-			<!-- profileimage -->
+			<!-- userProfileUrl -->
 			<div class="input-wrap">
 				<div class="input__wrap input__attachments _edit">
 					<div class="input__item">
@@ -129,7 +129,7 @@ const isNickNameChanged = computed(() => {
 });
 
 const isImageChange = computed(() => {
-	return imagePreview.value !== userInfo.userProfile;
+	return imagePreview.value !== userInfo.userProfileUrl;
 });
 
 // 프리뷰 이미지
@@ -206,8 +206,8 @@ const saveProfile = async () => {
 		nickName:
 			userNickName.value === userInfo.userNickname ? null : userNickName.value,
 		country: country.value === userInfo.userCountry ? null : country.value,
-		profileImage:
-			imagePreview.value === userInfo.userProfile
+		userProfileUrl:
+			imagePreview.value === userInfo.userProfileUrl
 				? null
 				: imagePreview.value[0],
 		latitude: latitude.value,
@@ -222,7 +222,7 @@ const saveProfile = async () => {
 		if (response.status === 200) {
 			userInfo.userNickname = userNickName.value;
 			userInfo.userCountry = country.value;
-			userInfo.userProfile = imagePreview.value;
+			userInfo.userProfileUrl = imagePreview.value;
 			router.back();
 		}
 	} catch (error) {
@@ -326,6 +326,6 @@ const getCountry = async (location: ILocation) => {
 onMounted(() => {
 	userNickName.value = userInfo.userNickname;
 	country.value = userInfo.userCountry;
-	imagePreview.value = userInfo.userProfile;
+	imagePreview.value = userInfo.userProfileUrl;
 });
 </script>

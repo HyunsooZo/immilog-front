@@ -141,7 +141,7 @@ export interface IUserInfo {
   email: string | null
   country: string | null
   region: string | null
-  userProfile: string | null
+  userProfileUrl: string | null
   isLocationMatch: boolean
 }
 

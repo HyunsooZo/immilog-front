@@ -5,8 +5,8 @@
 			<div class="item">
 				<button type="button" class="list__item_button" role="link" @click="onProfileEdit">
 					<div class="info__wrap">
-						<div class="item__pic" :class="{ 'pic--default': !userInfo.userProfile }">
-							<img v-if="userInfo.userProfile" :src="userInfo.userProfile" alt="" />
+						<div class="item__pic" :class="{ 'pic--default': !userInfo.userProfileUrl }">
+							<img v-if="userInfo.userProfileUrl" :src="userInfo.userProfileUrl" alt="" />
 						</div>
 						<div class="item__fnc">
 							<div class="list__item">

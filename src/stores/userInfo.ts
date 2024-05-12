@@ -9,7 +9,7 @@ interface UserInfoState {
   userEmail: string | null
   userCountry: string | null
   userRegion: string | null
-  userProfile: string | null
+  userProfileUrl: string | null
   isLocationMatch: boolean
 }
 
@@ -22,7 +22,7 @@ export const useUserInfoStore = defineStore('userInfo', {
     userEmail: null,
     userCountry: null,
     userRegion: null,
-    userProfile: null,
+    userProfileUrl: null,
     isLocationMatch: false
   }),
   actions: {
@@ -37,7 +37,7 @@ export const useUserInfoStore = defineStore('userInfo', {
       this.userEmail = userInfo.email
       this.userCountry = userInfo.country
       this.userRegion = userInfo.region
-      this.userProfile = userInfo.userProfile
+      this.userProfileUrl = userInfo.userProfileUrl
       this.isLocationMatch = userInfo.isLocationMatch
     },
     signOut(): void {
@@ -48,7 +48,7 @@ export const useUserInfoStore = defineStore('userInfo', {
       this.userEmail = null
       this.userCountry = null
       this.userRegion = null
-      this.userProfile = null
+      this.userProfileUrl = null
       this.isLocationMatch = false
     }
   }
