@@ -23,8 +23,6 @@
 						<textarea v-model="textareaContent" class="text__area" name="content" autocomplete="off"
 							placeholder="댓글을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다." data-autosuggest_is-input="true"
 							ref="textareaRef" @input="adjustTextareaHeight" rows="2"></textarea>
-
-
 						<!-- <textarea v-model="content" class="text__area" name="content" autocomplete="off"
 							placeholder="댓글을 입력해주세요. 다른 사용자로부터 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 될 수 있습니다."
 							data-autosuggest_is-input="true" ref="textareaRef" @input="adjustTextareaHeight" rows="2"></textarea> -->
@@ -135,7 +133,7 @@ const commentApi = async () => {
 const callCommentApi = async () => {
 	try {
 		const requestForm = {
-			content: textareaRef.value,
+			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		}
 		const response: AxiosResponse<void> = await axios.post(
 			`/comments/posts/${props.postSeq}`,
@@ -153,7 +151,7 @@ const callCommentApi = async () => {
 const callReplyApi = async () => {
 	try {
 		const requestForm = {
-			content: textareaRef.value,
+			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		}
 		const response: AxiosResponse<void> = await axios.post(
 			`/replies/comments/${props.commentSeq}`,
