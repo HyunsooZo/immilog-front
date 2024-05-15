@@ -125,7 +125,7 @@ import type { IApiChat } from '@/types/api-interface';
 import type { IChat } from '@/types/interface';
 import { useRoute, useRouter } from 'vue-router';
 import { computed } from 'vue';
-import { applicationJsonWithToken,webSocketURL } from '@/utils/header';
+import { applicationJsonWithToken, webSocketURL } from '@/utils/header';
 import axios, { AxiosResponse } from 'axios';
 import SideMenu from '@/components/settings/SideMenu.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
@@ -214,7 +214,7 @@ const fetchChats = async () => {
 		isLoading.value = true;
 		const response: AxiosResponse<IApiChat> = await axios.get(
 			`/chat/rooms/${chatRoomSeq.value}?page=${page.value}`,
-			applicationJsonWithToken(localStorage.getItem('accessToken')),
+			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
 			response.data.data.content.forEach((chat: IChat) => chats.value.push(chat));

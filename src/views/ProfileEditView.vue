@@ -217,7 +217,7 @@ const saveProfile = async () => {
 		const response: AxiosResponse<IApiResponse> = await axios.patch(
 			'/users/information',
 			formData,
-			applicationJsonWithToken(localStorage.getItem('accessToken')),
+			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
 			userInfo.userNickname = userNickName.value;

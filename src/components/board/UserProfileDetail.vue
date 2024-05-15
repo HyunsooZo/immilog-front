@@ -63,6 +63,8 @@ import UserBoard from './UserBoard.vue';
 
 const { t } = useI18n();
 
+const userInfo = useUserInfoStore();
+
 const props = defineProps({
 	userProfile: {
 		type: Object as () => IOtherUserInfo,
@@ -108,7 +110,7 @@ const onChatRoom = async () => {
 	const response: AxiosResponse<IApiChatStart> = await axios.post(
 		`/chat/rooms?counterpartSeq=${props.userProfile.userSeq}`,
 		{},
-		applicationJsonWithToken(localStorage.getItem('accessToken')),
+		applicationJsonWithToken(userInfo.accessToken),
 	);
 
 	if (response.data.status === 200) {
@@ -164,7 +166,7 @@ const reportApi = async (requestForm: { reason: string, description: string }) =
 		const response: AxiosResponse<void> = await axios.patch(
 			`/users/${props.userProfile.userSeq}/report`,
 			requestForm,
-			applicationJsonWithToken(localStorage.getItem('accessToken')),
+			applicationJsonWithToken(userInfo.accessToken),
 		);
 
 		if (response.status === 204) {

@@ -138,7 +138,7 @@ const callCommentApi = async () => {
 		const response: AxiosResponse<void> = await axios.post(
 			`/comments/posts/${props.postSeq}`,
 			requestForm,
-			applicationJsonWithToken(localStorage.getItem('accessToken')),
+			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 201) {
 			console.log('댓글 등록 성공');
@@ -156,7 +156,7 @@ const callReplyApi = async () => {
 		const response: AxiosResponse<void> = await axios.post(
 			`/replies/comments/${props.commentSeq}`,
 			requestForm,
-			applicationJsonWithToken(localStorage.getItem('accessToken')),
+			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 201) {
 			console.log('대댓글 등록 성공');

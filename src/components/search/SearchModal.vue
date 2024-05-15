@@ -56,10 +56,12 @@ import { onMounted, ref, computed } from 'vue';
 import type { ISearchResult } from '@/types/interface';
 import { applicationJsonWithToken } from '@/utils/header';
 import { IApiSearchResult, IPageable } from '@/types/api-interface';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
 import axios, { AxiosResponse } from 'axios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SearchResult from '../board/SearchResult.vue';
 
+const userInfo = useUserInfoStore();
 const searchInput = ref('');
 const searchHistory = ref<String[]>([]);
 const searchResult = ref<ISearchResult[]>([]);
@@ -98,7 +100,7 @@ const callSearchApi = async () => {
 	try {
 		const response: AxiosResponse<IApiSearchResult> = await axios.get(
 			`/posts/search?keyword=${searchInput.value}&page=${page.value}`,
-			applicationJsonWithToken(localStorage.getItem('accessToken')),
+			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
 			response.data.data.content.forEach((element: any) => {

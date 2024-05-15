@@ -52,7 +52,7 @@ const reportUser = () => {
 const getOutOfChatRoom = async () => {
 	const { status } = await axios.delete(
 		`/chat/rooms/${props.chatRoomSeq}`,
-		applicationJsonWithToken(localStorage.getItem('accessToken')),
+		applicationJsonWithToken(userInfo.accessToken),
 	);
 	if (status === 204) {
 		console.log('방 나가기 성공');

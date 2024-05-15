@@ -235,7 +235,7 @@ const detailBoard = async () => {
 	try {
 		const response: AxiosResponse<IApiPostDetail> = await axios.get(
 			`/posts/${props.postIndex}`,
-			applicationJsonWithToken(localStorage.getItem('accessToken')),
+			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
 			detailPost.value = response.data.data;

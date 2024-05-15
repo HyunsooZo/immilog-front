@@ -403,7 +403,7 @@ const imageUpload = async () => {
 		const response: AxiosResponse<IApiImage> = await axios.post(
 			`/images?imagePath=content`,
 			formData,
-			applicationJsonWithToken(localStorage.getItem('accessToken')),
+			applicationJsonWithToken(userInfo.accessToken),
 		)
 		if (response.status === 200) {
 			response.data.data.imageUrl.forEach(image => {

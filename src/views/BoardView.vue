@@ -238,7 +238,7 @@ const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 			`&sortingMethod=${sortingMethod}` +
 			`&isPublic=${'N'}` +
 			`&page=${nextPage}`,
-			applicationJsonWithToken(localStorage.getItem('accessToken')),
+			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
 			response.data.data.content.forEach((post: any) => state.value.posts.push(post));

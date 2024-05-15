@@ -21,8 +21,11 @@ import { onMounted, ref } from 'vue';
 import { applicationJsonWithToken } from '@/utils/header';
 import { IApiPosts } from '@/types/api-interface';
 import { IState } from '@/types/interface';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
 import BoardContent from '@/components/board/BoardContent.vue';
 import axios, { AxiosResponse } from 'axios';
+
+const userInfo = useUserInfoStore();
 
 const props = defineProps<{
 	userSeq: number;
@@ -51,7 +54,7 @@ const fetchMyPostList = async (page: number) => {
 	try {
 		const response: AxiosResponse<IApiPosts> = await axios.get(
 			`/posts/users/${props.userSeq}/page/${page}`,
-			applicationJsonWithToken(localStorage.getItem('accessToken'))
+			applicationJsonWithToken(userInfo.accessToken)
 		);
 		if (response.status === 200) {
 			state.value.posts = response.data.data.content;
