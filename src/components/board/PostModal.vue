@@ -397,7 +397,7 @@ const imageUpload = async () => {
 		for (const file of imageFile.value) {
 			const resizedImage = await resizeImage(file, 0.5);
 			formData.append(
-				'multipartFiles',
+				'multipartFile',
 				new File([resizedImage], file.name, { type: file.type }),
 			);
 		}
