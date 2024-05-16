@@ -16,6 +16,19 @@ const multipartFormData = {
   }
 }
 
+const multipartFormDataWithToken = (accessToken: string | null | undefined) => ({
+  headers: {
+    contentType: 'multipart/form-data',
+    Authorization: `Bearer ${accessToken ? accessToken.toString() : ''}`
+  }
+})
+
 const webSocketURL = 'https://api.ko-meet-back.com'
 
-export { applicationJson, applicationJsonWithToken, multipartFormData, webSocketURL }
+export {
+  applicationJson,
+  applicationJsonWithToken,
+  multipartFormData,
+  multipartFormDataWithToken,
+  webSocketURL
+}

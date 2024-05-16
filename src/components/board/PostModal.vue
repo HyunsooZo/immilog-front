@@ -199,7 +199,7 @@ import { uploadPostApi } from '@/services/post.ts';
 import { ISelectItem } from '@/types/interface';
 import { IApiImage } from '@/types/api-interface';
 import { useUserInfoStore } from '@/stores/userInfo';
-import { applicationJsonWithToken } from '@/utils/header';
+import { applicationJsonWithToken, multipartFormDataWithToken } from '@/utils/header';
 import { postRegistrationIcon, imageSelectIcon, hashTagIcon } from '@/utils/icons.ts';
 import axios, { AxiosResponse } from 'axios';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
@@ -321,7 +321,7 @@ const props = defineProps<{
 
 // 프리뷰 이미지 처리 함수
 const previewImage = (event: Event) => {
-	const input = event.target as HTMLInputElement; // 타입 단언을 사용하여 HTMLInputElement로 변환
+	const input = event.target as HTMLInputElement;
 	if (!input.files || input.files.length === 0) {
 		openAlert(t('postModal.fileHasntBeenUploaded'));
 		return;
@@ -331,6 +331,7 @@ const previewImage = (event: Event) => {
 		return;
 	}
 	const file = input.files[0];
+	imageFile.value.push(file);
 	const reader = new FileReader();
 	reader.onload = (e: ProgressEvent<FileReader>) => {
 		const result = e.target?.result;
@@ -403,8 +404,8 @@ const imageUpload = async () => {
 		const response: AxiosResponse<IApiImage> = await axios.post(
 			`/images?imagePath=content`,
 			formData,
-			applicationJsonWithToken(userInfo.accessToken),
-		)
+			multipartFormDataWithToken(userInfo.accessToken)
+		);
 		if (response.status === 200) {
 			response.data.data.imageUrl.forEach(image => {
 				imagePaths.value.push(image);
@@ -417,6 +418,7 @@ const imageUpload = async () => {
 		console.log(error);
 	}
 };
+
 
 // 게시물 업로드 함수
 const postUpload = async () => {

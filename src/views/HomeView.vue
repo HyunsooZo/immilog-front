@@ -311,8 +311,9 @@ const openPostModal = () => {
 	modalOpenClass();
 };
 const closePostModal = () => {
-	onPostModal.value = false;
+	state.value.posts = [];
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+	onPostModal.value = false;
 	modalCloseClass();
 };
 // -->
