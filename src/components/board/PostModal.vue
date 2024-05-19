@@ -428,7 +428,12 @@ const postUpload = async () => {
 	}
 	onLoading();
 	if (imageFile.value.length > 0) {
-		await imageUpload();
+		try {
+			await imageUpload();
+		} catch (error) {
+			console.log(error);
+			offLoading();
+		}
 	}
 	try {
 		const form = createImageForm();
