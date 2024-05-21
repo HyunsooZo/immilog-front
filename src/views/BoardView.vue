@@ -263,8 +263,8 @@ watch(
 );
 
 onMounted(() => {
-	if (!localStorage.getItem('accessToken')) {
-		router.push('/sign-in');
+	if(userInfo.accessToken){
+		router.push('sign-in');
 	}
 	updateMenuBar();
 	fetchBoardList('CREATED_DATE', 0);
