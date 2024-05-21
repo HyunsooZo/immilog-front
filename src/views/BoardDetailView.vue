@@ -505,7 +505,7 @@ const bookmarkApi = () => {
 }
 
 onMounted(() => {
-	if(userInfo.accessToken){
+	if(!userInfo.accessToken){
 		router.push('sign-in');
 	}
 	detailBoard();
