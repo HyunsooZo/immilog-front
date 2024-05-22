@@ -263,7 +263,7 @@ watch(
 );
 
 onMounted(() => {
-	if (!localStorage.getItem('accessToken')) {
+	if(!userInfo.accessToken){
 		router.push('/sign-in');
 	}
 	updateMenuBar();
