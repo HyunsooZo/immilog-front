@@ -105,10 +105,11 @@ import { useLocationStore } from '@/stores/location.ts';
 import { resizeImage } from '@/utils/image.ts';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -162,7 +163,7 @@ const checkNickName = async () => {
 		return;
 	}
 	try {
-		const { status, data } = await axios.get(
+		const { status, data } = await api.get(
 			`/users/nicknames?nickname=${userNickName.value}`,
 			applicationJson,
 		);
@@ -183,7 +184,7 @@ const hostImage = async () => {
 		const formData = new FormData();
 		const resizedImage = await resizeImage(imageFile.value, 0.5);
 		formData.append('multipartFile', resizedImage as Blob);
-		const response: AxiosResponse<IApiImage> = await axios.post(
+		const response: AxiosResponse<IApiImage> = await api.post(
 			'/images?imagePath=profile',
 			formData,
 			multipartFormData,
@@ -214,7 +215,7 @@ const saveProfile = async () => {
 		longitude: longitude.value,
 	};
 	try {
-		const response: AxiosResponse<IApiResponse> = await axios.patch(
+		const response: AxiosResponse<IApiResponse> = await api.patch(
 			'/users/information',
 			formData,
 			applicationJsonWithToken(userInfo.accessToken),
@@ -309,7 +310,7 @@ const getCountry = async (location: ILocation) => {
 		longitude: location.longitude
 	});
 	try {
-		const response: AxiosResponse<IApiLocation> = await axios.get(
+		const response: AxiosResponse<IApiLocation> = await api.get(
 			`/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
 			multipartFormData,
 		);

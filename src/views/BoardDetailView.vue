@@ -247,7 +247,7 @@ import { likeApi } from '@/services/post.ts';
 import { writeReply, lastReply } from '@/utils/icons.ts';
 import { extractAtWordAndRest } from '@/utils/comment.ts';
 import { useI18n } from 'vue-i18n';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import ReplyWrite from '@/components/comment/ReplyWrite.vue';
 import NoContent from '@/components/board/NoContent.vue';
@@ -255,6 +255,7 @@ import ReplyModal from '@/components/comment/ReplyModal.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import MoreModalForPost from '@/components/modal/MoreModalForPost.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -373,7 +374,7 @@ const likePost = async () => {
 	}
 	post.value = updatedPost;
 
-	const response = await axios.patch(
+	const response = await api.patch(
 		`posts/${post.value.seq}/like`,
 		{},
 		applicationJsonWithToken(userInfo.accessToken),
@@ -440,7 +441,7 @@ const likeReply = async (index: string | number, replyIndex: string | number) =>
 
 const detailBoard = async () => {
 	try {
-		const response = await axios.get(
+		const response = await api.get(
 			`/posts/${route.params.postId}`,
 			applicationJson,
 		);
@@ -484,7 +485,7 @@ const editPost = () => { };
 
 const deletePost = async () => {
 	try {
-		const response: AxiosResponse<void> = await axios.patch(
+		const response: AxiosResponse<void> = await api.patch(
 			`/posts/${postSeq}/delete`,
 			{},
 			applicationJsonWithToken(userInfo.accessToken),

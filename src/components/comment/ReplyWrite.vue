@@ -59,9 +59,10 @@ import { ref } from 'vue';
 import { postRegistrationIcon } from '@/utils/icons.ts';
 import { applicationJsonWithToken } from '@/utils/header';
 import { useUserInfoStore } from '@/stores/userInfo';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
+import api from '@/api';
 
 const userInfo = useUserInfoStore();
 const alertValue = ref(false);
@@ -135,7 +136,7 @@ const callCommentApi = async () => {
 		const requestForm = {
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		}
-		const response: AxiosResponse<void> = await axios.post(
+		const response: AxiosResponse<void> = await api.post(
 			`/comments/posts/${props.postSeq}`,
 			requestForm,
 			applicationJsonWithToken(userInfo.accessToken),
@@ -153,7 +154,7 @@ const callReplyApi = async () => {
 		const requestForm = {
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		}
-		const response: AxiosResponse<void> = await axios.post(
+		const response: AxiosResponse<void> = await api.post(
 			`/replies/comments/${props.commentSeq}`,
 			requestForm,
 			applicationJsonWithToken(userInfo.accessToken),

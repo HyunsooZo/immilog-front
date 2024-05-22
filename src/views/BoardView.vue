@@ -66,7 +66,7 @@ import SearchBar from '@/components/search/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select--dialog
 import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/board/BoardContent.vue';
-import axios from 'axios';
+import api from '@/api';
 import { useRouter } from 'vue-router';
 import { applicationJsonWithToken } from '@/utils/header';
 import { AxiosResponse } from 'axios';
@@ -232,7 +232,7 @@ const loadMoreData = async () => {
 const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
 	try {
-		const response: AxiosResponse<IApiPosts> = await axios.get(
+		const response: AxiosResponse<IApiPosts> = await api.get(
 			`/posts?country=${userInfo.userCountry}` +
 			`&category=${selectCategoryValue.value.code.toUpperCase()}` +
 			`&sortingMethod=${sortingMethod}` +

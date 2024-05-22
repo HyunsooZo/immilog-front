@@ -95,12 +95,13 @@ import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { timeCalculation } from '@/utils/date-time.ts';
 import { useI18n } from 'vue-i18n';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import SearchBox from '@/components/search/SearchBox.vue';
 import MoreModal from '@/components/modal/MoreModal.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -122,7 +123,7 @@ const onChatDetail = (seq: number) => {
 // 채팅목록 불러오기
 const fetchChatList = async () => {
 	try {
-		const response: AxiosResponse<IApiChatRoom> = await axios.get(
+		const response: AxiosResponse<IApiChatRoom> = await api.get(
 			`/chat/rooms?page=${chatRoomsPage.value}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
@@ -193,7 +194,7 @@ const closeMoreModalAndDeleteChatRoom = (chatRoomSeq: number) => {
 
 const callSearchApi = async (searchValue: any) => {
 	try {
-		const response: AxiosResponse<IApiChatRoomList> = await axios.get(
+		const response: AxiosResponse<IApiChatRoomList> = await api.get(
 			`/chat/rooms/search?keyword=${searchValue}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);

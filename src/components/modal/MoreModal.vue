@@ -31,7 +31,7 @@
 import { ref } from 'vue';
 import { applicationJsonWithToken } from '@/utils/header';
 import { useUserInfoStore } from '@/stores/userInfo';
-import axios from 'axios';
+import api from '@/api';
 import ConfirmModal from './ConfirmModal.vue';
 
 const userInfo = useUserInfoStore();
@@ -50,7 +50,7 @@ const reportUser = () => {
 };
 
 const getOutOfChatRoom = async () => {
-	const { status } = await axios.delete(
+	const { status } = await api.delete(
 		`/chat/rooms/${props.chatRoomSeq}`,
 		applicationJsonWithToken(userInfo.accessToken),
 	);

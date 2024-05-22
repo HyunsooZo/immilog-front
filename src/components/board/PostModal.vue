@@ -201,11 +201,12 @@ import { IApiImage } from '@/types/api-interface';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { applicationJsonWithToken, multipartFormDataWithToken } from '@/utils/header';
 import { postRegistrationIcon, imageSelectIcon, hashTagIcon } from '@/utils/icons.ts';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import { useI18n } from 'vue-i18n';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -401,7 +402,7 @@ const imageUpload = async () => {
 				new File([resizedImage], file.name, { type: file.type }),
 			);
 		}
-		const response: AxiosResponse<IApiImage> = await axios.post(
+		const response: AxiosResponse<IApiImage> = await api.post(
 			`/images?imagePath=content`,
 			formData,
 			multipartFormDataWithToken(userInfo.accessToken)

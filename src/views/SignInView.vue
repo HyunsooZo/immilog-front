@@ -106,9 +106,10 @@ import { getCoordinate } from '@/services/geolocation.ts';
 import { getUserInfo } from '@/services/userInfoFetch.ts';
 import { useI18n } from 'vue-i18n';
 import { applicationJson } from '@/utils/header';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -134,7 +135,7 @@ const signIn = async () => {
 			latitude: localStorage.getItem('latitude'),
 			longitude: localStorage.getItem('longitude'),
 		}
-		const response: AxiosResponse<IApiUserInfo> = await axios.post(
+		const response: AxiosResponse<IApiUserInfo> = await api.post(
 			'/users/sign-in',
 			requestForm,
 			applicationJson,

@@ -23,7 +23,8 @@ import { IApiPosts } from '@/types/api-interface';
 import { IState } from '@/types/interface';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import BoardContent from '@/components/board/BoardContent.vue';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
+import api from '@/api';
 
 const userInfo = useUserInfoStore();
 
@@ -52,7 +53,7 @@ const state = ref<IState>({
 const fetchMyPostList = async (page: number) => {
 	state.value.loading = true;
 	try {
-		const response: AxiosResponse<IApiPosts> = await axios.get(
+		const response: AxiosResponse<IApiPosts> = await api.get(
 			`/posts/users/${props.userSeq}/page/${page}`,
 			applicationJsonWithToken(userInfo.accessToken)
 		);

@@ -55,9 +55,10 @@ import { applicationJsonWithToken } from '@/utils/header';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useUserInfoStore } from '@/stores/userInfo';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SearchResult from '@/components/board/SearchResult.vue';
+import api from '@/api';
 
 const userInfo = useUserInfoStore();
 const { t } = useI18n();
@@ -99,7 +100,7 @@ const callSearchApi = async (pageNumber: number) => {
 	stackSearchHistory();
 	initializeStateIfKeywordChanged();
 	try {
-		const response: AxiosResponse<IApiSearchResult> = await axios.get(
+		const response: AxiosResponse<IApiSearchResult> = await api.get(
 			`/posts/search?keyword=${searchInput.value}&page=${pageNumber}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);

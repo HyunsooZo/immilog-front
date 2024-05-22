@@ -55,11 +55,12 @@ import router from '@/router';
 import { IApiChatStart } from '@/types/api-interface';
 import { IOtherUserInfo } from '@/types/interface';
 import { applicationJsonWithToken } from '@/utils/header';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUserInfoStore } from '@/stores/userInfo';
 import UserBoard from './UserBoard.vue';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -107,7 +108,7 @@ const closeModal = () => {
 };
 
 const onChatRoom = async () => {
-	const response: AxiosResponse<IApiChatStart> = await axios.post(
+	const response: AxiosResponse<IApiChatStart> = await api.post(
 		`/chat/rooms?counterpartSeq=${props.userProfile.userSeq}`,
 		{},
 		applicationJsonWithToken(userInfo.accessToken),
@@ -163,7 +164,7 @@ const setReportReason = (reason: string, description: string) => {
 const reportApi = async (requestForm: { reason: string, description: string }) => {
 
 	try {
-		const response: AxiosResponse<void> = await axios.patch(
+		const response: AxiosResponse<void> = await api.patch(
 			`/users/${props.userProfile.userSeq}/report`,
 			requestForm,
 			applicationJsonWithToken(userInfo.accessToken),

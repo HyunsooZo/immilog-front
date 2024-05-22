@@ -57,9 +57,10 @@ import type { ISearchResult } from '@/types/interface';
 import { applicationJsonWithToken } from '@/utils/header';
 import { IApiSearchResult, IPageable } from '@/types/api-interface';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SearchResult from '../board/SearchResult.vue';
+import api from '@/api';
 
 const userInfo = useUserInfoStore();
 const searchInput = ref('');
@@ -98,7 +99,7 @@ const callSearchApi = async () => {
 	onLoading();
 	stackSearchHistory();
 	try {
-		const response: AxiosResponse<IApiSearchResult> = await axios.get(
+		const response: AxiosResponse<IApiSearchResult> = await api.get(
 			`/posts/search?keyword=${searchInput.value}&page=${page.value}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);

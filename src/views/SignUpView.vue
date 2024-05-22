@@ -104,10 +104,11 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useLocationStore } from '@/stores/location.ts';
 import { applicationJson } from '@/utils/header';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -164,7 +165,7 @@ const register = async () => {
 				region: region.value,
 				profileImage: null,
 			};
-			const response: AxiosResponse<void> = await axios.post(
+			const response: AxiosResponse<void> = await api.post(
 				'/users',
 				formData,
 				applicationJson,
@@ -238,7 +239,7 @@ const getCoordinate = async () => {
 
 const getCountry = async (location: ILocation) => {
 	try {
-		const response: AxiosResponse<IApiLocation> = await axios.get(
+		const response: AxiosResponse<IApiLocation> = await api.get(
 			`/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
 			applicationJson,
 		);
@@ -265,7 +266,7 @@ const overAllValidationCheck = () => {
 
 const checkNickName = async () => {
 	try {
-		const response: AxiosResponse<IApiBoolean> = await axios.get(
+		const response: AxiosResponse<IApiBoolean> = await api.get(
 			`/users/nicknames?nickname=${userNickName.value}`,
 			applicationJson,
 		);

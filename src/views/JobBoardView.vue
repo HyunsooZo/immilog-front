@@ -54,7 +54,7 @@ import { showAd } from '@/utils/showAd';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { applicationJsonWithToken } from '@/utils/header';
 import { refreshAccessToken } from '@/services/auth';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import SearchBox from '@/components/search/SearchBox.vue';
 import JobContent from '@/components/board/JobContent.vue';
@@ -62,6 +62,7 @@ import SelectDialog from '@/components/selections/SelectDialog.vue';
 import PostModal from '@/components/board/PostModal.vue';
 import SubMenuList from '@/components/selections/SubMenuList.vue';
 import NoContent from '@/components/board/NoContent.vue';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -131,7 +132,7 @@ const selectedSortingMethod = ref('CREATED_DATE');
 const fetchJobBoardList = async () => {
 	state.value.loading = true;
 	try {
-		const response: AxiosResponse<IApiJobPost> = await axios.get(
+		const response: AxiosResponse<IApiJobPost> = await api.get(
 			`/job-boards?country=${selectedCountry.value}` +
 			`&sortingMethod=${selectedSortingMethod.value}` +
 			`&industry=${selectIndustryValue.value.code}` +

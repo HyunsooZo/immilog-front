@@ -168,10 +168,10 @@ import { extractAtWordAndRest } from '@/utils/comment.ts';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { likeApi } from '@/services/post.ts';
 import { useI18n } from 'vue-i18n';
-import axios from 'axios';
 import { applicationJsonWithToken } from '@/utils/header';
 import { AxiosResponse } from 'axios';
 import { IApiPostDetail } from '@/types/api-interface';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -233,7 +233,7 @@ const closeReplyWrite = () => {
 
 const detailBoard = async () => {
 	try {
-		const response: AxiosResponse<IApiPostDetail> = await axios.get(
+		const response: AxiosResponse<IApiPostDetail> = await api.get(
 			`/posts/${props.postIndex}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);

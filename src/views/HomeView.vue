@@ -69,7 +69,7 @@ import { useI18n } from 'vue-i18n';
 import { countries } from '@/utils/selectItems.ts';
 import { useHomeCategoryStore } from '@/stores/category.ts';
 import { useHomeSortingStore } from '@/stores/sorting.ts';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import SearchBar from '@/components/search/SearchBar.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import BoardContent from '@/components/board/BoardContent.vue';
@@ -77,6 +77,7 @@ import PostModal from '@/components/board/PostModal.vue';
 import NoContent from '@/components/board/NoContent.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SubMenuList from '@/components/selections/SubMenuList.vue';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -260,7 +261,7 @@ const currentPage = ref(0);
 const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
 	try {
-		const response: AxiosResponse<IApiPosts> = await axios.get(
+		const response: AxiosResponse<IApiPosts> = await api.get(
 			`/posts?country=${selectCountry.value.code}
 			&sortingMethod=${sortingMethod}
 			&isPublic=Y&category=${selectCategoryValue.value.code}

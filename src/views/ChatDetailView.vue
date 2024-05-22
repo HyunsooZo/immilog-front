@@ -126,13 +126,14 @@ import type { IChat } from '@/types/interface';
 import { useRoute, useRouter } from 'vue-router';
 import { computed } from 'vue';
 import { applicationJsonWithToken, webSocketURL } from '@/utils/header';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import SideMenu from '@/components/settings/SideMenu.vue';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 import ChatImagePreview from '@/components/chat/ChatImagePreview.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import api from '@/api';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
@@ -212,7 +213,7 @@ const fetchChats = async () => {
 	}
 	try {
 		isLoading.value = true;
-		const response: AxiosResponse<IApiChat> = await axios.get(
+		const response: AxiosResponse<IApiChat> = await api.get(
 			`/chat/rooms/${chatRoomSeq.value}?page=${page.value}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);

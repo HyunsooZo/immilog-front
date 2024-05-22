@@ -81,9 +81,9 @@ import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { timeCalculation } from '@/utils/date-time.ts';
 import { useI18n } from 'vue-i18n';
 import type { ISearchResult } from '@/types/interface';
-import axios from 'axios';
 import { applicationJsonWithToken } from '@/utils/header';
 import { AxiosResponse } from 'axios';
+import api from '@/api';
 
 const { t } = useI18n();
 
@@ -147,7 +147,7 @@ const likeApi = async () => {
 	}
 	changeLike();
 	try {
-		const response: AxiosResponse<void> = await axios.patch(
+		const response: AxiosResponse<void> = await api.patch(
 			`/posts/${props.post.seq}/like`,
 			{},
 			applicationJsonWithToken(userInfo.accessToken),
@@ -159,7 +159,7 @@ const likeApi = async () => {
 
 const increaseViewCount = async () => {
 	try {
-		const response: AxiosResponse<void> = await axios.patch(
+		const response: AxiosResponse<void> = await api.patch(
 			`/posts/${props.post.seq}/view`,
 			{},
 			applicationJsonWithToken(userInfo.accessToken),
@@ -193,7 +193,7 @@ const bookmarkApi = async () => {
 	}
 	changeBookmark();
 	try {
-		await axios.post(
+		await api.post(
 			`/bookmarks/posts/${props.post.seq}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
