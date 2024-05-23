@@ -1,3 +1,4 @@
+import { IApiRefreshToken } from '@/types/api-interface.ts'
 import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 
 // Axios 인스턴스 생성
@@ -9,7 +10,7 @@ const api = axios.create({
 // 요청 인터셉터 설정
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('access_token')
+    const token = localStorage.getItem('accessToken')
     if (token && config.headers) {
       config.headers['Authorization'] = `Bearer ${token}`
     }
@@ -20,6 +21,21 @@ api.interceptors.request.use(
   }
 )
 
+let isRefreshing = false
+let failedQueue: any[] = []
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error)
+    } else {
+      prom.resolve(token)
+    }
+  })
+
+  failedQueue = []
+}
+
 // 응답 인터셉터 설정
 api.interceptors.response.use(
   (response: AxiosResponse) => {
@@ -27,22 +43,58 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config
+
     if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
-      const refreshToken = localStorage.getItem('refresh_token')
-      try {
-        const response = await api.post('/auth/refresh-token', {
-          refreshToken: refreshToken
-        })
-        if (response.status === 200) {
-          localStorage.setItem('access_token', response.data.accessToken)
-          api.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.accessToken
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject })
+        }).then(token => {
+          originalRequest.headers['Authorization'] = 'Bearer ' + token
           return api(originalRequest)
+        }).catch(err => {
+          return Promise.reject(err)
+        })
+      }
+
+      originalRequest._retry = true
+      isRefreshing = true
+
+      const refreshToken = localStorage.getItem('refreshToken')
+
+      if (!refreshToken) {
+        // Refresh token이 없는 경우 처리 (로그아웃 등)
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        return Promise.reject(error)
+      }
+
+      try {
+        const response:AxiosResponse<IApiRefreshToken> = await axios.get(`/auth/refresh?token=${refreshToken}`)
+        if (response.status === 200) {
+          const newAccessToken = response.data.data.accessToken
+          const newRefreshToken = response.data.data.refreshToken
+          localStorage.setItem('accessToken', newAccessToken)
+          localStorage.setItem('refreshToken', newRefreshToken)
+          api.defaults.headers.common['Authorization'] = 'Bearer ' + newAccessToken
+          originalRequest.headers['Authorization'] = 'Bearer ' + newAccessToken
+          processQueue(null, newAccessToken)
+          return api(originalRequest)
+        } else {
+          processQueue(new Error('Failed to refresh token'), null)
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('refreshToken')
+          return Promise.reject(error)
         }
       } catch (refreshError) {
+        processQueue(refreshError, null)
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
         return Promise.reject(refreshError)
+      } finally {
+        isRefreshing = false
       }
     }
+
     return Promise.reject(error)
   }
 )

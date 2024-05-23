@@ -53,7 +53,6 @@ import { useI18n } from 'vue-i18n';
 import { showAd } from '@/utils/showAd';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { applicationJsonWithToken } from '@/utils/header';
-import { refreshAccessToken } from '@/services/auth';
 import { AxiosResponse } from 'axios';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import SearchBox from '@/components/search/SearchBox.vue';
@@ -144,7 +143,6 @@ const fetchJobBoardList = async () => {
 			state.value.jobBoards = response.data.data.content;
 			state.value.pagination = response.data.data.pageable;
 		} else if (response.status === 401) {
-			await refreshAccessToken();
 			fetchJobBoardList();
 		}
 	} catch (error) {
