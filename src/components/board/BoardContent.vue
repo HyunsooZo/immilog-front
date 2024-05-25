@@ -186,8 +186,7 @@ const allCommentCounts = (post: IPost) => {
 };
 
 const checkIfTokenExists = () => {
-	const token = localStorage.getItem('accessToken');
-	if (!token) {
+	if (!userInfo.accessToken) {
 		router.push('/sign-in');
 	}
 };
