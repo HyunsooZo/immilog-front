@@ -233,11 +233,11 @@
 	<LoadingModal v-if="isLoading" />
 	<MoreModalForPost v-if="onMorePostModal" :posetSeq="post.seq" @close="closeMoreModal" @edit="editPost"
 		@delete="deletePost" />
-	<UserProfileDetail @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
+	<UserProfileDetail :userProfile=postAuthorInfo @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
 </template>
 
 <script setup lang="ts">
-import type { IPost, IComment } from '@/types/interface';
+import type { IPost, IComment, IOtherUserInfo } from '@/types/interface';
 import { applicationJson, applicationJsonWithToken } from '@/utils/header';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -270,8 +270,12 @@ const modalCloseClass = () => {
 // 프로필 보기
 const isUserProfileDetailOn = ref(false);
 const onUserProfileDetail = () => {
-	isUserProfileDetailOn.value = true;
-	modalOpenClass();
+	if (post.value.userSeq === userInfo.userSeq) {
+		router.push('/my-page');
+	} else {
+		isUserProfileDetailOn.value = true;
+		modalOpenClass();
+	}
 };
 const offUserProfileDetail = () => {
 	isUserProfileDetailOn.value = false;
@@ -501,12 +505,20 @@ const deletePost = async () => {
 
 const selectedValue = ref(null);
 
+const postAuthorInfo = ref<IOtherUserInfo>({
+	userSeq: post.value.userSeq,
+	userProfileUrl: post.value.userProfileUrl,
+	userNickName: post.value.userNickName,
+	country: post.value.country,
+	region: post.value.region,
+})
+
 const bookmarkApi = () => {
 
 }
 
 onMounted(() => {
-	if(!userInfo.accessToken){
+	if (!userInfo.accessToken) {
 		router.push('/sign-in');
 	}
 	detailBoard();
