@@ -243,7 +243,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { timeCalculation } from '@/utils/date-time.ts';
-import { likeApi } from '@/services/post.ts';
+import { likeApi, postBookmarkdApi } from '@/services/post.ts';
 import { writeReply, lastReply } from '@/utils/icons.ts';
 import { extractAtWordAndRest } from '@/utils/comment.ts';
 import { useI18n } from 'vue-i18n';
@@ -513,9 +513,34 @@ const postAuthorInfo = ref<IOtherUserInfo>({
 	region: post.value.region,
 })
 
-const bookmarkApi = () => {
+const bookmarkApi = async () => {
+	checkIfTokenExists();
+	changeBookmark();
+	try {
+		postBookmarkdApi(post.value.seq);
+	} catch (error) {
+		console.log(error);
+	}
+};
 
-}
+const changeBookmark = () => {
+	if (isBookmarked.value) {
+		const index = userSeq.value !== null ? bookmarkUsers.value.indexOf(userSeq.value) : -1;
+		if (index !== -1) {
+			bookmarkUsers.value.splice(index, 1);
+		}
+	} else {
+		if (userSeq.value !== null) {
+			bookmarkUsers.value.push(userSeq.value);
+		}
+	}
+};
+
+const checkIfTokenExists = () => {
+	if (!userInfo.accessToken) {
+		router.push('/sign-in');
+	}
+};
 
 onMounted(() => {
 	if (!userInfo.accessToken) {
