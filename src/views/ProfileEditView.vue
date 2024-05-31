@@ -1,6 +1,6 @@
 <template>
 	<LoadingModal v-if="isLoading" />
-	<TheHeader />
+	<TheHeader :showNotification="false" />
 	<div class="content">
 		<TheTopBox :title="t('profileEditView.profileEdit')" :text="t('profileEditView.profileEditText')" />
 		<div class="container">
