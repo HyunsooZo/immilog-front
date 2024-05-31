@@ -3,11 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">알림</p>
-				<button
-					class="button-icon button--close"
-					role="link"
-					@click="closeModal"
-				>
+				<button class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">취소</i>
 				</button>
 			</div>
@@ -45,15 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
-
-//사용자 고유번호
-defineProps({
-	userSeq: Number,
-});
+import { onMounted, onUnmounted } from 'vue';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
 
 //모달 닫는 에밋
 const emits = defineEmits(['close']);
+
+const userInfo = useUserInfoStore();
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -68,7 +62,16 @@ const closeModal = () => {
 	modalCloseClass();
 };
 
+const getNotificationsApi = () => {
+	// 작성 필요 
+};
+
 onMounted(() => {
 	modalOpenClass();
+	getNotificationsApi();
+});
+
+onUnmounted(() => {
+	modalCloseClass();
 });
 </script>

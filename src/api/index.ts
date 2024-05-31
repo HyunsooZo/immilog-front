@@ -25,7 +25,7 @@ let isRefreshing = false
 let failedQueue: any[] = []
 
 const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach(prom => {
+  failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(error)
     } else {
@@ -48,12 +48,14 @@ api.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject })
-        }).then(token => {
-          originalRequest.headers['Authorization'] = 'Bearer ' + token
-          return api(originalRequest)
-        }).catch(err => {
-          return Promise.reject(err)
         })
+          .then((token) => {
+            originalRequest.headers['Authorization'] = 'Bearer ' + token
+            return api(originalRequest)
+          })
+          .catch((err) => {
+            return Promise.reject(err)
+          })
       }
 
       originalRequest._retry = true
@@ -69,7 +71,9 @@ api.interceptors.response.use(
       }
 
       try {
-        const response:AxiosResponse<IApiRefreshToken> = await axios.get(`/auth/refresh?token=${refreshToken}`)
+        const response: AxiosResponse<IApiRefreshToken> = await axios.get(
+          `/auth/refresh?token=${refreshToken}`
+        )
         if (response.status === 200) {
           const newAccessToken = response.data.data.accessToken
           const newRefreshToken = response.data.data.refreshToken

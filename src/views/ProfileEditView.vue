@@ -296,6 +296,8 @@ const fetchLocation = async () => {
 	} catch (error) {
 		console.error('Failed to get location:', error);
 		isLoading.value = false;
+	} finally {
+		isLoading.value = false;
 	}
 };
 

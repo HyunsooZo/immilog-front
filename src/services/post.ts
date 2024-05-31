@@ -1,3 +1,4 @@
+import api from '@/api/index.ts'
 import axios from 'axios'
 
 // API 기본 URL 설정
@@ -11,10 +12,8 @@ export const likeApi = async (path: string, seq: number) => {
     return { status: 'unauthenticated' }
   }
   try {
-    // 요청 구성
-    const config = createConfig('patch', `/${path}/${seq}/like`, null)
     // API 요청 및 응답 상태 반환
-    const response = await axios(config)
+    const response = await api.patch(`/${path}/${seq}/like`)
     return { status: response.status }
   } catch (error) {
     // 에러 발생 시 로그 기록 및 에러 상태 반환
@@ -29,8 +28,7 @@ export const viewApi = async (seq: any) => {
     return { status: 'unauthenticated' }
   }
   try {
-    const config = createConfig('patch', `/posts/${seq}/view`, null)
-    const response = await axios(config)
+    const response = await api.patch(`/posts/${seq}/view`)
     return { status: response.status }
   } catch (error) {
     console.log(error)
@@ -43,8 +41,7 @@ export const getBookmarkedPostApi = async () => {
     return { status: 'unauthenticated' }
   }
   try {
-    const config = createConfig('get', `/bookmarks`, null)
-    const response = await axios(config)
+    const response = await api.get(`/bookmarks`)
     return { status: response.status, data: response.data }
   } catch (error) {
     console.log(error)
@@ -57,8 +54,7 @@ export const postBookmarkdApi = async (seq: any) => {
     return { status: 'unauthenticated' }
   }
   try {
-    const config = createConfig('post', `/bookmarks/posts/${seq}`, null)
-    const response = await axios(config)
+    const response = await api.post(`/bookmarks/posts/${seq}`)
     return { status: response.status }
   } catch (error) {
     console.log(error)
@@ -71,23 +67,10 @@ export const uploadPostApi = async (param: any) => {
     return { status: 'unauthenticated' }
   }
   try {
-    const config = createConfig('post', `/posts`, param)
-    const response = await axios(config)
+    const response = await api.post(`/posts`)
     return { status: response.status, data: response.data }
   } catch (error) {
     console.log(error)
     return { status: 'error', error }
-  }
-}
-
-const createConfig = (method: string, url: string, data: null) => {
-  return {
-    method,
-    url,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    data
   }
 }

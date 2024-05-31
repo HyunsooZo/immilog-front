@@ -53,7 +53,7 @@
 			</ul>
 			<ul>
 				<li class="item">
-					<button type="button" class="button button-text" role="link">
+					<button type="button" class="button button-text" role="link" @click="onMenuOpen">
 						<svg viewBox="0 0 16 16">
 							<path :d="noticeIcon.first" />
 							<path :d="noticeIcon.second" />
@@ -87,6 +87,7 @@
 	<teleport to="#modal" v-if="modalValue">
 		<ConfirmModal :modalText="modalText" @modalValue="closeModal" />
 	</teleport>
+	<NotificationModal v-if="onMenu" @close="onMenuClose" />
 </template>
 
 <script setup lang="ts">
@@ -105,6 +106,7 @@ import {
 	logoutIcon,
 } from '@/utils/icons.ts';
 import { useI18n } from 'vue-i18n';
+import NotificationModal from '@/components/notification/NotificationModal.vue';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -182,4 +184,17 @@ onMounted(async () => {
 		router.push({ name: 'SignIn' });
 	}
 });
+
+// <-- 알림 팝업 관련
+
+const onMenu = ref(false);
+
+const onMenuOpen = () => {
+	onMenu.value = true;
+};
+
+const onMenuClose = () => {
+	onMenu.value = false;
+};
+// -->
 </script>

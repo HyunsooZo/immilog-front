@@ -25,7 +25,7 @@
 		</div>
 	</div>
 	<!-- 알림 모달 -->
-	<NotificationModal v-if="onMenu" :userSeq="userSeq" @close="onMenuClose" />
+	<NotificationModal v-if="onMenu" @close="onMenuClose" />
 </template>
 
 <script setup lang="ts">

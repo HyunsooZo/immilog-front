@@ -233,17 +233,17 @@
 	<LoadingModal v-if="isLoading" />
 	<MoreModalForPost v-if="onMorePostModal" :posetSeq="post.seq" @close="closeMoreModal" @edit="editPost"
 		@delete="deletePost" />
-	<UserProfileDetail @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
+	<UserProfileDetail :userProfile=postAuthorInfo @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
 </template>
 
 <script setup lang="ts">
-import type { IPost, IComment } from '@/types/interface';
+import type { IPost, IComment, IOtherUserInfo } from '@/types/interface';
 import { applicationJson, applicationJsonWithToken } from '@/utils/header';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { timeCalculation } from '@/utils/date-time.ts';
-import { likeApi } from '@/services/post.ts';
+import { likeApi, postBookmarkdApi } from '@/services/post.ts';
 import { writeReply, lastReply } from '@/utils/icons.ts';
 import { extractAtWordAndRest } from '@/utils/comment.ts';
 import { useI18n } from 'vue-i18n';
@@ -270,8 +270,12 @@ const modalCloseClass = () => {
 // 프로필 보기
 const isUserProfileDetailOn = ref(false);
 const onUserProfileDetail = () => {
-	isUserProfileDetailOn.value = true;
-	modalOpenClass();
+	if (post.value.userSeq === userInfo.userSeq) {
+		router.push('/my-page');
+	} else {
+		isUserProfileDetailOn.value = true;
+		modalOpenClass();
+	}
 };
 const offUserProfileDetail = () => {
 	isUserProfileDetailOn.value = false;
@@ -501,12 +505,45 @@ const deletePost = async () => {
 
 const selectedValue = ref(null);
 
-const bookmarkApi = () => {
+const postAuthorInfo = ref<IOtherUserInfo>({
+	userSeq: post.value.userSeq,
+	userProfileUrl: post.value.userProfileUrl,
+	userNickName: post.value.userNickName,
+	country: post.value.country,
+	region: post.value.region,
+})
 
-}
+const bookmarkApi = async () => {
+	checkIfTokenExists();
+	changeBookmark();
+	try {
+		postBookmarkdApi(post.value.seq);
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const changeBookmark = () => {
+	if (isBookmarked.value) {
+		const index = userSeq.value !== null ? bookmarkUsers.value.indexOf(userSeq.value) : -1;
+		if (index !== -1) {
+			bookmarkUsers.value.splice(index, 1);
+		}
+	} else {
+		if (userSeq.value !== null) {
+			bookmarkUsers.value.push(userSeq.value);
+		}
+	}
+};
+
+const checkIfTokenExists = () => {
+	if (!userInfo.accessToken) {
+		router.push('/sign-in');
+	}
+};
 
 onMounted(() => {
-	if(!userInfo.accessToken){
+	if (!userInfo.accessToken) {
 		router.push('/sign-in');
 	}
 	detailBoard();
