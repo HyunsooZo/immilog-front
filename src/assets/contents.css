@@ -160,6 +160,9 @@ strong + .button-text {
 [class*='button-icon'].button--signin-kakao {
   background-image: url(@/assets/images/icon-kakao-480.png);
 }
+[class*='button-icon'].button--signin-naver {
+  background-image: url(@/assets/images/icon-naver-480.png);
+}
 .button-icon.button--post svg {
   width: 1.8rem;
   height: 1.8rem;
