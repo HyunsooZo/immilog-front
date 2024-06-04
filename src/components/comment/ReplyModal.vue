@@ -7,7 +7,7 @@
 						<i class="blind">이전화면</i>
 					</button>
 				</div>
-				<p class="modal-title"><em class="header-logo">KoMeet</em></p>
+				<p class="modal-title"><em class="header-logo">Immilog</em></p>
 				<!-- <button class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">닫기</i>
 				</button> -->
