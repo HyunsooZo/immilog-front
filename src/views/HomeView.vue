@@ -11,9 +11,6 @@
 							:aria-selected="menu.active.value ? 'true' : 'false'">
 							{{ menu.label }}
 						</button>
-						<button type="button" class="button-icon button--back" role="link" @click="test">
-							<i class="blind">이전화면</i>
-						</button>
 					</li>
 				</ul>
 				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
