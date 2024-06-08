@@ -28,10 +28,6 @@ export const getUserInfo = async (latitude: number, longitude: number): Promise<
     const response = await api(config)
     return { status: response.status, data: response.data }
   } catch (error: unknown) {
-    // 에러 처리
-    console.error('Error:', error)
-    localStorage.removeItem('accessToken')
-    // 기타 에러 반환
     return {
       status: error,
       error: 'Error fetching user info'

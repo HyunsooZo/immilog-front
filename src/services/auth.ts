@@ -17,7 +17,7 @@ export const fetchUserInfo = async (accessToken: string | null | undefined) => {
         `/auth/user?latitude=${latitude}&longitude=${longitude}`,
         applicationJsonWithToken(accessToken)
       )
-      if (response.status === 200 || response.data.status === 200) {
+      if (response.status === 200 && response.data.status === 200) {
         isInProgress = false
         return response
       }
