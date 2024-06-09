@@ -27,13 +27,13 @@
 			</div>
 			<!-- nickname -->
 			<div class="input-wrap">
-				<em class="input__title">{{ t('profilEditView.nicknameChange') }}</em>
+				<em class="input__title">{{ t('profileEditView.nicknameChange') }}</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
 							<input v-model="userNickName" type="text" class="input__element"
-								:placeholder="t('profilEditView.nicknameChangePlaceHolder')" />
+								:placeholder="t('profieEditView.nicknameChangePlaceHolder')" />
 						</div>
 					</div>
 					<button type="button" class="button button--primary" @click="checkNickName">
@@ -54,7 +54,7 @@
 			</div>
 			<!-- country -->
 			<div class="input-wrap">
-				<em class="input__title">{{ t('profilEditView.changeCountry') }}</em>
+				<em class="input__title">{{ t('profileEditView.changeCountry') }}</em>
 				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
@@ -64,7 +64,7 @@
 						</div>
 					</div>
 					<button type="button" class="button button--primary" @click="fetchLocation">
-						{{ t('profilEditView.fetchLocation') }}
+						{{ t('profileEditView.fetchLocation') }}
 					</button>
 				</div>
 			</div>
@@ -192,7 +192,7 @@ const hostImage = async () => {
 		if (response.status === 200) {
 			imagePreview.value = response.data.data;
 		} else {
-			openAlert(t('profilEditView.failedToUploadImage'));
+			openAlert(t('profileEditView.failedToUploadImage'));
 		}
 	} catch (error) {
 		console.log(error);
@@ -319,7 +319,7 @@ const getCountry = async (location: ILocation) => {
 		if (response.status === 200) {
 			country.value = response.data.data.country;
 		} else {
-			openAlert(t('profilEditView.failedToFetchLocationInfo'));
+			openAlert(t('profileEditView.failedToFetchLocationInfo'));
 		}
 	} catch (error) {
 		console.log(error);

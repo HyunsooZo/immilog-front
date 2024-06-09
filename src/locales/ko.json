@@ -164,7 +164,7 @@
   "resultView": {
     "confirm": "확인"
   },
-  "profilEditView": {
+  "profileEditView": {
     "profileEdit": "프로필 수정",
     "profileEditText": "프로필 수정 후 확인 버튼을 눌러주세요.",
     "nicknameChange": "닉네임 변경",
