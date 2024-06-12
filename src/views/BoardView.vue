@@ -157,7 +157,7 @@ const isCategorySelectClicked = ref(false);
 
 const openCategorySelect = () => {
 	nextTick(() => {
-		selectTitle.value = '카테고리 선택';
+		selectTitle.value = t('subMenuList.category');
 		selectList.value = categoryList;
 		isCategorySelectClicked.value = true;
 	});
@@ -173,7 +173,7 @@ const isSortingSelectClicked = ref(false);
 
 const openSortingSelect = () => {
 	nextTick(() => {
-		selectTitle.value = '정렬 기준 선택';
+		selectTitle.value = t('subMenuList.sorting');
 		selectList.value = sortingList;
 		isSortingSelectClicked.value = true;
 	});
@@ -263,7 +263,7 @@ watch(
 );
 
 onMounted(() => {
-	if(!userInfo.accessToken){
+	if (!userInfo.accessToken) {
 		router.push('/sign-in');
 	}
 	updateMenuBar();

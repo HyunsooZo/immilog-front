@@ -182,7 +182,8 @@
   },
   "subMenuList": {
     "industry": "Industry",
-    "sorting": "Sorting Method"
+    "sorting": "Sorting Method",
+    "category": "Category"
   },
   "userProfileDetail": {
     "posts": "Posts",

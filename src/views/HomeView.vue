@@ -204,7 +204,7 @@ const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
 // select 관련 메소드 (카테고리 및 정렬)
 const openCategorySelect = () => {
 	nextTick(() => {
-		selectTitle.value = '카테고리 선택';
+		selectTitle.value = t('subMenuList.category');
 		selectList.value = categoryList;
 		isCategorySelectClicked.value = true;
 	});
@@ -214,7 +214,7 @@ const openCategorySelect = () => {
 // select 관련 메소드 (정렬)
 const openSortingSelect = () => {
 	nextTick(() => {
-		selectTitle.value = '정렬 기준 선택';
+		selectTitle.value = t('subMenuList.sorting');
 		selectList.value = sortingList;
 		isSortingSelectClicked.value = true;
 	});
