@@ -2,6 +2,7 @@ import {
   IChat,
   IChatRoom,
   IJobPost,
+  INotification,
   IPost,
   ISearchResult,
   ISortInfo,
@@ -59,6 +60,10 @@ export interface IApiImage extends IApiResponse {
   data: {
     imageUrl: string[]
   }
+}
+
+export interface IApiNotifications extends IApiResponse {
+  data: IPagenation<INotification>
 }
 
 export interface IApiLocation extends IApiResponse {

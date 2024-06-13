@@ -123,6 +123,13 @@ export interface IState {
   last: boolean
 }
 
+export interface INotificationState {
+  notifications: INotification[]
+  pagination: IPageable
+  loading: boolean
+  last: boolean
+}
+
 export interface ILocation {
   latitude: number | null
   longitude: number | null
@@ -184,4 +191,17 @@ export interface IJobPost {
   companyLogo: string
   status: string
   createdAt: string | Date
+}
+export interface INoticiationPageable {
+  pagination: IPageable
+}
+export interface INotification {
+  seq: number
+  authorUserSeq: number
+  title: string
+  content: string
+  type: string
+  status: string
+  targetCountries: string[]
+  readUsers: number[]
 }

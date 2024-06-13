@@ -207,6 +207,8 @@ onMounted(async () => {
 			if (response.status === 200 || response.status === 201) {
 				setToken(response.data.data);
 				useUserInfoStore().setUserInfo(response.data.data);
+			} else {
+				localStorage.removeItem('accessToken');
 			}
 		}
 		router.push({ name: 'Home' });
