@@ -9,7 +9,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="list-wrap">
-					<div class="item" v-for="(item, index) in state.notifications" :key="index">
+					<div class="item" v-if="login" v-for="(item, index) in state.notifications" :key="index">
 						<div class="text__wrap">
 							<div class="list__item">
 								<div class="text__item">
@@ -29,6 +29,7 @@
 							<!-- //loop -->
 						</div>
 					</div>
+					<div v-else>컨텐츠 없음~</div>
 					<!-- // -->
 				</div>
 			</div>
@@ -50,6 +51,7 @@ const emits = defineEmits(['close']);
 
 const userInfo = useUserInfoStore();
 const currentPage = ref(0);
+const login = ref(false);
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -108,7 +110,12 @@ const handleScroll = () => {
 };
 onMounted(async () => {
 	modalOpenClass();
-	await getNotificationsApi(0);
+	if (!userInfo.userNickname) {
+		login.value = false;
+	} else {
+		login.value = true;
+		await getNotificationsApi(0);
+	}
 });
 
 onUnmounted(() => {
