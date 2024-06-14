@@ -7,6 +7,14 @@ import App from './App.vue'
 import router from '@/router'
 import setupI18n from './i18n'
 
+document.addEventListener(
+  'deviceready',
+  () => {
+    console.log('Cordova is ready')
+  },
+  false
+)
+
 const initializeApp = async (): Promise<void> => {
   const pinia = createPinia()
   const app = createApp(App)
