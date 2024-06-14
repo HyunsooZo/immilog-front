@@ -10,11 +10,11 @@
 						</div>
 						<div class="item__fnc">
 							<div class="list__item">
-								<em>{{ userInfo.userCountry }}</em>
-								<em>{{ userInfo.userRegion }}</em>
+								<em v-if="loginStatus">{{ userInfo.userCountry }}</em>
+								<em v-if="loginStatus">{{ userInfo.userRegion }}</em>
 							</div>
 							<div class="list__item user button-text">
-								<strong>{{ userInfo.userNickname }} </strong>
+								<strong>{{ userInfo.userNickname ? userInfo.userNickname : t('myPageView.login') }} </strong>
 							</div>
 						</div>
 					</div>
@@ -23,7 +23,7 @@
 		</div>
 		<!--  -->
 		<div class="list-wrap list--link">
-			<ul>
+			<ul v-if="loginStatus">
 				<li class="item">
 					<button type="button" class="button button-text" role="link" @click="onMyBoard">
 						<svg viewBox="0 0 16 16">
@@ -41,18 +41,9 @@
 						<span>{{ t('myPageView.bookMark') }}</span>
 					</button>
 				</li>
-				<li class="item">
-					<button type="button" class="button button-text" role="link">
-						<svg viewBox="0 0 16 16">
-							<path :d="settingIcon.first" />
-							<path :d="settingIcon.second" />
-						</svg>
-						<span>{{ t('myPageView.settings') }}</span>
-					</button>
-				</li>
 			</ul>
 			<ul>
-				<li class="item">
+				<li class="item" v-if="loginStatus">
 					<button type="button" class="button button-text" role="link" @click="onMenuOpen">
 						<svg viewBox="0 0 16 16">
 							<path :d="noticeIcon.first" />
@@ -70,13 +61,24 @@
 						<span>{{ t('myPageView.customerService') }}</span>
 					</button>
 				</li>
-				<li class="item">
+				<li class="item" v-if="loginStatus">
 					<button type="button" class="button" role="link" @click="signOut">
 						<svg viewBox="0 0 16 16">
 							<path :d="logoutIcon.first" />
 							<path :d="logoutIcon.second" />
 						</svg>
 						<span>{{ t('myPageView.logout') }}</span>
+					</button>
+				</li>
+			</ul>
+			<ul>
+				<li class="item">
+					<button type="button" class="button button-text" role="link">
+						<svg viewBox="0 0 16 16">
+							<path :d="settingIcon.first" />
+							<path :d="settingIcon.second" />
+						</svg>
+						<span>{{ t('myPageView.settings') }}</span>
 					</button>
 				</li>
 			</ul>
@@ -111,6 +113,7 @@ import NotificationModal from '@/components/notification/NotificationModal.vue';
 const { t } = useI18n();
 const router = useRouter();
 const userInfo = useUserInfoStore();
+const loginStatus = ref(false);
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -121,7 +124,12 @@ const modalCloseClass = () => {
 };
 
 // 프로필 수정 페이지로 이동
-const onProfileEdit = () => router.push(`/profile-edit`);
+const onProfileEdit = () => {
+	if (loginStatus.value === false) {
+		return router.push('/sign-in');
+	}
+	router.push(`/profile-edit`);
+}
 
 // 내 게시물 표시 상태
 const isUserBoardOn = ref(false);
@@ -180,8 +188,8 @@ const removeTokens = () => {
 
 // 사용자 정보 확인 후 로그인 페이지로 리다이렉트
 onMounted(async () => {
-	if (!userInfo.userNickname) {
-		router.push({ name: 'SignIn' });
+	if (userInfo.userNickname) {
+		loginStatus.value = true;
 	}
 });
 
