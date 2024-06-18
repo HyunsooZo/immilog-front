@@ -103,3 +103,8 @@ export interface IApiRefreshToken extends IApiResponse {
     accessToken: string
   }
 }
+
+export interface IApiErrorResponse {
+  errorCode: string
+  message: string
+}
