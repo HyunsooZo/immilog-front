@@ -166,17 +166,34 @@ const signIn = async () => {
         offLoading()
         router.push({ name: 'Home' })
       }, 1000)
-    } else if(response.status === 200 && response.data.message === '비밀번호가 일치하지 않습니다.'){
+    } else if (
+      response.status === 200 &&
+      response.data.message === '비밀번호가 일치하지 않습니다.'
+    ) {
       password.value = ''
       openAlert(t('signInView.passwordNotMatch'))
-    }else if(response.status === 200 && response.data.message === '사용자 상태가 활성화되어 있지 않습니다.'){
-      openAlert(t('signInView.notActiveUser'))
-    }else{
+    } else if (
+      response.status === 200 &&
+      response.data.message === '사용자 상태가 활성화되어 있지 않습니다.'
+    ) {
+      openAlert(t('signInView.notAnActiveUser'))
+    } else {
       password.value = ''
       openAlert(t('signInView.failedToSignIn'))
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log(error)
+    if (
+      error.response.status === 400 &&
+      error.response.data.message === '이메일 형식에 맞게 입력해주세요.'
+    ) {
+      openAlert(t('signInView.invalidEmailFormat'))
+    } else if (
+      error.response.status === 400 &&
+      error.response.data.message === '비밀번호는 8자에서 15자여야 합니다.'
+    ) {
+      openAlert(t('signInView.passwordLengthError'))
+    }
     openAlert(t('signInView.failedToConnect'))
   } finally {
     setTimeout(() => {

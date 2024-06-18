@@ -133,7 +133,9 @@
     "failedToSignIn": "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
     "failedToConnect": "서버와 연결이 끊겼습니다. 다시 시도해주세요.",
     "passwordNotMatch": "비밀번호가 일치하지 않습니다.",
-    "notAnActiveUser": "활성화되지 않은 계정입니다. 이메일로 전송된 인증 링크를 클릭하여 계정을 활성화해주세요."
+    "notAnActiveUser": "활성화되지 않은 계정입니다. 이메일로 전송된 인증 링크를 클릭하여 계정을 활성화해주세요.",
+    "invalidEmailFormat" : "이메일 형식이 올바르지 않습니다.",
+    "passwordLengthError" : "비밀번호는 8자 이상 20자 이하로 입력해주세요."
   },
   "signUpView": {
     "signUp": "회원가입",

@@ -133,7 +133,9 @@
     "failedToSignIn": "Failed to sign in. Please check your email and password.",
     "failedToConnect": "Failed to connect to the server. Please try again.",
     "passwordNotMatch": "Passwords do not match.",
-    "notAnActiveUser": "Not an active user. Please complete the sign-up by clicking the link in the verification email."
+    "notAnActiveUser": "Not an active user. Please complete the sign-up by clicking the link in the verification email.",
+    "invalidEmailFormat" : "Invalid email format.",
+    "passwordLengthError" : "Password must be 8-20 characters long."
   },
   "signUpView": {
     "signUp": "Sign Up",
