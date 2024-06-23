@@ -108,3 +108,7 @@ export interface IApiErrorResponse {
   errorCode: string
   message: string
 }
+
+export interface IApiUnreadNotification extends IApiResponse {
+  data: boolean
+}

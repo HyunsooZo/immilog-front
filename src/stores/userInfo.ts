@@ -11,6 +11,7 @@ interface UserInfoState {
   userRegion: string | null
   userProfileUrl: string | null
   isLocationMatch: boolean
+  unreadNotification: boolean
 }
 
 export const useUserInfoStore = defineStore('userInfo', {
@@ -23,7 +24,8 @@ export const useUserInfoStore = defineStore('userInfo', {
     userCountry: null,
     userRegion: null,
     userProfileUrl: null,
-    isLocationMatch: false
+    isLocationMatch: false,
+    unreadNotification: false
   }),
   actions: {
     setUserInfo(userInfo: IUserInfo | null | undefined): void {
@@ -50,6 +52,9 @@ export const useUserInfoStore = defineStore('userInfo', {
       this.userRegion = null
       this.userProfileUrl = null
       this.isLocationMatch = false
+    },
+    setUnreadNotification(unreadNotification: boolean): void {
+      this.unreadNotification = unreadNotification
     }
   }
 })

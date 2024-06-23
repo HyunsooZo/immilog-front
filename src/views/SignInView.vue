@@ -99,7 +99,7 @@
 
 <script setup lang="ts">
 import type { IUserInfo } from '@/types/interface'
-import type { IApiErrorResponse, IApiUserInfo } from '@/types/api-interface'
+import type { IApiUnreadNotification, IApiUserInfo } from '@/types/api-interface'
 import { useRouter } from 'vue-router'
 import { computed, onMounted, ref } from 'vue'
 import { useUserInfoStore } from '@/stores/userInfo.ts'
@@ -150,6 +150,7 @@ const signIn = async () => {
 				offLoading()
 				router.push({ name: 'Home' })
 			}, 1000)
+			getUnreadNotificationStatus()
 		}
 	} catch (error: any) {
 		openAlert(t(handleError(error)))
@@ -157,6 +158,18 @@ const signIn = async () => {
 		setTimeout(() => {
 			offLoading()
 		}, 2000)
+	}
+}
+
+const getUnreadNotificationStatus = async () => {
+	try {
+		const response: AxiosResponse<IApiUnreadNotification> =
+			await api.get('/notices/unread')
+		if (response.data.status === 200) {
+			useUserInfoStore().setUnreadNotification(response.data.data)
+		}
+	} catch (error) {
+		console.log(error)
 	}
 }
 

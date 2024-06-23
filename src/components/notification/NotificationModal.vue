@@ -108,6 +108,11 @@ const handleScroll = () => {
 		getNotificationsApi(currentPage.value);
 	}
 };
+
+const setUnreadNotificationAsRead = () => {
+	userInfo.setUnreadNotification(false);
+};
+
 onMounted(async () => {
 	modalOpenClass();
 	if (!userInfo.userNickname) {
@@ -115,6 +120,7 @@ onMounted(async () => {
 	} else {
 		login.value = true;
 		await getNotificationsApi(0);
+		setUnreadNotificationAsRead();
 	}
 });
 

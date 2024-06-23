@@ -11,7 +11,8 @@
 		<h1 class="title"><em class="header-logo">Immilog</em></h1>
 		<!-- 알림 버튼 -->
 		<div class="item__fnc" v-if="showNotification">
-			<button type="button" class="button-icon button--notice new" role="link" @click="">
+			<button type="button" class="button-icon button--notice" :class="{ new: userInfo.unreadNotification }" role="link"
+				@click="">
 				<i class="blind">알림</i>
 			</button>
 		</div>
@@ -21,7 +22,9 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { useUserInfoStore } from '@/stores/userInfo';
 const router = useRouter();
+const userInfo = useUserInfoStore();
 
 const props = defineProps({
 	showNotification: {
