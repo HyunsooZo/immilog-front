@@ -28,7 +28,9 @@
     "logout": "로그아웃",
     "login": "로그인",
     "settings": "언어 설정",
-    "languageChange": "언어 변경"
+    "languageChange": "언어 변경",
+    "korean": "한국어",
+    "english": "영어"
   },
   "selectItems": {
     "allCategories": "전체",
@@ -134,8 +136,8 @@
     "failedToConnect": "서버와 연결이 끊겼습니다. 다시 시도해주세요.",
     "passwordNotMatch": "비밀번호가 일치하지 않습니다.",
     "notAnActiveUser": "활성화되지 않은 계정입니다. 이메일로 전송된 인증 링크를 클릭하여 계정을 활성화해주세요.",
-    "invalidEmailFormat" : "이메일 형식이 올바르지 않습니다.",
-    "passwordLengthError" : "비밀번호는 8자 이상 20자 이하로 입력해주세요."
+    "invalidEmailFormat": "이메일 형식이 올바르지 않습니다.",
+    "passwordLengthError": "비밀번호는 8자 이상 20자 이하로 입력해주세요."
   },
   "signUpView": {
     "signUp": "회원가입",

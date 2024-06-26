@@ -73,13 +73,18 @@
 			</ul>
 			<ul>
 				<li class="item">
-					<button type="button" class="button button-text" role="link">
+					<div class="button button-text" role="link">
 						<svg viewBox="0 0 16 16">
 							<path :d="settingIcon.first" />
 							<path :d="settingIcon.second" />
 						</svg>
 						<span>{{ t('myPageView.settings') }}</span>
-					</button>
+						<div class="input__item">
+							<input type="radio" class="input__radio" name="setting" id="setting" />
+							<label for="setting" class="input__label">{{ t('myPageView.korean') }}</label>
+							<label for="setting" class="input__label">{{ t('myPageView.english') }}</label>
+						</div>
+					</div>
 				</li>
 			</ul>
 		</div>
