@@ -189,7 +189,8 @@
   },
   "postView": {
     "myCountry": "My Country",
-    "interestCountry": "Interest Country"
+    "interestCountry": "Interest Country",
+    "noInterestCountry": "No interest country. Please set your interest country in My Page."
   },
   "subMenuList": {
     "industry": "Industry",

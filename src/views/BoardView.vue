@@ -52,6 +52,9 @@
 	<PostModal v-if="onPostModal" :isJobBoard=false @onPostModal:value="closePostModal" />
 	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
 		@close="closeSelect" @select:value="selectedValue" />
+	<teleport to="#modal" v-if="alertValue">
+		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+	</teleport>
 </template>
 
 <script setup lang="ts">
@@ -66,6 +69,7 @@ import SearchBar from '@/components/search/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select--dialog
 import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/board/BoardContent.vue';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
 import api from '@/api';
 import { useRouter } from 'vue-router';
 import { applicationJsonWithToken } from '@/utils/header';
@@ -73,6 +77,17 @@ import { AxiosResponse } from 'axios';
 import { IApiPosts } from '@/types/api-interface';
 
 const { t } = useI18n();
+const alertValue = ref(false);
+const alertText = ref('');
+
+const openAlert = (content: string) => {
+	alertValue.value = true;
+	alertText.value = content;
+};
+
+const closeAlert = () => {
+	alertValue.value = false;
+};
 
 const router = useRouter();
 // modal open/close 시 body 컨트롤
@@ -128,6 +143,10 @@ let menus = [
 ];
 
 const selectMenu = (selectedMenu: ISelectMenu) => {
+	if (selectedMenu.label === t('postView.interestCountry') && !userInfo.userInterestCountry) {
+		openAlert(t('postView.noInterestCountry'));
+		return;
+	}
 	selectedMenu.active.value = true;
 	menus
 		.filter(menu => menu !== selectedMenu)
@@ -138,6 +157,7 @@ const selectMenu = (selectedMenu: ISelectMenu) => {
 		updateMenuBar();
 	});
 };
+
 const updateMenuBar = () => {
 	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
 	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';

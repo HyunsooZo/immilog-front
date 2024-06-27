@@ -189,7 +189,8 @@
   },
   "postView": {
     "myCountry": "내 국가",
-    "interestCountry": "관심 국가"
+    "interestCountry": "관심 국가",
+    "noInterestCountry": "관심 국가가 없습니다. 마이페이지에서 관심 국가를 설정해주세요."
   },
   "subMenuList": {
     "industry": "업계 선택",
