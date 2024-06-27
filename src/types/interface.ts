@@ -111,6 +111,7 @@ export interface IUser {
   reportedCount: number
   reportedDate: string
   country: string
+  interestCountry: string
   region: string
   userRole: string
   userStatus: string
