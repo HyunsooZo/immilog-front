@@ -68,6 +68,19 @@
 					</button>
 				</div>
 			</div>
+			<!-- interested country -->
+			<div class="input-wrap">
+				<em class="input__title">{{ t('profileEditView.changeInterestedCountry') }}</em>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner" @click="openSelect">
+							<input v-model="interestCountry" type="text" class="input__element"
+								:placeholder="t('profileEditView.interestCountry')" readonly />
+						</div>
+					</div>
+				</div>
+			</div>
 
 			<div class="button-wrap">
 				<button class="button" role="link" :class="{
@@ -90,6 +103,8 @@
 			</div>
 		</div>
 	</div>
+	<SelectDialog v-if="isCountrySelectClicked" :title="countrySelectTitle" :list="countries" @close="closeSelect"
+		@select:value="selectedValue" />
 	<teleport to="#modal" v-if="alertValue">
 		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
 	</teleport>
@@ -97,18 +112,20 @@
 
 <script setup lang="ts">
 import type { IApiImage, IApiLocation, IApiResponse } from '@/types/api-interface';
-import type { ILocation } from '@/types/interface';
+import type { ILocation, ISelectItem } from '@/types/interface';
 import { applicationJson, applicationJsonWithToken, multipartFormData } from '@/utils/header';
 import { computed, onMounted, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { useLocationStore } from '@/stores/location.ts';
 import { resizeImage } from '@/utils/image.ts';
 import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import { useI18n } from 'vue-i18n'
+import { countries } from '@/utils/selectItems'
 import { AxiosResponse } from 'axios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
+import SelectDialog from '@/components/selections/SelectDialog.vue';
 import api from '@/api';
 
 const { t } = useI18n();
@@ -119,6 +136,9 @@ const isNickNameValid = ref(false);
 const userInfo = useUserInfoStore();
 const userNickName = ref();
 const country = ref();
+const interestCountry = ref(userInfo.userInterestCountry);
+const isCountrySelectClicked = ref(false);
+const countrySelectTitle = t('profileEditView.selectCountry');
 const imagePreview = ref();
 const imageFile = ref(null);
 const latitude = ref(0.0);
@@ -207,6 +227,7 @@ const saveProfile = async () => {
 		nickName:
 			userNickName.value === userInfo.userNickname ? null : userNickName.value,
 		country: country.value === userInfo.userCountry ? null : country.value,
+		interestCountry: interestCountry.value === userInfo.userInterestCountry ? null : interestCountry.value,
 		userProfileUrl:
 			imagePreview.value === userInfo.userProfileUrl
 				? null
@@ -245,6 +266,33 @@ const closeAlert = () => {
 	alertValue.value = false;
 };
 // -->
+
+// select 관련 메소드 
+const openSelect = (event: Event) => {
+	event.preventDefault();
+	isCountrySelectClicked.value = true;
+	modalOpenClass();
+}
+
+const closeSelect = () => {
+	isCountrySelectClicked.value = false;
+	modalCloseClass();
+};
+
+// select 관련 메소드 (선택된 값 처리)
+const selectedValue = (value: ISelectItem) => {
+	if (countries.some(c => c.code === value.code)) {
+		interestCountry.value = t(value.name);
+	}
+};
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
+};
 
 const options = {
 	enableHighAccuracy: true,

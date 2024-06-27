@@ -147,6 +147,7 @@ export interface IUserInfo {
   nickname: string | null
   email: string | null
   country: string | null
+  interestCountry: string | null
   region: string | null
   userProfileUrl: string | null
   isLocationMatch: boolean
