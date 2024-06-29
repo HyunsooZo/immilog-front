@@ -156,6 +156,8 @@
     "passwordNotMatch": "비밀번호가 일치하지 않습니다.",
     "passwordFormatNotMeet": "비밀번호는 영문, 숫자, 특수문자 조합으로 8~20자리로 입력해주세요.",
     "country": "접속 국가",
+    "interestCountry": "관심 국가",
+    "interestCountryPlaceHolder": "관심 국가 선택",
     "doDuplicationCheck": "닉네임 중복체크를 해주세요.",
     "signUpVerificationEmailHasBeenSent": "회원가입 인증 이메일이 발송되었습니다.",
     "thruVerificationEmail": "입력하신 이메일을 통하여 <br>이메일 인증을 완료하신 후 <br>아래 버튼을 눌러 로그인을 진행해주세요.",

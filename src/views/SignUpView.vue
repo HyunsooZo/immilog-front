@@ -87,7 +87,22 @@
 					</div>
 				</div>
 			</div>
+			<!-- interest country -->
+			<div class="input-wrap">
+				<em class="input__title">{{ t('signUpView.interestCountry') }}</em>
+				<!-- input__wrap -->
+				<div class="input__wrap underline-type">
+					<div class="input__item">
+						<div class="input__item_inner" @click="openSelect">
+							<input v-model="interestCountry" type="text" class="input__element"
+								:placeholder="t('signUpView.interestCountryPlaceHolder')" readonly />
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
+		<SelectDialog v-if="isCountrySelectClicked" :title="countrySelectTitle" :list="countries" @close="closeSelect"
+			@select:value="selectedValue" />
 		<TheFooterButton :onClick="register" :condition="fullFilled && !isLoading" />
 	</div>
 	<teleport to="#modal" v-if="alertValue">
@@ -97,27 +112,34 @@
 
 <script setup lang="ts">
 import type { IApiBoolean, IApiLocation } from '@/types/api-interface';
-import type { IError, ILocation } from '@/types/interface';
+import type { IError, ILocation, ISelectItem } from '@/types/interface';
 import { computed, ref, watch } from 'vue';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useLocationStore } from '@/stores/location.ts';
+import { useUserInfoStore } from '@/stores/userInfo';
 import { applicationJson } from '@/utils/header';
+import { countries } from '@/utils/selectItems'
 import { AxiosResponse } from 'axios';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
+import SelectDialog from '@/components/selections/SelectDialog.vue';
 import api from '@/api';
 
 const { t } = useI18n();
 
+const userInfo = useUserInfoStore();
 const emailRegister = ref('');
 const userNickName = ref('');
 const userPassword = ref('');
 const userPasswordConfirm = ref('');
 const submitted = ref(false);
 const country = ref(t('signUpView.noLocationInfo'));
+const isCountrySelectClicked = ref(false);
+const interestCountry = ref(userInfo.userInterestCountry);
+const countrySelectTitle = t('profileEditView.selectCountry');
 const region = ref('');
 const isLoading = ref(false);
 const isNickNameValid = ref(false);
@@ -162,6 +184,7 @@ const register = async () => {
 				nickName: userNickName.value,
 				password: userPassword.value,
 				country: country.value,
+				interestCountry: interestCountry.value,
 				region: region.value,
 				profileImage: null,
 			};
@@ -311,6 +334,34 @@ const onResult = () => {
 			content: t('signUpView.thruVerificationEmail'),
 		},
 	});
+};
+
+
+// modal open/close 시 body 컨트롤
+const modalOpenClass = () => {
+	document.body.classList.add('inactive');
+};
+const modalCloseClass = () => {
+	document.body.classList.remove('inactive');
+};
+
+// select 관련 메소드 
+const openSelect = (event: Event) => {
+	event.preventDefault();
+	isCountrySelectClicked.value = true;
+	modalOpenClass();
+}
+
+const closeSelect = () => {
+	isCountrySelectClicked.value = false;
+	modalCloseClass();
+};
+
+// select 관련 메소드 (선택된 값 처리)
+const selectedValue = (value: ISelectItem) => {
+	if (countries.some(c => c.code === value.code)) {
+		interestCountry.value = t(value.name);
+	}
 };
 
 onMounted(() => {

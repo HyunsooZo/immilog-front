@@ -156,6 +156,8 @@
     "passwordNotMatch": "Passwords do not match.",
     "passwordFormatNotMeet": "Password must be 8-20 characters long and include letters, numbers, and special characters.",
     "country": "Country of Access",
+    "interestCountry": "Interest Country",
+    "interestCountryPlaceHolder": "Select Interest Country",
     "doDuplicationCheck": "Please check for nickname duplicates.",
     "signUpVerificationEmailHasBeenSent": "A sign-up verification email has been sent.",
     "thruVerificationEmail": "Complete the email verification through the email you entered <br>then click the button below to proceed with login.",
