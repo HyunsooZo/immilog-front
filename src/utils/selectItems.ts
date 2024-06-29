@@ -17,7 +17,6 @@ const sortingList: ISelectItem[] = [
 ]
 
 const countries: ISelectItem[] = [
-  { name: 'country.all', code: 'ALL' },
   { name: 'country.malaysia', code: 'MALAYSIA' },
   { name: 'country.singapore', code: 'SINGAPORE' },
   { name: 'country.indonesia', code: 'INDONESIA' },
