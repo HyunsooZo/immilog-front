@@ -59,6 +59,9 @@ export const useUserInfoStore = defineStore('userInfo', {
     },
     setUnreadNotification(unreadNotification: boolean): void {
       this.unreadNotification = unreadNotification
+    },
+    setUserInterestCountry(userInterestCountry: string): void {
+      this.userInterestCountry = userInterestCountry
     }
   }
 })

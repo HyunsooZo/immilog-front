@@ -33,7 +33,7 @@
 					<div class="input__item">
 						<div class="input__item_inner">
 							<input v-model="userNickName" type="text" class="input__element"
-								:placeholder="t('profieEditView.nicknameChangePlaceHolder')" />
+								:placeholder="t('profileEditView.nicknameChangePlaceHolder')" />
 						</div>
 					</div>
 					<button type="button" class="button button--primary" @click="checkNickName">
@@ -83,21 +83,7 @@
 			</div>
 
 			<div class="button-wrap">
-				<button class="button" role="link" :class="{
-					'button--positive':
-						(!nickNameCheckDone && !isNickNameChanged) ||
-						(nickNameCheckDone && isNickNameValid) ||
-						isImageChange ||
-						country ||
-						userNickName,
-					'button--disabled':
-						(!nickNameCheckDone && !isNickNameChanged) ||
-						!nickNameCheckDone ||
-						!isImageChange ||
-						!isNickNameValid ||
-						!country ||
-						!userNickName,
-				}" @click="saveProfile">
+				<button class="button" role="link" :class="buttonClass" @click="saveProfile">
 					{{ t('profileEditView.save') }}
 				</button>
 			</div>
@@ -136,7 +122,7 @@ const isNickNameValid = ref(false);
 const userInfo = useUserInfoStore();
 const userNickName = ref();
 const country = ref();
-const interestCountry = ref(userInfo.userInterestCountry);
+const interestCountry = ref(userInfo.userInterestCountry ? userInfo.userInterestCountry : undefined);
 const isCountrySelectClicked = ref(false);
 const countrySelectTitle = t('profileEditView.selectCountry');
 const imagePreview = ref();
@@ -149,7 +135,26 @@ const isNickNameChanged = computed(() => {
 	return userNickName.value !== userInfo.userNickname;
 });
 
-const isImageChange = computed(() => {
+const isInterestCountryChanged = computed(() => {
+	return interestCountry.value !== userInfo.userInterestCountry;
+});
+
+const isCountryChanged = computed(() => {
+	return country.value !== userInfo.userCountry;
+});
+
+const buttonClass = computed(() => {
+	if (isInterestCountryChanged.value ||
+		(nickNameCheckDone.value && isNickNameValid.value && isNickNameChanged.value) ||
+		isImageChanged.value ||
+		isCountryChanged.value) {
+		return 'button--positive';
+	} else {
+		return 'button--disabled';
+	}
+});
+
+const isImageChanged = computed(() => {
 	return imagePreview.value !== userInfo.userProfileUrl;
 });
 
@@ -222,6 +227,9 @@ const hostImage = async () => {
 const saveProfile = async () => {
 	if (imageFile.value) {
 		await hostImage();
+	}
+	if (isInterestCountryChanged && interestCountry.value) {
+		userInfo.setUserInterestCountry(interestCountry.value);
 	}
 	const formData = {
 		nickName:
