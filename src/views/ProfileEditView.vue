@@ -232,14 +232,10 @@ const saveProfile = async () => {
 		userInfo.setUserInterestCountry(interestCountry.value);
 	}
 	const formData = {
-		nickName:
-			userNickName.value === userInfo.userNickname ? null : userNickName.value,
+		nickName: userNickName.value === userInfo.userNickname ? null : userNickName.value,
 		country: country.value === userInfo.userCountry ? null : country.value,
 		interestCountry: interestCountry.value === userInfo.userInterestCountry ? null : interestCountry.value,
-		userProfileUrl:
-			imagePreview.value === userInfo.userProfileUrl
-				? null
-				: imagePreview.value[0],
+		userProfileUrl: imagePreview.value === userInfo.userProfileUrl ? null : imagePreview.value[0],
 		latitude: latitude.value,
 		longitude: longitude.value,
 	};
