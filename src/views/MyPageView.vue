@@ -10,7 +10,7 @@
 						</div>
 						<div class="item__fnc">
 							<div class="list__item">
-								<em v-if="loginStatus">{{ userInfo.userCountry }}</em>
+								<em v-if="loginStatus">{{ t('countries.' + userInfo.userCountry) }}</em>
 								<em v-if="loginStatus">{{ userInfo.userRegion }}</em>
 							</div>
 							<div class="list__item user button-text">

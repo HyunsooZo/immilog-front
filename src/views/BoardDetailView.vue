@@ -14,7 +14,7 @@
 					<div class="item__fnc">
 						<div class="list__item">
 							<button type="button" class="list__item_button ctg">
-								<em>{{ post.country }}</em>
+								<em>{{ t('countries.' + post.country) }}</em>
 								<strong>{{ post.category }}</strong>
 							</button>
 						</div>

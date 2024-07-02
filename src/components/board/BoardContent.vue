@@ -7,7 +7,7 @@
 			<div class="item__fnc">
 				<div class="list__item">
 					<button type="button" class="list__item_button ctg">
-						<em>{{ post.country }}</em>
+						<em>{{ t('countries.' + post.country) }}</em>
 						<strong>{{ post.category }}</strong>
 						<span v-if="post.isPublic === 'N'" class="list__private">
 							<i class="blind">내국가에만 공개 된 글</i>

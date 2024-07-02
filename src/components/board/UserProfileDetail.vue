@@ -20,7 +20,7 @@
 							</button>
 							<div class="item__fnc">
 								<div class="list__item">
-									<em>{{ userProfile.country }}</em>
+									<em>{{ t('countries.' + userProfile.country) }}</em>
 									<em>{{ userProfile.region }}</em>
 								</div>
 								<div class="list__item user">

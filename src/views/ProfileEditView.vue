@@ -370,7 +370,7 @@ const getCountry = async (location: ILocation) => {
 			multipartFormData,
 		);
 		if (response.status === 200) {
-			country.value = response.data.data.country;
+			country.value = t('countries.' + response.data.data.country);
 		} else {
 			openAlert(t('profileEditView.failedToFetchLocationInfo'));
 		}
@@ -381,11 +381,11 @@ const getCountry = async (location: ILocation) => {
 
 onMounted(() => {
 	userNickName.value = userInfo.userNickname;
-	country.value = userInfo.userCountry;
+	country.value = t('countries.' + userInfo.userCountry);
 	imagePreview.value = userInfo.userProfileUrl;
 	if (userInfo.userInterestCountry) {
 		interestCountry.value = userInfo.userInterestCountry;
-		interestCountryName.value = t(userInfo.userInterestCountry.name);
+		interestCountryName.value = t('countries.' + userInfo.userInterestCountry.name);
 	}
 });
 </script>

@@ -234,5 +234,24 @@
     "postingSucceed": "게시물이 등록되었습니다.",
     "enterTitle": "제목을 입력해주세요.",
     "enterContent": "내용을 입력해주세요."
+  },
+  "countries": {
+    "MALAYSIA": "말레이시아",
+    "SINGAPORE": "싱가포르",
+    "INDONESIA": "인도네시아",
+    "VIETNAM": "베트남",
+    "PHILIPPINES": "필리핀",
+    "THAILAND": "태국",
+    "MYANMAR": "미얀마",
+    "CAMBODIA": "캄보디아",
+    "LAOS": "라오스",
+    "BRUNEI": "브루나이",
+    "EAST_TIMOR": "동티모르",
+    "CHINA": "중국",
+    "JAPAN": "일본",
+    "SOUTH_KOREA": "대한민국",
+    "AUSTRALIA": "호주",
+    "NEW_ZEALAND": "뉴질랜드",
+    "GUAM": "괌"
   }
 }

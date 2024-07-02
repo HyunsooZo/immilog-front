@@ -234,5 +234,24 @@
     "postingSucceed": "Posting Succeed",
     "enterTitle": "Please enter a title.",
     "enterContent": "Please enter content."
+  },
+  "countries": {
+    "MALAYSIA": "Malaysia",
+    "SINGAPORE": "Singapore",
+    "INDONESIA": "Indonesia",
+    "VIETNAM": "Vietnam",
+    "PHILIPPINES": "Philippines",
+    "THAILAND": "Thailand",
+    "MYANMAR": "Myanmar",
+    "CAMBODIA": "Cambodia",
+    "LAOS": "Laos",
+    "BRUNEI": "Brunei",
+    "EAST_TIMOR": "East Timor",
+    "CHINA": "China",
+    "JAPAN": "Japan",
+    "SOUTH_KOREA": "South Korea",
+    "AUSTRALIA": "Australia",
+    "NEW_ZEALAND": "New Zealand",
+    "GUAM": "Guam"
   }
 }
