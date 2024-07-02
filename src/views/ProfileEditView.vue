@@ -75,7 +75,7 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner" @click="openSelect">
-							<input v-model="interestCountry" type="text" class="input__element"
+							<input v-model="interestCountryName" type="text" class="input__element"
 								:placeholder="t('profileEditView.interestCountry')" readonly />
 						</div>
 					</div>
@@ -122,13 +122,14 @@ const isNickNameValid = ref(false);
 const userInfo = useUserInfoStore();
 const userNickName = ref();
 const country = ref();
-const interestCountry = ref(userInfo.userInterestCountry ? userInfo.userInterestCountry : undefined);
+const interestCountry = ref<ISelectItem | null>(null);
+const interestCountryName = ref('');
 const isCountrySelectClicked = ref(false);
 const countrySelectTitle = t('profileEditView.selectCountry');
 const imagePreview = ref();
 const imageFile = ref(null);
-const latitude = ref(0.0);
-const longitude = ref(0.0);
+const latitude = ref(parseFloat(localStorage.getItem('latitude') ?? '0.0'));
+const longitude = ref(parseFloat(localStorage.getItem('longitude') ?? '0.0'));
 const isLoading = ref(false);
 
 const isNickNameChanged = computed(() => {
@@ -234,7 +235,7 @@ const saveProfile = async () => {
 	const formData = {
 		nickName: userNickName.value === userInfo.userNickname ? null : userNickName.value,
 		country: country.value === userInfo.userCountry ? null : country.value,
-		interestCountry: interestCountry.value === userInfo.userInterestCountry ? null : interestCountry.value,
+		interestCountry: (!interestCountry.value && interestCountry.value === userInfo.userInterestCountry) ? null : interestCountry.value?.code,
 		userProfileUrl: imagePreview.value === userInfo.userProfileUrl ? null : imagePreview.value[0],
 		latitude: latitude.value,
 		longitude: longitude.value,
@@ -286,7 +287,7 @@ const closeSelect = () => {
 // select 관련 메소드 (선택된 값 처리)
 const selectedValue = (value: ISelectItem) => {
 	if (countries.some(c => c.code === value.code)) {
-		interestCountry.value = t(value.name);
+		interestCountry.value = value;
 	}
 };
 
@@ -382,5 +383,9 @@ onMounted(() => {
 	userNickName.value = userInfo.userNickname;
 	country.value = userInfo.userCountry;
 	imagePreview.value = userInfo.userProfileUrl;
+	if (userInfo.userInterestCountry) {
+		interestCountry.value = userInfo.userInterestCountry;
+		interestCountryName.value = t(userInfo.userInterestCountry.name);
+	}
 });
 </script>

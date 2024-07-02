@@ -1,4 +1,4 @@
-import { IUserInfo } from '@/types/interface.ts'
+import { ISelectItem, IUserInfo } from '@/types/interface.ts'
 import { defineStore } from 'pinia'
 
 interface UserInfoState {
@@ -8,7 +8,7 @@ interface UserInfoState {
   userNickname: string | null
   userEmail: string | null
   userCountry: string | null
-  userInterestCountry: string | null
+  userInterestCountry: ISelectItem | null
   userRegion: string | null
   userProfileUrl: string | null
   isLocationMatch: boolean
@@ -40,7 +40,10 @@ export const useUserInfoStore = defineStore('userInfo', {
       this.userNickname = userInfo.nickname
       this.userEmail = userInfo.email
       this.userCountry = userInfo.country
-      this.userInterestCountry = userInfo.interestCountry
+      this.userInterestCountry = {
+        name: userInfo.interestCountry ?? '',
+        code: ''
+      }
       this.userRegion = userInfo.region
       this.userProfileUrl = userInfo.userProfileUrl
       this.isLocationMatch = userInfo.isLocationMatch
@@ -60,7 +63,7 @@ export const useUserInfoStore = defineStore('userInfo', {
     setUnreadNotification(unreadNotification: boolean): void {
       this.unreadNotification = unreadNotification
     },
-    setUserInterestCountry(userInterestCountry: string): void {
+    setUserInterestCountry(userInterestCountry: ISelectItem): void {
       this.userInterestCountry = userInterestCountry
     }
   }
