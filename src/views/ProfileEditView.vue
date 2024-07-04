@@ -75,7 +75,7 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner" @click="openSelect">
-							<input v-model="interestCountryName" type="text" class="input__element"
+							<input v-model="interestCountry" type="text" class="input__element"
 								:placeholder="t('profileEditView.interestCountry')" readonly />
 						</div>
 					</div>
@@ -122,8 +122,9 @@ const isNickNameValid = ref(false);
 const userInfo = useUserInfoStore();
 const userNickName = ref();
 const country = ref();
-const interestCountry = ref<ISelectItem | null>(null);
-const interestCountryName = ref('');
+const countryCode = ref();
+const interestCountry = ref('');
+const interestCountryCode = ref('');
 const isCountrySelectClicked = ref(false);
 const countrySelectTitle = t('profileEditView.selectCountry');
 const imagePreview = ref();
@@ -141,7 +142,7 @@ const isInterestCountryChanged = computed(() => {
 });
 
 const isCountryChanged = computed(() => {
-	return country.value !== userInfo.userCountry;
+	return countryCode && countryCode.value !== userInfo.userCountry;
 });
 
 const buttonClass = computed(() => {
@@ -229,13 +230,10 @@ const saveProfile = async () => {
 	if (imageFile.value) {
 		await hostImage();
 	}
-	if (isInterestCountryChanged && interestCountry.value) {
-		userInfo.setUserInterestCountry(interestCountry.value);
-	}
 	const formData = {
 		nickName: userNickName.value === userInfo.userNickname ? null : userNickName.value,
-		country: country.value === userInfo.userCountry ? null : country.value,
-		interestCountry: (!interestCountry.value && interestCountry.value === userInfo.userInterestCountry) ? null : interestCountry.value?.code,
+		country: country.value === userInfo.userCountry ? null : countryCode.value,
+		interestCountry: (!interestCountry.value && interestCountry.value === userInfo.userInterestCountry) ? null : interestCountryCode.value,
 		userProfileUrl: imagePreview.value === userInfo.userProfileUrl ? null : imagePreview.value[0],
 		latitude: latitude.value,
 		longitude: longitude.value,
@@ -247,9 +245,18 @@ const saveProfile = async () => {
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
-			userInfo.userNickname = userNickName.value;
-			userInfo.userCountry = country.value;
-			userInfo.userProfileUrl = imagePreview.value;
+			if (isNickNameChanged.value) {
+				userInfo.userNickname = userNickName.value;
+			}
+			if (isImageChanged.value) {
+				userInfo.userProfileUrl = imagePreview.value;
+			}
+			if (isCountryChanged.value) {
+				userInfo.userCountry = countryCode.value;
+			}
+			if (isInterestCountryChanged.value) {
+				userInfo.userInterestCountry = interestCountryCode.value;
+			}
 			router.back();
 		}
 	} catch (error) {
@@ -287,7 +294,8 @@ const closeSelect = () => {
 // select 관련 메소드 (선택된 값 처리)
 const selectedValue = (value: ISelectItem) => {
 	if (countries.some(c => c.code === value.code)) {
-		interestCountry.value = value;
+		interestCountry.value = t('countries.' + value.code);
+		interestCountryCode.value = value.code;
 	}
 };
 
@@ -371,6 +379,7 @@ const getCountry = async (location: ILocation) => {
 		);
 		if (response.status === 200) {
 			country.value = t('countries.' + response.data.data.country);
+			countryCode.value = response.data.data.country;
 		} else {
 			openAlert(t('profileEditView.failedToFetchLocationInfo'));
 		}
@@ -384,8 +393,9 @@ onMounted(() => {
 	country.value = t('countries.' + userInfo.userCountry);
 	imagePreview.value = userInfo.userProfileUrl;
 	if (userInfo.userInterestCountry) {
-		interestCountry.value = userInfo.userInterestCountry;
-		interestCountryName.value = t('countries.' + userInfo.userInterestCountry.name);
+		interestCountry.value = t('countries.' + userInfo.userInterestCountry);
+	} else {
+		interestCountry.value = '';
 	}
 });
 </script>

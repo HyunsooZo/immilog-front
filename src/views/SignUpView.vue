@@ -139,6 +139,7 @@ const submitted = ref(false);
 const country = ref(t('signUpView.noLocationInfo'));
 const isCountrySelectClicked = ref(false);
 const interestCountry = ref(userInfo.userInterestCountry);
+const interestCountryCode = ref('');
 const countrySelectTitle = t('profileEditView.selectCountry');
 const region = ref('');
 const isLoading = ref(false);
@@ -184,7 +185,7 @@ const register = async () => {
 				nickName: userNickName.value,
 				password: userPassword.value,
 				country: country.value,
-				interestCountry: interestCountry.value,
+				interestCountry: interestCountryCode.value,
 				region: region.value,
 				profileImage: null,
 			};
@@ -361,6 +362,7 @@ const closeSelect = () => {
 const selectedValue = (value: ISelectItem) => {
 	if (countries.some(c => c.code === value.code)) {
 		interestCountry.value = t(value.name);
+		interestCountryCode.value = value.code;
 	}
 };
 

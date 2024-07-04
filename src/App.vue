@@ -27,6 +27,7 @@ const init = async () => {
 		localStorage.setItem('accessToken', response.data.data.accessToken as string);
 		localStorage.setItem('refreshToken', response.data.data.refreshToken as string);
 		userInfo.setUserInfo(response.data.data);
+		userInfo.setUserInterestCountry(response.data.data.interestCountry);
 		return true;
 	} else {
 		return false;
