@@ -29,8 +29,8 @@
     "login": "로그인",
     "settings": "언어 설정",
     "languageChange": "언어 변경",
-    "korean": "kr",
-    "english": "en"
+    "korean": "한국어",
+    "english": "영어"
   },
   "selectItems": {
     "allCategories": "전체",

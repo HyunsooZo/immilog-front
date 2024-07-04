@@ -1833,7 +1833,7 @@ strong + .button-text {
 .input__item._switch-toggle {
   position: relative;
   display: inline-block;
-  width: 4.5rem;
+  width: 4.8rem;
   height: 2rem;
 }
 .input__item._switch-toggle [class^='input__'] {
@@ -1854,31 +1854,45 @@ strong + .button-text {
   transition: 0.3s;
   border-radius: 1rem;
 }
-.input__item._switch-toggle .input__label span {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 2.2rem;
-  margin-top: -0.1rem;
-  text-align: center;
-  line-height: 2.2rem;
-  font-size: 1.2rem;
-}
-.input__item._switch-toggle .input__label::before {
-  content: '';
+.input__item._switch-toggle .input__label::before,
+.input__item._switch-toggle .input__label::after {
+  content: 'KR';
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
-  width: 2.2rem;
-  height: 2.2rem;
-  margin-top: -0.1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: -0.25rem;
+  line-height: 2.5rem;
+  font-weight: 500;
+  font-size: 1.2rem;
+  text-align: center;
   background: #fff;
   border-radius: 50%;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
 }
-.input__item._switch-toggle [class^='input__']:checked + .input__label {
-  background: #3f51b5;
+.input__item._switch-toggle [class^='input__']:checked + .input__label::before {
+  content: 'US';
+}
+.input__item._switch-toggle .input__label::after {
+  content: 'US';
+  left: auto;
+  right: 0;
+  width: 2rem;
+  margin-right: 0.3rem;
+  font-weight: 300;
+  font-size: 1.1rem;
+  color: #f6f6f6;
+  background: transparent;
+  box-shadow: none;
+}
+.input__item._switch-toggle [class^='input__']:checked + .input__label::after {
+  content: 'KR';
+  left: 0;
+  right: auto;
+  margin-left: 0.3rem;
+  margin-right: 0;
 }
 .input__item._switch-toggle [class^='input__'] + .input__label::before,
 .input__item._switch-toggle [class^='input__'] + .input__label span {
@@ -1889,6 +1903,7 @@ strong + .button-text {
 }
 .input__item._switch-toggle [class^='input__']:checked + .input__label::before,
 .input__item._switch-toggle [class^='input__']:checked + .input__label span {
+  margin-left: -0.2rem;
   -webkit-transform: translateX(100%);
   transform: translateX(100%);
 }

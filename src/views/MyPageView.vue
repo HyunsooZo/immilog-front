@@ -81,7 +81,7 @@
 						<span>{{ t('myPageView.settings') }}</span>
 						<div class="input__item _switch-toggle">
 							<input type="checkbox" class="input__checkbox" name="setting" id="setting" />
-							<label for="setting" class="input__label"><span>{{ t('myPageView.korean') }}</span></label>
+							<label for="setting" class="input__label"><span class="blind">{{ t('myPageView.korean') }}</span></label>
 							<!-- <label for="setting" class="input__label">{{ t('myPageView.english') }}</label> -->
 						</div>
 					</div>
