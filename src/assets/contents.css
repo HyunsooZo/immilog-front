@@ -1829,19 +1829,69 @@ strong + .button-text {
 .input__wrap.date-type .input__element:disabled {
   color: #aaa;
 }
-/* .input__wrap.date-type .input__element:disabled::before {
-    content: attr(data-placeholder);
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: #999;
-    background: #fff;
-    line-height: 3.1rem;
-} */
+/* switch toggle */
+.input__item._switch-toggle {
+  position: relative;
+  display: inline-block;
+  width: 4.5rem;
+  height: 2rem;
+}
+.input__item._switch-toggle [class^='input__'] {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.input__item._switch-toggle .input__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: #999;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 1rem;
+}
+.input__item._switch-toggle .input__label span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.2rem;
+  margin-top: -0.1rem;
+  text-align: center;
+  line-height: 2.2rem;
+  font-size: 1.2rem;
+}
+.input__item._switch-toggle .input__label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-top: -0.1rem;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+}
+.input__item._switch-toggle [class^='input__']:checked + .input__label {
+  background: #3f51b5;
+}
+.input__item._switch-toggle [class^='input__'] + .input__label::before,
+.input__item._switch-toggle [class^='input__'] + .input__label span {
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+}
+.input__item._switch-toggle [class^='input__']:checked + .input__label::before,
+.input__item._switch-toggle [class^='input__']:checked + .input__label span {
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
+}
 
 /* 목록 상단 기능 */
 .fnc-wrap {
@@ -2476,11 +2526,20 @@ strong + .button-text {
 .list-wrap.list--link li.item:last-child {
   border-bottom: none;
 }
-.list-wrap.list--link li.item .button {
+.list-wrap.list--link li.item .button,
+.list-wrap.list--link li.item .check {
   position: relative;
   padding: 1.5rem 1rem;
 }
-.list-wrap.list--link li.item .button svg {
+.list-wrap.list--link li.item .check {
+  display: flex;
+  align-items: center;
+  padding: 1.4rem 1rem;
+}
+.list-wrap.list--link li.item .check .input__item._switch-toggle {
+  margin-left: auto;
+}
+.list-wrap.list--link li.item svg {
   width: 1.6rem;
   height: 1.6rem;
   margin-right: 0.6rem;

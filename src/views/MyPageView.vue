@@ -73,16 +73,16 @@
 			</ul>
 			<ul>
 				<li class="item">
-					<div class="button button-text" role="link">
+					<div class="check">
 						<svg viewBox="0 0 16 16">
 							<path :d="settingIcon.first" />
 							<path :d="settingIcon.second" />
 						</svg>
 						<span>{{ t('myPageView.settings') }}</span>
-						<div class="input__item">
-							<input type="radio" class="input__radio" name="setting" id="setting" />
-							<label for="setting" class="input__label">{{ t('myPageView.korean') }}</label>
-							<label for="setting" class="input__label">{{ t('myPageView.english') }}</label>
+						<div class="input__item _switch-toggle">
+							<input type="checkbox" class="input__checkbox" name="setting" id="setting" />
+							<label for="setting" class="input__label"><span>{{ t('myPageView.korean') }}</span></label>
+							<!-- <label for="setting" class="input__label">{{ t('myPageView.english') }}</label> -->
 						</div>
 					</div>
 				</li>
