@@ -1850,8 +1850,8 @@ strong + .button-text {
   padding: 0;
   border: 0;
   background: #999;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
   border-radius: 1rem;
 }
 .input__item._switch-toggle .input__label span {
@@ -1882,8 +1882,8 @@ strong + .button-text {
 }
 .input__item._switch-toggle [class^='input__'] + .input__label::before,
 .input__item._switch-toggle [class^='input__'] + .input__label span {
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
   -webkit-transform: translateX(0);
   transform: translateX(0);
 }
