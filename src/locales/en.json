@@ -253,5 +253,12 @@
     "AUSTRALIA": "Australia",
     "NEW_ZEALAND": "New Zealand",
     "GUAM": "Guam"
+  },
+  "postCategories":{
+    "ALL": "All",
+    "WORKING_HOLIDAY":"Working Holiday",
+    "GREEN_CARD":"Permanent Residency",
+    "COMMUNICATION":"Communication",
+    "QNA":"Q&A"
   }
 }

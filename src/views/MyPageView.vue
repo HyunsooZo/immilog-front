@@ -117,7 +117,7 @@ import BookMark from '@/components/board/BookMark.vue'
 import UserBoard from '@/components/board/UserBoard.vue'
 import ConfirmModal from '@/components/modal/ConfirmModal.vue'
 import { useUserInfoStore } from '@/stores/userInfo.ts'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   myPostIcon,
@@ -129,22 +129,23 @@ import {
 } from '@/utils/icons.ts'
 import { useI18n } from 'vue-i18n'
 import NotificationModal from '@/components/notification/NotificationModal.vue'
-import { watchEffect } from 'vue'
 
 const { t, locale } = useI18n()
 const router = useRouter()
 const userInfo = useUserInfoStore()
 const loginStatus = ref(false)
-const isEnglishChecked = ref(false)
+const isEnglishChecked = ref(localStorage.getItem('language') === 'en')
 
+// 컴퓨티드 속성으로 언어 설정
+const changeLanguage = computed(() => {
+  return isEnglishChecked.value ? 'en' : 'ko'
+})
+
+// 언어 변경을 감지하여 localStorage와 locale 업데이트
 watchEffect(() => {
-  if (isEnglishChecked.value) {
-    locale.value = 'en'
-    localStorage.setItem('language', 'en')
-  } else {
-    locale.value = 'ko'
-    localStorage.setItem('language', 'ko')
-  }
+  const language = changeLanguage.value
+  localStorage.setItem('language', language)
+  locale.value = language
 })
 
 // modal open/close 시 body 컨트롤
@@ -220,9 +221,6 @@ const removeTokens = () => {
 
 // 사용자 정보 확인 후 로그인 페이지로 리다이렉트
 onMounted(async () => {
-  if (localStorage.getItem('language') === 'en') {
-    isEnglishChecked.value = true
-  }
   if (userInfo.userNickname) {
     loginStatus.value = true
   }

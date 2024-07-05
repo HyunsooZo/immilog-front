@@ -5,7 +5,7 @@
 				<div class="list__item">
 					<button type="button" class="list__item_button">
 						<strong class="em">{{ jobBoard.company }}</strong>
-						<em>{{ jobBoard.country }}</em>
+						<em>{{ t('countries.' + jobBoard.country) }}</em>
 						<em>{{ jobBoard.region }}</em>
 					</button>
 				</div>

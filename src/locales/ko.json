@@ -253,5 +253,12 @@
     "AUSTRALIA": "호주",
     "NEW_ZEALAND": "뉴질랜드",
     "GUAM": "괌"
+  },
+  "postCategories":{
+    "ALL": "전체",
+    "WORKING_HOLIDAY": "워킹홀리데이",
+    "GREEN_CARD": "영주권",
+    "COMMUNICATION": "소통",
+    "QNA": "질문/답변"
   }
 }
