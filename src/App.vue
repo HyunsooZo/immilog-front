@@ -15,8 +15,9 @@ import { fetchUserInfo } from './services/auth.ts';
 import { AxiosResponse } from 'axios';
 import TheFooter from './components/layouts/TheFooter.vue';
 import router from './router/index.ts';
+import { useI18n } from 'vue-i18n';
 
-
+const { locale } = useI18n();
 const route = useRoute();
 const hideFooter = computed(() => route.meta.hideFooter);
 const userInfo = useUserInfoStore();
@@ -35,6 +36,7 @@ const init = async () => {
 }
 
 onMounted(async () => {
+	locale.value = localStorage.getItem('language')==='en' ?'en':'ko';	
 	await getCoordinate();
 	if (!await init()) {
 		await nextTick()
