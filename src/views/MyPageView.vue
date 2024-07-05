@@ -139,8 +139,10 @@ const isKoreanChecked = ref(true)
 watchEffect(() => {
 	if (isKoreanChecked.value) {
 		locale.value = 'ko';
+		localStorage.setItem('language', 'ko');
 	} else {
-		locale.value = 'en'; // 이 부분에서 원하는 언어 코드로 변경
+		locale.value = 'en'; 
+		localStorage.setItem('language', 'en');
 	}
 });
 
