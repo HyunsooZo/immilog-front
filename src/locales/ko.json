@@ -116,7 +116,7 @@
     "chat": "채팅"
   },
   "searchBar": {
-    "keywordPlaceHoler": "검색어를 입력하세요"
+    "keywordPlaceHolder": "검색어를 입력하세요"
   },
   "signInView": {
     "email": "이메일",

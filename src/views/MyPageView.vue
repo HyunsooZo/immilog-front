@@ -87,7 +87,7 @@
                 class="input__checkbox"
                 name="setting"
                 id="setting"
-                v-model="isKoreanChecked"
+                v-model="isEnglishChecked"
               />
               <label for="setting" class="input__label"
                 ><span class="blind">{{ t('myPageView.korean') }}</span></label
@@ -130,21 +130,21 @@ import { useI18n } from 'vue-i18n'
 import NotificationModal from '@/components/notification/NotificationModal.vue'
 import { watchEffect } from 'vue'
 
-const { t, locale } = useI18n();
+const { t, locale } = useI18n()
 const router = useRouter()
 const userInfo = useUserInfoStore()
 const loginStatus = ref(false)
-const isKoreanChecked = ref(true)
+const isEnglishChecked = ref(false)
 
 watchEffect(() => {
-	if (isKoreanChecked.value) {
-		locale.value = 'ko';
-		localStorage.setItem('language', 'ko');
-	} else {
-		locale.value = 'en'; 
-		localStorage.setItem('language', 'en');
-	}
-});
+  if (isEnglishChecked.value) {
+	locale.value = 'en'
+    localStorage.setItem('language', 'en')
+  } else {
+	locale.value = 'ko'
+    localStorage.setItem('language', 'ko')
+  }
+})
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -219,6 +219,9 @@ const removeTokens = () => {
 
 // 사용자 정보 확인 후 로그인 페이지로 리다이렉트
 onMounted(async () => {
+  if (localStorage.getItem('language') === 'en') {
+    isEnglishChecked.value = true
+  }
   if (userInfo.userNickname) {
     loginStatus.value = true
   }
