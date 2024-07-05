@@ -90,9 +90,10 @@
                 v-model="isEnglishChecked"
               />
               <label for="setting" class="input__label"
-                ><span class="blind">{{ t('myPageView.korean') }}</span></label
+                ><span class="blind">{{
+                  isEnglishChecked ? t('myPageView.english') : t('myPageView.korean')
+                }}</span></label
               >
-              <!-- <label for="setting" lcass="input__label">{{ t('myPageView.english') }}</label> -->
             </div>
           </div>
         </li>
@@ -138,10 +139,10 @@ const isEnglishChecked = ref(false)
 
 watchEffect(() => {
   if (isEnglishChecked.value) {
-	locale.value = 'en'
+    locale.value = 'en'
     localStorage.setItem('language', 'en')
   } else {
-	locale.value = 'ko'
+    locale.value = 'ko'
     localStorage.setItem('language', 'ko')
   }
 })
