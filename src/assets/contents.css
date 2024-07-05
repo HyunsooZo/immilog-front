@@ -2547,12 +2547,12 @@ strong + .button-text {
 .list-wrap.list--link li.item .button,
 .list-wrap.list--link li.item .check {
   position: relative;
-  padding: 1.1rem 1rem;
+  padding: 1.5rem 1rem;
 }
 .list-wrap.list--link li.item .check {
   display: flex;
   align-items: center;
-  padding: 1.4rem 1rem;
+  padding: 1.1rem 1rem;
 }
 .list-wrap.list--link li.item .check .input__item._switch-toggle {
   margin-left: auto;
