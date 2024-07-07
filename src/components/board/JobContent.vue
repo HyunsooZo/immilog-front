@@ -159,7 +159,7 @@ const isBookmarked = computed(() => {
 
 const onBoardDetail = () => {
 	viewApi(props.jobBoard.seq);
-	router.push(`/board/${props.jobBoard.seq}`);
+	router.push(`/job-board/${props.jobBoard.seq}`);
 };
 
 // 좋아요 API 호출
