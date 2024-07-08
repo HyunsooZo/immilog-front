@@ -142,7 +142,7 @@ const isInterestCountryChanged = computed(() => {
 });
 
 const isCountryChanged = computed(() => {
-	return countryCode && countryCode.value !== userInfo.userCountry;
+	return countryCode && (countryCode.value !== userInfo.userCountry);
 });
 
 const buttonClass = computed(() => {
@@ -391,6 +391,7 @@ const getCountry = async (location: ILocation) => {
 onMounted(() => {
 	userNickName.value = userInfo.userNickname;
 	country.value = t('countries.' + userInfo.userCountry);
+	countryCode.value = userInfo.userCountry;
 	imagePreview.value = userInfo.userProfileUrl;
 	if (userInfo.userInterestCountry) {
 		interestCountry.value = t('countries.' + userInfo.userInterestCountry);
