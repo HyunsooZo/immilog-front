@@ -1,6 +1,9 @@
 <template>
 	<div class="item">
 		<div class="info__wrap">
+			<div class="item__pic" :class="{ 'pic--default': !jobBoard.companyLogo }">
+				<img v-if="jobBoard.companyLogo" :src="jobBoard.companyLogo" alt="" />
+			</div>
 			<div class="item__fnc">
 				<div class="list__item">
 					<button type="button" class="list__item_button">
@@ -138,8 +141,14 @@ const props = defineProps({
 	},
 	showAd: {
 		type: Boolean,
+		required: false,
 		default: false
 	},
+	detail: {
+		type: Boolean,
+		required: false,
+		default: false
+	}
 });
 
 const likes = ref(props.jobBoard.likeCount);

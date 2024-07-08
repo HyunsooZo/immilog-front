@@ -7,7 +7,7 @@
 
 		<!-- 목록 -->
 		<div class="list-wrap">
-			<JobContent />
+			<JobContent :jobBoard="jobBoard" :detail="true" />
 		</div>
 	</div>
 </template>
@@ -20,9 +20,6 @@ import { onMounted, ref } from 'vue';
 import { applicationJson } from '@/utils/header';
 import api from '@/api';
 import { IJobPost } from '@/types/interface';
-
-
-
 
 const route = useRoute();
 const postId = route.params.postId;
