@@ -48,7 +48,7 @@
 			</button>
 			<NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="t('homeView.post')" />
 			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" :showAd="showAd(index)"
-				:jobBoard="emptyJobPost" :isJobBoard="false" />
+				:detail="false" :jobBoard="emptyJobPost" :isJobBoard="false" />
 		</div>
 	</div>
 	<LoadingModal v-if="isLoading" />

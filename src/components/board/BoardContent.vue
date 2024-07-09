@@ -188,8 +188,8 @@ const props = defineProps({
   },
   detail: {
     type: Boolean,
-    required: false,
-    default: false
+    required: true,
+    default: true
   },
   isJobBoard: {
     type: Boolean,

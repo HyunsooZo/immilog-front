@@ -188,8 +188,8 @@
               <div class="text__item">
                 <p class="text">
                   <span class="comment__user" v-if="extractAtWordAndRest(reply.content).atWord">{{
-          extractAtWordAndRest(reply.content).atWord
-        }}</span>
+                    extractAtWordAndRest(reply.content).atWord
+                    }}</span>
                   {{ extractAtWordAndRest(reply.content).restText }}
                 </p>
               </div>
@@ -198,10 +198,10 @@
           <div class="util__wrap">
             <div class="item__fnc">
               <button type="button" class="list__item_button like" :class="{
-          active: post.comments[index].replies[replyIndex].likeUsers.includes(
-            userSeq ? userSeq : 0
-          )
-        }" @click="likeReply(index, replyIndex)">
+                active: post.comments[index].replies[replyIndex].likeUsers.includes(
+                  userSeq ? userSeq : 0
+                )
+              }" @click="likeReply(index, replyIndex)">
                 <!-- //활성화 .active -->
                 <i class="blind">좋아요</i>
                 <span class="item__count">{{ reply.upVotes }}</span>
