@@ -7,19 +7,20 @@
 
 		<!-- 목록 -->
 		<div class="list-wrap">
-			<JobContent :jobBoard="jobBoard" :detail="true" />
+			<BoardContent :jobBoard="jobBoard" :detail="true" :post="emptyPost" :isJobBoard="true" />
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import TheHeader from '@/components/layouts/TheHeader.vue';
-import JobContent from '@/components/board/JobContent.vue';
+import BoardContent from '@/components/board/BoardContent.vue';
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue';
 import { applicationJson } from '@/utils/header';
 import api from '@/api';
 import { IJobPost } from '@/types/interface';
+import { emptyPost } from '@/utils/emptyObjects';
 
 const route = useRoute();
 const postId = route.params.postId;

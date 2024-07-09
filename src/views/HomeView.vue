@@ -47,7 +47,8 @@
 				<i class="blind">글쓰기</i>
 			</button>
 			<NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="t('homeView.post')" />
-			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" :showAd="showAd(index)" />
+			<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" :showAd="showAd(index)"
+				:jobBoard="emptyJobPost" :isJobBoard="false" />
 		</div>
 	</div>
 	<LoadingModal v-if="isLoading" />
@@ -70,6 +71,7 @@ import { countries } from '@/utils/selectItems.ts';
 import { useHomeCategoryStore } from '@/stores/category.ts';
 import { useHomeSortingStore } from '@/stores/sorting.ts';
 import { AxiosResponse } from 'axios';
+import { emptyJobPost } from '@/utils/emptyObjects';
 import SearchBar from '@/components/search/SearchBar.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import BoardContent from '@/components/board/BoardContent.vue';

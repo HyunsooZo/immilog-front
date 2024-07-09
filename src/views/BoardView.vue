@@ -45,7 +45,7 @@
 				<i class="blind">글쓰기</i>
 			</button>
 			<div v-for="(item, index) in state.posts" :key="index">
-				<BoardContent :post="item" />
+				<BoardContent :post="item" :detail="false" :jobBoard="emptyJobPost" :isJobBoard="false" />
 			</div>
 		</div>
 	</div>
@@ -64,7 +64,7 @@ import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { useI18n } from 'vue-i18n';
-import { ISelectItem, ISelectMenu, type IState } from '@/types/interface';
+import { IJobPost, ISelectItem, ISelectMenu, type IState } from '@/types/interface';
 import SearchBar from '@/components/search/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select--dialog
 import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
@@ -75,6 +75,7 @@ import { useRouter } from 'vue-router';
 import { applicationJsonWithToken } from '@/utils/header';
 import { AxiosResponse } from 'axios';
 import { IApiPosts } from '@/types/api-interface';
+import { emptyJobPost } from '@/utils/emptyObjects.ts';
 
 const { t } = useI18n();
 const alertValue = ref(false);
