@@ -79,6 +79,8 @@ import { IApiPosts } from '@/types/api-interface';
 const { t } = useI18n();
 const alertValue = ref(false);
 const alertText = ref('');
+const country = ref('');
+const interestCountry = ref<string | undefined>('');
 
 const openAlert = (content: string) => {
 	alertValue.value = true;
@@ -142,8 +144,9 @@ let menus = [
 	{ label: t('postView.interestCountry'), active: ref(false) },
 ];
 
-const selectMenu = (selectedMenu: ISelectMenu) => {
-	if (selectedMenu.label === t('postView.interestCountry') && !userInfo.userInterestCountry) {
+const selectMenu = async (selectedMenu: ISelectMenu) => {
+	const isInterestCountryMenu = selectedMenu.label === t('postView.interestCountry');
+	if (isInterestCountryMenu && !userInfo.userInterestCountry) {
 		openAlert(t('postView.noInterestCountry'));
 		return;
 	}
@@ -156,6 +159,19 @@ const selectMenu = (selectedMenu: ISelectMenu) => {
 	nextTick(() => {
 		updateMenuBar();
 	});
+	selectCategoryValue.value = {
+		name: 'selectItems.allCategories', code: 'ALL'
+	};
+	currentPage.value = 0;
+	selectSortingValue.value = {
+		name: 'selectItems.sortByRecent', code: 'CREATED_DATE'
+	};
+	initState();
+	if (isInterestCountryMenu) {
+		await fetchBoardList(country.value, selectSortingValue.value.code, currentPage.value);
+	} else {
+		await fetchBoardList(country.value, selectSortingValue.value.code, currentPage.value);
+	}
 };
 
 const updateMenuBar = () => {
@@ -219,6 +235,26 @@ const state = ref<IState>({
 	loading: false,
 });
 
+const initState = () => {
+	state.value = {
+		posts: [],
+		pagination: {
+			sort: {
+				sorted: false,
+				unsorted: true,
+				empty: true,
+			},
+			pageSize: 10,
+			pageNumber: 0,
+			offset: 0,
+			paged: true,
+			unpaged: false,
+		},
+		last: false,
+		loading: false,
+	}
+}
+
 const selectedValue = (value: ISelectItem) => {
 	if (categoryList.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
@@ -244,16 +280,16 @@ const loadMoreData = async () => {
 	if (!state.value.last && !state.value.loading) {
 		state.value.loading = true;
 		currentPage.value += 1;
-		await fetchBoardList(selectSortingValue.value.code, currentPage.value);
+		await fetchBoardList(country.value, selectSortingValue.value.code, currentPage.value);
 		state.value.loading = false; // fetchBoardList 호출 후 loading 상태 변경
 	}
 };
 
-const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
+const fetchBoardList = async (country: string, sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
 	try {
 		const response: AxiosResponse<IApiPosts> = await api.get(
-			`/posts?country=${userInfo.userCountry}` +
+			`/posts?country=${country}` +
 			`&category=${selectCategoryValue.value.code.toUpperCase()}` +
 			`&sortingMethod=${sortingMethod}` +
 			`&isPublic=${'N'}` +
@@ -272,13 +308,17 @@ const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 };
 
 watch([selectSortingValue, selectCategoryValue], () => {
-	fetchBoardList(selectCategoryValue.value.code, currentPage.value);
+	fetchBoardList(
+		country.value,
+		selectCategoryValue.value.code,
+		currentPage.value
+	);
 });
 
 watch(
 	() => userInfo.userCountry,
 	() => {
-		fetchBoardList(selectCategoryValue.value.code, currentPage.value);
+		fetchBoardList(country.value, selectCategoryValue.value.code, currentPage.value);
 	},
 );
 
@@ -286,8 +326,10 @@ onMounted(() => {
 	if (!userInfo.accessToken) {
 		router.push('/sign-in');
 	}
+	country.value = userInfo.userCountry ? userInfo.userCountry : '';
+	interestCountry.value = userInfo.userInterestCountry ? userInfo.userInterestCountry : undefined;
 	updateMenuBar();
-	fetchBoardList('CREATED_DATE', 0);
+	fetchBoardList(country.value, 'CREATED_DATE', 0);
 	window.addEventListener('scroll', handleScroll);
 });
 
