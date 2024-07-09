@@ -2213,9 +2213,6 @@ strong + .button-text {
   word-break: break-all;
   white-space: pre-wrap;
 }
-.list-wrap .item .text__wrap [class*='list__item'] .tag__wrap {
-  margin: 0.4rem 0 0;
-}
 .list-wrap .item .text__wrap [class*='list__item'] .comment__user {
   padding-right: 0.4rem;
   color: #3fa0b5;
@@ -2234,6 +2231,10 @@ strong + .button-text {
 }
 .list-wrap .item .text__wrap [class*='list__item'] .thumb img {
   object-fit: cover;
+}
+/* 구인/구직 */
+.list-wrap .item .text__wrap [class*='list__item'] .tag__wrap {
+  margin: 0.4rem 0 0;
 }
 /* 목록인 경우 버튼 */
 .list-wrap .item .text__wrap button[class*='list__item_button'] .title {
@@ -2613,7 +2614,7 @@ strong + .button-text {
   padding: 0 0.2rem;
 }
 .attachments__wrap {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   font-size: 0;
 }
 .attachments__wrap:nth-child(1) {
@@ -2623,10 +2624,11 @@ strong + .button-text {
   position: relative;
   overflow: hidden;
   display: inline-block;
+  width: 100%;
   min-height: 2rem;
 }
 .attachments__wrap .attachments__item + .attachments__item {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 .item__display .button--del {
   position: absolute;

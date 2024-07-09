@@ -1,5 +1,5 @@
 <template>
-	<div class="item">
+	<div class="item _type01"><!-- //구인구직 ._type01 -->
 		<div class="info__wrap">
 			<div class="item__pic" :class="{ 'pic--default': !jobBoard.companyLogo }">
 				<img v-if="jobBoard.companyLogo" :src="jobBoard.companyLogo" alt="" />
@@ -15,10 +15,12 @@
 			</div>
 		</div>
 		<div class="text__wrap">
-			<button type="button" class="list__item_button" @click="onBoardDetail">
+			<button type="button" class="list__item_button" @click="onBoardDetail"><!-- //목록인 경우 -->
+				<!-- <div class="list__item"> //상세화면인 경우 -->
 				<div class="text__item">
 					<p class="title">{{ jobBoard.title }}</p>
 					<p class="text">{{ jobBoard.content }}</p>
+					<!-- 구인구직 .tag__wrap 위치 변경 -->
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<!-- 필수 -->
@@ -38,13 +40,13 @@
 							</div>
 							<!-- 선택 -->
 							<!-- <div class="tag__item">
-								<span class="item--tag">
-									<em>대기업</em>
-								</span>
-								<span class="item--tag">
-									<em>재택근무</em>
-								</span>
-							</div> -->
+						<span class="item--tag">
+							<em>대기업</em>
+						</span>
+						<span class="item--tag">
+							<em>재택근무</em>
+						</span>
+					</div> -->
 						</div>
 					</div>
 					<div class="tag__wrap">
@@ -57,11 +59,18 @@
 						</div>
 					</div>
 				</div>
-				<div class="thumb" v-if="jobBoard.attachments.length > 0">
-					<img :src="thumbnail" alt="" />
-				</div>
+				<!-- </div> -->
 			</button>
 		</div>
+
+		<div class="attachments__wrap">
+			<div class="attachments__item">
+				<div class="item__display">
+					<img src="https://komeet.s3.ap-northeast-2.amazonaws.com/content/77a6db1c302640fa.jpeg" alt="preview">
+				</div>
+			</div><!-- //loop -->
+		</div>
+
 		<div class="util__wrap">
 			<div class="item__fnc">
 				<p class="list__item read">

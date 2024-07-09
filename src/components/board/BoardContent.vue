@@ -2,12 +2,7 @@
   <div class="item">
     <div class="info__wrap">
       <div class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
-        <img
-          v-if="post.userProfileUrl"
-          :src="post.userProfileUrl"
-          alt=""
-          @click="onUserProfileDetail"
-        />
+        <img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" @click="onUserProfileDetail" />
       </div>
       <div class="item__fnc">
         <div class="list__item">
@@ -33,6 +28,7 @@
           <p class="title">{{ post.title }}</p>
           <p class="text">{{ post.content }}</p>
         </div>
+        <!-- 이미지 목록인 경우 -->
         <div class="thumb" v-if="post.attachments.length > 0">
           <img :src="thumbnail" alt="" />
         </div>
@@ -44,12 +40,7 @@
           <i class="blind">조회수</i>
           <span class="item__count">{{ post.viewCount }}</span>
         </p>
-        <button
-          type="button"
-          class="list__item_button like"
-          :class="{ active: isLiked }"
-          @click="likePost"
-        >
+        <button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
           <!-- //활성화 .active -->
           <i class="blind">좋아요</i>
           <span class="item__count"> {{ likes }}</span>
@@ -62,17 +53,10 @@
       <div class="item__fnc">
         <p class="list__item past">
           <i class="blind">작성시간</i>
-          <span class="item__count"
-            >{{ timeCalculation(post.createdAt).time
-            }}{{ t(timeCalculation(post.createdAt).text) }}</span
-          >
+          <span class="item__count">{{ timeCalculation(post.createdAt).time
+            }}{{ t(timeCalculation(post.createdAt).text) }}</span>
         </p>
-        <button
-          type="button"
-          class="list__item_button mark"
-          :class="{ active: isBookmarked }"
-          @click="bookmarkApi"
-        >
+        <button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
           <!-- //활성화 .active -->
           <i class="blind">북마크</i>
         </button>
@@ -81,11 +65,7 @@
   </div>
   <!-- //.item -->
   <AdContent v-if="showAd" />
-  <UserProfileDetail
-    :userProfile="postAuthorInfo"
-    @close="offUserProfileDetail"
-    v-if="isUserProfileDetailOn"
-  />
+  <UserProfileDetail :userProfile="postAuthorInfo" @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
 </template>
 
 <script setup lang="ts">

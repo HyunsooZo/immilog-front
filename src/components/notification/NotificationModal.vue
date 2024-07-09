@@ -9,7 +9,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="list-wrap">
-					<div class="item" v-if="login" v-for="(item, index) in state.notifications" :key="index">
+					<button type="button" class="item" v-if="login" v-for="(item, index) in state.notifications" :key="index">
 						<div class="text__wrap">
 							<div class="list__item">
 								<div class="text__item">
@@ -28,7 +28,7 @@
 							</div>
 							<!-- //loop -->
 						</div>
-					</div>
+					</button>
 					<div v-else>컨텐츠 없음~</div>
 					<!-- // -->
 				</div>
