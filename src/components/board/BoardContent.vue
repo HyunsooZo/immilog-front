@@ -38,8 +38,7 @@
       <button type="button" :class="{
         list__item_button: !detail,
         list__item: detail
-      }
-        " @click="onBoardDetail">
+      }" @click="onBoardDetail">
         <div class="text__item">
           <p class="title">{{ isJobBoard ? jobBoard.title : post.title }}</p>
           <p class="text">{{ isJobBoard ? jobBoard.content : post.content }}</p>
@@ -202,9 +201,9 @@ const props = defineProps({
   }
 })
 const jobBoardFlag = ref(props.isJobBoard)
-const likes = ref(jobBoardFlag ? props.jobBoard.likeCount : props.post.likeCount)
-const likeUsers = ref(jobBoardFlag ? props.jobBoard.likeUsers : props.post.likeUsers)
-const bookmarkUsers = ref(jobBoardFlag ? props.jobBoard.bookmarkUsers : props.post.bookmarkUsers)
+const likes = ref(jobBoardFlag.value ? props.jobBoard.likeCount : props.post.likeCount)
+const likeUsers = ref(jobBoardFlag.value ? props.jobBoard.likeUsers : props.post.likeUsers)
+const bookmarkUsers = ref(jobBoardFlag.value ? props.jobBoard.bookmarkUsers : props.post.bookmarkUsers)
 const userSeq = ref(userInfo.userSeq)
 const thumbnail = ref(!props.isJobBoard && props.post.attachments.length > 0 ? props.post.attachments[0] : '')
 const isLiked = computed(() => {
@@ -216,8 +215,8 @@ const isBookmarked = computed(() => {
 })
 
 const onBoardDetail = () => {
-  viewApi(jobBoardFlag ? props.jobBoard.seq : props.post.seq)
-  router.push(jobBoardFlag ? `/job-board/${props.jobBoard.seq}` : `/board/${props.post.seq}`)
+  viewApi(jobBoardFlag.value ? props.jobBoard.seq : props.post.seq, jobBoardFlag.value)
+  router.push(jobBoardFlag.value ? `/job-board/${props.jobBoard.seq}` : `/board/${props.post.seq}`)
 }
 
 // 좋아요 API 호출
@@ -225,8 +224,8 @@ const likePost = () => {
   checkIfTokenExists()
   changeLike()
   likeApi(
-    jobBoardFlag ? 'job-boards' : 'posts',
-    jobBoardFlag ? props.jobBoard.seq : props.post.seq
+    jobBoardFlag.value ? 'job-boards' : 'posts',
+    jobBoardFlag.value ? props.jobBoard.seq : props.post.seq
   )
 }
 
@@ -249,7 +248,7 @@ const bookmarkApi = async () => {
   checkIfTokenExists()
   changeBookmark()
   try {
-    postBookmarkdApi(jobBoardFlag ? props.jobBoard.seq : props.post.seq)
+    postBookmarkdApi(jobBoardFlag.value ? props.jobBoard.seq : props.post.seq)
   } catch (error) {
     console.log(error)
   }
@@ -258,7 +257,7 @@ const bookmarkApi = async () => {
 const changeBookmark = () => {
   if (isBookmarked.value) {
     const index =
-      jobBoardFlag ?
+      jobBoardFlag.value ?
         userSeq.value !== null ? bookmarkUsers.value.indexOf(userSeq.value) : -1 :
         bookmarkUsers.value.indexOf(userSeq.value ? userSeq.value : 0)
     if (index !== -1) {
@@ -266,6 +265,7 @@ const changeBookmark = () => {
     }
   } else {
     if (userSeq.value !== null) {
+
       bookmarkUsers.value.push(userSeq.value)
     }
   }

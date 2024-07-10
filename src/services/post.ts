@@ -23,12 +23,14 @@ export const likeApi = async (path: string, seq: number) => {
 }
 
 // view 업데이트 API 요청 함수
-export const viewApi = async (seq: any) => {
+export const viewApi = async (seq: any, jobBoardFlag: boolean) => {
   if (!token) {
     return { status: 'unauthenticated' }
   }
   try {
-    const response = await api.patch(`/posts/${seq}/view`)
+    const response = await api.patch(
+      jobBoardFlag ? `/job-boards/${seq}/view` : `/posts/${seq}/view`
+    )
     return { status: response.status }
   } catch (error) {
     console.log(error)
