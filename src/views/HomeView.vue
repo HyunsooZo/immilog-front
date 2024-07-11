@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import type { IPost, ISelectItem, IState } from '@/types/interface';
 import type { IApiPosts } from '@/types/api-interface';
-import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { postBtn } from '@/utils/icons.ts';
@@ -87,6 +87,8 @@ const router = useRouter();
 
 const homeCategory = useHomeCategoryStore();
 const homeSorting = useHomeSortingStore();
+
+const sortingListWithoutLike = sortingList.filter(s => (s.code !== 'LIKE_COUNT' && s.code !== 'CREATED_DATE'));
 
 // modal open/close 시 body 컨트롤
 const modalOpenClass = () => {
@@ -190,8 +192,30 @@ const selectSortingValue = ref<ISelectItem>({
 });
 const selectCountry = ref({ name: '전체', code: 'ALL' });
 
+watch(selectCategoryValue, () => {
+	homeCategory.setCategory(selectCategoryValue.value);
+	initializeState();
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+});
+
+watch(selectSortingValue, () => {
+	homeSorting.setSorting(selectSortingValue.value);
+	initializeState();
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+});
+
+
 // select 관련 메소드 (메뉴)
 const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
+	if (selectedMenu.label === t('homeView.recentPost')) {
+		const recent = { name: 'selectItems.sortByRecent', code: 'CREATED_DATE' };
+		selectSortingValue.value = recent;
+		homeSorting.setSorting(recent);
+	} else if (selectedMenu.label === t('homeView.popularPost')) {
+		const like = { name: 'selectItems.sortByLike', code: 'LIKE_COUNT' };
+		selectSortingValue.value = like;
+		homeSorting.setSorting(like);
+	}
 	selectedMenu.active.value = true;
 	menus
 		.filter(menu => menu !== selectedMenu)
@@ -217,7 +241,7 @@ const openCategorySelect = () => {
 const openSortingSelect = () => {
 	nextTick(() => {
 		selectTitle.value = t('subMenuList.sorting');
-		selectList.value = sortingList;
+		selectList.value = sortingListWithoutLike;
 		isSortingSelectClicked.value = true;
 	});
 	modalOpenClass();
@@ -235,7 +259,7 @@ const selectedValue = (value: ISelectItem) => {
 	if (categoryList.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
 		homeCategory.setCategory(value)
-	} else if (sortingList.some(s => s.code === value.code)) {
+	} else if (sortingListWithoutLike.some(s => s.code === value.code)) {
 		selectSortingValue.value = value;
 		homeSorting.setSorting(value);
 	}
@@ -340,13 +364,6 @@ onMounted(async () => {
 	}
 	window.addEventListener('scroll', handleScroll);
 });
-
-const test = () => {
-	api.get(
-		`/replies/test`
-	);
-}
-
 
 onUnmounted(() => {
 	window.removeEventListener('scroll', handleScroll);
