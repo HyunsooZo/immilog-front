@@ -60,7 +60,7 @@
 							<div class="input__item">
 								<input type="checkbox" class="input__checkbox _text" id="allDate" v-model="allDate"
 									@change="updatePlaceholderDate" />
-								<label for="allDate" class="input__label">{{ t('postModal.jobOpeningsErequently') }}</label>
+								<label for="allDate" class="input__label">{{ t('postModal.jobOpeningsFrequently') }}</label>
 							</div>
 						</div>
 					</div>
@@ -72,7 +72,7 @@
 								<div class="input__item_inner">
 									<label for="selCareer" v-if="!selectedCareer" class="placeholder">{{ PlaceholderCareer }}</label>
 									<input type="text" class="input__element" id="selCareer" v-model="selectedCareer"
-										:disabled="allCareer" @click="openAlert(t('postModal.selectExperienceAlert'))" />
+										:disabled="allCareer" @click="onSelectModal()" />
 								</div>
 							</div>
 							<div class="input__item">
@@ -185,7 +185,7 @@
 		</div>
 	</div>
 	<CustomAlert v-if="alertValue" :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
-	<SelectDialog v-if="isCategorySelectClicked" :title="selectTitle" :list="categoryList" @close="closeSelect"
+	<SelectDialog v-if="selectOpenValue" :title="selectTitle" :list="selectList" @close="closeSelect"
 		@select:value="selectedValue" />
 	<LoadingModal v-if="isLoading" />
 </template>
@@ -194,7 +194,7 @@
 import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { resizeImage } from '@/utils/image.ts';
-import { categoryList } from '@/utils/selectItems.ts';
+import { experienceList, countries } from '@/utils/selectItems.ts';
 import { uploadPostApi } from '@/services/post.ts';
 import { ISelectItem } from '@/types/interface';
 import { IApiImage } from '@/types/api-interface';
@@ -210,6 +210,7 @@ import api from '@/api';
 
 const { t } = useI18n();
 
+const selectList = ref<ISelectItem[]>();
 const userInfo = useUserInfoStore();
 const selectedDate = ref('');
 const selectedCareer = ref('');
@@ -252,20 +253,23 @@ watch(allCareer, () => {
 
 //
 const router = useRouter();
-const isCategorySelectClicked = ref(false);
+const selectOpenValue = ref(false);
 
-const selectTitle = t('postModal.selectCategory');
+const selectTitle = ref(t('postModal.selectCategory'));
 const selectedCategory = ref({ name: t('postModal.communication'), code: 'COMMUNICATION' });
 const selectedValue = (value: ISelectItem) => {
+	if (selectTitle.value === '경력 선택') {
+		selectedCareer.value = t(value.name);
+	}
 	selectedCategory.value = value;
 };
 
 const openCategorySelect = () => {
-	isCategorySelectClicked.value = true;
+	selectOpenValue.value = true;
 };
 
 const closeSelect = () => {
-	isCategorySelectClicked.value = false;
+	selectOpenValue.value = false;
 };
 
 const alertValue = ref(false);
@@ -493,4 +497,10 @@ const validateUploadPost = () => {
 	}
 	return true;
 };
+
+const onSelectModal = () => {
+	selectOpenValue.value = true;
+	selectTitle.value = '경력 선택';
+	selectList.value = experienceList;
+}
 </script>
