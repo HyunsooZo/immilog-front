@@ -9,7 +9,8 @@
 			</div>
 			<div class="modal-body">
 				<div class="list-wrap">
-					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" />
+					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" :jobBoard="emptyJobPost"
+						:detail="false" :showAd="true" :isJobBoard="false" />
 				</div>
 			</div>
 		</div>
@@ -25,6 +26,7 @@ import { useUserInfoStore } from '@/stores/userInfo.ts';
 import BoardContent from '@/components/board/BoardContent.vue';
 import { AxiosResponse } from 'axios';
 import api from '@/api';
+import { emptyJobPost } from '@/utils/emptyObjects';
 
 const userInfo = useUserInfoStore();
 

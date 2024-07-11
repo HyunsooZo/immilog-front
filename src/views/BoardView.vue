@@ -64,7 +64,7 @@ import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { useI18n } from 'vue-i18n';
-import { IJobPost, ISelectItem, ISelectMenu, type IState } from '@/types/interface';
+import { ISelectItem, ISelectMenu, type IState } from '@/types/interface';
 import SearchBar from '@/components/search/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select--dialog
 import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
@@ -169,9 +169,9 @@ const selectMenu = async (selectedMenu: ISelectMenu) => {
 	};
 	initState();
 	if (isInterestCountryMenu) {
-		await fetchBoardList(country.value, selectSortingValue.value.code, currentPage.value);
+		country.value = interestCountry.value ? interestCountry.value : country.value;
 	} else {
-		await fetchBoardList(country.value, selectSortingValue.value.code, currentPage.value);
+		country.value = userInfo.userCountry ? userInfo.userCountry : '';
 	}
 };
 
@@ -188,7 +188,7 @@ const currentPage = ref(0);
 // .category__list
 const selectCategoryValue = ref({
 	name: 'selectItems.allCategories',
-	code: 'all',
+	code: 'ALL',
 });
 const isCategorySelectClicked = ref(false);
 
@@ -308,20 +308,13 @@ const fetchBoardList = async (country: string, sortingMethod: string, nextPage: 
 	}
 };
 
-watch([selectSortingValue, selectCategoryValue], () => {
+watch([selectSortingValue, selectCategoryValue, country], () => {
 	fetchBoardList(
 		country.value,
-		selectCategoryValue.value.code,
+		selectSortingValue.value.code,
 		currentPage.value
 	);
 });
-
-watch(
-	() => userInfo.userCountry,
-	() => {
-		fetchBoardList(country.value, selectCategoryValue.value.code, currentPage.value);
-	},
-);
 
 onMounted(() => {
 	if (!userInfo.accessToken) {
