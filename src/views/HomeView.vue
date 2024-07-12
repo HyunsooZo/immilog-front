@@ -55,11 +55,12 @@
 	<PostModal v-if="onPostModal" :isJobBoard=false @onPostModal:value="closePostModal" />
 	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
 		@close="closeSelect" @select:value="selectedValue" />
+	<CustomAlert v-if="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
 </template>
 
 <script setup lang="ts">
-import type { IPost, ISelectItem, IState } from '@/types/interface';
-import type { IApiPosts } from '@/types/api-interface';
+import type { IPost, ISelectItem, IState, IUserInfo } from '@/types/interface';
+import type { IApiPosts, IApiUserInfo } from '@/types/api-interface';
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
@@ -72,6 +73,7 @@ import { useHomeCategoryStore } from '@/stores/category.ts';
 import { useHomeSortingStore } from '@/stores/sorting.ts';
 import { AxiosResponse } from 'axios';
 import { emptyJobPost } from '@/utils/emptyObjects';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
 import SearchBar from '@/components/search/SearchBar.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
 import BoardContent from '@/components/board/BoardContent.vue';
@@ -80,11 +82,14 @@ import NoContent from '@/components/board/NoContent.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SubMenuList from '@/components/selections/SubMenuList.vue';
 import api from '@/api';
+import { getCoordinate } from '@/services/geolocation';
+import { getUserInfo } from '@/services/userInfoFetch';
 
 const { t } = useI18n();
 
 const router = useRouter();
 
+const userInfo = useUserInfoStore();
 const homeCategory = useHomeCategoryStore();
 const homeSorting = useHomeSortingStore();
 
@@ -344,6 +349,48 @@ const closePostModal = () => {
 	modalCloseClass();
 };
 // -->
+const alertValue = ref(false);
+const alertText = ref('');
+const openAlert = (content: string) => {
+	alertValue.value = true;
+	alertText.value = content;
+};
+
+const closeAlert = () => {
+	alertValue.value = false;
+	userInfo.setLocationMatch(true);
+};
+
+const checkIfUserLocationMatch = () => {
+	if (!userInfo.isLocationMatch) {
+		openAlert(t('homeView.locationMismatch'))
+	}
+};
+
+const setToken = (data: IUserInfo) => {
+	localStorage.setItem('accessToken', data.accessToken ? data.accessToken : '')
+	localStorage.setItem('refreshToken', data.refreshToken ? data.refreshToken : '')
+}
+
+const fetchUserInfo = async () => {
+	if (localStorage.getItem('accessToken')) {
+		await getCoordinate()
+		const lat = localStorage.getItem('latitude')
+		const lon = localStorage.getItem('longitude')
+		if (lat && lon) {
+			const response: AxiosResponse<IApiUserInfo> = await getUserInfo(
+				parseFloat(lat ? lat : '0'),
+				parseFloat(lon ? lon : '0')
+			)
+			if (response.status === 200 || response.status === 201) {
+				setToken(response.data.data)
+				useUserInfoStore().setUserInfo(response.data.data)
+			} else {
+				localStorage.removeItem('accessToken')
+			}
+		}
+	}
+}
 
 // 로딩화면 관련 상태
 const isLoading = ref(false);
@@ -351,7 +398,8 @@ const isLoading = ref(false);
 onMounted(async () => {
 	updateMenuBar();
 	handleScrollEvent();
-	if (useUserInfoStore().userSeq === null) {
+	if (userInfo.userSeq === null) {
+		fetchUserInfo();
 		isLoading.value = true;
 		setTimeout(() => {
 			fetchBoardList('CREATED_DATE', 0);
@@ -359,7 +407,9 @@ onMounted(async () => {
 				isLoading.value = false;
 			}, 1000);
 		}, 4000);
+		checkIfUserLocationMatch();
 	} else {
+		checkIfUserLocationMatch();
 		fetchBoardList('CREATED_DATE', 0);
 	}
 	window.addEventListener('scroll', handleScroll);

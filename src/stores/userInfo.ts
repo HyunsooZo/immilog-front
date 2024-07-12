@@ -62,6 +62,9 @@ export const useUserInfoStore = defineStore('userInfo', {
     },
     setUserInterestCountry(userInterestCountry: string): void {
       this.userInterestCountry = userInterestCountry
+    },
+    setLocationMatch(isLocationMatch: boolean): void {
+      this.isLocationMatch = isLocationMatch
     }
   }
 })

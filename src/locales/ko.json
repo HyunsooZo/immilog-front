@@ -7,7 +7,8 @@
   "homeView": {
     "post": "글",
     "recentPost": "최신 글",
-    "popularPost": "인기 글"
+    "popularPost": "인기 글",
+    "locationMismatch": "위치 정보가 일치하지 않습니다. 마이페이지 > 프로필 수정에서 위치를 설정해주세요."
   },
   "bookMarkView": {
     "bookMark": "북마크"
@@ -254,7 +255,7 @@
     "NEW_ZEALAND": "뉴질랜드",
     "GUAM": "괌"
   },
-  "postCategories":{
+  "postCategories": {
     "ALL": "전체",
     "WORKING_HOLIDAY": "워킹홀리데이",
     "GREEN_CARD": "영주권",

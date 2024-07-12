@@ -6,11 +6,7 @@
 			</div>
 			<div class="modal-footer">
 				<div class="button-wrap">
-					<button
-						type="button"
-						class="button button--positive"
-						@click="closeModal"
-					>
+					<button type="button" class="button button--positive" @click="closeModal">
 						확인
 					</button>
 				</div>

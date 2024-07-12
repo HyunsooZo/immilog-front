@@ -7,7 +7,8 @@
   "homeView": {
     "post": "Post",
     "recentPost": "Recent",
-    "popularPost": "Popular"
+    "popularPost": "Popular",
+    "locationMismatch": "Location mismatch. Please set your location in MyPage > EditProfile"
   },
   "bookMarkView": {
     "bookMark": "Bookmark"
@@ -254,11 +255,11 @@
     "NEW_ZEALAND": "New Zealand",
     "GUAM": "Guam"
   },
-  "postCategories":{
+  "postCategories": {
     "ALL": "All",
-    "WORKING_HOLIDAY":"Working Holiday",
-    "GREEN_CARD":"Permanent Residency",
-    "COMMUNICATION":"Communication",
-    "QNA":"Q&A"
+    "WORKING_HOLIDAY": "Working Holiday",
+    "GREEN_CARD": "Permanent Residency",
+    "COMMUNICATION": "Communication",
+    "QNA": "Q&A"
   }
 }
