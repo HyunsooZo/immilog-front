@@ -354,11 +354,13 @@ const alertText = ref('');
 const openAlert = (content: string) => {
 	alertValue.value = true;
 	alertText.value = content;
+	modalOpenClass();
 };
 
 const closeAlert = () => {
 	alertValue.value = false;
 	userInfo.setLocationMatch(true);
+	modalCloseClass();
 };
 
 const checkIfUserLocationMatch = () => {
