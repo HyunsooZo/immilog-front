@@ -385,6 +385,7 @@ const fetchUserInfo = async () => {
 			if (response.status === 200 || response.status === 201) {
 				setToken(response.data.data)
 				useUserInfoStore().setUserInfo(response.data.data)
+				checkIfUserLocationMatch();
 			} else {
 				localStorage.removeItem('accessToken')
 			}
@@ -407,7 +408,6 @@ onMounted(async () => {
 				isLoading.value = false;
 			}, 1000);
 		}, 4000);
-		checkIfUserLocationMatch();
 	} else {
 		checkIfUserLocationMatch();
 		fetchBoardList('CREATED_DATE', 0);
