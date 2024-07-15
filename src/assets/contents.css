@@ -1066,6 +1066,9 @@ strong + .button-text {
   margin: 2rem 0;
   padding: 0 1.5rem;
 }
+.modal-body .modal-footer .button-wrap .button {
+  margin: 0;
+}
 .modal-content > .modal-footer .button-wrap {
   margin: 0 1.2rem 1.5rem;
 }
