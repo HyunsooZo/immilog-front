@@ -36,7 +36,7 @@
 							<button class="button button--primary button__s" role="link" @click="onChatRoom">
 								{{ t('userProfileDetail.chat') }}
 							</button>
-							<button class="button button--primary button__s" role="link" @click="onReportPopUp">
+							<button class="button button--primary button__s _gray" role="link" @click="onReportPopUp">
 								{{ t('userProfileDetail.report') }}
 							</button>
 						</div>

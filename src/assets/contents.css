@@ -255,6 +255,10 @@ strong + .button-text {
   background: #fff;
   color: #333;
 }
+.button-wrap .button._gray {
+  background: #999;
+  color: #fff;
+}
 .button--select {
   position: relative;
   display: block;
