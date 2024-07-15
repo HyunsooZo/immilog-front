@@ -988,18 +988,25 @@ strong + .button-text {
   height: fit-content;
   max-height: calc(100vh - 5rem);
 }
-.modal._detail-view .modal-content .modal-header {
-  align-items: baseline;
+.modal._detail-view .modal-header {
+  align-items: flex-start;
+  min-height: inherit;
   border: none;
+}
+.modal._detail-view .modal-header .modal-title {
+  padding: 1.3rem 0 1rem 1.5rem;
 }
 .modal._detail-view .modal-content .modal-body {
   max-height: inherit;
-  margin-bottom: 0;
+  margin: 0.5rem 0 0;
   padding: 0 1.5rem 2rem;
 }
 .modal._detail-view .modal-content .list-wrap .item {
   padding: 0;
   border: none;
+}
+.modal._detail-view .list-wrap .item .util__wrap {
+  margin: 0 0 1rem;
 }
 
 .modal {
@@ -2385,6 +2392,9 @@ strong + .button-text {
   vertical-align: 0;
 }
 /* 기능버튼, 글정보 */
+.list-wrap .item .util__wrap.end {
+  justify-content: right;
+}
 .list-wrap .item .util__wrap {
   display: flex;
   align-items: center;

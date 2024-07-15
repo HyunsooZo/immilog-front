@@ -10,7 +10,7 @@
 			<div class="modal-body">
 				<div class="list-wrap">
 					<div class="item" v-if="login" v-for="(item, index) in state.notifications" :key="index"
-						@click="openNotificationDetailModal">
+						@click="openNotificationDetailModal(item.title, item.content)">
 						<div class="text__wrap">
 							<button type="button" class="list__item_button">
 								<div class="text__item">
@@ -19,10 +19,17 @@
 										{{ item.content }}
 									</p>
 								</div>
-								<div class="thumb">
-									<img src="@/assets/images/email-icon-logo.png" alt="" />
-								</div>
+								<!-- <div class="thumb">
+								<img src="@/assets/images/email-icon-logo.png" alt="" />
+							</div> -->
 							</button>
+						</div>
+						<div class="util__wrap end">
+							<div class="item__fnc">
+								<p class="list__item past">
+									<i class="blind">작성시간</i><span class="item__count">0000/00/00 00:00:00</span>
+								</p>
+							</div>
 						</div>
 					</div>
 					<div class="item item--noreply" v-else>
@@ -47,7 +54,8 @@
 			</div>
 		</div>
 	</div>
-	<NotificationDetailModal v-if="onNotificationDetailModal" @close="closeNotificationDetailModal" />
+	<NotificationDetailModal v-if="onNotificationDetailModal" :title="currentTitle" :content="currentContent"
+		@close="closeNotificationDetailModal" />
 </template>
 
 <script setup lang="ts">
@@ -67,6 +75,8 @@ const { t } = useI18n();
 //모달 닫는 에밋
 const emits = defineEmits(['close']);
 
+const currentTitle = ref('');
+const currentContent = ref('');
 const userInfo = useUserInfoStore();
 const currentPage = ref(0);
 const login = ref(false);
@@ -148,7 +158,9 @@ onUnmounted(() => {
 
 // NotificationDetailModal 오픈 및 닫기
 const onNotificationDetailModal = ref(false);
-const openNotificationDetailModal = () => {
+const openNotificationDetailModal = (title: string, content: string) => {
+	currentTitle.value = title;
+	currentContent.value = content;
 	onNotificationDetailModal.value = true;
 	modalOpenClass();
 };
