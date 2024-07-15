@@ -35,30 +35,42 @@
 				</div>
 
 				<div class="title">대화상대</div>
-				<!-- <div class="list-wrap list--link">
+				<div class="list-wrap list--link item_profile">
 					<ul>
 						<li class="item">
 							<div class="info__wrap">
-								<div class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
-									<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
+								<div class="item__pic pic--default">
+									<img src="" alt="" />
 								</div>
 								<div class="item__fnc">
 									<div class="list__item">
-										<button type="button" class="list__item_button ctg">
-											<em>{{ post.country }}</em>
-										</button>
+										<em>countries</em>
+										<em>region</em>
 									</div>
-									<div class="list__item">
-										<button type="button" class="list__item_button user">
-											<em>{{ post.region }}</em>
-											<strong>{{ post.userNickName }}</strong>
-										</button>
+									<div class="list__item user">
+										<strong>userNickName 본인</strong>
 									</div>
 								</div>
 							</div>
 						</li>
+						<li class="item">
+							<button type="button" class="info__wrap">
+								<div class="item__pic">
+									<img src="" alt="" />
+								</div>
+								<div class="item__fnc">
+									<div class="list__item">
+										<em>countries</em>
+										<em>region</em>
+									</div>
+									<div class="list__item user">
+										<strong>userNickName</strong>
+									</div>
+								</div>
+							</button><!-- // 사용자 프로필 보기 -->
+						</li>
 					</ul>
-				</div> -->
+				</div>
 			</div>
 			<div class="sidemenu-footer">
 				<div class="item__fnc">

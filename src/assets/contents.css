@@ -1412,6 +1412,15 @@ strong + .button-text {
   background-position: 50% center;
   background-size: 100%;
 }
+.list-wrap.list--link.item_profile {
+  margin: 0;
+}
+.list-wrap.list--link.item_profile .item {
+  border: none;
+}
+.list-wrap.list--link.item_profile ul {
+  padding-top: 1rem;
+}
 .sidemenu-wrap {
   position: fixed;
   top: 0;
