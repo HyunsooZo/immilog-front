@@ -3,38 +3,51 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">알림</p>
-				<button class="button-icon button--close" role="link" @click="closeModal">
+				<button type="button" class="button-icon button--close" @click="closeModal">
 					<i class="blind">취소</i>
 				</button>
 			</div>
 			<div class="modal-body">
 				<div class="list-wrap">
-					<button type="button" class="item" v-if="login" v-for="(item, index) in state.notifications" :key="index">
+					<div class="item" v-if="login" v-for="(item, index) in state.notifications" :key="index"
+						@click="openNotificationDetailModal">
 						<div class="text__wrap">
-							<div class="list__item">
+							<button type="button" class="list__item_button">
 								<div class="text__item">
 									<p class="title">{{ item.title }}</p>
 									<p class="text">
 										{{ item.content }}
 									</p>
 								</div>
-							</div>
-						</div>
-						<div class="attachments__wrap">
-							<div class="attachments__item">
-								<div class="item__display">
+								<div class="thumb">
 									<img src="@/assets/images/email-icon-logo.png" alt="" />
 								</div>
-							</div>
-							<!-- //loop -->
+							</button>
 						</div>
-					</button>
-					<div v-else>컨텐츠 없음~</div>
+					</div>
+					<div class="item item--noreply" v-else>
+						<div class="noreply__wrap">
+							<div class="item__bi">
+								<svg viewBox="0 0 16 16" class="bi-blockquote-left">
+									<path :d="myPostIcon" />
+								</svg>
+							</div>
+							<div class="noreply__text">
+								<p class="text__item">
+									알림이 없습니다.
+								</p>
+								<p class="text__item">
+									로그인 후 알림을 확인해 보세요!
+								</p>
+							</div>
+						</div>
+					</div>
 					<!-- // -->
 				</div>
 			</div>
 		</div>
 	</div>
+	<NotificationDetailModal v-if="onNotificationDetailModal" @close="closeNotificationDetailModal" />
 </template>
 
 <script setup lang="ts">
@@ -45,6 +58,11 @@ import { AxiosResponse } from 'axios';
 import { INotificationState } from '@/types/interface';
 import { IApiNotifications } from '@/types/api-interface';
 import api from '@/api';
+import NotificationDetailModal from '@/components/notification/NotificationDetailModal.vue';
+import { myPostIcon } from '@/utils/icons.ts';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 //모달 닫는 에밋
 const emits = defineEmits(['close']);
@@ -127,4 +145,15 @@ onMounted(async () => {
 onUnmounted(() => {
 	modalCloseClass();
 });
+
+// NotificationDetailModal 오픈 및 닫기
+const onNotificationDetailModal = ref(false);
+const openNotificationDetailModal = () => {
+	onNotificationDetailModal.value = true;
+	modalOpenClass();
+};
+const closeNotificationDetailModal = () => {
+	onNotificationDetailModal.value = false;
+	modalCloseClass();
+};
 </script>

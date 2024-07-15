@@ -8,10 +8,10 @@
 					<div class="input__inner-item">
 						<input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
 							:placeholder="t('searchView.searchPlaceHolder')" autocomplete="off" @keyup.enter="callSearchApi(page)" />
-						<button v-if="searchInput !== ''" type="reset" class="input__button-remove" title="텍스트삭제"
+						<button type="reset" v-if="searchInput !== ''" class="input__button-remove" title="텍스트삭제"
 							@click="initializeSearchInput"></button>
 					</div>
-					<button class="button button--close" role="link" @click="onBack">
+					<button type="button" class="button button--close" role="link" @click="onBack">
 						<i class="blind">취소</i>
 					</button>
 				</div>

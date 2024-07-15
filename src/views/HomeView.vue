@@ -7,7 +7,7 @@
 			<div class="menu-wrap">
 				<ul class="menu__inner">
 					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
-						<button @click="selectMenu(menu)" type="button" class="button"
+						<button type="button" @click="selectMenu(menu)" class="button"
 							:aria-selected="menu.active.value ? 'true' : 'false'">
 							{{ menu.label }}
 						</button>

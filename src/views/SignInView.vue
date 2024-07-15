@@ -38,10 +38,10 @@
 			</div>
 
 			<div class="button-wrap">
-				<button @click="signIn" :class="{
-					'button button--positive': isValidLogin && !isLoading,
-					'button button--disabled': !isValidLogin || isLoading
-				}" role="link" id="loginBtn">
+				<button type="button" @click="signIn" :class="{
+		'button button--positive': isValidLogin && !isLoading,
+		'button button--disabled': !isValidLogin || isLoading
+	}" role="link" id="loginBtn">
 					{{ t('signInView.signIn') }}
 				</button>
 				<!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->

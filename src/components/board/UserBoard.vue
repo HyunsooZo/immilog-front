@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">내 게시물</p>
-				<button class="button-icon button--close" role="link" @click="closeModal">
+				<button type="button" class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">취소</i>
 				</button>
 			</div>

@@ -8,7 +8,7 @@
 					</button>
 				</div>
 				<p class="modal-title"><em class="header-logo">Immilog</em></p>
-				<!-- <button class="button-icon button--close" role="link" @click="closeModal">
+				<!-- <button type="button" class="button-icon button--close" role="link" @click="closeModal">
 					<i class="blind">닫기</i>
 				</button> -->
 			</div>
@@ -25,19 +25,19 @@
 							<div class="item__fnc">
 								<div class="list__item">
 									<button type="button" class="list__item_button user" :class="{
-										'user--author': isAuthor(
-											detailPost.userSeq,
-											detailPost.comments[commentIndex].user.seq,
-										),
-									}">
+						'user--author': isAuthor(
+							detailPost.userSeq,
+							detailPost.comments[commentIndex].user.seq,
+						),
+					}">
 										<!-- //원글작성자 댓글 .user--author -->
 
 										<em>{{
-											detailPost.comments[commentIndex].user.country
-										}}</em>
+						detailPost.comments[commentIndex].user.country
+					}}</em>
 										<strong>{{
-											detailPost.comments[commentIndex].user.nickName
-										}}</strong>
+							detailPost.comments[commentIndex].user.nickName
+						}}</strong>
 									</button>
 								</div>
 							</div>
@@ -59,35 +59,35 @@
 						<div class="util__wrap">
 							<div class="item__fnc">
 								<button type="button" class="list__item_button like" :class="{
-									active:
-										detailPost.comments[commentIndex].likeUsers.includes(
-											userSeq,
-										),
-								}" @click="likeComment(commentIndex)">
+						active:
+							detailPost.comments[commentIndex].likeUsers.includes(
+								userSeq,
+							),
+					}" @click="likeComment(commentIndex)">
 									<!-- //활성화 .active -->
 									<i class="blind">좋아요</i>
 									<span class="item__count">{{
-										detailPost.comments[commentIndex].upVotes
-									}}</span>
+						detailPost.comments[commentIndex].upVotes
+					}}</span>
 								</button>
 								<button type="button" class="list__item cmt" @click="openReplyWrite(commentIndex, '')">
 									<span class="item__count">{{
-										detailPost.comments[commentIndex].replies.length
-									}}</span>
+						detailPost.comments[commentIndex].replies.length
+					}}</span>
 								</button>
 								<p class="list__item past">
 									<i class="blind">작성시간</i>
 									<span class="item__count">{{
-										timeCalculation(
-											detailPost.comments[commentIndex].createdAt,
-										).time
-									}}{{
-											t(
-												timeCalculation(
-													detailPost.comments[commentIndex].createdAt,
-												).text,
-											)
-										}}</span>
+							timeCalculation(
+								detailPost.comments[commentIndex].createdAt,
+							).time
+						}}{{
+							t(
+								timeCalculation(
+									detailPost.comments[commentIndex].createdAt,
+								).text,
+							)
+						}}</span>
 								</p>
 							</div>
 						</div>
@@ -99,11 +99,11 @@
 								<div class="item__fnc">
 									<div class="list__item">
 										<button type="button" class="list__item_button user" :class="{
-											'user--author': isAuthor(
-												detailPost.userSeq,
-												reply.user.seq,
-											),
-										}">
+						'user--author': isAuthor(
+							detailPost.userSeq,
+							reply.user.seq,
+						),
+					}">
 											<!-- //원글작성자 댓글 .user--author -->
 											<em>{{ reply.user.country }}</em>
 											<strong>{{ reply.user.nickName }}</strong>
@@ -121,7 +121,7 @@
 									<div class="text__item">
 										<p class="text">
 											<span class="comment__user" v-if="extractAtWordAndRest(reply.content).atWord">{{
-												extractAtWordAndRest(reply.content).atWord }}</span>
+						extractAtWordAndRest(reply.content).atWord }}</span>
 											{{ extractAtWordAndRest(reply.content).restText }}
 										</p>
 									</div>
@@ -130,8 +130,8 @@
 							<div class="util__wrap">
 								<div class="item__fnc">
 									<button type="button" class="list__item_button like" :class="{
-										active: reply.likeUsers.includes(userSeq),
-									}" @click="likeReply(commentIndex, index)">
+						active: reply.likeUsers.includes(userSeq),
+					}" @click="likeReply(commentIndex, index)">
 										<!-- //활성화 .active -->
 										<i class="blind">좋아요</i>
 										<span class="item__count">{{ reply.upVotes }}</span>
