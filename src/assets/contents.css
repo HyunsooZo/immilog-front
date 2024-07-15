@@ -994,7 +994,7 @@ strong + .button-text {
   border: none;
 }
 .modal._detail-view .modal-header .modal-title {
-  padding: 1.3rem 0 1rem 1.5rem;
+  padding: 2rem 0 1rem 1.5rem;
 }
 .modal._detail-view .modal-content .modal-body {
   max-height: inherit;
