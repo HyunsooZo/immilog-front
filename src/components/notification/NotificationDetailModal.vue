@@ -30,6 +30,13 @@
 						</div> -->
 					</div>
 				</div>
+				<div class="modal-footer">
+					<div class="button-wrap">
+						<button class="button button--positive" role="link" @click="">
+							링크버튼 필요 시 사용
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
