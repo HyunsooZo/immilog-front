@@ -3,7 +3,7 @@
     <!-- 개인정보 -->
     <div class="list-wrap _personal">
       <div class="item">
-        <button type="button" class="list__item_button" role="link" @click="onProfileEdit">
+        <button type="button" class="list__item_button" @click="onProfileEdit">
           <div class="info__wrap">
             <div class="item__pic" :class="{ 'pic--default': !userInfo.userProfileUrl }">
               <img v-if="userInfo.userProfileUrl" :src="userInfo.userProfileUrl" alt="" />
@@ -14,8 +14,7 @@
                 <em v-if="loginStatus">{{ userInfo.userRegion }}</em>
               </div>
               <div class="list__item user button-text">
-                <strong
-                  >{{ userInfo.userNickname ? userInfo.userNickname : t('myPageView.login') }}
+                <strong>{{ userInfo.userNickname ? userInfo.userNickname : t('myPageView.login') }}
                 </strong>
               </div>
             </div>
@@ -27,7 +26,7 @@
     <div class="list-wrap list--link">
       <ul v-if="loginStatus">
         <li class="item">
-          <button type="button" class="button button-text" role="link" @click="onMyBoard">
+          <button type="button" class="button button-text" @click="onMyBoard">
             <svg viewBox="0 0 16 16">
               <path :d="myPostIcon" />
             </svg>
@@ -35,7 +34,7 @@
           </button>
         </li>
         <li class="item">
-          <button type="button" class="button button-text" role="link" @click="onBookmark">
+          <button type="button" class="button button-text" @click="onBookmark">
             <svg viewBox="0 0 16 16">
               <path fill-rule="evenodd" :d="bookmarkIcon.first" />
               <path :d="bookmarkIcon.second" />
@@ -46,7 +45,7 @@
       </ul>
       <ul>
         <li class="item" v-if="loginStatus">
-          <button type="button" class="button button-text" role="link" @click="onMenuOpen">
+          <button type="button" class="button button-text" @click="onNotificationModal">
             <svg viewBox="0 0 16 16">
               <path :d="noticeIcon.first" />
               <path :d="noticeIcon.second" />
@@ -55,7 +54,7 @@
           </button>
         </li>
         <li class="item">
-          <button type="button" class="button button-text" role="link" @click="openEmailForm">
+          <button type="button" class="button button-text" @click="openEmailForm">
             <svg viewBox="0 0 16 16">
               <path :d="customerCenterIcon.first" />
               <path :d="customerCenterIcon.second" />
@@ -64,7 +63,7 @@
           </button>
         </li>
         <li class="item" v-if="loginStatus">
-          <button type="button" class="button" role="link" @click="signOut">
+          <button type="button" class="button" @click="signOut">
             <svg viewBox="0 0 16 16">
               <path :d="logoutIcon.first" />
               <path :d="logoutIcon.second" />
@@ -82,34 +81,22 @@
             </svg>
             <span>{{ t('myPageView.settings') }}</span>
             <div class="input__item _switch-toggle">
-              <input
-                type="checkbox"
-                class="input__checkbox"
-                name="setting"
-                id="setting"
-                v-model="isEnglishChecked"
-              />
-              <label for="setting" class="input__label"
-                ><span class="blind">{{
-                  isEnglishChecked ? t('myPageView.english') : t('myPageView.korean')
-                }}</span></label
-              >
+              <input type="checkbox" class="input__checkbox" name="setting" id="setting" v-model="isEnglishChecked" />
+              <label for="setting" class="input__label"><span class="blind">{{
+          isEnglishChecked ? t('myPageView.english') : t('myPageView.korean')
+        }}</span></label>
             </div>
           </div>
         </li>
       </ul>
     </div>
     <BookMark @update:bookmarkValue="offBookMark" v-if="isBookmarkOn" />
-    <UserBoard
-      :userSeq="userInfo.userSeq ? userInfo.userSeq : 0"
-      @close="offUserBoard"
-      v-if="isUserBoardOn"
-    />
+    <UserBoard :userSeq="userInfo.userSeq ? userInfo.userSeq : 0" @close="offUserBoard" v-if="isUserBoardOn" />
   </div>
   <teleport to="#modal" v-if="modalValue">
     <ConfirmModal :modalText="modalText" @modalValue="closeModal" />
   </teleport>
-  <NotificationModal v-if="onMenu" @close="onMenuClose" />
+  <NotificationModal v-if="isNotificationModal" @close="offNotificationModal" />
 </template>
 
 <script setup lang="ts">
@@ -149,10 +136,10 @@ watchEffect(() => {
 })
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
   document.body.classList.add('inactive')
 }
-const modalCloseClass = () => {
+const isModalClose = () => {
   document.body.classList.remove('inactive')
 }
 
@@ -168,31 +155,34 @@ const onProfileEdit = () => {
 const isUserBoardOn = ref(false)
 const onMyBoard = () => {
   isUserBoardOn.value = true
-  modalOpenClass()
+  isModalOpen()
 }
 const offUserBoard = () => {
   isUserBoardOn.value = false
-  modalCloseClass()
+  isModalClose()
 }
 
 // 북마크 표시 상태
 const isBookmarkOn = ref(false)
 const onBookmark = () => {
   isBookmarkOn.value = true
-  modalOpenClass()
+  isModalOpen()
 }
 const offBookMark = () => {
   isBookmarkOn.value = false
-  modalCloseClass()
+  isModalClose()
 }
 
-// 모달 상태
-const modalValue = ref(false)
-const modalText = ref('로그아웃 하시겠습니까?')
-const closeModal = () => {
-  modalValue.value = false
+// 공지사항
+const isNotificationModal = ref(false)
+const onNotificationModal = () => {
+  isNotificationModal.value = true
+}
+const offNotificationModal = () => {
+  isNotificationModal.value = false
 }
 
+// 고객센터 이메일 폼
 const openEmailForm = () => {
   const { userEmail, userNickname, userCountry } = userInfo || {} // userInfo가 정의되지 않은 경우를 대비
   const deviceInfo = navigator.userAgent
@@ -205,6 +195,13 @@ const openEmailForm = () => {
   const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 
   window.location.href = mailtoLink
+}
+
+// 모달 상태
+const modalValue = ref(false)
+const modalText = ref('로그아웃 하시겠습니까?')
+const closeModal = () => {
+  modalValue.value = false
 }
 
 // 로그아웃 처리
@@ -226,16 +223,4 @@ onMounted(async () => {
   }
 })
 
-// <-- 알림 팝업 관련
-
-const onMenu = ref(false)
-
-const onMenuOpen = () => {
-  onMenu.value = true
-}
-
-const onMenuClose = () => {
-  onMenu.value = false
-}
-// -->
 </script>

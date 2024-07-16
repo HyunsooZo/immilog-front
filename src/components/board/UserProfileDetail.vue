@@ -6,7 +6,7 @@
 					{{ userProfile.userNickName }}
 					<span>{{ t('userProfileDetailView.userProfileDetail') }}</span>
 				</p>
-				<button class="button-icon button--close" role="link" @click="closeModal">
+				<button class="button-icon button--close" @click="closeModal">
 					<i class="blind">취소</i>
 				</button>
 			</div>
@@ -29,14 +29,14 @@
 							</div>
 						</div>
 						<div class="button-wrap">
-							<button class="button button--primary button__s" role="link" @click="onUserBoard">
+							<button class="button button--primary button__s" @click="onUserBoard">
 								{{ t('userProfileDetail.posts') }}
 							</button>
 							<!-- 본인 프로필은 채팅, 신고 버튼 미노출 -->
-							<button class="button button--primary button__s" role="link" @click="onChatRoom">
+							<button class="button button--primary button__s" @click="onChatRoom">
 								{{ t('userProfileDetail.chat') }}
 							</button>
-							<button class="button button--primary button__s _gray" role="link" @click="onReportPopUp">
+							<button class="button button--primary button__s _gray" @click="onReportPopUp">
 								{{ t('userProfileDetail.report') }}
 							</button>
 						</div>
@@ -81,12 +81,12 @@ const props = defineProps({
 });
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
 
 // modal close 시 body 컨트롤
-const modalCloseClass = () => {
+const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 
@@ -104,7 +104,7 @@ const emits = defineEmits(['close']);
 
 const closeModal = () => {
 	emits('close');
-	modalCloseClass();
+	isModalClose();
 };
 
 const onChatRoom = async () => {
@@ -123,11 +123,11 @@ const onChatRoom = async () => {
 const isUserBoardOn = ref(false);
 const onUserBoard = () => {
 	isUserBoardOn.value = true;
-	modalOpenClass();
+	isModalOpen();
 };
 const offUserBoard = () => {
 	isUserBoardOn.value = false;
-	modalCloseClass();
+	isModalClose();
 };
 
 

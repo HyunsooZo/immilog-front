@@ -3,12 +3,12 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="item__fnc">
-					<button type="button" class="button-icon button--back" role="link" @click="closeModal">
+					<button type="button" class="button-icon button--back" @click="closeModal">
 						<i class="blind">이전화면</i>
 					</button>
 				</div>
 				<p class="modal-title"><em class="header-logo">Immilog</em></p>
-				<!-- <button type="button" class="button-icon button--close" role="link" @click="closeModal">
+				<!-- <button type="button" class="button-icon button--close" @click="closeModal">
 					<i class="blind">닫기</i>
 				</button> -->
 			</div>
@@ -202,10 +202,10 @@ const isLiked = ref(false);
 const emit = defineEmits(['close']);
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
-const modalCloseClass = () => {
+const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 
@@ -221,11 +221,11 @@ const openReplyWrite = (index: number, nickName: string) => {
 	taggedUser.value = nickName;
 	replyIndex.value = index;
 	isReplyWriteClicked.value = true;
-	modalOpenClass();
+	isModalOpen();
 };
 const closeReplyWrite = () => {
 	isReplyWriteClicked.value = false;
-	modalCloseClass();
+	isModalClose();
 	setTimeout(() => {
 		detailBoard();
 	}, 500);

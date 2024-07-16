@@ -1,7 +1,7 @@
 <template>
 	<header class="header _bg" v-if="chats.length > 0">
 		<div class="item__fnc">
-			<button type="button" class="button-icon button--back" role="link" @click="previousComponent">
+			<button type="button" class="button-icon button--back" @click="previousComponent">
 				<i class="blind">이전화면</i>
 			</button>
 		</div>
@@ -12,7 +12,7 @@
 			</p>
 		</div>
 		<div class="item__fnc">
-			<button class="button-icon button--menu" role="link" @click="onSideMenu">
+			<button class="button-icon button--menu" @click="onSideMenu">
 				<i class="blind">메뉴</i>
 			</button>
 		</div>
@@ -140,10 +140,10 @@ const router = useRouter();
 const route = useRoute();
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
-const modalCloseClass = () => {
+const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 
@@ -151,11 +151,11 @@ const modalCloseClass = () => {
 const isUserProfileDetailOn = ref(false);
 const onUserProfileDetail = () => {
 	isUserProfileDetailOn.value = true;
-	modalOpenClass();
+	isModalOpen();
 };
 const offUserProfileDetail = () => {
 	isUserProfileDetailOn.value = false;
-	modalCloseClass();
+	isModalClose();
 };
 
 // 웹소켓 관련 변수

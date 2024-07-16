@@ -2,7 +2,7 @@
 	<div class="modal default--dialog" tabindex="-1" role="dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="button-icon button--close" role="link" @click="closeModal">
+				<button type="button" class="button-icon button--close" @click="closeModal">
 					<i class="blind">닫기</i>
 				</button>
 			</div>

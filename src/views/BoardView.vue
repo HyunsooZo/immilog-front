@@ -94,10 +94,10 @@ const closeAlert = () => {
 
 const router = useRouter();
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
-const modalCloseClass = () => {
+const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 
@@ -198,7 +198,7 @@ const openCategorySelect = () => {
 		selectList.value = categoryList;
 		isCategorySelectClicked.value = true;
 	});
-	modalOpenClass();
+	isModalOpen();
 };
 
 // .sort__list
@@ -214,7 +214,7 @@ const openSortingSelect = () => {
 		selectList.value = sortingList;
 		isSortingSelectClicked.value = true;
 	});
-	modalOpenClass();
+	isModalOpen();
 };
 
 // 게시글 목록 관련 반응형 객체
@@ -268,7 +268,7 @@ const closeSelect = () => {
 	isCategorySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
 	inquireBoardList(selectCategoryValue.value, selectSortingValue.value);
-	modalCloseClass();
+	isModalClose();
 };
 
 const inquireBoardList = (category: ISelectItem, sorting: ISelectItem) => {
@@ -342,10 +342,10 @@ const handleScroll = () => {
 const onPostModal = ref(false);
 const openPostModal = () => {
 	onPostModal.value = true;
-	modalOpenClass();
+	isModalOpen();
 };
 const closePostModal = () => {
 	onPostModal.value = false;
-	modalCloseClass();
+	isModalClose();
 };
 </script>

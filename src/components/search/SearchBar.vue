@@ -15,11 +15,11 @@
 				<!-- <img src="@/assets/images/icon-logo.png" alt="ko-meet" @click="onHome" /> -->
 			</p>
 			<div class="input__inner">
-				<button class="button button--search" role="link" @click="onSearch">
+				<button class="button button--search" @click="onSearch">
 					<span>{{ t('searchBar.keywordPlaceHolder') }}</span>
 				</button>
 			</div>
-			<button type="button" class="button-icon button--notice" :class="{ new: userInfo.unreadNotification }" role="link"
+			<button type="button" class="button-icon button--notice" :class="{ new: userInfo.unreadNotification }"
 				@click="onMenuOpen">
 				<i class="blind">알림</i>
 			</button>

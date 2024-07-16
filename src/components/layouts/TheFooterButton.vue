@@ -3,8 +3,7 @@
 	<div class="footer">
 		<div class="button-wrap">
 			<!-- 회원가입 버튼 -->
-			<button type="button" @click="props.onClick" :class="buttonClasses" :disabled="!props.condition" role="link"
-				id="registerBtn">
+			<button type="button" @click="props.onClick" :class="buttonClasses" :disabled="!props.condition" id="registerBtn">
 				{{ t('theFooterButton.register') }}
 			</button>
 		</div>

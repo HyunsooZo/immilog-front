@@ -339,10 +339,10 @@ const onResult = () => {
 
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
-const modalCloseClass = () => {
+const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 
@@ -350,12 +350,12 @@ const modalCloseClass = () => {
 const openSelect = (event: Event) => {
 	event.preventDefault();
 	isCountrySelectClicked.value = true;
-	modalOpenClass();
+	isModalOpen();
 }
 
 const closeSelect = () => {
 	isCountrySelectClicked.value = false;
-	modalCloseClass();
+	isModalClose();
 };
 
 // select 관련 메소드 (선택된 값 처리)

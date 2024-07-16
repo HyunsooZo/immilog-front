@@ -13,7 +13,7 @@
 						<span>등록</span>
 					</button>
 				</div>
-				<button type="button" class="button-icon button--close" role="link" @click="closeDialog">
+				<button type="button" class="button-icon button--close" @click="closeDialog">
 					<i class="blind">닫기</i>
 				</button>
 			</div>

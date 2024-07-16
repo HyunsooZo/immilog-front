@@ -1,15 +1,19 @@
 <template>
   <div class="item">
     <div class="info__wrap">
-      <div class="item__pic" :class="{
-        'pic--default': isJobBoard ?
+      <!-- <button type="button" class="item__pic" :class="{
+        'pic--default _company': isJobBoard ?
           !jobBoard.companyLogo :
           !post.userProfileUrl
-      }">
+      }" @click="onUserProfileDetail"> -->
+      <button type="button" class="item__pic" :class="{
+        'pic--default': isJobBoard ? !jobBoard.companyLogo : !post.userProfileUrl,
+        'pic--default _company': isJobBoard && !jobBoard.companyLogo
+      }" @click="onUserProfileDetail">
         <img v-if="isJobBoard ? jobBoard.companyLogo : post.userProfileUrl"
           :src="isJobBoard ? jobBoard.companyLogo : post.userProfileUrl" alt=""
           @click="isJobBoard ? null : onUserProfileDetail" />
-      </div>
+      </button>
       <div class="item__fnc">
         <div class="list__item">
           <button type="button" class="list__item_button ctg">
@@ -159,21 +163,21 @@ const userInfo = useUserInfoStore()
 const router = useRouter()
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
   document.body.classList.add('inactive')
 }
-const modalCloseClass = () => {
+const isModalClose = () => {
   document.body.classList.remove('inactive')
 }
 // 프로필 보기
 const isUserProfileDetailOn = ref(false)
 const onUserProfileDetail = () => {
   isUserProfileDetailOn.value = true
-  modalOpenClass()
+  isModalOpen()
 }
 const offUserProfileDetail = () => {
   isUserProfileDetailOn.value = false
-  modalCloseClass()
+  isModalClose()
 }
 
 const props = defineProps({

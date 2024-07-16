@@ -32,7 +32,7 @@
 				</div>
 				<div class="modal-footer">
 					<div class="button-wrap">
-						<button class="button button--positive" role="link" @click="">
+						<button class="button button--positive" @click="">
 							링크버튼 필요 시 사용
 						</button>
 					</div>

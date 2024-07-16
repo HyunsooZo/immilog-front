@@ -41,7 +41,7 @@
 				<button type="button" @click="signIn" :class="{
 		'button button--positive': isValidLogin && !isLoading,
 		'button button--disabled': !isValidLogin || isLoading
-	}" role="link" id="loginBtn">
+	}" id="loginBtn">
 					{{ t('signInView.signIn') }}
 				</button>
 				<!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
@@ -85,7 +85,7 @@
 			<ul>
 				<li>
 					<strong>{{ t('signInView.ifYouDoNotHaveAnAccount') }}</strong>
-					<button type="button" class="button-text" role="link" @click="onSignUp">
+					<button type="button" class="button-text" @click="onSignUp">
 						<strong>{{ t('signInView.signUp') }}</strong>
 					</button>
 				</li>

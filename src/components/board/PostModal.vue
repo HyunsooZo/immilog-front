@@ -11,7 +11,7 @@
 					</svg>
 					<span>{{ t('postModal.register') }}</span>
 				</button>
-				<button class="button-icon button--close" role="link" @click="closeModal">
+				<button class="button-icon button--close" @click="closeModal">
 					<i class="blind">취소</i>
 				</button>
 			</div>
@@ -37,8 +37,8 @@
 							<div class="input__item">
 								<input v-model="privateYn" type="radio" class="input__radio" id="onlyMyCountry" name="postSelect"
 									value="Y" @click="
-										openAlert(t('postModal.privateDescription'))
-										" />
+					openAlert(t('postModal.privateDescription'))
+					" />
 								<label for="onlyMyCountry" class="input__label">{{ t('postModal.private') }}</label>
 							</div>
 						</div>

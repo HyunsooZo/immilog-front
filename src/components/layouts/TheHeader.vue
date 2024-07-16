@@ -3,7 +3,7 @@
 	<header class="header">
 		<!-- 뒤로 가기 버튼 -->
 		<div class="item__fnc">
-			<button type="button" class="button-icon button--back" role="link" @click="onBack">
+			<button type="button" class="button-icon button--back" @click="onBack">
 				<i class="blind">이전화면</i>
 			</button>
 		</div>
@@ -11,8 +11,7 @@
 		<h1 class="title"><em class="header-logo">Immilog</em></h1>
 		<!-- 알림 버튼 -->
 		<div class="item__fnc" v-if="showNotification">
-			<button type="button" class="button-icon button--notice" :class="{ new: userInfo.unreadNotification }" role="link"
-				@click="">
+			<button type="button" class="button-icon button--notice" :class="{ new: userInfo.unreadNotification }" @click="">
 				<i class="blind">알림</i>
 			</button>
 		</div>

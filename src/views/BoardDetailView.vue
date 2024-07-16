@@ -188,8 +188,8 @@
               <div class="text__item">
                 <p class="text">
                   <span class="comment__user" v-if="extractAtWordAndRest(reply.content).atWord">{{
-                    extractAtWordAndRest(reply.content).atWord
-                    }}</span>
+          extractAtWordAndRest(reply.content).atWord
+        }}</span>
                   {{ extractAtWordAndRest(reply.content).restText }}
                 </p>
               </div>
@@ -198,10 +198,10 @@
           <div class="util__wrap">
             <div class="item__fnc">
               <button type="button" class="list__item_button like" :class="{
-                active: post.comments[index].replies[replyIndex].likeUsers.includes(
-                  userSeq ? userSeq : 0
-                )
-              }" @click="likeReply(index, replyIndex)">
+          active: post.comments[index].replies[replyIndex].likeUsers.includes(
+            userSeq ? userSeq : 0
+          )
+        }" @click="likeReply(index, replyIndex)">
                 <!-- //활성화 .active -->
                 <i class="blind">좋아요</i>
                 <span class="item__count">{{ reply.upVotes }}</span>
@@ -262,10 +262,10 @@ import api from '@/api'
 const { t } = useI18n()
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
   document.body.classList.add('inactive')
 }
-const modalCloseClass = () => {
+const isModalClose = () => {
   document.body.classList.remove('inactive')
 }
 
@@ -276,12 +276,12 @@ const onUserProfileDetail = () => {
     router.push('/my-page')
   } else {
     isUserProfileDetailOn.value = true
-    modalOpenClass()
+    isModalOpen()
   }
 }
 const offUserProfileDetail = () => {
   isUserProfileDetailOn.value = false
-  modalCloseClass()
+  isModalClose()
 }
 
 const isAuthor = (userSeq: number) => {
@@ -297,12 +297,12 @@ const replyDetailModal = ref(false)
 const openReplyModal = (index: number) => {
   replyIndex.value = index
   replyDetailModal.value = true
-  modalOpenClass()
+  isModalOpen()
 }
 
 const closeReplyModal = () => {
   replyDetailModal.value = false
-  modalCloseClass()
+  isModalClose()
 }
 
 // 댓글쓰기
@@ -314,23 +314,23 @@ const openReplyWrite = (index: any, nickName: string | null) => {
   replyIndex.value = index
   isReplyWriteClicked.value = true
   taggedUser.value = nickName ? nickName : ''
-  modalOpenClass()
+  isModalOpen()
 }
 const closeReplyWrite = () => {
   isReplyWriteClicked.value = false
   taggedUser.value = ''
-  modalCloseClass()
+  isModalClose()
   setTimeout(() => {
     detailBoard()
   }, 1500)
 }
 const openCommentWrite = () => {
   isCommentWriteClicked.value = true
-  modalOpenClass()
+  isModalOpen()
 }
 const closeCommentWrite = () => {
   isCommentWriteClicked.value = false
-  modalCloseClass()
+  isModalClose()
   setTimeout(() => {
     detailBoard()
   }, 500)

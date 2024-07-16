@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="button-wrap">
-			<button class="button button--primary" role="link" @click="onLogin">
+			<button class="button button--primary" @click="onLogin">
 				{{ t('resultView.confirm') }}
 			</button>
 		</div>

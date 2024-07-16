@@ -10,7 +10,7 @@
 			<div class="modal-body">
 				<div class="list-wrap">
 					<div class="item" v-if="login" v-for="(item, index) in state.notifications" :key="index"
-						@click="openNotificationDetailModal(item.title, item.content)">
+						@click="onNotificationDetailModal(item.title, item.content)">
 						<div class="text__wrap">
 							<button type="button" class="list__item_button">
 								<div class="text__item">
@@ -54,8 +54,8 @@
 			</div>
 		</div>
 	</div>
-	<NotificationDetailModal v-if="onNotificationDetailModal" :title="currentTitle" :content="currentContent"
-		@close="closeNotificationDetailModal" />
+	<NotificationDetailModal v-if="isNotificationDetailModal" :title="currentTitle" :content="currentContent"
+		@close="offNotificationDetailModal" />
 </template>
 
 <script setup lang="ts">
@@ -82,16 +82,16 @@ const currentPage = ref(0);
 const login = ref(false);
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
-const modalCloseClass = () => {
+const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 
 const closeModal = () => {
 	emits('close');
-	modalCloseClass();
+	isModalClose();
 };
 
 const state = ref<INotificationState>({
@@ -142,7 +142,7 @@ const setUnreadNotificationAsRead = () => {
 };
 
 onMounted(async () => {
-	modalOpenClass();
+	isModalOpen();
 	if (!userInfo.userNickname) {
 		login.value = false;
 	} else {
@@ -153,19 +153,18 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-	modalCloseClass();
+	isModalClose();
 });
 
 // NotificationDetailModal 오픈 및 닫기
-const onNotificationDetailModal = ref(false);
-const openNotificationDetailModal = (title: string, content: string) => {
+const isNotificationDetailModal = ref(false);
+const onNotificationDetailModal = (title: string, content: string) => {
 	currentTitle.value = title;
 	currentContent.value = content;
-	onNotificationDetailModal.value = true;
-	modalOpenClass();
+	isNotificationDetailModal.value = true;
 };
-const closeNotificationDetailModal = () => {
-	onNotificationDetailModal.value = false;
-	modalCloseClass();
+const offNotificationDetailModal = () => {
+	isNotificationDetailModal.value = false;
+
 };
 </script>

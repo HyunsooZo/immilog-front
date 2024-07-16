@@ -13,7 +13,7 @@
 								<button type="reset" v-if="searchInput !== ''" class="input__button-remove" title="텍스트삭제"
 									@click="initializeSearchInput"></button>
 							</div>
-							<button type="button" class="button button--close" role="link" @click="closeSearchModal">
+							<button type="button" class="button button--close" @click="closeSearchModal">
 								<i class="blind">취소</i>
 							</button>
 						</div>

@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">{{ t('bookMarkView.bookMark') }}</p>
-				<button type="button" class="button-icon button--close" role="link" @click="closeModal">
+				<button type="button" class="button-icon button--close" @click="closeModal">
 					<i class="blind">취소</i>
 				</button>
 			</div>

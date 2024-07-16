@@ -5,7 +5,7 @@
 			<div class="modal-content" v-if="isVisible">
 				<div class="modal-header">
 					<p class="modal-title">{{ title }}</p>
-					<button type="button" class="button-icon button--close" role="link" @click="closeDialog">
+					<button type="button" class="button-icon button--close" @click="closeDialog">
 						<i class="blind">닫기</i>
 					</button>
 				</div>

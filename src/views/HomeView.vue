@@ -96,10 +96,10 @@ const homeSorting = useHomeSortingStore();
 const sortingListWithoutLike = sortingList.filter(s => (s.code !== 'LIKE_COUNT' && s.code !== 'CREATED_DATE'));
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
-const modalCloseClass = () => {
+const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 
@@ -239,7 +239,7 @@ const openCategorySelect = () => {
 		selectList.value = categoryList;
 		isCategorySelectClicked.value = true;
 	});
-	modalOpenClass();
+	isModalOpen();
 };
 
 // select 관련 메소드 (정렬)
@@ -249,14 +249,14 @@ const openSortingSelect = () => {
 		selectList.value = sortingListWithoutLike;
 		isSortingSelectClicked.value = true;
 	});
-	modalOpenClass();
+	isModalOpen();
 };
 
 // select 관련 메소드 (닫기)
 const closeSelect = () => {
 	isCategorySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
-	modalCloseClass();
+	isModalClose();
 };
 
 // select 관련 메소드 (선택된 값 처리)
@@ -340,13 +340,13 @@ const loadMoreData = async () => {
 const onPostModal = ref(false);
 const openPostModal = () => {
 	onPostModal.value = true;
-	modalOpenClass();
+	isModalOpen();
 };
 const closePostModal = () => {
 	state.value.posts = [];
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 	onPostModal.value = false;
-	modalCloseClass();
+	isModalClose();
 };
 // -->
 const alertValue = ref(false);
@@ -354,13 +354,13 @@ const alertText = ref('');
 const openAlert = (content: string) => {
 	alertValue.value = true;
 	alertText.value = content;
-	modalOpenClass();
+	isModalOpen();
 };
 
 const closeAlert = () => {
 	alertValue.value = false;
 	userInfo.setLocationMatch(true);
-	modalCloseClass();
+	isModalClose();
 };
 
 const checkIfUserLocationMatch = () => {

@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">내 게시물</p>
-				<button type="button" class="button-icon button--close" role="link" @click="closeModal">
+				<button type="button" class="button-icon button--close" @click="closeModal">
 					<i class="blind">취소</i>
 				</button>
 			</div>
@@ -73,20 +73,20 @@ const fetchMyPostList = async (page: number) => {
 const emits = defineEmits(['close']);
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
-const modalCloseClass = () => {
+const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 
 const closeModal = () => {
 	emits('close');
-	modalCloseClass();
+	isModalClose();
 };
 
 onMounted(() => {
 	fetchMyPostList(0);
-	modalOpenClass();
+	isModalOpen();
 });
 </script>

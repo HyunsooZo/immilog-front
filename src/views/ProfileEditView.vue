@@ -83,7 +83,7 @@
 			</div>
 
 			<div class="button-wrap">
-				<button class="button" role="link" :class="buttonClass" @click="saveProfile">
+				<button class="button" :class="buttonClass" @click="saveProfile">
 					{{ t('profileEditView.save') }}
 				</button>
 			</div>
@@ -283,12 +283,12 @@ const closeAlert = () => {
 const openSelect = (event: Event) => {
 	event.preventDefault();
 	isCountrySelectClicked.value = true;
-	modalOpenClass();
+	isModalOpen();
 }
 
 const closeSelect = () => {
 	isCountrySelectClicked.value = false;
-	modalCloseClass();
+	isModalClose();
 };
 
 // select 관련 메소드 (선택된 값 처리)
@@ -300,10 +300,10 @@ const selectedValue = (value: ISelectItem) => {
 };
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
-const modalCloseClass = () => {
+const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 

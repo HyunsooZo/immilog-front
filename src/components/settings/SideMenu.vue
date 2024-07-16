@@ -3,7 +3,7 @@
 		<div class="sidemenu__inner">
 			<div class="sidemenu-header">
 				<div class="item__fnc">
-					<button class="button-icon button--close" role="link" @click="closeModal">
+					<button class="button-icon button--close" @click="closeModal">
 						<i class="blind">취소</i>
 					</button>
 				</div>
@@ -13,21 +13,21 @@
 				<div class="list-wrap list--link item_preview">
 					<ul>
 						<li class="item">
-							<button type="button" class="button button-text" role="link" @click="onPicBoard">
+							<button type="button" class="button button-text" @click="onPicBoard">
 								<span>사진</span>
 							</button>
 							<div class="item__list">
 								<!-- // 미리보기 4개까지 -->
-								<button type="button" class="thumb">
+								<button type="button" class="thumb" @click="onChatPicPreview">
 									<img src="@/assets/images/email-icon-logo.png" alt="" />
 								</button>
-								<button type="button" class="thumb">
+								<button type="button" class="thumb" @click="onChatPicPreview">
 									<img src="@/assets/images/icon-google-480.png" alt="" />
 								</button>
 							</div>
 						</li>
 						<li class="item">
-							<button type="button" class="button button-text" role="link" @click="onLinkBoard">
+							<button type="button" class="button button-text" @click="onLinkBoard">
 								<span>링크</span>
 							</button>
 						</li>
@@ -74,7 +74,7 @@
 			</div>
 			<div class="sidemenu-footer">
 				<div class="item__fnc">
-					<button class="button-icon__s button--signout" role="link">
+					<button class="button-icon__s button--signout">
 						<svg viewBox="0 0 16 16">
 							<path :d="quitIcon.first"></path>
 							<path :d="quitIcon.second"></path>
@@ -83,7 +83,7 @@
 					</button>
 				</div>
 				<div class="item__fnc">
-					<button class="button-icon__s button--setting" role="link">
+					<button class="button-icon__s button--setting">
 						<svg viewBox="0 0 16 16">
 							<path :d="settingIcon.first" />
 							<path :d="settingIcon.second" />
@@ -94,16 +94,27 @@
 			</div>
 		</div>
 	</div>
+	<ChatPicPreview @close="offChatPicPreview" v-if="isChatPicPreview" />
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { quitIcon, settingIcon } from '@/utils/icons.ts';
+import ChatPicPreview from '@/components/board/UserProfilePic.vue';
 
 //모달 닫는 에밋
 const emits = defineEmits(['close']);
 
 const closeModal = () => {
 	emits('close');
+};
+
+const isChatPicPreview = ref(false);
+const onChatPicPreview = () => {
+	isChatPicPreview.value = true;
+};
+const offChatPicPreview = () => {
+	isChatPicPreview.value = false;
 };
 
 const onPicBoard = () => {

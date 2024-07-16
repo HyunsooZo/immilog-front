@@ -69,10 +69,10 @@ const { t } = useI18n();
 const router = useRouter();
 
 // modal open/close 시 body 컨트롤
-const modalOpenClass = () => {
+const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
-const modalCloseClass = () => {
+const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 
@@ -112,11 +112,11 @@ const handleScrollEvent = () => {
 const onPostModal = ref(false);
 const openPostModal = () => {
 	onPostModal.value = true;
-	modalOpenClass();
+	isModalOpen();
 };
 const closePostModal = () => {
 	onPostModal.value = false;
-	modalCloseClass();
+	isModalClose();
 };
 
 const state = ref({
@@ -199,7 +199,7 @@ const openCategorySelect = () => {
 		selectList.value = industryList;
 		isIndustrySelectClicked.value = true;
 	});
-	modalOpenClass();
+	isModalOpen();
 };
 
 // select 관련 메소드 (정렬)
@@ -209,14 +209,14 @@ const openSortingSelect = () => {
 		selectList.value = sortingList2;
 		isSortingSelectClicked.value = true;
 	});
-	modalOpenClass();
+	isModalOpen();
 };
 
 // select 관련 메소드 (닫기)
 const closeSelect = () => {
 	isIndustrySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
-	modalCloseClass();
+	isModalClose();
 };
 
 // select 관련 메소드 (선택된 값 처리)
