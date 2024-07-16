@@ -69,7 +69,20 @@ export const uploadPostApi = async (param: any) => {
     return { status: 'unauthenticated' }
   }
   try {
-    const response = await api.post(`/posts`)
+    const response = await api.post(`/posts`, param)
+    return { status: response.status, data: response.data }
+  } catch (error) {
+    console.log(error)
+    return { status: 'error', error }
+  }
+}
+
+export const uploadJobBoardApi = async (param: any) => {
+  if (!token) {
+    return { status: 'unauthenticated' }
+  }
+  try {
+    const response = await api.post(`/job-boards`, param)
     return { status: response.status, data: response.data }
   } catch (error) {
     console.log(error)

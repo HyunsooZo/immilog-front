@@ -37,8 +37,8 @@
 							<div class="input__item">
 								<input v-model="privateYn" type="radio" class="input__radio" id="onlyMyCountry" name="postSelect"
 									value="Y" @click="
-					openAlert(t('postModal.privateDescription'))
-					" />
+										openAlert(t('postModal.privateDescription'))
+										" />
 								<label for="onlyMyCountry" class="input__label">{{ t('postModal.private') }}</label>
 							</div>
 						</div>
@@ -195,7 +195,7 @@ import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { resizeImage } from '@/utils/image.ts';
 import { experienceList, countries } from '@/utils/selectItems.ts';
-import { uploadPostApi } from '@/services/post.ts';
+import { uploadJobBoardApi, uploadPostApi } from '@/services/post.ts';
 import { ISelectItem } from '@/types/interface';
 import { IApiImage } from '@/types/api-interface';
 import { useUserInfoStore } from '@/stores/userInfo';
@@ -214,6 +214,7 @@ const selectList = ref<ISelectItem[]>();
 const userInfo = useUserInfoStore();
 const selectedDate = ref('');
 const selectedCareer = ref('');
+const selectedCareerCode = ref('');
 const allDate = ref(false);
 const allCareer = ref(false);
 const updateDate = (event: Event) => {
@@ -260,6 +261,7 @@ const selectedCategory = ref({ name: t('postModal.communication'), code: 'COMMUN
 const selectedValue = (value: ISelectItem) => {
 	if (selectTitle.value === '경력 선택') {
 		selectedCareer.value = t(value.name);
+		selectedCareerCode.value = value.code;
 	}
 	selectedCategory.value = value;
 };
@@ -441,8 +443,8 @@ const postUpload = async () => {
 		}
 	}
 	try {
-		const form = createImageForm();
-		const { status } = await uploadPostApi(form);
+		const form = props.isJobBoard ? createJobBoardForm() : createPostForm();
+		const { status } = props.isJobBoard ? await uploadJobBoardApi(form) : await uploadPostApi(form);
 		if (status === 201 || status === 200) {
 			setTimeout(() => {
 				offLoading();
@@ -475,7 +477,7 @@ const checkIfTokenExists = () => {
 };
 
 // 이미지 업로드 요청 폼 생성 함수
-const createImageForm = () => {
+const createPostForm = () => {
 	return {
 		title: title.value,
 		content: content.value,
@@ -483,6 +485,18 @@ const createImageForm = () => {
 		attachments: imagePaths.value,
 		isPublic: privateYn.value === 'N' ? true : false,
 		category: selectedCategory.value.code,
+	};
+};
+
+const createJobBoardForm = () => {
+	return {
+		title: title.value,
+		content: content.value,
+		tags: tags.value,
+		attachments: imagePaths.value,
+		isPublic: privateYn.value === 'N' ? true : false,
+		deadline: allDate.value ? null : selectedDate.value + 'T00:00:00',
+		experience: allCareer.value ? null : selectedCareerCode.value,
 	};
 };
 
