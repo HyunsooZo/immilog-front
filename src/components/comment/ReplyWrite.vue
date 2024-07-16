@@ -1,6 +1,6 @@
 <template>
 	<!-- replydialog -->
-	<div class="modal reply--dialog" tabindex="-1" role="dialog" @click.self="closeDialog">
+	<div class="modal reply--dialog" tabindex="-1" role="dialog" @click.self="closeModal">
 		<div class="modal-content">
 			<div class="modal-header">
 				<!-- 등록 -->
@@ -13,7 +13,7 @@
 						<span>등록</span>
 					</button>
 				</div>
-				<button type="button" class="button-icon button--close" @click="closeDialog">
+				<button type="button" class="button-icon button--close" @click="closeModal">
 					<i class="blind">닫기</i>
 				</button>
 			</div>
@@ -90,7 +90,7 @@ const props = defineProps({
 	},
 });
 
-const closeDialog = () => {
+const closeModal = () => {
 	emit('close');
 };
 
@@ -127,7 +127,7 @@ const commentApi = async () => {
 	}
 	setTimeout(() => {
 		offLoading();
-		closeDialog();
+		closeModal();
 	}, 1000);
 };
 
