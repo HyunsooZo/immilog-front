@@ -1898,60 +1898,52 @@ strong + .button-text {
   height: 100%;
   padding: 0;
   border: 0;
-  background: #bbb;
+  background: #e9e9e9;
   -webkit-transition: 0.3s;
   transition: 0.3s;
   border-radius: 1.3rem;
 }
 .input__item._switch-toggle .input__label::before,
 .input__item._switch-toggle .input__label::after {
-  content: 'KOR';
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
+  letter-spacing: -0.5px;
+}
+.input__item._switch-toggle .input__label::before {
+  content: 'KOR \00a0\00a0\00a0 ENG';
+  width: 100%;
+  height: 100%;
+  padding: 0 0.4rem;
+  line-height: 2.6rem;
+  font-size: 1rem;
+  opacity: 0.75;
+  box-sizing: border-box;
+}
+.input__item._switch-toggle .input__label::after {
+  content: 'KOR';
   width: 3rem;
   height: 3rem;
   margin-top: -0.2rem;
   line-height: 3rem;
   font-size: 1.2rem;
-  letter-spacing: -1px;
-  text-align: center;
-  background: #fff;
+  color: #fff;
+  background: #999;
   border-radius: 50%;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
-.input__item._switch-toggle [class^='input__']:checked + .input__label::before {
-  content: 'ENG';
-}
-.input__item._switch-toggle .input__label::after {
-  content: 'ENG';
-  left: auto;
-  right: 0;
-  width: 2.6rem;
-  padding-right: 0.4rem;
-  font-size: 1rem;
-  color: #fff;
-  background: transparent;
-  box-shadow: none;
-  opacity: 0.75;
-  box-sizing: border-box;
-}
 .input__item._switch-toggle [class^='input__']:checked + .input__label::after {
-  content: 'KOR';
-  left: 0;
-  right: auto;
-  padding-right: 0;
-  padding-left: 0.4rem;
+  content: 'ENG';
 }
-.input__item._switch-toggle [class^='input__'] + .input__label::before,
+.input__item._switch-toggle [class^='input__'] + .input__label::after,
 .input__item._switch-toggle [class^='input__'] + .input__label span {
   -webkit-transition: 0.3s;
   transition: 0.3s;
   -webkit-transform: translateX(0);
   transform: translateX(0);
 }
-.input__item._switch-toggle [class^='input__']:checked + .input__label::before,
+.input__item._switch-toggle [class^='input__']:checked + .input__label::after,
 .input__item._switch-toggle [class^='input__']:checked + .input__label span {
   margin-left: -0.4rem;
   -webkit-transform: translateX(100%);

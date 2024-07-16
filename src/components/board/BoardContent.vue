@@ -2,7 +2,7 @@
   <div class="item">
     <div class="info__wrap">
       <!-- <button type="button" class="item__image" :class="{
-        'image--default _company': isJobBoard ?
+        'image--default': isJobBoard ?
           !jobBoard.companyLogo :
           !post.userProfileUrl
       }" @click="onUserProfileDetail"> -->
