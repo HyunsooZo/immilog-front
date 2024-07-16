@@ -13,7 +13,7 @@
 				<div class="list-wrap list--link item_preview">
 					<ul>
 						<li class="item">
-							<button type="button" class="button button-text" @click="onImgBoard">
+							<button type="button" class="button button-text" @click="onImageBoard">
 								<span>사진</span>
 							</button>
 							<div class="item__list">
@@ -117,7 +117,7 @@ const offImagePreview = () => {
 	isImagePreview.value = false;
 };
 
-const onImgBoard = () => {
+const onImageBoard = () => {
 
 }
 
