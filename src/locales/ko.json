@@ -150,7 +150,7 @@
     "nicknamePlaceHolder": "닉네임 입력(5~10자 한글, 영문, 숫자 조합)",
     "duplicationCheck": "중복 확인",
     "alreadyInUse": "이미 사용중인 닉네임입니다.",
-    "availableNickname:": "사용 가능한 닉네임입니다.",
+    "availableNickname": "사용 가능한 닉네임입니다.",
     "password": "비밀번호",
     "passwordPlaceHolder": "비밀번호 입력(영문, 숫자, 특수문자 조합으로 8~20자리)",
     "passwordConfirm": "비밀번호 확인",

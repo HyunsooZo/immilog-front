@@ -150,7 +150,7 @@
     "nicknamePlaceHolder": "Enter nickname (5-10 characters, combination of Korean, English, and numbers)",
     "duplicationCheck": "Check for duplicates",
     "alreadyInUse": "Nickname already in use.",
-    "availableNickname:": "Nickname available.",
+    "availableNickname": "Nickname available.",
     "password": "Password",
     "passwordPlaceHolder": "Enter password (combination of letters, numbers, and special characters, 8-20 characters)",
     "passwordConfirm": "Confirm password",
