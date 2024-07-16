@@ -8,7 +8,7 @@
       </div>
       <div class="item">
         <div class="info__wrap">
-          <div class="item__pic" :class="{ 'pic--default': !post.userProfileUrl }">
+          <div class="item__image" :class="{ 'image--default': !post.userProfileUrl }">
             <img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
           </div>
           <div class="item__fnc">

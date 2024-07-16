@@ -955,12 +955,12 @@ strong + .button-text {
   margin: 0;
   padding: 0;
 }
-.modal._preview .item__pic::after {
+.modal._preview .item__image::after {
   content: '';
   display: block;
   padding-bottom: 100%;
 }
-.modal._preview .item__pic .button--close {
+.modal._preview .item__image .button--close {
   position: absolute;
   top: -1rem;
   right: -1rem;
@@ -971,12 +971,12 @@ strong + .button-text {
   background: rgb(51 51 51 / 0.7);
   z-index: 1;
 }
-.modal._preview .item__pic .button--close::after {
+.modal._preview .item__image .button--close::after {
   width: 1.5rem;
   height: 1.5rem;
   background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(255 255 255)' xmlns='http://www.w3.org/2000/svg'><path d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z'/></svg>");
 }
-.modal._preview .item__pic img {
+.modal._preview .item__image img {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -1227,7 +1227,7 @@ strong + .button-text {
   top: 0;
   left: -4.2rem;
 }
-.chat-wrap .chat__list .item .info__wrap .item__pic.pic--default {
+.chat-wrap .chat__list .item .info__wrap .item__image.image--default {
   background: #fff;
 }
 .chat-wrap .chat__list .item .chat__message {
@@ -1725,7 +1725,7 @@ strong + .button-text {
   border: 1px solid #e9e9e9;
   border-radius: 50%;
 }
-.input__attachments._edit .item__display.pic--default::after {
+.input__attachments._edit .item__display.image--default::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -2155,7 +2155,7 @@ strong + .button-text {
   margin-bottom: 1rem;
   text-align: left;
 }
-[class*='-wrap'] .item .info__wrap .item__pic {
+[class*='-wrap'] .item .info__wrap .item__image {
   position: relative;
   overflow: hidden;
   width: 3.2rem;
@@ -2164,7 +2164,7 @@ strong + .button-text {
   border: 1px solid #e9e9e9;
   border-radius: 50%;
 }
-[class*='-wrap'] .item .info__wrap .item__pic.pic--default::after {
+[class*='-wrap'] .item .info__wrap .item__image.image--default::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -2177,12 +2177,12 @@ strong + .button-text {
   background-size: auto 100%;
   transform: translate(-50%, -50%);
 }
-[class*='-wrap'] .item .info__wrap .item__pic.pic--default._company::after {
+[class*='-wrap'] .item .info__wrap .item__image.image--default._company::after {
   width: 55%;
   height: 55%;
   background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(204 204 204)' xmlns='http://www.w3.org/2000/svg'><path d='M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514Z'/><path d='M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a.5.5 0 0 1-1 0V1H3v14h3v-2.5a.5.5 0 0 1 .5-.5H8v4H3a1 1 0 0 1-1-1V1Z'/><path d='M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z'/></svg>");
 }
-[class*='-wrap'] .item .info__wrap .item__pic img {
+[class*='-wrap'] .item .info__wrap .item__image img {
   object-fit: cover;
 }
 .list-wrap .item .info__wrap .item__fnc {
@@ -2320,7 +2320,7 @@ strong + .button-text {
 .list-wrap._chat .item .info__wrap {
   margin-bottom: 0;
 }
-.list-wrap._chat .item .info__wrap .item__pic {
+.list-wrap._chat .item .info__wrap .item__image {
   position: absolute;
   top: 50%;
   left: 0;
@@ -2521,7 +2521,7 @@ strong + .button-text {
   justify-content: center;
   margin: 0;
 }
-.list-wrap.personal__view .item .info__wrap .item__pic {
+.list-wrap.personal__view .item .info__wrap .item__image {
   width: 10rem;
   height: 10rem;
   margin-right: 0;
@@ -2553,7 +2553,7 @@ strong + .button-text {
   justify-content: left;
   margin: 0;
 }
-.list-wrap._personal .item .info__wrap .item__pic {
+.list-wrap._personal .item .info__wrap .item__image {
   width: 5rem;
   height: 5rem;
   margin-right: 0.8rem;

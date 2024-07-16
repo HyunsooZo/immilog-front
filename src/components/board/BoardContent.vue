@@ -1,14 +1,14 @@
 <template>
   <div class="item">
     <div class="info__wrap">
-      <!-- <button type="button" class="item__pic" :class="{
-        'pic--default _company': isJobBoard ?
+      <!-- <button type="button" class="item__image" :class="{
+        'image--default _company': isJobBoard ?
           !jobBoard.companyLogo :
           !post.userProfileUrl
       }" @click="onUserProfileDetail"> -->
-      <button type="button" class="item__pic" :class="{
-        'pic--default': isJobBoard ? !jobBoard.companyLogo : !post.userProfileUrl,
-        'pic--default _company': isJobBoard && !jobBoard.companyLogo
+      <button type="button" class="item__image" :class="{
+        'image--default': isJobBoard ? !jobBoard.companyLogo : !post.userProfileUrl,
+        'image--default _company': isJobBoard && !jobBoard.companyLogo
       }" @click="onUserProfileDetail">
         <img v-if="isJobBoard ? jobBoard.companyLogo : post.userProfileUrl"
           :src="isJobBoard ? jobBoard.companyLogo : post.userProfileUrl" alt=""

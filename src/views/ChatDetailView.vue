@@ -38,8 +38,8 @@
 							:class="{ _my: amISender(chat.sender.seq), }">
 							<!-- 사용자 정보 -->
 							<div class="info__wrap" v-if="!amISender(chat.sender.seq)">
-								<button type="button" class="item__pic" :class="{ 'pic--default': chat.sender.profileImage === '', }"
-									@click="onUserProfileDetail">
+								<button type="button" class="item__image"
+									:class="{ 'image--default': chat.sender.profileImage === '', }" @click="onUserProfileDetail">
 									<img :src="chat.sender.profileImage" alt=""
 										v-if="chat.sender.profileImage !== ''" /></button><!-- // 사용자 프로필 보기 -->
 							</div>

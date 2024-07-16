@@ -14,8 +14,8 @@
 				<div class="list-wrap personal__view">
 					<div class="item">
 						<div class="info__wrap">
-							<button type="button" class="item__pic" :class="{ 'pic--default': !userProfile.userProfileUrl }"
-								role="link" @click="onUserProfilePic">
+							<button type="button" class="item__image" :class="{ 'image--default': !userProfile.userProfileUrl }"
+								role="link" @click="onUserProfileImage">
 								<img v-if="userProfile.userProfileUrl" :src="userProfile.userProfileUrl" alt="" />
 							</button>
 							<div class="item__fnc">
@@ -45,12 +45,12 @@
 			</div>
 		</div>
 	</div>
-	<UserProfilePic :userProfile=userProfile @close="offUserProfilePic" v-if="isUserProfilePicOn" />
+	<UserProfileImage :userProfile=userProfile @close="offUserProfileImage" v-if="isUserProfileImageOn" />
 	<UserBoard :userSeq=userProfile.userSeq @close="offUserBoard" v-if="isUserBoardOn" />
 </template>
 
 <script setup lang="ts">
-import UserProfilePic from '@/components/board/UserProfilePic.vue';
+import UserProfileImage from '@/components/board/UserProfileImage.vue';
 import router from '@/router';
 import { IApiChatStart } from '@/types/api-interface';
 import { IOtherUserInfo } from '@/types/interface';
@@ -91,12 +91,12 @@ const isModalClose = () => {
 };
 
 // 프로필 사진
-const isUserProfilePicOn = ref(false);
-const onUserProfilePic = () => {
-	isUserProfilePicOn.value = true;
+const isUserProfileImageOn = ref(false);
+const onUserProfileImage = () => {
+	isUserProfileImageOn.value = true;
 };
-const offUserProfilePic = () => {
-	isUserProfilePicOn.value = false;
+const offUserProfileImage = () => {
+	isUserProfileImageOn.value = false;
 };
 
 //모달 닫는 에밋

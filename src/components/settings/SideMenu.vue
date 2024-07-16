@@ -13,15 +13,15 @@
 				<div class="list-wrap list--link item_preview">
 					<ul>
 						<li class="item">
-							<button type="button" class="button button-text" @click="onPicBoard">
+							<button type="button" class="button button-text" @click="onImgBoard">
 								<span>사진</span>
 							</button>
 							<div class="item__list">
 								<!-- // 미리보기 4개까지 -->
-								<button type="button" class="thumb" @click="onChatPicPreview">
+								<button type="button" class="thumb" @click="onImagePreview">
 									<img src="@/assets/images/email-icon-logo.png" alt="" />
 								</button>
-								<button type="button" class="thumb" @click="onChatPicPreview">
+								<button type="button" class="thumb" @click="onImagePreview">
 									<img src="@/assets/images/icon-google-480.png" alt="" />
 								</button>
 							</div>
@@ -39,7 +39,7 @@
 					<ul>
 						<li class="item">
 							<div class="info__wrap">
-								<div class="item__pic pic--default">
+								<div class="item__image image--default">
 									<img src="" alt="" />
 								</div>
 								<div class="item__fnc">
@@ -55,7 +55,7 @@
 						</li>
 						<li class="item">
 							<button type="button" class="info__wrap">
-								<div class="item__pic">
+								<div class="item__image">
 									<img src="" alt="" />
 								</div>
 								<div class="item__fnc">
@@ -67,7 +67,7 @@
 										<strong>userNickName</strong>
 									</div>
 								</div>
-							</button><!-- // 사용자 프로필 보기 -->
+							</button>
 						</li>
 					</ul>
 				</div>
@@ -94,13 +94,13 @@
 			</div>
 		</div>
 	</div>
-	<ChatPicPreview @close="offChatPicPreview" v-if="isChatPicPreview" />
+	<ImagePreview @close="offImagePreview" v-if="isImagePreview" />
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { quitIcon, settingIcon } from '@/utils/icons.ts';
-import ChatPicPreview from '@/components/board/UserProfilePic.vue';
+import ImagePreview from '@/components/board/UserProfileImage.vue';
 
 //모달 닫는 에밋
 const emits = defineEmits(['close']);
@@ -109,15 +109,15 @@ const closeModal = () => {
 	emits('close');
 };
 
-const isChatPicPreview = ref(false);
-const onChatPicPreview = () => {
-	isChatPicPreview.value = true;
+const isImagePreview = ref(false);
+const onImagePreview = () => {
+	isImagePreview.value = true;
 };
-const offChatPicPreview = () => {
-	isChatPicPreview.value = false;
+const offImagePreview = () => {
+	isImagePreview.value = false;
 };
 
-const onPicBoard = () => {
+const onImgBoard = () => {
 
 }
 

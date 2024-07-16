@@ -2,7 +2,7 @@
 	<div class="modal _preview" tabindex="-1" role="dialog" @click.self="closeModal">
 		<div class="modal-content">
 			<div class="modal-body">
-				<div class="item__pic">
+				<div class="item__image">
 					<!-- <button
 						class="button-icon button--close"
 						role="link"
