@@ -234,7 +234,10 @@
     "failedToUploadImage": "Failed to upload image. Please try again.",
     "postingSucceed": "Posting Succeed",
     "enterTitle": "Please enter a title.",
-    "enterContent": "Please enter content."
+    "enterContent": "Please enter content.",
+    "enterDate": "Please select a deadline.",
+    "enterExperience": "Please select a experience.",
+    "jobBoard": "Post Job Listing"
   },
   "countries": {
     "MALAYSIA": "Malaysia",
