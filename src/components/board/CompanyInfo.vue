@@ -42,8 +42,9 @@
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="countryValue"
 												@input="handleInput('country')" />
-											<label for="registCountry" :class="{ active: label.country }">{{ t('companyInfoView.country')
-												}}</label>
+											<label for="registCountry" :class="{ active: labelFields.country }">{{
+					t('companyInfoView.country')
+				}}</label>
 										</div>
 									</div>
 								</div>
@@ -56,7 +57,7 @@
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="companyAddressValue"
 												@input="handleInput('companyAddress')" />
-											<label for="registCompanyAddress" :class="{ active: label.companyAddress }">{{
+											<label for="registCompanyAddress" :class="{ active: labelFields.companyAddress }">{{
 					t('companyInfoView.companyAddress') }}</label>
 										</div>
 									</div>
@@ -70,7 +71,7 @@
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="companyHomepageValue"
 												@input="handleInput('companyHomepage')" />
-											<label for="registCompanyHomepage" :class="{ active: label.companyHomepage }">{{
+											<label for="registCompanyHomepage" :class="{ active: labelFields.companyHomepage }">{{
 					t('companyInfoView.companyHomepage') }}</label>
 										</div>
 									</div>
@@ -84,7 +85,7 @@
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="companyEmailValue"
 												@input="handleInput('companyEmail')" />
-											<label for="registCompanyEmail" :class="{ active: label.companyEmail }">{{
+											<label for="registCompanyEmail" :class="{ active: labelFields.companyEmail }">{{
 					t('companyInfoView.companyEmail') }}</label>
 										</div>
 									</div>
@@ -97,7 +98,7 @@
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="companyPhoneValue"
 												@input="handleInput('companyPhone')" />
-											<label for="registCompanyPhone" :class="{ active: label.companyPhone }">{{
+											<label for="registCompanyPhone" :class="{ active: labelFields.companyPhone }">{{
 					t('companyInfoView.companyPhone') }}</label>
 										</div>
 									</div>
@@ -111,7 +112,7 @@
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="industryValue"
 												@input="handleInput('industry')" />
-											<label for="registIndustry" :class="{ active: label.industry }">{{
+											<label for="registIndustry" :class="{ active: labelFields.industry }">{{
 					t('companyInfoView.industry')
 				}}</label>
 										</div>
@@ -125,7 +126,7 @@
 										<div class="input__item_inner">
 											<input type="text" id="registCompany" class="input__element" v-model="companyNameValue"
 												@input="handleInput('companyName')" />
-											<label for="registCompanyName" :class="{ active: label.companyName }">{{
+											<label for="registCompanyName" :class="{ active: labelFields.companyName }">{{
 					t('companyInfoView.company') }}</label>
 										</div>
 									</div>
@@ -168,25 +169,44 @@ const companyHomepageValue = ref('');
 const companyAddressValue = ref('');
 const countryValue = ref('');
 
-const fields = ref({
-	companyName: { visible: false, active: false, label: false },
-	industry: { visible: false, active: false, label: false },
-	companyPhone: { visible: false, active: false, label: false },
-	companyEmail: { visible: false, active: false, label: false },
-	companyHomepage: { visible: false, active: false, label: false },
-	companyAddress: { visible: false, active: false, label: false },
-	country: { visible: true, active: true, label: false },
+const isActive = ref({
+	companyName: false,
+	industry: false,
+	companyPhone: false,
+	companyEmail: false,
+	companyHomepage: false,
+	companyAddress: false,
+	country: false,
+});
+const visibleFields = ref({
+	companyName: false,
+	industry: false,
+	companyPhone: false,
+	companyEmail: false,
+	companyHomepage: false,
+	companyAddress: false,
+	country: false,
+});
+const labelFields = ref({
+	companyName: false,
+	industry: false,
+	companyPhone: false,
+	companyEmail: false,
+	companyHomepage: false,
+	companyAddress: false,
+	country: false,
 });
 
+const isVisible = (field) => visibleFields.value[field];
 const getStyle = (field) => {
-	return fields.value[field].visible ? 'display: block;' : 'display: none;';
+	return isVisible(field) ? 'display: block;' : 'display: none;';
 };
 const handleInput = (field) => {
-	fields.value[field].visible = true;
-	fields.value[field].label = true;
+	visibleFields.value[field] = true;
+	labelFields.value[field] = true;
 
 	setTimeout(() => {
-		fields.value[field].active = true;
+		isActive.value[field] = true;
 	}, 2000);
 };
 
@@ -194,11 +214,4 @@ const closeModal = () => {
 	emits('close');
 };
 
-const checkNickName = () => {
-	// 닉네임 중복 체크 로직
-};
-
-const saveProfile = () => {
-	// 프로필 저장 로직
-};
 </script>
