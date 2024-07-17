@@ -74,6 +74,18 @@
       </ul>
       <ul>
         <li class="item">
+          <button type="button" class="button button-text" @click="onCompanyInfo">
+            <svg viewBox="0 0 16 16">
+              <path :d="companyInfoIcon.first" />
+              <path :d="companyInfoIcon.second" />
+              <path :d="companyInfoIcon.third" />
+            </svg>
+            <span>{{ t('myPageView.companyInfo') }}</span>
+          </button>
+        </li>
+      </ul>
+      <ul>
+        <li class="item">
           <div class="check">
             <svg viewBox="0 0 16 16">
               <path :d="settingIcon.first" />
@@ -92,6 +104,7 @@
     </div>
     <BookMark @update:bookmarkValue="offBookMark" v-if="isBookmarkOn" />
     <UserBoard :userSeq="userInfo.userSeq ? userInfo.userSeq : 0" @close="offUserBoard" v-if="isUserBoardOn" />
+    <CompanyInfo v-if="isCompanyInfo" @close="offCompanyInfo" />
   </div>
   <teleport to="#modal" v-if="modalValue">
     <ConfirmModal :modalText="modalText" @modalValue="closeModal" />
@@ -100,6 +113,7 @@
 </template>
 
 <script setup lang="ts">
+import CompanyInfo from '@/components/board/CompanyInfo.vue'
 import BookMark from '@/components/board/BookMark.vue'
 import UserBoard from '@/components/board/UserBoard.vue'
 import ConfirmModal from '@/components/modal/ConfirmModal.vue'
@@ -112,7 +126,8 @@ import {
   settingIcon,
   noticeIcon,
   customerCenterIcon,
-  logoutIcon
+  logoutIcon,
+  companyInfoIcon
 } from '@/utils/icons.ts'
 import { useI18n } from 'vue-i18n'
 import NotificationModal from '@/components/notification/NotificationModal.vue'
@@ -180,6 +195,15 @@ const onNotificationModal = () => {
 }
 const offNotificationModal = () => {
   isNotificationModal.value = false
+}
+
+// 회사등록
+const isCompanyInfo = ref(false)
+const onCompanyInfo = () => {
+  isCompanyInfo.value = true
+}
+const offCompanyInfo = () => {
+  isCompanyInfo.value = false
 }
 
 // 고객센터 이메일 폼

@@ -1108,6 +1108,19 @@ strong + .button-text {
 .modal.modal--full .modal-header + .modal-body {
   max-height: calc(100vh - 5rem);
 }
+/* fixed bottom button */
+.modal.modal--full._fixed-bot .modal-body {
+  padding: 0 0 calc(10rem + constant(safe-area-inset-bottom));
+  padding: 0 0 calc(10rem + env(safe-area-inset-bottom));
+}
+.modal.modal--full._fixed-bot .modal-body .content {
+  padding-bottom: 0;
+}
+.modal.modal--full._fixed-bot .modal-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
 /* select dialog */
 .select--dialog .modal-content {
   top: auto;
@@ -1564,6 +1577,43 @@ strong + .button-text {
   position: relative;
   width: 100%;
 }
+
+/*  */
+.regist-wrap .input-wrap._regist {
+  padding-top: 0;
+  margin: 0;
+  background: #fff;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  transition: all ease 1s;
+  transform: translateY(100%);
+  height: 0;
+}
+.regist-wrap .input-wrap._regist .input__element ~ label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 3.2rem;
+  color: #999;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+}
+/* .regist-wrap .input-wrap._regist.active .input__element ~ label, */
+.regist-wrap .input-wrap._regist .input__element:focus ~ label,
+.regist-wrap .input-wrap._regist .input__element ~ label.active {
+  top: -20px;
+  line-height: 1.7rem;
+  color: #666;
+  font-weight: 500;
+}
+.regist-wrap .input-wrap._regist.active {
+  padding-top: 3.6rem;
+  transform: translateY(0);
+  height: 100%;
+}
+
 .input__wrap.underline-type .input__item::before {
   content: none;
 }
@@ -1604,6 +1654,7 @@ strong + .button-text {
   border-bottom: 1px solid #ccc;
   background: transparent;
   text-align: left;
+  z-index: 1;
 }
 .input__wrap.underline-type .input__element:focus {
   border-bottom-color: #333;
@@ -1613,6 +1664,7 @@ strong + .button-text {
 .input__wrap.underline-type .input__element:disabled::placeholder {
   color: #333;
 }
+
 /* email type input */
 /* .input__wrap.underline-type.email-type .input__item + .input__item {
     margin: 0 0 0 2rem;
@@ -1724,19 +1776,6 @@ strong + .button-text {
   text-align: center;
   border: 1px solid #e9e9e9;
   border-radius: 50%;
-}
-.input__attachments._edit .item__display.image--default::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 70%;
-  height: 70%;
-  background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(204 204 204)' xmlns='http://www.w3.org/2000/svg'><path d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z'/></svg>");
-  background-repeat: no-repeat;
-  background-position: 50% center;
-  background-size: auto 100%;
-  transform: translate(-50%, -50%);
 }
 .input__attachments._edit .item__display img {
   border: 0;
@@ -2156,7 +2195,8 @@ strong + .button-text {
   border: 1px solid #e9e9e9;
   border-radius: 50%;
 }
-[class*='-wrap'] .item .info__wrap .item__image.image--default::after {
+[class*='-wrap'] .item .info__wrap .item__image.image--default::after,
+.input__attachments._edit .item__display.image--default::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -2169,10 +2209,11 @@ strong + .button-text {
   background-size: auto 100%;
   transform: translate(-50%, -50%);
 }
-[class*='-wrap'] .item .info__wrap .item__image.image--default._company::after {
+[class*='-wrap'] .item .info__wrap .item__image.image--default._company::after,
+.input__attachments._edit .item__display.image--default._company::after {
   width: 55%;
   height: 55%;
-  background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(204 204 204)' xmlns='http://www.w3.org/2000/svg'><path d='M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514Z'/><path d='M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a.5.5 0 0 1-1 0V1H3v14h3v-2.5a.5.5 0 0 1 .5-.5H8v4H3a1 1 0 0 1-1-1V1Z'/><path d='M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1Z'/></svg>");
+  background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(204 204 204)' xmlns='http://www.w3.org/2000/svg'><path d='M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z'/><path d='M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z'/></svg>");
 }
 [class*='-wrap'] .item .info__wrap .item__image img {
   object-fit: cover;
