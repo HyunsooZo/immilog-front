@@ -153,7 +153,7 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import { useI18n } from 'vue-i18n';
@@ -197,11 +197,11 @@ const labelFields = ref({
 	country: false,
 });
 
-const isVisible = (field) => visibleFields.value[field];
-const getStyle = (field) => {
+const isVisible = (field: string) => visibleFields.value[field];
+const getStyle = (field: string) => {
 	return isVisible(field) ? 'display: block;' : 'display: none;';
 };
-const handleInput = (field) => {
+const handleInput = (field: string) => {
 	visibleFields.value[field] = true;
 	labelFields.value[field] = true;
 
