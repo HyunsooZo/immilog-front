@@ -207,7 +207,7 @@ const handleInput = (field) => {
 
 	setTimeout(() => {
 		isActive.value[field] = true;
-	}, 2000);
+	}, 1000);
 };
 
 const closeModal = () => {
