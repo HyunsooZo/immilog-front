@@ -204,7 +204,7 @@ const openCategorySelect = () => {
 // .sort__list
 const selectSortingValue = ref({
 	name: 'selectItems.sortByRecent',
-	code: 'recent',
+	code: 'CREATED_DATE',
 });
 const isSortingSelectClicked = ref(false);
 

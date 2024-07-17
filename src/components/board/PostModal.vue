@@ -3,7 +3,7 @@
 	<div class="modal modal--full post--dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<p class="modal-title">{{ t('postModal.writePost') }}</p>
+				<p class="modal-title">{{ isJobBoard ? t('postModal.jobBoard') : t('postModal.writePost') }}</p>
 				<button type="button" class="button-icon__s button--post_upload" @click="postUpload">
 					<svg viewBox="0 0 16 16">
 						<path :d="postRegistrationIcon.first" />
@@ -72,7 +72,7 @@
 								<div class="input__item_inner">
 									<label for="selCareer" v-if="!selectedCareer" class="placeholder">{{ PlaceholderCareer }}</label>
 									<input type="text" class="input__element" id="selCareer" v-model="selectedCareer"
-										:disabled="allCareer" @click="onSelectModal()" />
+										:disabled="allCareer" @click="onSelectModal()" readonly />
 								</div>
 							</div>
 							<div class="input__item">
@@ -507,6 +507,10 @@ const validateUploadPost = () => {
 	}
 	if (!content.value) {
 		openAlert(t('postModal.enterContent'));
+		return false;
+	}
+	if (props.isJobBoard && !selectedDate.value && !allDate.value) {
+		openAlert(t('postModal.selectDate'));
 		return false;
 	}
 	return true;

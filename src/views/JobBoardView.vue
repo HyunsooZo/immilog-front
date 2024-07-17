@@ -116,6 +116,8 @@ const openPostModal = () => {
 };
 const closePostModal = () => {
 	onPostModal.value = false;
+	initializeState();
+	fetchJobBoardList();
 	isModalClose();
 };
 

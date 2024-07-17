@@ -172,7 +172,7 @@
     "nicknamePlaceHolder": "Enter nickname (5-10 characters, combination of Korean, English, and numbers)",
     "duplicationCheck": "Check for duplicates",
     "alreadyInUse": "Nickname already in use.",
-    "availableNickname:": "Nickname available.",
+    "availableNickname": "Nickname available.",
     "password": "Password",
     "passwordPlaceHolder": "Enter password (combination of letters, numbers, and special characters, 8-20 characters)",
     "passwordConfirm": "Confirm password",
@@ -256,7 +256,10 @@
     "failedToUploadImage": "Failed to upload image. Please try again.",
     "postingSucceed": "Posting Succeed",
     "enterTitle": "Please enter a title.",
-    "enterContent": "Please enter content."
+    "enterContent": "Please enter content.",
+    "enterDate": "Please select a deadline.",
+    "enterExperience": "Please select a experience.",
+    "jobBoard": "Post Job Listing"
   },
   "countries": {
     "MALAYSIA": "Malaysia",
