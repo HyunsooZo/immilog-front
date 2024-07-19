@@ -39,9 +39,9 @@
 
 			<div class="button-wrap">
 				<button type="button" @click="signIn" :class="{
-		'button button--positive': isValidLogin && !isLoading,
-		'button button--disabled': !isValidLogin || isLoading
-	}" id="loginBtn">
+					'button button--positive': isValidLogin && !isLoading,
+					'button button--disabled': !isValidLogin || isLoading
+				}" id="loginBtn">
 					{{ t('signInView.signIn') }}
 				</button>
 				<!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
@@ -142,7 +142,6 @@ const signIn = async () => {
 			requestForm,
 			applicationJson
 		)
-		console.log(response)
 		if (response.status === 200) {
 			useUserInfoStore().setUserInfo(response.data.data)
 			setToken(response.data.data)
