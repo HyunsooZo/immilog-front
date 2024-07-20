@@ -33,23 +33,7 @@
 							</div>
 						</div>
 
-						<div class="regist-wrap">
-							<div class="input-wrap _regist" v-for="(field, index) in fields" :key="index"
-								:class="{ active: formFields.isActive[field.name] }" :style="getStyle(field.name)">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" :v-model="field.model"
-												@input="handleInput(field.name, index)" />
-											<label :for="`regist${field.label}`" :class="{ active: formFields.labelFields[field.name] }">
-												{{ t(field.translationKey) }}
-											</label>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
+						<RegistWrap :fields="fields" :formFields.sync="formFields" />
 					</div>
 				</div>
 			</div>
@@ -65,6 +49,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
+import RegistWrap from '@/components/board/RegistWrap.vue'; // 새로운 컴포넌트 import
 import { useI18n } from 'vue-i18n';
 
 const emits = defineEmits(['close']);
@@ -118,23 +103,19 @@ const formFields = ref({
 	},
 });
 
-const isVisible = (field: string) => formFields.value.visibleFields[field];
-const getStyle = (field: string) => {
-	return isVisible(field) ? 'display: block;' : 'display: none;';
+const previewImage = () => {
+	// 이미지 미리보기 기능 구현
 };
-const handleInput = (field: string, index: number) => {
-	formFields.value.labelFields[field] = true;
-	if (index < fields.length && index >= 0) {
-		const nextField = fields[index - 1].name;
-		formFields.value.visibleFields[nextField] = true;
-		setTimeout(() => {
-			formFields.value.isActive[field] = true;
-			formFields.value.isActive[nextField] = true;
-		}, 1000);
-	}
+
+const removeImage = () => {
+	// 이미지 삭제 기능 구현
 };
 
 const closeModal = () => {
 	emits('close');
+};
+
+const saveProfile = () => {
+	// 프로필 저장 기능 구현
 };
 </script>
