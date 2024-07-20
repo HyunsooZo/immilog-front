@@ -34,114 +34,22 @@
 						</div>
 
 						<div class="regist-wrap">
-							<!-- country -->
-							<div class="input-wrap _regist" :class="{ active: formFields.isActive.companyAddress }"
-								:style="getStyle('companyAddress')">
+							<div class="input-wrap _regist" v-for="(field, index) in fields" :key="index"
+								:class="{ active: formFields.isActive[field.name] }" :style="getStyle(field.name)">
 								<div class="input__wrap underline-type">
 									<div class="input__item">
 										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="countryValue"
-												@input="handleInput('country')" />
-											<label for="registCountry" :class="{ active: formFields.labelFields.country }">{{
-												t('companyInfoView.country')
-											}}</label>
+											<input type="text" class="input__element" :v-model="field.model"
+												@input="handleInput(field.name, index)" />
+											<label :for="`regist${field.label}`" :class="{ active: formFields.labelFields[field.name] }">
+												{{ t(field.translationKey) }}
+											</label>
 										</div>
 									</div>
 								</div>
-							</div>
-							<!-- companyAddress -->
-							<div class="input-wrap _regist" :class="{ active: formFields.isActive.companyHomepage }"
-								:style="getStyle('companyHomepage')">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="companyAddressValue"
-												@input="handleInput('companyAddress')" />
-											<label for="registCompanyAddress" :class="{ active: formFields.labelFields.companyAddress }">{{
-												t('companyInfoView.companyAddress') }}</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- companyHomepage -->
-							<div class="input-wrap _regist" :class="{ active: formFields.isActive.companyEmail }"
-								:style="getStyle('companyEmail')">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="companyHomepageValue"
-												@input="handleInput('companyHomepage')" />
-											<label for="registCompanyHomepage" :class="{ active: formFields.labelFields.companyHomepage }">{{
-												t('companyInfoView.companyHomepage') }}</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- companyEmail -->
-							<div class="input-wrap _regist" :class="{ active: formFields.isActive.companyPhone }"
-								:style="getStyle('companyPhone')">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="companyEmailValue"
-												@input="handleInput('companyEmail')" />
-											<label for="registCompanyEmail" :class="{ active: formFields.labelFields.companyEmail }">{{
-												t('companyInfoView.companyEmail') }}</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- companyPhone -->
-							<div class="input-wrap _regist" :class="{ active: formFields.isActive.industry }"
-								:style="getStyle('industry')">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="companyPhoneValue"
-												@input="handleInput('companyPhone')" />
-											<label for="registCompanyPhone" :class="{ active: formFields.labelFields.companyPhone }">{{
-												t('companyInfoView.companyPhone') }}</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- industry -->
-							<div class="input-wrap _regist" :class="{ active: formFields.isActive.companyName }"
-								:style="getStyle('companyName')">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="industryValue"
-												@input="handleInput('industry')" />
-											<label for="registIndustry" :class="{ active: formFields.labelFields.industry }">{{
-												t('companyInfoView.industry')
-											}}</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- companyName -->
-							<div class="input-wrap _regist active">
-								<div class=" input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" id="registCompany" class="input__element" v-model="companyNameValue"
-												@input="handleInput('companyName')" />
-											<label for="registCompanyName" :class="{ active: formFields.labelFields.companyName }">{{
-												t('companyInfoView.company') }}</label>
-										</div>
-									</div>
-									<button type="button" class="button button--primary" @click="checkNickName">{{
-										t('companyInfoView.duplicationCheck') }}</button>
-								</div>
-								<p v-if="nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error"
-									aria-live="assertive">{{ t('signUpView.alreadyInUse') }}</p>
-								<p v-if="!nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error"
-									aria-live="assertive">{{ t('signUpView.doDuplicationCheck') }}</p>
-								<p v-if="nickNameCheckDone && isNickNameValid && isNickNameChanged" class="input__text"
-									aria-live="assertive">{{ t('signUpView.availableNickname') }}</p>
 							</div>
 						</div>
+
 					</div>
 				</div>
 			</div>
@@ -170,9 +78,19 @@ const companyHomepageValue = ref('');
 const companyAddressValue = ref('');
 const countryValue = ref('');
 
+const fields = [
+	{ name: 'country', model: countryValue, label: 'Country', translationKey: 'companyInfoView.country' },
+	{ name: 'companyAddress', model: companyAddressValue, label: 'CompanyAddress', translationKey: 'companyInfoView.companyAddress' },
+	{ name: 'companyHomepage', model: companyHomepageValue, label: 'CompanyHomepage', translationKey: 'companyInfoView.companyHomepage' },
+	{ name: 'companyEmail', model: companyEmailValue, label: 'CompanyEmail', translationKey: 'companyInfoView.companyEmail' },
+	{ name: 'companyPhone', model: companyPhoneValue, label: 'CompanyPhone', translationKey: 'companyInfoView.companyPhone' },
+	{ name: 'industry', model: industryValue, label: 'Industry', translationKey: 'companyInfoView.industry' },
+	{ name: 'companyName', model: companyNameValue, label: 'Company', translationKey: 'companyInfoView.company' },
+];
+
 const formFields = ref({
 	isActive: {
-		companyName: false,
+		companyName: true,
 		industry: false,
 		companyPhone: false,
 		companyEmail: false,
@@ -181,7 +99,7 @@ const formFields = ref({
 		country: false,
 	},
 	visibleFields: {
-		companyName: false,
+		companyName: true,
 		industry: false,
 		companyPhone: false,
 		companyEmail: false,
@@ -198,41 +116,25 @@ const formFields = ref({
 		companyAddress: false,
 		country: false,
 	},
-	tagType: {
-		companyName: 'text',
-		industry: 'button',
-		companyPhone: 'text',
-		companyEmail: 'text',
-		companyHomepage: 'text',
-		companyAddress: 'text',
-		country: 'button',
-	},
-	duplicationChekc: {
-		companyName: true,
-		industry: false,
-		companyPhone: false,
-		companyEmail: false,
-		companyHomepage: false,
-		companyAddress: false,
-		country: false,
-	},
 });
 
 const isVisible = (field: string) => formFields.value.visibleFields[field];
 const getStyle = (field: string) => {
 	return isVisible(field) ? 'display: block;' : 'display: none;';
 };
-const handleInput = (field: string) => {
-	formFields.value.visibleFields[field] = true;
+const handleInput = (field: string, index: number) => {
 	formFields.value.labelFields[field] = true;
-
-	setTimeout(() => {
-		formFields.value.isActive[field] = true;
-	}, 1000);
+	if (index < fields.length && index >= 0) {
+		const nextField = fields[index - 1].name;
+		formFields.value.visibleFields[nextField] = true;
+		setTimeout(() => {
+			formFields.value.isActive[field] = true;
+			formFields.value.isActive[nextField] = true;
+		}, 1000);
+	}
 };
 
 const closeModal = () => {
 	emits('close');
 };
-
 </script>
