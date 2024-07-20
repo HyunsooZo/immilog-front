@@ -53,11 +53,11 @@
 											<input type="text" id="registCompany" class="input__element" v-model="companyNameValue"
 												@input="handleInput(fields.length - 1)" />
 											<label for="registCompanyName" :class="{ active: labelFields[fields.length - 1] }">{{
-												t('companyInfoView.company') }}</label>
+					t('companyInfoView.company') }}</label>
 										</div>
 									</div>
 									<button type="button" class="button button--primary" @click="checkNickName">{{
-										t('companyInfoView.duplicationCheck') }}</button>
+					t('companyInfoView.duplicationCheck') }}</button>
 								</div>
 								<p v-if="nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error"
 									aria-live="assertive">{{ t('signUpView.alreadyInUse') }}</p>
@@ -128,9 +128,9 @@ const handleInput = (index: number) => {
 	if (fields[index].value) {
 		if (index >= 0) {
 			labelFields.value[index] = true;
+			visibleFields.value[index - 1] = true;
 			if (index > 0) {
 				setTimeout(() => {
-					visibleFields.value[index - 1] = true;
 					isActive.value[index - 1] = true;
 				}, 1000);
 			}
