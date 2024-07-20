@@ -96,7 +96,7 @@ const companyAddressValue = ref('');
 const countryValue = ref('');
 
 const fields = reactive([
-	{ name: 'Country', value: countryValue, label: t('companyInfoView.country') },
+	// { name: 'Country', value: countryValue, label: t('companyInfoView.country') },
 	{ name: 'CompanyAddress', value: companyAddressValue, label: t('companyInfoView.companyAddress') },
 	{ name: 'CompanyHomepage', value: companyHomepageValue, label: t('companyInfoView.companyHomepage') },
 	{ name: 'CompanyEmail', value: companyEmailValue, label: t('companyInfoView.companyEmail') },
@@ -125,21 +125,12 @@ const getStyle = (index: number) => {
 };
 
 const handleInput = (index: number) => {
-	console.log(`handleInput called for index: ${index}`);
-	console.log(`Current value of field: ${fields[index].value}`);
-
 	if (fields[index].value) {
 		if (index > 0) {
 			setTimeout(() => {
-				if (index === fields.length - 1) {
-					labelFields.value[index] = true;
-				}
-				labelFields.value[index - 1] = true;
-				console.log(`labelFields updated: ${JSON.stringify(labelFields.value)}`);
+				labelFields.value[index] = true;
 				visibleFields.value[index - 1] = true;
-				console.log(`visibleFields updated: ${JSON.stringify(visibleFields.value)}`);
 				isActive.value[index - 1] = true;
-				console.log(`isActive updated: ${JSON.stringify(isActive.value)}`);
 			}, 1000);
 		}
 	}
