@@ -128,6 +128,7 @@ const interestCountryCode = ref();
 const isCountrySelectClicked = ref(false);
 const countrySelectTitle = t('profileEditView.selectCountry');
 const imagePreview = ref();
+const imageUrl = ref();
 const imageFile = ref(null);
 const latitude = ref(parseFloat(localStorage.getItem('latitude') ?? '0.0'));
 const longitude = ref(parseFloat(localStorage.getItem('longitude') ?? '0.0'));
@@ -180,6 +181,7 @@ const removeImage = () => {
 	// 비어있는 이미지로 설정
 	imagePreview.value = '';
 	imageFile.value = null;
+	imageUrl.value = [''];
 };
 
 // 닉네임 중복 체크
@@ -217,7 +219,7 @@ const hostImage = async () => {
 			multipartFormData,
 		);
 		if (response.status === 200) {
-			imagePreview.value = response.data.data;
+			imageUrl.value = response.data.data.imageUrl;
 		} else {
 			openAlert(t('profileEditView.failedToUploadImage'));
 		}
@@ -234,7 +236,7 @@ const saveProfile = async () => {
 		nickName: userNickName.value === userInfo.userNickname ? null : userNickName.value,
 		country: country.value === userInfo.userCountry ? null : countryCode.value,
 		interestCountry: (!interestCountry.value && interestCountry.value === userInfo.userInterestCountry) ? null : interestCountryCode.value,
-		userProfileUrl: (imagePreview.value[0] != userInfo.userProfileUrl && imagePreview.value[0]) ? imagePreview.value[0] : null,
+		profileImage: isImageChanged ? imageUrl.value[0] : null,
 		latitude: latitude.value,
 		longitude: longitude.value,
 	};

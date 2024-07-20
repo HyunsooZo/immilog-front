@@ -6,83 +6,8 @@
       <div class="list__title">
         <span class="title">{{ t('postCategories.' + post.category) }}</span>
       </div>
-      <div class="item">
-        <div class="info__wrap">
-          <div class="item__image" :class="{ 'image--default': !post.userProfileUrl }">
-            <img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
-          </div>
-          <div class="item__fnc">
-            <div class="list__item">
-              <button type="button" class="list__item_button ctg">
-                <em>{{ t('countries.' + post.country) }}</em>
-                <strong>{{ t('postCategories.' + post.category) }}</strong>
-              </button>
-            </div>
-            <div class="list__item">
-              <button type="button" class="list__item_button user" @click="onUserProfileDetail">
-                <em>{{ post.region }}</em>
-                <strong>{{ post.userNickName }}</strong></button><!-- //사용자 프로필 보기 > 채팅 -->
-            </div>
-          </div>
-          <div class="item__fnc" v-if="post.userSeq === userInfo.userSeq">
-            <button type="button" class="list__item_button more" @click="openMoreModal">
-              <i class="blind">더보기</i></button><!-- //공유, 신고, 본인글인 경우 추가 :수정, 삭제 -->
-          </div>
-        </div>
-        <div class="text__wrap">
-          <div class="list__item">
-            <div class="text__item">
-              <p class="title">{{ post.title }}</p>
-              <p class="text">{{ post.content }}</p>
-            </div>
-          </div>
-        </div>
-        <!-- file preview -->
-        <div class="attachments__wrap" v-if="post.attachments.length > 0">
-          <div class="attachments__item" v-for="(image, index) in post.attachments" :key="index">
-            <div class="item__display">
-              <img :src="image" alt="preview" />
-            </div>
-          </div>
-          <!-- //loop -->
-        </div>
-        <div class="tag__wrap">
-          <div class="tag__inner">
-            <div class="tag__item">
-              <button v-for="tag in post.tags" :key="tag" type="button" class="button button--hash">
-                <em>{{ tag }}</em>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="util__wrap">
-          <div class="item__fnc">
-            <button type="button" class="list__item_button like"
-              :class="{ active: post.likeUsers.includes(userSeq ? userSeq : 0) }" @click="likePost">
-              <i class="blind">좋아요</i>
-              <span class="item__count">{{ post.likeCount }}</span>
-            </button>
-            <p class="list__item cmt">
-              <i class="blind">댓글</i>
-              <span class="item__count">{{ allCommentCounts(post) }}</span>
-            </p>
-          </div>
-          <div class="item__fnc">
-            <!-- <button type="button" class="list__item_button share">
-							<i class="blind">공유하기</i>
-						</button> -->
-            <p class="list__item past">
-              <i class="blind">작성시간</i>
-              <span class="item__count">{{ timeCalculation(post.createdAt).time }}
-                {{ t(timeCalculation(post.createdAt).text) }}</span>
-            </p>
-            <button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
-              <!-- //활성화 .active -->
-              <i class="blind">북마크</i>
-            </button>
-          </div>
-        </div>
-      </div>
+      <BoardContent :key="posetSeq" :post="post" :detail="true" :jobBoard="emptyJobPost" :isJobBoard="false">
+      </BoardContent>
       <!-- //.item -->
     </div>
     <ReplyModal v-if="replyDetailModal" :post="post" :commentIndex="Number(replyIndex)" :postIndex="Number(postSeq)"
@@ -188,8 +113,8 @@
               <div class="text__item">
                 <p class="text">
                   <span class="comment__user" v-if="extractAtWordAndRest(reply.content).atWord">{{
-          extractAtWordAndRest(reply.content).atWord
-        }}</span>
+                    extractAtWordAndRest(reply.content).atWord
+                    }}</span>
                   {{ extractAtWordAndRest(reply.content).restText }}
                 </p>
               </div>
@@ -198,10 +123,10 @@
           <div class="util__wrap">
             <div class="item__fnc">
               <button type="button" class="list__item_button like" :class="{
-          active: post.comments[index].replies[replyIndex].likeUsers.includes(
-            userSeq ? userSeq : 0
-          )
-        }" @click="likeReply(index, replyIndex)">
+                active: post.comments[index].replies[replyIndex].likeUsers.includes(
+                  userSeq ? userSeq : 0
+                )
+              }" @click="likeReply(index, replyIndex)">
                 <!-- //활성화 .active -->
                 <i class="blind">좋아요</i>
                 <span class="item__count">{{ reply.upVotes }}</span>

@@ -14,7 +14,7 @@
           :src="isJobBoard ? jobBoard.companyLogo : post.userProfileUrl" alt=""
           @click="isJobBoard ? null : onUserProfileDetail" />
       </button>
-      <div class="item__fnc">
+      <div class="item__fnc" @click="onUserProfileDetail">
         <div class="list__item">
           <button type="button" class="list__item_button ctg">
             <!-- 일반 게시글 -->
@@ -31,7 +31,7 @@
         </div>
         <!-- 일반 게시물 -->
         <div class="list__item" v-if="!isJobBoard">
-          <button type="button" class="list__item_button user" @click="onUserProfileDetail">
+          <button type="button" class="list__item_button user">
             <em>{{ post.region }}</em>
             <strong>{{ post.userNickName }}</strong>
           </button>
@@ -169,9 +169,14 @@ const isModalOpen = () => {
 const isModalClose = () => {
   document.body.classList.remove('inactive')
 }
+
 // 프로필 보기
 const isUserProfileDetailOn = ref(false)
+
 const onUserProfileDetail = () => {
+  if (!postAuthorInfo.value.userSeq) {
+    setPostAuthorInfo();
+  }
   isUserProfileDetailOn.value = true
   isModalOpen()
 }
@@ -296,6 +301,14 @@ const postAuthorInfo = ref<IOtherUserInfo>({
   country: props.post.country,
   region: props.post.region
 })
+
+const setPostAuthorInfo = () => {
+  postAuthorInfo.value.userSeq = props.post.userSeq;
+  postAuthorInfo.value.userProfileUrl = props.post.userProfileUrl;
+  postAuthorInfo.value.userNickName = props.post.userNickName;
+  postAuthorInfo.value.country = props.post.country;
+  postAuthorInfo.value.region = props.post.region;
+}
 
 const calculateDeadLine = (deadline: string | number | Date) => {
   const date = new Date(deadline);

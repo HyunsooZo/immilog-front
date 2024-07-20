@@ -95,8 +95,7 @@
             <div class="input__item _switch-toggle">
               <input type="checkbox" class="input__checkbox" name="setting" id="setting" v-model="isEnglishChecked" />
               <label for="setting" class="input__label"><span class="blind">{{
-          isEnglishChecked ? t('myPageView.english') : t('myPageView.korean')
-        }}</span></label>
+                isEnglishChecked ? t('myPageView.english') : t('myPageView.korean') }}</span></label>
             </div>
           </div>
         </li>
@@ -113,10 +112,10 @@
 </template>
 
 <script setup lang="ts">
-import CompanyInfo from '@/components/board/CompanyInfo.vue'
 import BookMark from '@/components/board/BookMark.vue'
 import UserBoard from '@/components/board/UserBoard.vue'
 import ConfirmModal from '@/components/modal/ConfirmModal.vue'
+import CompanyInfo from '@/components/board/CompanyInfo.vue'
 import { useUserInfoStore } from '@/stores/userInfo.ts'
 import { onMounted, ref, computed, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'

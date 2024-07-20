@@ -34,104 +34,30 @@
 						</div>
 
 						<div class="regist-wrap">
-							<!-- country -->
-							<div class="input-wrap _regist" :class="{ active: isActive.companyAddress }"
-								:style="getStyle('companyAddress')">
+							<div v-for="(field, index) in fields" :key="index" class="input-wrap _regist"
+								:class="{ active: isActive[index] }" :style="getStyle(index)">
 								<div class="input__wrap underline-type">
 									<div class="input__item">
 										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="countryValue"
-												@input="handleInput('country')" />
-											<label for="registCountry" :class="{ active: labelFields.country }">{{
-					t('companyInfoView.country')
-				}}</label>
+											<input type="text" :class="`input__element`" v-model="field.value" @input="handleInput(index)" />
+											<label :for="`regist${field.name}`" :class="{ active: labelFields[index] }">{{ field.label
+												}}</label>
 										</div>
 									</div>
 								</div>
 							</div>
-							<!-- companyAddress -->
-							<div class="input-wrap _regist" :class="{ active: isActive.companyHomepage }"
-								:style="getStyle('companyHomepage')">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="companyAddressValue"
-												@input="handleInput('companyAddress')" />
-											<label for="registCompanyAddress" :class="{ active: labelFields.companyAddress }">{{
-					t('companyInfoView.companyAddress') }}</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- companyHomepage -->
-							<div class="input-wrap _regist" :class="{ active: isActive.companyEmail }"
-								:style="getStyle('companyEmail')">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="companyHomepageValue"
-												@input="handleInput('companyHomepage')" />
-											<label for="registCompanyHomepage" :class="{ active: labelFields.companyHomepage }">{{
-					t('companyInfoView.companyHomepage') }}</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- companyEmail -->
-							<div class="input-wrap _regist" :class="{ active: isActive.companyPhone }"
-								:style="getStyle('companyPhone')">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="companyEmailValue"
-												@input="handleInput('companyEmail')" />
-											<label for="registCompanyEmail" :class="{ active: labelFields.companyEmail }">{{
-					t('companyInfoView.companyEmail') }}</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- companyPhone -->
-							<div class="input-wrap _regist" :class="{ active: isActive.industry }" :style="getStyle('industry')">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="companyPhoneValue"
-												@input="handleInput('companyPhone')" />
-											<label for="registCompanyPhone" :class="{ active: labelFields.companyPhone }">{{
-					t('companyInfoView.companyPhone') }}</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- industry -->
-							<div class="input-wrap _regist" :class="{ active: isActive.companyName }"
-								:style="getStyle('companyName')">
-								<div class="input__wrap underline-type">
-									<div class="input__item">
-										<div class="input__item_inner">
-											<input type="text" class="input__element" v-model="industryValue"
-												@input="handleInput('industry')" />
-											<label for="registIndustry" :class="{ active: labelFields.industry }">{{
-					t('companyInfoView.industry')
-				}}</label>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!-- companyName -->
 							<div class="input-wrap _regist active">
 								<div class=" input__wrap underline-type">
 									<div class="input__item">
 										<div class="input__item_inner">
 											<input type="text" id="registCompany" class="input__element" v-model="companyNameValue"
-												@input="handleInput('companyName')" />
-											<label for="registCompanyName" :class="{ active: labelFields.companyName }">{{
-					t('companyInfoView.company') }}</label>
+												@input="handleInput(fields.length - 1)" />
+											<label for="registCompanyName" :class="{ active: labelFields[fields.length - 1] }">{{
+												t('companyInfoView.company') }}</label>
 										</div>
 									</div>
 									<button type="button" class="button button--primary" @click="checkNickName">{{
-					t('companyInfoView.duplicationCheck') }}</button>
+										t('companyInfoView.duplicationCheck') }}</button>
 								</div>
 								<p v-if="nickNameCheckDone && !isNickNameValid && isNickNameChanged" class="input__error"
 									aria-live="assertive">{{ t('signUpView.alreadyInUse') }}</p>
@@ -154,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import { useI18n } from 'vue-i18n';
 
@@ -169,49 +95,92 @@ const companyHomepageValue = ref('');
 const companyAddressValue = ref('');
 const countryValue = ref('');
 
-const isActive = ref({
-	companyName: false,
-	industry: false,
-	companyPhone: false,
-	companyEmail: false,
-	companyHomepage: false,
-	companyAddress: false,
-	country: false,
-});
-const visibleFields = ref({
-	companyName: false,
-	industry: false,
-	companyPhone: false,
-	companyEmail: false,
-	companyHomepage: false,
-	companyAddress: false,
-	country: false,
-});
-const labelFields = ref({
-	companyName: false,
-	industry: false,
-	companyPhone: false,
-	companyEmail: false,
-	companyHomepage: false,
-	companyAddress: false,
-	country: false,
-});
+const fields = reactive([
+	{ name: 'Country', value: countryValue, label: t('companyInfoView.country') },
+	{ name: 'CompanyAddress', value: companyAddressValue, label: t('companyInfoView.companyAddress') },
+	{ name: 'CompanyHomepage', value: companyHomepageValue, label: t('companyInfoView.companyHomepage') },
+	{ name: 'CompanyEmail', value: companyEmailValue, label: t('companyInfoView.companyEmail') },
+	{ name: 'CompanyPhone', value: companyPhoneValue, label: t('companyInfoView.companyPhone') },
+	{ name: 'Industry', value: industryValue, label: t('companyInfoView.industry') },
+	{ name: 'CompanyName', value: companyNameValue, label: t('companyInfoView.company') },
+]);
 
-const isVisible = (field: string) => visibleFields.value[field];
-const getStyle = (field: string) => {
-	return isVisible(field) ? 'display: block;' : 'display: none;';
-};
-const handleInput = (field: string) => {
-	visibleFields.value[field] = true;
-	labelFields.value[field] = true;
+const isActive = ref(Array(fields.length).fill(false));
+const visibleFields = ref(Array(fields.length).fill(false));
+const labelFields = ref(Array(fields.length).fill(false));
 
-	setTimeout(() => {
-		isActive.value[field] = true;
-	}, 1000);
+// 닉네임 체크와 관련된 상태 변수 초기화
+const nickNameCheckDone = ref(false);
+const isNickNameValid = ref(false);
+const isNickNameChanged = ref(false);
+
+// 클래스 관련 상태 변수 초기화
+const buttonClass = ref('');
+
+visibleFields.value[0] = true; // 첫 번째 필드가 기본적으로 보이도록 설정
+
+const isVisible = (index: number) => visibleFields.value[index];
+const getStyle = (index: number) => {
+	return isVisible(index) ? 'display: block;' : 'display: none;';
 };
+
+const handleInput = (index: number) => {
+	console.log(`handleInput called for index: ${index}`);
+	console.log(`Current value of field: ${fields[index].value}`);
+
+	if (fields[index].value) {
+		if (index > 0) {
+			setTimeout(() => {
+				if (index === fields.length - 1) {
+					labelFields.value[index] = true;
+				}
+				labelFields.value[index - 1] = true;
+				console.log(`labelFields updated: ${JSON.stringify(labelFields.value)}`);
+				visibleFields.value[index - 1] = true;
+				console.log(`visibleFields updated: ${JSON.stringify(visibleFields.value)}`);
+				isActive.value[index - 1] = true;
+				console.log(`isActive updated: ${JSON.stringify(isActive.value)}`);
+			}, 1000);
+		}
+	}
+};
+
+fields.forEach((field, index) => {
+	watch(field.value, (newValue) => {
+		console.log(`watch triggered for index: ${index}, newValue: ${newValue}`);
+		if (newValue) {
+			handleInput(index);
+		}
+	});
+});
 
 const closeModal = () => {
 	emits('close');
 };
+
+const checkNickName = () => {
+	// 닉네임 중복 체크 로직 추가
+	isNickNameChanged.value = true;
+	// 예시: 중복 체크가 완료되고 유효한 닉네임일 경우
+	nickNameCheckDone.value = true;
+	isNickNameValid.value = true;
+};
+
+const previewImage = (event) => {
+	const file = event.target.files[0];
+	if (file) {
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			imagePreview.value = e.target.result;
+		};
+		reader.readAsDataURL(file);
+	}
+};
+
+const removeImage = () => {
+	imagePreview.value = '';
+};
+
+const imagePreview = ref('');
 
 </script>
