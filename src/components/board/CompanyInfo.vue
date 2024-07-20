@@ -126,12 +126,14 @@ const getStyle = (index: number) => {
 
 const handleInput = (index: number) => {
 	if (fields[index].value) {
-		if (index > 0) {
-			setTimeout(() => {
-				labelFields.value[index] = true;
-				visibleFields.value[index - 1] = true;
-				isActive.value[index - 1] = true;
-			}, 1000);
+		if (index >= 0) {
+			labelFields.value[index] = true;
+			if (index > 0) {
+				setTimeout(() => {
+					visibleFields.value[index - 1] = true;
+					isActive.value[index - 1] = true;
+				}, 1000);
+			}
 		}
 	}
 };
