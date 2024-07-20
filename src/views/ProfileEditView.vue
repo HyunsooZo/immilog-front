@@ -234,7 +234,7 @@ const saveProfile = async () => {
 		nickName: userNickName.value === userInfo.userNickname ? null : userNickName.value,
 		country: country.value === userInfo.userCountry ? null : countryCode.value,
 		interestCountry: (!interestCountry.value && interestCountry.value === userInfo.userInterestCountry) ? null : interestCountryCode.value,
-		userProfileUrl: imagePreview.value === userInfo.userProfileUrl ? null : imagePreview.value[0],
+		userProfileUrl: (imagePreview.value[0] != userInfo.userProfileUrl && imagePreview.value[0]) ? imagePreview.value[0] : null,
 		latitude: latitude.value,
 		longitude: longitude.value,
 	};
