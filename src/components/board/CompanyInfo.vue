@@ -35,86 +35,87 @@
 
 						<div class="regist-wrap">
 							<!-- country -->
-							<div class="input-wrap _regist" :class="{ active: isActive.companyAddress }"
+							<div class="input-wrap _regist" :class="{ active: formFields.isActive.companyAddress }"
 								:style="getStyle('companyAddress')">
 								<div class="input__wrap underline-type">
 									<div class="input__item">
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="countryValue"
 												@input="handleInput('country')" />
-											<label for="registCountry" :class="{ active: labelFields.country }">{{
+											<label for="registCountry" :class="{ active: formFields.labelFields.country }">{{
 												t('companyInfoView.country')
-												}}</label>
+											}}</label>
 										</div>
 									</div>
 								</div>
 							</div>
 							<!-- companyAddress -->
-							<div class="input-wrap _regist" :class="{ active: isActive.companyHomepage }"
+							<div class="input-wrap _regist" :class="{ active: formFields.isActive.companyHomepage }"
 								:style="getStyle('companyHomepage')">
 								<div class="input__wrap underline-type">
 									<div class="input__item">
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="companyAddressValue"
 												@input="handleInput('companyAddress')" />
-											<label for="registCompanyAddress" :class="{ active: labelFields.companyAddress }">{{
+											<label for="registCompanyAddress" :class="{ active: formFields.labelFields.companyAddress }">{{
 												t('companyInfoView.companyAddress') }}</label>
 										</div>
 									</div>
 								</div>
 							</div>
 							<!-- companyHomepage -->
-							<div class="input-wrap _regist" :class="{ active: isActive.companyEmail }"
+							<div class="input-wrap _regist" :class="{ active: formFields.isActive.companyEmail }"
 								:style="getStyle('companyEmail')">
 								<div class="input__wrap underline-type">
 									<div class="input__item">
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="companyHomepageValue"
 												@input="handleInput('companyHomepage')" />
-											<label for="registCompanyHomepage" :class="{ active: labelFields.companyHomepage }">{{
+											<label for="registCompanyHomepage" :class="{ active: formFields.labelFields.companyHomepage }">{{
 												t('companyInfoView.companyHomepage') }}</label>
 										</div>
 									</div>
 								</div>
 							</div>
 							<!-- companyEmail -->
-							<div class="input-wrap _regist" :class="{ active: isActive.companyPhone }"
+							<div class="input-wrap _regist" :class="{ active: formFields.isActive.companyPhone }"
 								:style="getStyle('companyPhone')">
 								<div class="input__wrap underline-type">
 									<div class="input__item">
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="companyEmailValue"
 												@input="handleInput('companyEmail')" />
-											<label for="registCompanyEmail" :class="{ active: labelFields.companyEmail }">{{
+											<label for="registCompanyEmail" :class="{ active: formFields.labelFields.companyEmail }">{{
 												t('companyInfoView.companyEmail') }}</label>
 										</div>
 									</div>
 								</div>
 							</div>
 							<!-- companyPhone -->
-							<div class="input-wrap _regist" :class="{ active: isActive.industry }" :style="getStyle('industry')">
+							<div class="input-wrap _regist" :class="{ active: formFields.isActive.industry }"
+								:style="getStyle('industry')">
 								<div class="input__wrap underline-type">
 									<div class="input__item">
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="companyPhoneValue"
 												@input="handleInput('companyPhone')" />
-											<label for="registCompanyPhone" :class="{ active: labelFields.companyPhone }">{{
+											<label for="registCompanyPhone" :class="{ active: formFields.labelFields.companyPhone }">{{
 												t('companyInfoView.companyPhone') }}</label>
 										</div>
 									</div>
 								</div>
 							</div>
 							<!-- industry -->
-							<div class="input-wrap _regist" :class="{ active: isActive.companyName }"
+							<div class="input-wrap _regist" :class="{ active: formFields.isActive.companyName }"
 								:style="getStyle('companyName')">
 								<div class="input__wrap underline-type">
 									<div class="input__item">
 										<div class="input__item_inner">
 											<input type="text" class="input__element" v-model="industryValue"
 												@input="handleInput('industry')" />
-											<label for="registIndustry" :class="{ active: labelFields.industry }">{{
+											<label for="registIndustry" :class="{ active: formFields.labelFields.industry }">{{
 												t('companyInfoView.industry')
-												}}</label>
+											}}</label>
 										</div>
 									</div>
 								</div>
@@ -126,7 +127,7 @@
 										<div class="input__item_inner">
 											<input type="text" id="registCompany" class="input__element" v-model="companyNameValue"
 												@input="handleInput('companyName')" />
-											<label for="registCompanyName" :class="{ active: labelFields.companyName }">{{
+											<label for="registCompanyName" :class="{ active: formFields.labelFields.companyName }">{{
 												t('companyInfoView.company') }}</label>
 										</div>
 									</div>
@@ -169,44 +170,64 @@ const companyHomepageValue = ref('');
 const companyAddressValue = ref('');
 const countryValue = ref('');
 
-const isActive = ref({
-	companyName: false,
-	industry: false,
-	companyPhone: false,
-	companyEmail: false,
-	companyHomepage: false,
-	companyAddress: false,
-	country: false,
-});
-const visibleFields = ref({
-	companyName: false,
-	industry: false,
-	companyPhone: false,
-	companyEmail: false,
-	companyHomepage: false,
-	companyAddress: false,
-	country: false,
-});
-const labelFields = ref({
-	companyName: false,
-	industry: false,
-	companyPhone: false,
-	companyEmail: false,
-	companyHomepage: false,
-	companyAddress: false,
-	country: false,
+const formFields = ref({
+	isActive: {
+		companyName: false,
+		industry: false,
+		companyPhone: false,
+		companyEmail: false,
+		companyHomepage: false,
+		companyAddress: false,
+		country: false,
+	},
+	visibleFields: {
+		companyName: false,
+		industry: false,
+		companyPhone: false,
+		companyEmail: false,
+		companyHomepage: false,
+		companyAddress: false,
+		country: false,
+	},
+	labelFields: {
+		companyName: false,
+		industry: false,
+		companyPhone: false,
+		companyEmail: false,
+		companyHomepage: false,
+		companyAddress: false,
+		country: false,
+	},
+	tagType: {
+		companyName: 'text',
+		industry: 'button',
+		companyPhone: 'text',
+		companyEmail: 'text',
+		companyHomepage: 'text',
+		companyAddress: 'text',
+		country: 'button',
+	},
+	duplicationChekc: {
+		companyName: true,
+		industry: false,
+		companyPhone: false,
+		companyEmail: false,
+		companyHomepage: false,
+		companyAddress: false,
+		country: false,
+	},
 });
 
-const isVisible = (field: string) => visibleFields.value[field];
+const isVisible = (field: string) => formFields.value.visibleFields[field];
 const getStyle = (field: string) => {
 	return isVisible(field) ? 'display: block;' : 'display: none;';
 };
 const handleInput = (field: string) => {
-	visibleFields.value[field] = true;
-	labelFields.value[field] = true;
+	formFields.value.visibleFields[field] = true;
+	formFields.value.labelFields[field] = true;
 
 	setTimeout(() => {
-		isActive.value[field] = true;
+		formFields.value.isActive[field] = true;
 	}, 1000);
 };
 
