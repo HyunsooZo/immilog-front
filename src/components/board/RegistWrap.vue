@@ -25,8 +25,6 @@
 <script setup lang="ts">
 import { IField, IFormFields, ISelectItem } from '@/types/interface';
 import { useI18n } from 'vue-i18n';
-import SelectDialog from '../selections/SelectDialog.vue';
-import { ref } from 'vue';
 
 const props = defineProps<{ fields: IField[], formFields: IFormFields }>();
 const emits = defineEmits(['update:formFields', 'openSelectForIndustry', 'openSelectForCountry']);
@@ -52,21 +50,23 @@ const handleInput = (field: string, index: number) => {
 };
 
 const handleClick = (field: string, index: number) => {
-  if (field === 'industry') {
-    props.formFields.labelFields[field] = true;
-    emits('openSelectForIndustry');
-  }
-  if (field === 'country') {
-    props.formFields.labelFields[field] = true;
-    emits('openSelectForCountry');
-  }
-  if (index < props.fields.length && index >= 0) {
-    const nextField = props.fields[index - 1].name;
-    props.formFields.visibleFields[nextField] = true;
-    setTimeout(() => {
-      props.formFields.isActive[field] = true;
-      props.formFields.isActive[nextField] = true;
-    }, 1000);
+  if (field === 'industry' || field === 'country') {
+    if (field === 'industry') {
+      props.formFields.labelFields[field] = true;
+      emits('openSelectForIndustry');
+    }
+    if (field === 'country') {
+      props.formFields.labelFields[field] = true;
+      emits('openSelectForCountry');
+    }
+    if (index < props.fields.length && index >= 0) {
+      const nextField = props.fields[index - 1].name;
+      props.formFields.visibleFields[nextField] = true;
+      setTimeout(() => {
+        props.formFields.isActive[field] = true;
+        props.formFields.isActive[nextField] = true;
+      }, 1000);
+    }
   }
 };
 
