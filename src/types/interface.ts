@@ -207,3 +207,18 @@ export interface INotification {
   targetCountries: string[]
   readUsers: number[]
 }
+
+export interface IField {
+  name: string
+  model: any
+  label: string
+  translationKey: string
+}
+
+export interface IFormFields {
+  isActive: { [key: string]: boolean }
+  visibleFields: { [key: string]: boolean }
+  labelFields: { [key: string]: boolean }
+  verification: { [key: string]: boolean }
+  select: { [key: string]: boolean }
+}

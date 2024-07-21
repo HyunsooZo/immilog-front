@@ -32,8 +32,8 @@
 								</div>
 							</div>
 						</div>
-
-						<RegistWrap :fields="fields" :formFields.sync="formFields" />
+						<RegistWrap :fields="fields" :formFields.sync="formFields" @openSelectForIndustry="openIndustrySelect"
+							@openSelectForCountry="openCountrySelect" />
 					</div>
 				</div>
 			</div>
@@ -44,26 +44,37 @@
 			</div>
 		</div>
 	</div>
+	<SelectDialog v-if="selectOpenValue" :title="selectTitle" :list="selectList" @close="closeSelect"
+		@select:value="selectedValue" />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import RegistWrap from '@/components/board/RegistWrap.vue'; // 새로운 컴포넌트 import
 import { useI18n } from 'vue-i18n';
+import { countries, industryList } from '@/utils/selectItems';
+import { IField, IFormFields, ISelectItem } from '@/types/interface';
+import SelectDialog from '../selections/SelectDialog.vue';
 
 const emits = defineEmits(['close']);
 const { t } = useI18n();
 
 const companyNameValue = ref('');
 const industryValue = ref('');
+const industryCode = ref('');
 const companyPhoneValue = ref('');
 const companyEmailValue = ref('');
 const companyHomepageValue = ref('');
 const companyAddressValue = ref('');
 const countryValue = ref('');
+const countryCodeValue = ref('');
+const regionValue = ref('');
 
-const fields = [
+const imagePreview = ref('');
+
+const fields: IField[] = [
+	{ name: 'region', model: regionValue, label: 'Region', translationKey: 'companyInfoView.region' },
 	{ name: 'country', model: countryValue, label: 'Country', translationKey: 'companyInfoView.country' },
 	{ name: 'companyAddress', model: companyAddressValue, label: 'CompanyAddress', translationKey: 'companyInfoView.companyAddress' },
 	{ name: 'companyHomepage', model: companyHomepageValue, label: 'CompanyHomepage', translationKey: 'companyInfoView.companyHomepage' },
@@ -73,7 +84,7 @@ const fields = [
 	{ name: 'companyName', model: companyNameValue, label: 'Company', translationKey: 'companyInfoView.company' },
 ];
 
-const formFields = ref({
+const formFields = ref<IFormFields>({
 	isActive: {
 		companyName: true,
 		industry: false,
@@ -82,6 +93,7 @@ const formFields = ref({
 		companyHomepage: false,
 		companyAddress: false,
 		country: false,
+		region: false,
 	},
 	visibleFields: {
 		companyName: true,
@@ -91,6 +103,7 @@ const formFields = ref({
 		companyHomepage: false,
 		companyAddress: false,
 		country: false,
+		region: false,
 	},
 	labelFields: {
 		companyName: false,
@@ -100,8 +113,61 @@ const formFields = ref({
 		companyHomepage: false,
 		companyAddress: false,
 		country: false,
+		region: false,
+	},
+	verification: {
+		companyName: true,
+		industry: false,
+		companyPhone: false,
+		companyEmail: false,
+		companyHomepage: false,
+		companyAddress: false,
+		country: false,
+		region: false,
+	},
+	select: {
+		companyName: false,
+		industry: true,
+		companyPhone: false,
+		companyEmail: false,
+		companyHomepage: false,
+		companyAddress: false,
+		country: true,
+		region: false,
 	},
 });
+
+
+const selectOpenValue = ref(false);
+
+const selectTitle = ref(t('postModal.selectCategory'));
+const selectList = ref<ISelectItem[]>(industryList);
+const selectedCategory = ref({ name: t('postModal.communication'), code: 'COMMUNICATION' });
+const selectedValue = (value: ISelectItem) => {
+	if (selectTitle.value === '경력 선택') {
+		industryValue.value = t(value.name);
+		industryCode.value = value.code;
+	} else if (selectTitle.value === '국가 선택') {
+		countryValue.value = t(value.name);
+		countryCodeValue.value = value.code;
+	}
+};
+
+const closeSelect = () => {
+	selectOpenValue.value = false;
+};
+
+const openIndustrySelect = () => {
+	selectTitle.value = '경력 선택'
+	selectList.value = industryList;
+	selectOpenValue.value = true;
+};
+
+const openCountrySelect = () => {
+	selectTitle.value = '국가 선택'
+	selectList.value = countries;
+	selectOpenValue.value = true;
+};
 
 const previewImage = () => {
 	// 이미지 미리보기 기능 구현
@@ -118,4 +184,12 @@ const closeModal = () => {
 const saveProfile = () => {
 	// 프로필 저장 기능 구현
 };
+
+
+const buttonClass = computed(() => {
+	return {
+		'button--primary': companyNameValue.value && industryValue.value && companyPhoneValue.value && companyEmailValue.value && companyHomepageValue.value && companyAddressValue.value && countryValue.value && regionValue.value,
+		'button--disabled': !companyNameValue.value || !industryValue.value || !companyPhoneValue.value || !companyEmailValue.value || !companyHomepageValue.value || !companyAddressValue.value || !countryValue.value || !regionValue.value,
+	};
+});
 </script>

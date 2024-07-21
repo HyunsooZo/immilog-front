@@ -158,7 +158,7 @@ const isBookmarked = computed(() => {
 });
 
 const onBoardDetail = () => {
-	viewApi(props.jobBoard.seq);
+	viewApi(props.jobBoard.seq, true);
 	router.push(`/board/${props.jobBoard.seq}`);
 };
 

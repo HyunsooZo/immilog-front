@@ -45,7 +45,8 @@
     "companyEmail": "Company Email",
     "companyHomepage": "Company Homepage",
     "companyAddress": "Company Address",
-    "country": "Location Information (Current Country / Region)",
+    "country": "Country",
+    "region": "Region",
     "save": "저장"
   },
   "selectItems": {

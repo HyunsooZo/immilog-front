@@ -45,7 +45,8 @@
     "companyEmail": "회사 이메일 입력",
     "companyHomepage": "회사 홈페이지 입력",
     "companyAddress": "회사 주소 입력",
-    "country": "등록자 위치 정보 (현재 국가 / 지역)",
+    "country": "국가",
+    "region": "지역",
     "save": "저장"
   },
   "selectItems": {
