@@ -42,7 +42,7 @@
 					<button class="button" :class="{
 						'button button--positive': buttonActivationCriteria,
 						'button button--disabled': !buttonActivationCriteria,
-					}" :disabled="!buttonActivationCriteria" @click="saveProfile">{{ t('companyInfoView.save') }}</button>
+					}" :disabled="!buttonActivationCriteria" @click="postApi">{{ t('companyInfoView.save') }}</button>
 				</div>
 			</div>
 		</div>
@@ -59,6 +59,7 @@ import { useI18n } from 'vue-i18n';
 import { countries, industryList } from '@/utils/selectItems';
 import { IField, IFormFields, ISelectItem } from '@/types/interface';
 import SelectDialog from '../selections/SelectDialog.vue';
+import { postCompanyInfo } from '@/services/companyService';
 
 const emits = defineEmits(['close']);
 const { t } = useI18n();
@@ -71,7 +72,7 @@ const companyEmailValue = ref('');
 const companyHomepageValue = ref('');
 const companyAddressValue = ref('');
 const countryValue = ref('');
-const countryCodeValue = ref('');
+const countryCode = ref('');
 const regionValue = ref('');
 
 const imagePreview = ref('');
@@ -139,20 +140,17 @@ const formFields = ref<IFormFields>({
 		region: false,
 	},
 });
-
-
 const selectOpenValue = ref(false);
 
 const selectTitle = ref(t('postModal.selectCategory'));
 const selectList = ref<ISelectItem[]>(industryList);
-const selectedCategory = ref({ name: t('postModal.communication'), code: 'COMMUNICATION' });
 const selectedValue = (value: ISelectItem) => {
 	if (selectTitle.value === '경력 선택') {
 		industryValue.value = t(value.name);
 		industryCode.value = value.code;
 	} else if (selectTitle.value === '국가 선택') {
 		countryValue.value = t(value.name);
-		countryCodeValue.value = value.code;
+		countryCode.value = value.code;
 	}
 };
 
@@ -184,11 +182,44 @@ const closeModal = () => {
 	emits('close');
 };
 
-const saveProfile = () => {
-	// 프로필 저장 기능 구현
-};
-
 const buttonActivationCriteria = computed(() => {
-	return companyNameValue.value && industryValue.value && companyPhoneValue.value && companyEmailValue.value && companyHomepageValue.value && companyAddressValue.value && countryValue.value && regionValue.value;
+	return companyNameValue.value &&
+		industryValue.value &&
+		companyPhoneValue.value &&
+		companyEmailValue.value &&
+		companyHomepageValue.value &&
+		companyAddressValue.value &&
+		countryValue.value &&
+		regionValue.value;
 });
+
+const postApi = async () => {
+	const requestForm = generateRequesrForm();
+	try {
+		const response = await postCompanyInfo(requestForm);
+		const { status } = response;
+		if (status === 201 || status === 200) {
+			setTimeout(() => {
+				closeModal();
+			}, 1000);
+		}
+
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+const generateRequesrForm = () => {
+	return {
+		industry: industryCode.value,
+		companyName: companyNameValue.value,
+		companyEmail: companyEmailValue.value,
+		companyPhone: companyPhoneValue.value,
+		companyAddress: companyAddressValue.value,
+		companyHomepage: companyHomepageValue.value,
+		companyCountry: countryCode.value,
+		companyRegion: regionValue.value,
+		companyLogo: null
+	}
+}
 </script>
