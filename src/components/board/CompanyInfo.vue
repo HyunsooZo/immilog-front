@@ -39,7 +39,10 @@
 			</div>
 			<div class="modal-footer">
 				<div class="button-wrap">
-					<button class="button" :class="buttonClass" @click="saveProfile">{{ t('companyInfoView.save') }}</button>
+					<button class="button" :class="{
+						'button button--positive': buttonActivationCriteria,
+						'button button--disabled': !buttonActivationCriteria,
+					}" :disabled="!buttonActivationCriteria" @click="saveProfile">{{ t('companyInfoView.save') }}</button>
 				</div>
 			</div>
 		</div>
@@ -185,11 +188,7 @@ const saveProfile = () => {
 	// 프로필 저장 기능 구현
 };
 
-
-const buttonClass = computed(() => {
-	return {
-		'button--primary': companyNameValue.value && industryValue.value && companyPhoneValue.value && companyEmailValue.value && companyHomepageValue.value && companyAddressValue.value && countryValue.value && regionValue.value,
-		'button--disabled': !companyNameValue.value || !industryValue.value || !companyPhoneValue.value || !companyEmailValue.value || !companyHomepageValue.value || !companyAddressValue.value || !countryValue.value || !regionValue.value,
-	};
+const buttonActivationCriteria = computed(() => {
+	return companyNameValue.value && industryValue.value && companyPhoneValue.value && companyEmailValue.value && companyHomepageValue.value && companyAddressValue.value && countryValue.value && regionValue.value;
 });
 </script>

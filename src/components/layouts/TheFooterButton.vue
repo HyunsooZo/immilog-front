@@ -17,16 +17,10 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 // props 정의
-const props = defineProps({
-	onClick: {
-		type: Function,
-		required: true,
-	},
-	condition: {
-		type: Boolean,
-		required: true,
-	},
-});
+const props = defineProps<{
+	onClick: (event: MouseEvent) => void;
+	condition: boolean;
+}>();
 
 // 버튼 클래스를 계산하는 computed 프로퍼티
 const buttonClasses = computed(() => ({
