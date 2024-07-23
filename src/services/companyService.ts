@@ -9,3 +9,13 @@ export const postCompanyInfo = async (param: any) => {
     return { status: 'error', error }
   }
 }
+
+export const getMyCompanyInfo = async () => {
+  try {
+    const response = await api.get(`/companies/my`)
+    return { status: response.status, data: response.data }
+  } catch (error) {
+    console.error(error)
+    return { status: 'error', error }
+  }
+}

@@ -1,6 +1,7 @@
 import {
   IChat,
   IChatRoom,
+  ICompany,
   IJobPost,
   INotification,
   IPost,
@@ -111,4 +112,8 @@ export interface IApiErrorResponse {
 
 export interface IApiUnreadNotification extends IApiResponse {
   data: boolean
+}
+
+export interface IApiCompanyInfo extends IApiResponse {
+  data: ICompany
 }

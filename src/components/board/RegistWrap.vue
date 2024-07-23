@@ -19,14 +19,14 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
 import { IField, IFormFields, ISelectItem } from '@/types/interface';
+import { onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-const props = defineProps<{ fields: IField[], formFields: IFormFields }>();
+const props = defineProps<{ fields: IField[], formFields: IFormFields, isFilled: Boolean }>();
 const emits = defineEmits(['update:formFields', 'openSelectForIndustry', 'openSelectForCountry']);
 
 const { t } = useI18n();
@@ -70,4 +70,29 @@ const handleClick = (field: string, index: number) => {
   }
 };
 
+const makeAllTrue = async () => {
+  Object.keys(props.formFields.isActive).forEach(key => {
+    props.formFields.isActive[key] = true;
+  });
+  Object.keys(props.formFields.labelFields).forEach(key => {
+    props.formFields.labelFields[key] = true;
+  });
+  Object.keys(props.formFields.visibleFields).forEach(key => {
+    props.formFields.visibleFields[key] = true;
+  });
+};
+
+watch(() => props.isFilled, (newVal) => {
+  if (newVal) {
+    makeAllTrue();
+    emits('update:formFields', { ...props.formFields });
+  }
+});
+
+onMounted(async () => {
+  if (props.isFilled) {
+    await makeAllTrue();
+    emits('update:formFields', { ...props.formFields });
+  }
+});
 </script>

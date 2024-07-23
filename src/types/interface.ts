@@ -222,3 +222,18 @@ export interface IFormFields {
   verification: { [key: string]: boolean }
   select: { [key: string]: boolean }
 }
+
+export interface ICompany {
+  seq: number
+  industry: string
+  company: string
+  companyEmail: string
+  companyPhone: string
+  companyAddress: string
+  companyHomepage: string
+  companyCountry: string
+  companyLogo: string
+  companyCountryCode: string
+  companyIndustryCode: string
+  companyManagerUserSeq: 21
+}

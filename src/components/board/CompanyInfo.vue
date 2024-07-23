@@ -32,8 +32,8 @@
 								</div>
 							</div>
 						</div>
-						<RegistWrap :fields="fields" :formFields.sync="formFields" @openSelectForIndustry="openIndustrySelect"
-							@openSelectForCountry="openCountrySelect" />
+						<RegistWrap :fields="fields" :formFields.sync="formFields" :isFilled="doesCompanyInfoExist"
+							@openSelectForIndustry="openIndustrySelect" @openSelectForCountry="openCountrySelect" />
 					</div>
 				</div>
 			</div>
@@ -52,14 +52,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import RegistWrap from '@/components/board/RegistWrap.vue'; // 새로운 컴포넌트 import
 import { useI18n } from 'vue-i18n';
 import { countries, industryList } from '@/utils/selectItems';
 import { IField, IFormFields, ISelectItem } from '@/types/interface';
 import SelectDialog from '../selections/SelectDialog.vue';
-import { postCompanyInfo } from '@/services/companyService';
+import { postCompanyInfo, getMyCompanyInfo } from '@/services/companyService';
+import { AxiosResponse } from 'axios';
+import { IApiCompanyInfo } from '@/types/api-interface';
 
 const emits = defineEmits(['close']);
 const { t } = useI18n();
@@ -222,4 +224,35 @@ const generateRequesrForm = () => {
 		companyLogo: null
 	}
 }
+
+const isLoading = ref(false);
+const doesCompanyInfoExist = ref(false);
+
+const fetchUserCompanyInfo = async () => {
+	const response: AxiosResponse<IApiCompanyInfo> | any = await getMyCompanyInfo();
+	if (response.status === 200 || response.status === 201) {
+		const { data } = response.data;
+		doesCompanyInfoExist.value = true;
+		if (data) {
+			companyNameValue.value = data.company;
+			industryValue.value = data.industry;
+			companyPhoneValue.value = data.companyPhone;
+			companyEmailValue.value = data.companyEmail;
+			companyHomepageValue.value = data.companyHomepage;
+			companyAddressValue.value = data.companyAddress;
+			countryValue.value = data.companyCountry;
+			regionValue.value = data.companyRegion;
+			countryCode.value = data.companyCountryCode;
+			industryCode.value = data.companyIndustryCode;
+		}
+	}
+}
+
+onMounted(async () => {
+	try {
+		await fetchUserCompanyInfo();
+	} catch (e) {
+		console.log(e);
+	}
+});
 </script>
