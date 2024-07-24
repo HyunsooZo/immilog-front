@@ -42,26 +42,33 @@
 					<button class="button" :class="{
 						'button button--positive': buttonActivationCriteria,
 						'button button--disabled': !buttonActivationCriteria,
-					}" :disabled="!buttonActivationCriteria" @click="postApi">{{ t('companyInfoView.save') }}</button>
+					}" :disabled="!buttonActivationCriteria" @click="submit">{{ t('companyInfoView.save') }}</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<SelectDialog v-if="selectOpenValue" :title="selectTitle" :list="selectList" @close="closeSelect"
 		@select:value="selectedValue" />
+	<teleport to="#modal" v-if="alertValue">
+		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+	</teleport>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
-import RegistWrap from '@/components/board/RegistWrap.vue'; // 새로운 컴포넌트 import
+import RegistWrap from '@/components/board/RegistWrap.vue';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
 import { useI18n } from 'vue-i18n';
 import { countries, industryList } from '@/utils/selectItems';
 import { IField, IFormFields, ISelectItem } from '@/types/interface';
 import SelectDialog from '../selections/SelectDialog.vue';
 import { postCompanyInfo, getMyCompanyInfo } from '@/services/companyService';
 import { AxiosResponse } from 'axios';
-import { IApiCompanyInfo } from '@/types/api-interface';
+import { IApiCompanyInfo, IApiImage } from '@/types/api-interface';
+import { multipartFormData } from '@/utils/header';
+import { resizeImage } from '@/utils/image';
+import api from '@/api';
 
 const emits = defineEmits(['close']);
 const { t } = useI18n();
@@ -77,7 +84,9 @@ const countryValue = ref('');
 const countryCode = ref('');
 const regionValue = ref('');
 
-const imagePreview = ref('');
+const imagePreview = ref();
+const imageUrl = ref();
+const imageFile = ref(null);
 
 const fields: IField[] = [
 	{ name: 'region', model: regionValue, label: 'Region', translationKey: 'companyInfoView.region' },
@@ -142,6 +151,22 @@ const formFields = ref<IFormFields>({
 		region: false,
 	},
 });
+
+// <-- 알럿 관련
+const alertValue = ref(false);
+const alertText = ref('');
+
+const openAlert = (content: string) => {
+	alertValue.value = true;
+	alertText.value = content;
+};
+
+const closeAlert = () => {
+	alertText.value = '';
+	alertValue.value = false;
+};
+// -->
+
 const selectOpenValue = ref(false);
 
 const selectTitle = ref(t('postModal.selectCategory'));
@@ -171,13 +196,12 @@ const openCountrySelect = () => {
 	selectList.value = countries;
 	selectOpenValue.value = true;
 };
-
-const previewImage = () => {
-	// 이미지 미리보기 기능 구현
-};
-
+// 프리뷰이미지 삭제
 const removeImage = () => {
-	// 이미지 삭제 기능 구현
+	// 비어있는 이미지로 설정
+	imagePreview.value = '';
+	imageFile.value = null;
+	imageUrl.value = [''];
 };
 
 const closeModal = () => {
@@ -211,6 +235,52 @@ const postApi = async () => {
 	}
 }
 
+// 프리뷰 이미지
+const previewImage = (event: { target: any; }) => {
+	const input = event.target;
+	if (input.files && input.files[0]) {
+		const reader = new FileReader();
+		reader.onload = e => {
+			if (e.target) {
+				imagePreview.value = e.target.result;
+			}
+			imageFile.value = input.files[0];
+		};
+		reader.readAsDataURL(input.files[0]);
+	}
+};
+
+const hostImage = async () => {
+	if (!imagePreview.value || !imageFile.value) {
+		return;
+	}
+	try {
+		const formData = new FormData();
+		const resizedImage = await resizeImage(imageFile.value, 0.5);
+		formData.append('multipartFile', resizedImage as Blob);
+		const response: AxiosResponse<IApiImage> = await api.post(
+			'/images?imagePath=company',
+			formData,
+			multipartFormData,
+		);
+		if (response.status === 200) {
+			imageUrl.value = response.data.data.imageUrl;
+		} else {
+			openAlert(t('profileEditView.failedToUploadImage'));
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+
+const submit = async () => {
+	if (imageFile.value) {
+		await hostImage();
+	}
+	await postApi();
+}
+
 const generateRequesrForm = () => {
 	return {
 		industry: industryCode.value,
@@ -221,11 +291,9 @@ const generateRequesrForm = () => {
 		companyHomepage: companyHomepageValue.value,
 		companyCountry: countryCode.value,
 		companyRegion: regionValue.value,
-		companyLogo: null
+		companyLogo: imageUrl.value[0],
 	}
 }
-
-const isLoading = ref(false);
 const doesCompanyInfoExist = ref(false);
 
 const fetchUserCompanyInfo = async () => {
@@ -244,6 +312,7 @@ const fetchUserCompanyInfo = async () => {
 			regionValue.value = data.companyRegion;
 			countryCode.value = data.companyCountryCode;
 			industryCode.value = data.companyIndustryCode;
+			imagePreview.value = data.companyLogo;
 		}
 	}
 }

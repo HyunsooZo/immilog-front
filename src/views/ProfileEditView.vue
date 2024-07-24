@@ -112,6 +112,7 @@ import LoadingModal from '@/components/loading/LoadingModal.vue';
 import TheHeader from '@/components/layouts/TheHeader.vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import SelectDialog from '@/components/selections/SelectDialog.vue';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
 import api from '@/api';
 
 const { t } = useI18n();
