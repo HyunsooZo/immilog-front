@@ -25,11 +25,12 @@
 </template>
 
 <script setup lang="ts">
-import Swiper from 'swiper/bundle';
 import { onMounted } from 'vue';
+import Swiper from 'swiper/bundle';
 
+// Swiper를 초기화하는 함수
 const initSwiper = () => {
-	const swiper = new Swiper('.swiper-container', {
+	new Swiper('.swiper-container', {
 		slidesPerView: 1,
 		observer: true,
 		observeParents: true,
@@ -39,7 +40,7 @@ const initSwiper = () => {
 		loopPreventsSliding: true,
 		autoplay: {
 			delay: 3000,
-			disableOnInteraction: false
+			disableOnInteraction: false,
 		},
 		pagination: {
 			el: '.swiper-pagination',
@@ -48,6 +49,7 @@ const initSwiper = () => {
 	});
 };
 
+// 컴포넌트가 마운트될 때 Swiper 초기화
 onMounted(initSwiper);
 </script>
 
