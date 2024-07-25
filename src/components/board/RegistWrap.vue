@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { IField, IFormFields, ISelectItem } from '@/types/interface';
+import { IField, IFormFields } from '@/types/interface';
 import { onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 

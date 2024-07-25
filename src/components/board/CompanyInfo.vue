@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import RegistWrap from '@/components/board/RegistWrap.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
@@ -68,6 +68,7 @@ import { AxiosResponse } from 'axios';
 import { IApiCompanyInfo, IApiImage } from '@/types/api-interface';
 import { multipartFormData } from '@/utils/header';
 import { resizeImage } from '@/utils/image';
+import { useCompanyInfo } from '@/stores/company';
 import api from '@/api';
 
 const emits = defineEmits(['close']);
@@ -87,6 +88,9 @@ const regionValue = ref('');
 const imagePreview = ref();
 const imageUrl = ref();
 const imageFile = ref(null);
+const imageHasChanged = ref(false);
+
+const companyInfo = useCompanyInfo();
 
 const fields: IField[] = [
 	{ name: 'region', model: regionValue, label: 'Region', translationKey: 'companyInfoView.region' },
@@ -202,6 +206,7 @@ const removeImage = () => {
 	imagePreview.value = '';
 	imageFile.value = null;
 	imageUrl.value = [''];
+	imageHasChanged.value = true;
 };
 
 const closeModal = () => {
@@ -209,6 +214,17 @@ const closeModal = () => {
 };
 
 const buttonActivationCriteria = computed(() => {
+	if (doesCompanyInfoExist) {
+		return companyInfo.companyNameValue != companyNameValue.value ||
+			companyInfo.industryValue != industryValue.value ||
+			companyInfo.companyPhoneValue != companyPhoneValue.value ||
+			companyInfo.companyEmailValue != companyEmailValue.value ||
+			companyInfo.companyHomepageValue != companyHomepageValue.value ||
+			companyInfo.companyAddressValue != companyAddressValue.value ||
+			companyInfo.countryValue != countryValue.value ||
+			companyInfo.regionValue != regionValue.value ||
+			imageHasChanged.value;
+	}
 	return companyNameValue.value &&
 		industryValue.value &&
 		companyPhoneValue.value &&
@@ -245,6 +261,7 @@ const previewImage = (event: { target: any; }) => {
 				imagePreview.value = e.target.result;
 			}
 			imageFile.value = input.files[0];
+			imageHasChanged.value = true;
 		};
 		reader.readAsDataURL(input.files[0]);
 	}
@@ -302,6 +319,7 @@ const fetchUserCompanyInfo = async () => {
 		const { data } = response.data;
 		doesCompanyInfoExist.value = true;
 		if (data) {
+			companyInfo.setCompanyInfo(data);
 			companyNameValue.value = data.company;
 			industryValue.value = data.industry;
 			companyPhoneValue.value = data.companyPhone;

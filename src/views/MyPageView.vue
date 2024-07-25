@@ -73,7 +73,7 @@
         </li>
       </ul>
       <ul>
-        <li class="item">
+        <li class="item" v-if="loginStatus">
           <button type="button" class="button button-text" @click="onCompanyInfo">
             <svg viewBox="0 0 16 16">
               <path :d="companyInfoIcon.first" />

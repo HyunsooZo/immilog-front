@@ -235,5 +235,6 @@ export interface ICompany {
   companyLogo: string
   companyCountryCode: string
   companyIndustryCode: string
+  companyRegion: string
   companyManagerUserSeq: 21
 }
