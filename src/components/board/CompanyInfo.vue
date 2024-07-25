@@ -176,10 +176,10 @@ const selectOpenValue = ref(false);
 const selectTitle = ref(t('postModal.selectCategory'));
 const selectList = ref<ISelectItem[]>(industryList);
 const selectedValue = (value: ISelectItem) => {
-	if (selectTitle.value === '경력 선택') {
+	if (selectTitle.value === t('companyInfoView.industry')) {
 		industryValue.value = t(value.name);
 		industryCode.value = value.code;
-	} else if (selectTitle.value === '국가 선택') {
+	} else if (selectTitle.value === t('companyInfoView.country')) {
 		countryValue.value = t(value.name);
 		countryCode.value = value.code;
 	}
@@ -190,13 +190,13 @@ const closeSelect = () => {
 };
 
 const openIndustrySelect = () => {
-	selectTitle.value = '경력 선택'
+	selectTitle.value = t('companyInfoView.industry');
 	selectList.value = industryList;
 	selectOpenValue.value = true;
 };
 
 const openCountrySelect = () => {
-	selectTitle.value = '국가 선택'
+	selectTitle.value = t('companyInfoView.country');
 	selectList.value = countries;
 	selectOpenValue.value = true;
 };
@@ -326,7 +326,7 @@ const fetchUserCompanyInfo = async () => {
 			companyEmailValue.value = data.companyEmail;
 			companyHomepageValue.value = data.companyHomepage;
 			companyAddressValue.value = data.companyAddress;
-			countryValue.value = data.companyCountry;
+			countryValue.value = t('countries.' + data.companyCountry);
 			regionValue.value = data.companyRegion;
 			countryCode.value = data.companyCountryCode;
 			industryCode.value = data.companyIndustryCode;
