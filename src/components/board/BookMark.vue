@@ -42,7 +42,6 @@ const isStickyWrap = ref(false);
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
 
-const props = defineProps({});
 const emits = defineEmits(['update:bookmarkValue']);
 
 const state = ref({

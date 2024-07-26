@@ -21,8 +21,8 @@
 				<div class="post-wrap">
 					<div class="post__wrap">
 						<textarea v-model="textareaContent" class="text__area" name="content" autocomplete="off"
-							placeholder="댓글을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다." data-autosuggest_is-input="true"
-							ref="textareaRef" @input="adjustTextareaHeight" rows="2"></textarea>
+							:placeholder="t('replyWrite.replyWritePlaceholder')" data-autosuggest_is-input="true" ref="textareaRef"
+							@input="adjustTextareaHeight" rows="2"></textarea>
 						<!-- <textarea v-model="content" class="text__area" name="content" autocomplete="off"
 							placeholder="댓글을 입력해주세요. 다른 사용자로부터 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 될 수 있습니다."
 							data-autosuggest_is-input="true" ref="textareaRef" @input="adjustTextareaHeight" rows="2"></textarea> -->
@@ -60,9 +60,12 @@ import { postRegistrationIcon } from '@/utils/icons.ts';
 import { applicationJsonWithToken } from '@/utils/header';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { AxiosResponse } from 'axios';
+import { useI18n } from 'vue-i18n';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import api from '@/api';
+
+const { t } = useI18n();
 
 const userInfo = useUserInfoStore();
 const alertValue = ref(false);

@@ -280,5 +280,8 @@
     "GREEN_CARD": "Permanent Residency",
     "COMMUNICATION": "Communication",
     "QNA": "Q&A"
+  },
+  "replyWrite": {
+    "replyWritePlaceholder": "Write a comment. If a certain number of reports are received, the comment will be automatically hidden."
   }
 }

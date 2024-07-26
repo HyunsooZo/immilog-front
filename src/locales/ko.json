@@ -280,5 +280,8 @@
     "GREEN_CARD": "영주권",
     "COMMUNICATION": "소통",
     "QNA": "질문/답변"
+  },
+  "replyWrite": {
+    "replyWritePlaceholder": "댓글을 입력해주세요. 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 됩니다."
   }
 }
