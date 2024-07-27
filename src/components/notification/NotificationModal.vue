@@ -27,7 +27,10 @@
 						<div class="util__wrap end">
 							<div class="item__fnc">
 								<p class="list__item past">
-									<i class="blind">작성시간</i><span class="item__count">0000/00/00 00:00:00</span>
+									<i class="blind">작성시간</i><span class="item__count">
+										{{ timeCalculation(item.createdAt.toString()).time }}
+										{{ t(timeCalculation(item.createdAt.toString()).text) }}
+									</span>
 								</p>
 							</div>
 						</div>
@@ -69,6 +72,7 @@ import api from '@/api';
 import NotificationDetailModal from '@/components/notification/NotificationDetailModal.vue';
 import { myPostIcon } from '@/utils/icons.ts';
 import { useI18n } from 'vue-i18n';
+import { timeCalculation } from '@/utils/date-time';
 
 const { t } = useI18n();
 

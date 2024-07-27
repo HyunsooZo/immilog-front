@@ -206,6 +206,7 @@ export interface INotification {
   status: string
   targetCountries: string[]
   readUsers: number[]
+  createdAt: string | Date
 }
 
 export interface IField {
