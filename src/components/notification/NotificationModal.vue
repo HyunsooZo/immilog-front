@@ -19,9 +19,6 @@
 										{{ item.content }}
 									</p>
 								</div>
-								<!-- <div class="thumb">
-								<img src="@/assets/images/email-icon-logo.png" alt="" />
-							</div> -->
 							</button>
 						</div>
 						<div class="util__wrap end">
