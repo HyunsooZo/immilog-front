@@ -19,7 +19,7 @@
 					<span>{{ t('searchBar.keywordPlaceHolder') }}</span>
 				</button>
 			</div>
-			<button type="button" class="button-icon button--notice" :class="{ new: userInfo.unreadNotification }"
+			<button type="button" class="button-icon button--notice" :class="{ _new: userInfo.unreadNotification }"
 				@click="onMenuOpen">
 				<i class="blind">알림</i>
 			</button>

@@ -11,7 +11,7 @@
 		<h1 class="title"><em class="header-logo">Immilog</em></h1>
 		<!-- 알림 버튼 -->
 		<div class="item__fnc" v-if="showNotification">
-			<button type="button" class="button-icon button--notice" :class="{ new: userInfo.unreadNotification }" @click="">
+			<button type="button" class="button-icon button--notice" :class="{ _new: userInfo.unreadNotification }" @click="">
 				<i class="blind">알림</i>
 			</button>
 		</div>
