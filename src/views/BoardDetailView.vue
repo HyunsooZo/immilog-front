@@ -114,7 +114,7 @@
                 <p class="text">
                   <span class="comment__user" v-if="extractAtWordAndRest(reply.content).atWord">{{
                     extractAtWordAndRest(reply.content).atWord
-                  }}</span>
+                    }}</span>
                   {{ extractAtWordAndRest(reply.content).restText }}
                 </p>
               </div>
@@ -157,8 +157,8 @@
   <ReplyWrite v-if="isReplyWriteClicked" :commentSeq="post.comments[replyIndex].seq" :isPostComment="false"
     :taggedUser="taggedUser" @close="closeReplyWrite" @select:value="selectedValue" />
   <LoadingModal v-if="isLoading" />
-  <MoreModalForPost v-if="onMorePostModal" :posetSeq="post.seq" @close="closeMoreModal" @edit="editPost"
-    @delete="deletePost" />
+  <!-- <MoreModalForPost v-if="onMorePostModal" :posetSeq="post.seq" @close="closeMoreModal" @edit="editPost"
+    @delete="deletePost" /> -->
   <UserProfileDetail :userProfile="postAuthorInfo" @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
 </template>
 
