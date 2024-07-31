@@ -29,6 +29,13 @@
           </button>
         </div>
       </div>
+      <div class="item__fnc" v-if="detail" @click="">
+        <div class=" list__item">
+          <button type="button" class="list__item_button more">
+            <i class="blind">더보기</i>
+          </button>
+        </div>
+      </div>
     </div>
     <div class="text__wrap">
       <component :is="detail ? 'div' : 'button'" :class="detail ? 'list__item' : 'list__item_button'"
