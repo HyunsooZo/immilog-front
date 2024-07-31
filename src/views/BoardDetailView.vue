@@ -6,7 +6,7 @@
       <div class="list__title">
         <span class="title">{{ t('postCategories.' + post.category) }}</span>
       </div>
-      <BoardContent :key="posetSeq" :post="post" :detail="true" :jobBoard="emptyJobPost" :isJobBoard="false">
+      <BoardContent :post="post" :detail="true" :jobBoard="emptyJobPost" :isJobBoard="false">
       </BoardContent>
       <!-- //.item -->
     </div>
@@ -105,7 +105,7 @@
             <div class="item__fnc">
               <button type="button" class="list__item_button more">
                 <i class="blind">더보기</i>
-              </button>
+              </button><!-- //공유, 신고, 본인글인 경우 추가 :수정, 삭제 -->
             </div>
           </div>
           <div class="text__wrap">
@@ -114,7 +114,7 @@
                 <p class="text">
                   <span class="comment__user" v-if="extractAtWordAndRest(reply.content).atWord">{{
                     extractAtWordAndRest(reply.content).atWord
-                    }}</span>
+                  }}</span>
                   {{ extractAtWordAndRest(reply.content).restText }}
                 </p>
               </div>
@@ -183,6 +183,7 @@ import MoreModalForPost from '@/components/modal/MoreModalForPost.vue'
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue'
 import BoardContent from '@/components/board/BoardContent.vue';
 import api from '@/api'
+import { emptyJobPost } from '@/utils/emptyObjects'
 
 const { t } = useI18n()
 
@@ -400,25 +401,6 @@ const openMoreModal = () => {
 
 const closeMoreModal = () => {
   onMorePostModal.value = false
-}
-// -->
-
-// <-- 게시물 수정/삭제 관련
-const editPost = () => { }
-
-const deletePost = async () => {
-  try {
-    const response: AxiosResponse<void> = await api.patch(
-      `/posts/${postSeq}/delete`,
-      {},
-      applicationJsonWithToken(userInfo.accessToken)
-    )
-    if (response.status === 204) {
-      router.push('/')
-    }
-  } catch (error) {
-    console.log(error)
-  }
 }
 // -->
 

@@ -29,7 +29,7 @@
           </button>
         </div>
       </div>
-      <div class="item__fnc" v-if="detail" @click="">
+      <div class="item__fnc" v-if="detail" @click="onMoreModal">
         <div class=" list__item">
           <button type="button" class="list__item_button more">
             <i class="blind">더보기</i>
@@ -64,7 +64,7 @@
           <div class="tag__wrap" :class="detail ? '_detail' : ''" v-if="(isJobBoard ? jobBoard : post).tags.length > 0">
             <div class="tag__inner">
               <div class="tag__item">
-                <component v-for="( tag, index ) in  isJobBoard ? jobBoard.tags : post.tags " :key="index"
+                <component v-for="( tag, index ) in isJobBoard ? jobBoard.tags : post.tags " :key="index"
                   class="item--hash" :is="detail ? 'button' : 'span'" @click="">
                   <em>{{ tag }}</em>
                 </component>
@@ -117,6 +117,8 @@
   </div>
   <AdContent v-if="showAd" />
   <UserProfileDetail :userProfile="postAuthorInfo" @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
+  <MoreModalForPost v-if="moreModalValue" :posetSeq="post.seq" @close="closeMoreModal" @edit="editPost"
+    @delete="deletePost" />
 </template>
 
 <script setup lang="ts">
@@ -129,6 +131,10 @@ import { useI18n } from 'vue-i18n';
 import { IJobPost, IOtherUserInfo, type IComment, type IPost } from '@/types/interface';
 import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
 import AdContent from '@/components/board/AdContent.vue';
+import MoreModalForPost from '../modal/MoreModalForPost.vue';
+import { AxiosResponse } from 'axios';
+import api from '@/api';
+import { applicationJsonWithToken } from '@/utils/header';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -262,4 +268,48 @@ const calculateDeadLine = (deadline: string | number | Date) => {
   const days = Math.floor(diff / day);
   return 'D-' + days;
 };
+
+const moreModalValue = ref(false);
+
+const onMoreModal = () => {
+  moreModalValue.value = true;
+};
+
+const closeMoreModal = () => {
+  moreModalValue.value = false;
+};
+
+// <-- 게시물 수정/삭제 관련
+const editPost = () => { }
+
+const deletePost = async () => {
+  if (!props.isJobBoard) {
+    try {
+      const response: AxiosResponse<void> = await api.patch(
+        `/posts/${props.post.seq}/delete`,
+        {},
+        applicationJsonWithToken(userInfo.accessToken)
+      )
+      if (response.status === 204) {
+        router.push('/')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    try {
+      const response: AxiosResponse<void> = await api.patch(
+        `/job-boards/${props.jobBoard.seq}/delete`,
+        {},
+        applicationJsonWithToken(userInfo.accessToken)
+      )
+      if (response.status === 204) {
+        router.push('/')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+// -->
 </script>
