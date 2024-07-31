@@ -75,8 +75,9 @@
             v-if="detail && (isJobBoard ? jobBoard.attachments.length > 0 : post.attachments.length > 0)">
             <div class="attachments__item">
               <div class="item__display">
-                <!-- <img :src="thumbnail" alt="" /> -->
-                <img src="https://komeet.s3.ap-northeast-2.amazonaws.com/content/77a6db1c302640fa.jpeg" alt="preview">
+                <div v-for="(attachment, index) in post.attachments" :key="index">
+                  <img :src="attachment" alt="preview">
+                </div>
               </div>
             </div>
           </div>
