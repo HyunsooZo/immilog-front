@@ -1,6 +1,6 @@
 <template>
-	<div class="modal default--dialog" tabindex="-1" role="dialog">
-		<div class="modal-content">
+	<div class="modal default--dialog" tabindex="-1" role="dialog" @click.self="closeModal">
+		<div class=" modal-content">
 			<div class="modal-body">
 				<div class="list-wrap">
 					<ul>
@@ -49,5 +49,10 @@ const closeConfirmModal = () => {
 const onDeletePost = () => {
 	onConfirmModal.value = false;
 	emits('delete', props.postSeq);
+};
+
+//모달 닫는 에밋
+const closeModal = () => {
+	emits('close');
 };
 </script>
