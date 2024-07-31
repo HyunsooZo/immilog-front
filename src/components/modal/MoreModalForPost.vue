@@ -1,11 +1,6 @@
 <template>
 	<div class="modal default--dialog" tabindex="-1" role="dialog">
 		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="button-icon button--close" @click="closeModal">
-					<i class="blind">닫기</i>
-				</button>
-			</div>
 			<div class="modal-body">
 				<div class="list-wrap">
 					<ul>
@@ -29,18 +24,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import ConfirmModal from './ConfirmModal.vue';
 
-const router = useRouter();
 const props = defineProps({
 	postSeq: Number,
 });
 const emits = defineEmits(['close', 'delete', 'edit']);
-
-const closeModal = () => {
-	emits('close');
-};
 
 const editPost = () => {
 
@@ -48,7 +37,6 @@ const editPost = () => {
 
 const deletePost = async () => {
 	onConfirmModal.value = true;
-
 };
 
 const onConfirmModal = ref(false);

@@ -29,7 +29,7 @@
           </button>
         </div>
       </div>
-      <div class="item__fnc" v-if="detail" @click="onMoreModal">
+      <div class="item__fnc" v-if="detail && post.userSeq == userInfo.userSeq" @click="onMoreModal">
         <div class=" list__item">
           <button type="button" class="list__item_button more">
             <i class="blind">더보기</i>
