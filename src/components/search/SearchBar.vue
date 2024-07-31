@@ -5,12 +5,13 @@
 		<div class="input-wrap">
 			<p class="logo-wrap" style="display: none;">
 				<em class="header-logo">
-					<span>K</span>
-					<span>a</span>
-					<span>t</span>
-					<span>h</span>
-					<span>e</span>
-					<span>r</span>
+					<span>I</span>
+					<span>m</span>
+					<span>m</span>
+					<span>i</span>
+					<span>l</span>
+					<span>o</span>
+					<span>g</span>
 				</em>
 				<!-- <img src="@/assets/images/icon-logo.png" alt="ko-meet" @click="onHome" /> -->
 			</p>

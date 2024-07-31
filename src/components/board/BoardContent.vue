@@ -31,20 +31,12 @@
       </div>
     </div>
     <div class="text__wrap">
-      <button type="button" :class="{ list__item_button: !detail, list__item: detail }" @click="onBoardDetail">
+      <component :is="detail ? 'div' : 'button'" :class="detail ? 'list__item' : 'list__item_button'"
+        @click="onBoardDetail">
         <div class="text__item">
           <p class="title">{{ isJobBoard ? jobBoard.title : post.title }}</p>
           <p class="text">{{ isJobBoard ? jobBoard.content : post.content }}</p>
-        </div>
-        <div class="thumb" v-if="!isJobBoard && post.attachments.length > 0">
-          <img :src="thumbnail" alt="" />
-        </div>
-      </button>
-    </div>
-    <div class="text__wrap" v-if="isJobBoard">
-      <button type="button" :class="{ 'list__item_button': !detail, 'list__item': detail }" @click="onBoardDetail">
-        <div class="text__item">
-          <div class="tag__wrap">
+          <div class="tag__wrap" v-if="isJobBoard">
             <div class="tag__inner">
               <div class="tag__item">
                 <span class="item--tag">
@@ -62,24 +54,30 @@
               </div>
             </div>
           </div>
-          <div class="tag__wrap">
+          <div class="tag__wrap" :class="detail ? '_detail' : ''" v-if="(isJobBoard ? jobBoard : post).tags.length > 0">
             <div class="tag__inner">
               <div class="tag__item">
-                <span class="item--hash" v-for="(tag, index) in jobBoard.tags" :key="index">
+                <component v-for="( tag, index ) in  isJobBoard ? jobBoard.tags : post.tags " :key="index"
+                  class="item--hash" :is="detail ? 'button' : 'span'" @click="">
                   <em>{{ tag }}</em>
-                </span>
+                </component>
+              </div>
+            </div>
+          </div>
+          <div class="attachments__wrap"
+            v-if="detail && (isJobBoard ? jobBoard.attachments.length > 0 : post.attachments.length > 0)">
+            <div class="attachments__item">
+              <div class="item__display">
+                <!-- <img :src="thumbnail" alt="" /> -->
+                <img src="https://komeet.s3.ap-northeast-2.amazonaws.com/content/77a6db1c302640fa.jpeg" alt="preview">
               </div>
             </div>
           </div>
         </div>
-      </button>
-    </div>
-    <div class="attachments__wrap" v-if="isJobBoard && detail">
-      <div class="attachments__item">
-        <div class="item__display">
-          <img src="https://komeet.s3.ap-northeast-2.amazonaws.com/content/77a6db1c302640fa.jpeg" alt="preview">
+        <div class="thumb" v-if="!isJobBoard && !detail && post.attachments.length > 0">
+          <img :src="thumbnail" alt="" />
         </div>
-      </div>
+      </component>
     </div>
     <div class="util__wrap">
       <div class="item__fnc">

@@ -2288,6 +2288,8 @@ strong + .button-text {
 }
 .list-wrap .item .text__wrap [class*='list__item'] .text__item {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   min-width: calc(100% - 78px); /* thum width */
 }
 .list-wrap .item .text__wrap [class*='list__item'] .title {
@@ -2318,10 +2320,6 @@ strong + .button-text {
 }
 .list-wrap .item .text__wrap [class*='list__item'] .thumb img {
   object-fit: cover;
-}
-/* 구인/구직 */
-.list-wrap .item .text__wrap [class*='list__item'] .tag__wrap {
-  margin: 0.4rem 0 0;
 }
 /* 목록인 경우 버튼 */
 .list-wrap .item .text__wrap button[class*='list__item_button'] .title {
@@ -2406,7 +2404,11 @@ strong + .button-text {
 }
 /* 해시태그 */
 .list-wrap .item .tag__wrap {
-  margin: 1.5rem 0;
+  margin: 0.4rem 0 0;
+}
+.list-wrap .item .tag__wrap._detail {
+  margin: 1.5rem 0 0.5rem;
+  order: 1;
 }
 .tag__wrap .tag__item {
   overflow-wrap: break-word;
