@@ -7,7 +7,7 @@
 					<i class="blind">취소</i>
 				</button>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" ref="scrollBody">
 				<div class="sticky-wrap" :class="{ active: isStickyWrap }">
 					<div class="menu-wrap">
 						<ul class="menu__inner">
@@ -31,16 +31,13 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, nextTick } from 'vue';
+import { onMounted, ref, nextTick, onUnmounted } from 'vue';
 import { getBookmarkedPostApi } from '@/services/post.ts';
 import { useI18n } from 'vue-i18n';
 import { emptyJobPost } from '@/utils/emptyObjects';
 import BoardContent from '@/components/board/BoardContent.vue';
 
 const { t } = useI18n();
-const isStickyWrap = ref(false);
-const menuBarLeft = ref('0px');
-const menuBarWidth = ref('0px');
 
 const emits = defineEmits(['update:bookmarkValue']);
 
@@ -73,16 +70,33 @@ const fetchBookmarkList = async () => {
 	}
 };
 
+// 스크롤 관련 상태 및 이벤트 핸들러
+const isStickyWrap = ref(false);
+const menuBarLeft = ref('0px');
+const menuBarWidth = ref('0px');
+const scrollBody = ref(null);
+
 const handleScrollEvent = () => {
-	window.addEventListener('scroll', handleStickyWrap);
+	if (scrollBody.value) {
+		scrollBody.value.addEventListener('scroll', handleStickyWrap);
+	}
 	return () => {
-		window.removeEventListener('scroll', handleStickyWrap);
+		if (scrollBody.value) {
+			scrollBody.value.removeEventListener('scroll', handleStickyWrap);
+		}
 	};
 };
-
+// 레이어팝업 내 스크롤 영역
 const handleStickyWrap = () => {
-	const modalBody = document.querySelector('.modal-body')?.scrollTop || 0;
-	isStickyWrap.value = modalBody > 0;
+	if (scrollBody.value) {
+		isStickyWrap.value = scrollBody.value.scrollTop > 0;
+	}
+};
+// 메뉴바 관련 메소드
+const updateMenuBar = () => {
+	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
+	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
+	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
 
 const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
@@ -91,15 +105,12 @@ const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
 	nextTick(() => updateMenuBar());
 };
 
-const updateMenuBar = () => {
-	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
-	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
-	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
-};
-
 onMounted(() => {
 	fetchBookmarkList();
 	updateMenuBar();
+	handleScrollEvent();
+});
+onUnmounted(() => {
 	handleScrollEvent();
 });
 </script>

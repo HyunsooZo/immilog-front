@@ -72,8 +72,8 @@
           </button>
         </li>
       </ul>
-      <ul>
-        <li class="item" v-if="loginStatus">
+      <ul v-if="loginStatus">
+        <li class="item">
           <button type="button" class="button button-text" @click="onCompanyInfo">
             <svg viewBox="0 0 16 16">
               <path :d="companyInfoIcon.first" />
@@ -95,7 +95,7 @@
             <div class="input__item _switch-toggle">
               <input type="checkbox" class="input__checkbox" name="setting" id="setting" v-model="isEnglishChecked" />
               <label for="setting" class="input__label"><span class="blind">{{
-                isEnglishChecked ? t('myPageView.english') : t('myPageView.korean') }}</span></label>
+          isEnglishChecked ? t('myPageView.english') : t('myPageView.korean') }}</span></label>
             </div>
           </div>
         </li>

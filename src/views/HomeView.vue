@@ -107,13 +107,14 @@ const isModalClose = () => {
 const isStickyWrap = ref(false);
 const isStickyButton = ref(false);
 const StickyWrapHeight = ref(0);
+const menuBarLeft = ref('0px');
+const menuBarWidth = ref('0px');
+
 const handleScrollEvent = () => {
 	window.addEventListener('scroll', handleStickyWrap);
 
-	// '.list-top-wrap' 요소의 높이를 가져오기 (높이가 없다면 0으로 처리)
+	// handleStickyButton top '.list-top-wrap' 요소의 높이를 가져오기 (높이가 없다면 0으로 처리)
 	const listTopHeight: number = document.querySelector('.list-top-wrap')?.getBoundingClientRect().height || 0;
-
-	// handleStickyButton에 listTopHeight 인자 전달
 	window.addEventListener('scroll', () => handleStickyButton(listTopHeight));
 
 	// 이벤트 제거를 위한 함수 반환
@@ -130,12 +131,16 @@ const handleStickyWrap = () => {
 			(stickyWrapElement?.getBoundingClientRect().height || 0) + 5;
 	}
 };
+// 글쓰기 버튼 스크롤 이벤트
 const handleStickyButton = (listTopHeight: number) => {
 	isStickyButton.value = window.scrollY > listTopHeight;
 };
-
-const menuBarLeft = ref('0px');
-const menuBarWidth = ref('0px');
+// 메뉴바 관련 메소드
+const updateMenuBar = () => {
+	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
+	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
+	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
+};
 
 // 게시글 목록 관련 반응형 객체
 const state = ref<IState>({
@@ -278,13 +283,6 @@ let menus = [
 	{ label: t('homeView.popularPost'), active: ref(false) },
 ];
 
-// 메뉴바 관련 메소드
-const updateMenuBar = () => {
-	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
-	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
-	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
-};
-
 // 게시글 목록 관련 페이징 값
 const currentPage = ref(0);
 
@@ -316,7 +314,6 @@ const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 		}, 1000);
 	}
 };
-
 
 // 무한 스크롤 관련 메소드 (스크롤 핸들링)
 const handleScroll = () => {
