@@ -45,7 +45,7 @@
 				<i class="blind">글쓰기</i>
 			</button>
 			<div v-for="(item, index) in state.posts" :key="index">
-				<BoardContent :post="item" :detail="false" :jobBoard="emptyJobPost" :isJobBoard="false" />
+				<BoardContent :post="item" :detail="false" :jobPost="emptyJobPost" :isJobBoard="false" />
 			</div>
 		</div>
 	</div>

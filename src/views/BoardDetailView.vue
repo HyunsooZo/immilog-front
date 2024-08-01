@@ -6,7 +6,7 @@
       <div class="list__title">
         <span class="title">{{ t('postCategories.' + post.category) }}</span>
       </div>
-      <BoardContent :post="post" :detail="true" :jobBoard="emptyJobPost" :isJobBoard="false">
+      <BoardContent :post="post" :detail="true" :jobPost="emptyJobPost" :isJobBoard="false">
       </BoardContent>
       <!-- //.item -->
     </div>
@@ -169,7 +169,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserInfoStore } from '@/stores/userInfo.ts'
 import { timeCalculation } from '@/utils/date-time.ts'
-import { likeApi, postBookmarkdApi } from '@/services/post.ts'
+import { likeApi, postBookmark } from '@/services/post.ts'
 import { writeReply, lastReply } from '@/utils/icons.ts'
 import { extractAtWordAndRest } from '@/utils/comment.ts'
 import { useI18n } from 'vue-i18n'
@@ -418,7 +418,7 @@ const bookmarkApi = async () => {
   checkIfTokenExists()
   changeBookmark()
   try {
-    postBookmarkdApi(post.value.seq)
+    postBookmark(post.value.seq)
   } catch (error) {
     console.log(error)
   }

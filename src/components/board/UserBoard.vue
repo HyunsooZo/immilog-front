@@ -22,7 +22,7 @@
 					</div>
 				</div>
 				<div class="list-wrap">
-					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" :jobBoard="emptyJobPost"
+					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" :jobPost="emptyJobPost"
 						:detail="false" :showAd="true" :isJobBoard="false" />
 				</div>
 			</div>
@@ -70,7 +70,7 @@ const state = ref<IState>({
 
 const menus = [
 	{ label: t('bookMark.post'), active: ref(true) },
-	{ label: t('bookMark.jobBoard'), active: ref(false) },
+	{ label: t('bookMark.jobPost'), active: ref(false) },
 ];
 
 const fetchMyPostList = async (page: number) => {

@@ -19,7 +19,7 @@
   "jobContent": {
     "jobOpeningsFrequently": "Always hiring",
     "jobOpening": "Open hiring",
-    "jobBoard": "Job Listings"
+    "jobPost": "Job Listings"
   },
   "myPageView": {
     "myPosts": "My posts",
@@ -223,7 +223,7 @@
   },
   "bookMark": {
     "post": "Post",
-    "jobBoard": "Job Board"
+    "jobPost": "Job Board"
   },
   "postModal": {
     "writePost": "Write Post",
@@ -253,7 +253,7 @@
     "enterContent": "Please enter content.",
     "enterDate": "Please select a deadline.",
     "enterExperience": "Please select a experience.",
-    "jobBoard": "Post Job Listing"
+    "jobPost": "Post Job Listing"
   },
   "countries": {
     "MALAYSIA": "Malaysia",

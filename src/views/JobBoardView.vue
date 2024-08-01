@@ -1,6 +1,6 @@
 <template>
 	<div class="content">
-		<TheTopBox :title="t('jobContent.jobBoard')" />
+		<TheTopBox :title="t('jobContent.jobPost')" />
 		<SearchBox />
 		<div class="list-top-wrap">
 			<!-- 카테고리 정렬 -->
@@ -30,10 +30,10 @@
 
 		<!-- 목록 -->
 		<div class="list-wrap">
-			<NoContent v-if="state.jobBoards.length === 0" :item="t('jobContent.jobBoard')" />
+			<NoContent v-if="state.jobPosts.length === 0" :item="t('jobContent.jobPost')" />
 			<!-- <NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="'구인/구직 글'" /> -->
-			<div v-for="(item, index) in state.jobBoards" :key="index">
-				<BoardContent :jobBoard="item" :showAd="showAd(index)" :isJobBoard="true" :post="emptyPost" :detail="false" />
+			<div v-for="(item, index) in state.jobPosts" :key="index">
+				<BoardContent :jobPost="item" :showAd="showAd(index)" :isJobBoard="true" :post="emptyPost" :detail="false" />
 			</div>
 		</div>
 	</div>
@@ -122,7 +122,7 @@ const closePostModal = () => {
 };
 
 const state = ref({
-	jobBoards: [] as IJobPost[],
+	jobPosts: [] as IJobPost[],
 	pagination: {} as IPageable,
 	loading: false,
 });
@@ -143,7 +143,7 @@ const fetchJobBoardList = async () => {
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
-			state.value.jobBoards = response.data.data.content;
+			state.value.jobPosts = response.data.data.content;
 			state.value.pagination = response.data.data.pageable;
 		} else if (response.status === 401) {
 			fetchJobBoardList();
@@ -170,7 +170,7 @@ const handleStickyButton = (listTopHeight: number) => {
 
 // select 관련 메소드 (초기화)
 const initializeState = () => {
-	state.value.jobBoards = [] as IJobPost[];
+	state.value.jobPosts = [] as IJobPost[];
 	state.value.pagination = {} as IPageable;
 	currentPage.value = 0;
 };

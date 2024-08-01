@@ -4,9 +4,9 @@
 			<div class="item__fnc">
 				<div class="list__item">
 					<button type="button" class="list__item_button">
-						<strong class="em">{{ jobBoard.company }}</strong>
-						<em>{{ jobBoard.country }}</em>
-						<em>{{ jobBoard.region }}</em>
+						<strong class="em">{{ jobPost.company }}</strong>
+						<em>{{ jobPost.country }}</em>
+						<em>{{ jobPost.region }}</em>
 					</button>
 				</div>
 			</div>
@@ -14,8 +14,8 @@
 		<div class="text__wrap">
 			<button type="button" class="list__item_button" @click="onBoardDetail">
 				<div class="text__item">
-					<p class="title">{{ jobBoard.title }}</p>
-					<p class="text">{{ jobBoard.content }}</p>
+					<p class="title">{{ jobPost.title }}</p>
+					<p class="text">{{ jobPost.content }}</p>
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<!-- 필수 -->
@@ -24,37 +24,28 @@
 									<em class="em">상시채용</em>
 								</span>
 								<span class="item--tag">
-									<em class="em">{{ calculateDeadLine(jobBoard.deadline) }}</em>
+									<em class="em">{{ calculateDeadLine(jobPost.deadline) }}</em>
 								</span>
 								<span class="item--tag">
 									<em>경력(0년 이상)</em>
 								</span>
 								<span class="item--tag">
-									<em>{{ jobBoard.experience }}</em>
+									<em>{{ jobPost.experience }}</em>
 								</span>
 							</div>
-							<!-- 선택 -->
-							<!-- <div class="tag__item">
-								<span class="item--tag">
-									<em>대기업</em>
-								</span>
-								<span class="item--tag">
-									<em>재택근무</em>
-								</span>
-							</div> -->
 						</div>
 					</div>
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<div class="tag__item">
-								<span class="item--hash" v-for="(tag, index) in jobBoard.tags" :key="index">
+								<span class="item--hash" v-for="(tag, index) in jobPost.tags" :key="index">
 									<em>{{ tag }}</em>
 								</span>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="thumb" v-if="jobBoard.attachments.length > 0">
+				<div class="thumb" v-if="jobPost.attachments.length > 0">
 					<img :src="thumbnail" alt="" />
 				</div>
 			</button>
@@ -63,23 +54,23 @@
 			<div class="item__fnc">
 				<p class="list__item read">
 					<i class="blind">조회수</i>
-					<span class="item__count">{{ jobBoard.viewCount }}</span>
+					<span class="item__count">{{ jobPost.viewCount }}</span>
 				</p>
 				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
-					<span class="item__count"> {{ jobBoard.likeCount }}</span>
+					<span class="item__count"> {{ jobPost.likeCount }}</span>
 				</button>
 			</div>
 			<div class="item__fnc">
 				<p class="list__item past">
 					<i class="blind">작성시간</i>
 					<span class="item__count">
-						{{ timeCalculation(jobBoard.createdAt.toString()).time
-						}}{{ t(timeCalculation(jobBoard.createdAt.toString()).text) }}
+						{{ timeCalculation(jobPost.createdAt.toString()).time
+						}}{{ t(timeCalculation(jobPost.createdAt.toString()).text) }}
 					</span>
 				</p>
-				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
+				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="postBokmarkApi">
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -95,7 +86,7 @@ import { useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { timeCalculation } from '@/utils/date-time.ts';
-import { likeApi, viewApi, postBookmarkdApi } from '@/services/post.ts';
+import { likeApi, viewApi, postBookmark } from '@/services/post.ts';
 import { useI18n } from 'vue-i18n';
 import { IJobPost } from '@/types/interface';
 import AdContent from './AdContent.vue';
@@ -106,7 +97,7 @@ const userInfo = useUserInfoStore();
 const router = useRouter();
 
 const props = defineProps({
-	jobBoard: {
+	jobPost: {
 		type: Object as () => IJobPost,
 		required: true,
 		default: () => ({
@@ -142,12 +133,14 @@ const props = defineProps({
 	},
 });
 
-const likes = ref(props.jobBoard.likeCount);
-const likeUsers = ref(props.jobBoard.likeUsers);
-const bookmarkUsers = ref(props.jobBoard.bookmarkUsers);
+const likes = ref(props.jobPost.likeCount);
+const likeUsers = ref(props.jobPost.likeUsers);
+const bookmarkUsers = ref(props.jobPost.bookmarkUsers);
 const userSeq = ref(userInfo.userSeq);
 const thumbnail = ref(
-	props.jobBoard.attachments.length > 0 ? props.jobBoard.attachments[0] : '',
+	props.jobPost.attachments.length > 0 ?
+		props.jobPost.attachments[0] :
+		'',
 );
 const isLiked = computed(() => {
 	return likeUsers.value.includes(userSeq.value ? userSeq.value : 0);
@@ -157,19 +150,22 @@ const isBookmarked = computed(() => {
 	return bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0);
 });
 
+// 게시글 상세 페이지로 이동
 const onBoardDetail = () => {
-	viewApi(props.jobBoard.seq, true);
-	router.push(`/board/${props.jobBoard.seq}`);
+	viewApi(props.jobPost.seq, true);
+	router.push(`/board/${props.jobPost.seq}`);
 };
 
 // 좋아요 API 호출
 const likePost = () => {
 	checkIfTokenExists();
-	changeLike();
-	likeApi('posts', props.jobBoard.seq);
+	changeLikeStatus
+		();
+	likeApi('posts', props.jobPost.seq);
 };
 
-const changeLike = () => {
+// 좋아요 상태 변경
+const changeLikeStatus = () => {
 	if (isLiked.value) {
 		const index = likeUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
 		if (index !== -1) {
@@ -182,17 +178,19 @@ const changeLike = () => {
 	}
 };
 
-const bookmarkApi = async () => {
+// 북마크 API 호출
+const postBokmarkApi = async () => {
 	checkIfTokenExists();
-	changeBookmark();
+	changeBookmarkStatus();
 	try {
-		postBookmarkdApi(props.jobBoard.seq);
+		postBookmark(props.jobPost.seq);
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-const changeBookmark = () => {
+// 북마크 상태 변경
+const changeBookmarkStatus = () => {
 	if (isBookmarked.value) {
 		const index = bookmarkUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
 		if (index !== -1) {
@@ -203,12 +201,15 @@ const changeBookmark = () => {
 	}
 };
 
+// 토큰 존재 여부 확인
 const checkIfTokenExists = () => {
 	const token = localStorage.getItem('accessToken');
 	if (!token) {
 		router.push('/sign-in');
 	}
 };
+
+// D-day 계산
 const calculateDeadLine = (deadline: string | number | Date) => {
 	const date = new Date(deadline);
 	const now = new Date();

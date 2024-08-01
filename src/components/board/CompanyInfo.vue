@@ -55,20 +55,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import TheTopBox from '@/components/search/TheTopBox.vue';
-import RegistWrap from '@/components/board/RegistWrap.vue';
-import CustomAlert from '@/components/modal/CustomAlert.vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { countries, industryList } from '@/utils/selectItems';
 import { IField, IFormFields, ISelectItem } from '@/types/interface';
-import SelectDialog from '../selections/SelectDialog.vue';
 import { postCompanyInfo, getMyCompanyInfo } from '@/services/companyService';
 import { AxiosResponse } from 'axios';
 import { IApiCompanyInfo, IApiImage } from '@/types/api-interface';
 import { multipartFormData } from '@/utils/header';
 import { resizeImage } from '@/utils/image';
 import { useCompanyInfo } from '@/stores/company';
+import SelectDialog from '../selections/SelectDialog.vue';
+import TheTopBox from '@/components/search/TheTopBox.vue';
+import RegistWrap from '@/components/board/RegistWrap.vue';
+import CustomAlert from '@/components/modal/CustomAlert.vue';
 import api from '@/api';
 
 const emits = defineEmits(['close']);
@@ -235,21 +235,6 @@ const buttonActivationCriteria = computed(() => {
 		regionValue.value;
 });
 
-const postApi = async () => {
-	const requestForm = generateRequesrForm();
-	try {
-		const response = await postCompanyInfo(requestForm);
-		const { status } = response;
-		if (status === 201 || status === 200) {
-			setTimeout(() => {
-				closeModal();
-			}, 1000);
-		}
-
-	} catch (e) {
-		console.log(e);
-	}
-}
 
 // 프리뷰 이미지
 const previewImage = (event: { target: any; }) => {
@@ -265,9 +250,10 @@ const previewImage = (event: { target: any; }) => {
 		};
 		reader.readAsDataURL(input.files[0]);
 	}
-};
+}
 
-const hostImage = async () => {
+// <-- 회사 정보 등록 관련
+const postImageApi = async () => {
 	if (!imagePreview.value || !imageFile.value) {
 		return;
 	}
@@ -290,13 +276,29 @@ const hostImage = async () => {
 	}
 };
 
+const postCompanyApi = async () => {
+	const requestForm = generateRequesrForm();
+	try {
+		const response = await postCompanyInfo(requestForm);
+		const { status } = response;
+		if (status === 201 || status === 200) {
+			setTimeout(() => {
+				closeModal();
+			}, 1000);
+		}
+
+	} catch (e) {
+		console.log(e);
+	}
+}
 
 const submit = async () => {
 	if (imageFile.value) {
-		await hostImage();
+		await postImageApi();
 	}
-	await postApi();
+	await postCompanyApi();
 }
+// -->
 
 const generateRequesrForm = () => {
 	return {

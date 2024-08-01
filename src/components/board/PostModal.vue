@@ -3,7 +3,7 @@
 	<div class="modal modal--full post--dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<p class="modal-title">{{ isJobBoard ? t('postModal.jobBoard') : t('postModal.writePost') }}</p>
+				<p class="modal-title">{{ isJobBoard ? t('postModal.jobPost') : t('postModal.writePost') }}</p>
 				<button type="button" class="button-icon__s button--post_upload" @click="postUpload">
 					<svg viewBox="0 0 16 16">
 						<path :d="postRegistrationIcon.first" />
@@ -44,7 +44,6 @@
 						</div>
 					</div>
 					<!-- //일반게시판 -->
-
 					<!-- 구인구직 -->
 					<!-- 채용마감일 -->
 					<div class="input-wrap" v-if="isJobBoard">
@@ -185,7 +184,7 @@
 		</div>
 	</div>
 	<CustomAlert v-if="alertValue" :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
-	<SelectDialog v-if="selectOpenValue" :title="selectTitle" :list="selectList" @close="closeSelect"
+	<SelectDialog v-if="selectDialogValue" :title="selectTitle" :list="selectList" @close="closeSelect"
 		@select:value="selectedValue" />
 	<LoadingModal v-if="isLoading" />
 </template>
@@ -228,6 +227,7 @@ const day = today.getDate().toString().padStart(2, '0');
 const minDate = `${year}-${month}-${day}`;
 
 const PlaceholderDate = ref('날짜 선택');
+
 const updatePlaceholderDate = () => {
 	if (allDate.value) {
 		selectedDate.value = '';
@@ -254,7 +254,7 @@ watch(allCareer, () => {
 
 //
 const router = useRouter();
-const selectOpenValue = ref(false);
+const selectDialogValue = ref(false);
 
 const selectTitle = ref(t('postModal.selectCategory'));
 const selectedCategory = ref({ name: t('postModal.communication'), code: 'COMMUNICATION' });
@@ -267,11 +267,11 @@ const selectedValue = (value: ISelectItem) => {
 };
 
 const openCategorySelect = () => {
-	selectOpenValue.value = true;
+	selectDialogValue.value = true;
 };
 
 const closeSelect = () => {
-	selectOpenValue.value = false;
+	selectDialogValue.value = false;
 };
 
 const alertValue = ref(false);
@@ -517,7 +517,7 @@ const validateUploadPost = () => {
 };
 
 const onSelectModal = () => {
-	selectOpenValue.value = true;
+	selectDialogValue.value = true;
 	selectTitle.value = '경력 선택';
 	selectList.value = experienceList;
 }

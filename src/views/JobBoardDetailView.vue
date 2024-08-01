@@ -7,7 +7,7 @@
 
 		<!-- 목록 -->
 		<div class="list-wrap">
-			<BoardContent :jobBoard="jobBoard" :detail="true" :post="emptyPost" :isJobBoard="true" />
+			<BoardContent :jobPost="jobPost" :detail="true" :post="emptyPost" :isJobBoard="true" />
 		</div>
 	</div>
 </template>
@@ -25,7 +25,7 @@ import { emptyPost } from '@/utils/emptyObjects';
 const route = useRoute();
 const postId = route.params.postId;
 
-const jobBoard = ref<IJobPost>({
+const jobPost = ref<IJobPost>({
 	seq: 0,
 	title: '',
 	content: '',
@@ -70,7 +70,7 @@ const fetchJobBoardDetail = async () => {
 	try {
 		const response = await api.get(`/job-boards/${postId}`, applicationJson)
 		if (response.status === 200) {
-			jobBoard.value = response.data.data
+			jobPost.value = response.data.data
 		}
 	} catch (error) {
 		console.log(error)

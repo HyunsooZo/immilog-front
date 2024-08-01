@@ -19,7 +19,7 @@
   "jobContent": {
     "jobOpeningsFrequently": "상시채용",
     "jobOpening": "수시채용",
-    "jobBoard": "구인/구직"
+    "jobPost": "구인/구직"
   },
   "myPageView": {
     "myPosts": "내 게시물",
@@ -223,7 +223,7 @@
   },
   "bookMark": {
     "post": "게시글",
-    "jobBoard": "구인/구직"
+    "jobPost": "구인/구직"
   },
   "postModal": {
     "writePost": "글 작성",
@@ -253,7 +253,7 @@
     "enterContent": "내용을 입력해주세요.",
     "enterDate": "날짜를 입력해주세요.",
     "enterExperience": "경력을 입력해주세요.",
-    "jobBoard": "구인공고 올리기"
+    "jobPost": "구인공고 올리기"
   },
   "countries": {
     "MALAYSIA": "말레이시아",

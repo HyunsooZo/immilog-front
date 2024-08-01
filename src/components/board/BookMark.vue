@@ -22,7 +22,7 @@
 					</div>
 				</div>
 				<div class="list-wrap">
-					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" :jobBoard="emptyJobPost"
+					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" :jobPost="emptyJobPost"
 						:isJobBoard="false" :detail="false" />
 				</div>
 			</div>
@@ -49,7 +49,7 @@ const state = ref({
 
 const menus = [
 	{ label: t('bookMark.post'), active: ref(true) },
-	{ label: t('bookMark.jobBoard'), active: ref(false) },
+	{ label: t('bookMark.jobPost'), active: ref(false) },
 ];
 
 const closeModal = () => {
@@ -74,7 +74,7 @@ const fetchBookmarkList = async () => {
 const isStickyWrap = ref(false);
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
-const scrollBody = ref(null);
+const scrollBody = ref<HTMLElement | null>(null);
 
 const handleScrollEvent = () => {
 	if (scrollBody.value) {
@@ -99,6 +99,7 @@ const updateMenuBar = () => {
 	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
 
+// 메뉴 선택
 const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
 	selectedMenu.active.value = true;
 	menus.filter(menu => menu !== selectedMenu).forEach(menu => menu.active.value = false);
@@ -110,6 +111,7 @@ onMounted(() => {
 	updateMenuBar();
 	handleScrollEvent();
 });
+
 onUnmounted(() => {
 	handleScrollEvent();
 });
