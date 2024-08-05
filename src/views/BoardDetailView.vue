@@ -145,9 +145,9 @@
         <!-- //.item -->
       </div>
       <!-- n개 이상 대댓글 더보기 -->
-      <div class="item item__more" v-if="comment.replies.length > 3">
+      <div class="item item__more" v-if="comment.replyCount > 3">
         <button type="button" class="list__item_button button-text" @click="openReplyModal(index)">
-          <span>{{ comment.replies.length - 3 }}{{ t('boardDetailView.multipleComments') }}</span>
+          <span>{{ comment.replyCount - 3 }}{{ t('boardDetailView.multipleComments') }}</span>
         </button>
       </div>
     </div>
@@ -273,6 +273,7 @@ const post = ref<IPost>({
   comments: [],
   viewCount: 0,
   likeCount: 0,
+  commentCount: 0,
   tags: [],
   attachments: [],
   likeUsers: [],
@@ -371,6 +372,7 @@ const detailBoard = async () => {
     const response = await api.get(`/posts/${route.params.postId}`, applicationJson)
     if (response.status === 200) {
       post.value = response.data.data
+      console.log(post.value)
       likeCount.value = response.data.data.likeCount
       likeUsers.value = response.data.data.likeUsers
       bookmarkUsers.value = response.data.data.bookmarkUsers
@@ -382,14 +384,6 @@ const detailBoard = async () => {
 
 const goToDown = () => {
   window.scrollTo(0, document.body.scrollHeight)
-}
-
-const allCommentCounts = (post: { comments: IComment[] }) => {
-  let result = post.comments.length
-  post.comments.forEach((comment: { replies: string | any[] }) => {
-    result += comment.replies.length
-  })
-  return result
 }
 
 // <-- 더보기 모달 관련

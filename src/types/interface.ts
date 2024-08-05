@@ -37,6 +37,7 @@ export interface IComment {
   user: IUser
   content: string
   replies: IComment[]
+  replyCount: number
   upVotes: number
   downVotes: number
   likeUsers: number[]
@@ -64,6 +65,7 @@ export interface IPost {
   userSeq: number
   userProfileUrl: string
   userNickName: string
+  commentCount: number
   comments: IComment[]
   viewCount: number
   likeCount: number

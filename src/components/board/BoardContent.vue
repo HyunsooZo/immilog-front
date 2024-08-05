@@ -99,7 +99,7 @@
         </button>
         <p class="list__item cmt" v-if="!isJobBoard">
           <i class="blind">댓글</i>
-          <span class="item__count">{{ allCommentCounts(post) }}</span>
+          <span class="item__count">{{ post.commentCount }}</span>
         </p>
       </div>
       <div class="item__fnc">
