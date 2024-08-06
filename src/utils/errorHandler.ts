@@ -1,9 +1,9 @@
 import { IApiErrorResponse } from '@/types/api-interface.ts'
 import { AxiosError } from 'axios'
 
-export const handleError = (error: AxiosError<IApiErrorResponse>) => {
+export const handleError = (error: string) => {
   console.log(error)
-  const errorMessage = error.response?.data.message
+  const errorMessage = error
   if (errorMessage === '이메일 형식에 맞게 입력해주세요.') {
     return 'signInView.invalidEmailFormat'
   } else if (errorMessage === '비밀번호는 8자에서 15자여야 합니다.') {

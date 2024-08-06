@@ -152,7 +152,8 @@ const signIn = async () => {
 			getUnreadNotificationStatus()
 		}
 	} catch (error: any) {
-		openAlert(t(handleError(error)))
+		console.log(error.response.data[0])
+		openAlert(t(handleError(error.response.data[0])))
 	} finally {
 		setTimeout(() => {
 			offLoading()
