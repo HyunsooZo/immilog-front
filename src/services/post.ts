@@ -41,7 +41,7 @@ export const getBookmarkedPostApi = async () => {
     return { status: 'unauthenticated' }
   }
   try {
-    const response = await api.get(`/bookmarks`)
+    const response = await api.get(`/bookmarks/post`)
     return { status: response.status, data: response.data }
   } catch (error) {
     console.log(error)
@@ -54,7 +54,7 @@ export const postBookmark = async (seq: any) => {
     return { status: 'unauthenticated' }
   }
   try {
-    const response = await api.post(`/bookmarks/posts/${seq}`)
+    const response = await api.post(`/bookmarks/post/${seq}`)
     return { status: response.status }
   } catch (error) {
     console.log(error)

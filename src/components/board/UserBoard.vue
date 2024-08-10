@@ -105,7 +105,7 @@ const isModalClose = () => {
 const isStickyWrap = ref(false);
 const menuBarLeft = ref('0px');
 const menuBarWidth = ref('0px');
-const scrollBody = ref(null);
+const scrollBody = ref<HTMLElement | null>(null);
 
 const handleScrollEvent = () => {
 	if (scrollBody.value) {

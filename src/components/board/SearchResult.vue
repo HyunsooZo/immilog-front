@@ -194,7 +194,7 @@ const bookmarkApi = async () => {
 	changeBookmark();
 	try {
 		await api.post(
-			`/bookmarks/posts/${props.post.seq}`,
+			`/bookmarks/post/${props.post.seq}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 	} catch (error) {
