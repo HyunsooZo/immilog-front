@@ -107,11 +107,11 @@ import { getCoordinate } from '@/services/geolocation.ts'
 import { getUserInfo } from '@/services/userInfoFetch.ts'
 import { useI18n } from 'vue-i18n'
 import { applicationJson } from '@/utils/header'
+import { handleError } from '@/utils/errorHandler'
 import { AxiosResponse } from 'axios'
 import CustomAlert from '@/components/modal/CustomAlert.vue'
 import LoadingModal from '@/components/loading/LoadingModal.vue'
 import api from '@/api'
-import { handleError } from '@/utils/errorHandler'
 
 const { t } = useI18n()
 

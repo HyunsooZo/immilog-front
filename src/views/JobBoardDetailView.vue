@@ -13,14 +13,14 @@
 </template>
 
 <script setup lang="ts">
-import TheHeader from '@/components/layouts/TheHeader.vue';
-import BoardContent from '@/components/board/BoardContent.vue';
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue';
 import { applicationJson } from '@/utils/header';
-import api from '@/api';
 import { IJobPost } from '@/types/interface';
 import { emptyPost } from '@/utils/emptyObjects';
+import api from '@/api';
+import TheHeader from '@/components/layouts/TheHeader.vue';
+import BoardContent from '@/components/board/BoardContent.vue';
 
 const route = useRoute();
 const postId = route.params.postId;

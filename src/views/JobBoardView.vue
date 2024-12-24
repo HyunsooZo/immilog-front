@@ -90,7 +90,7 @@ const handleScrollEvent = () => {
 	const listTopElement = document.querySelector('.list-top-wrap') as HTMLElement;
 	let listTopHeight = listTopElement?.getBoundingClientRect().height;
 
-	const stickyButtonHandler = () => {
+	stickyButtonHandler = () => {
 		if (listTopHeight !== undefined) {
 			handleStickyButton(listTopHeight);
 		}

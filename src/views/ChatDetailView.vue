@@ -118,11 +118,11 @@
 </template>
 
 <script setup lang="ts">
+import type { IApiChat } from '@/types/api-interface';
+import type { IChat } from '@/types/interface';
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { imageSelectIcon, chatSendingIcon } from '@/utils/icons.ts';
-import type { IApiChat } from '@/types/api-interface';
-import type { IChat } from '@/types/interface';
 import { useRoute, useRouter } from 'vue-router';
 import { computed } from 'vue';
 import { applicationJsonWithToken, webSocketURL } from '@/utils/header';

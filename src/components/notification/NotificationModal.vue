@@ -65,11 +65,11 @@ import { applicationJsonWithToken } from '@/utils/header';
 import { AxiosResponse } from 'axios';
 import { INotificationState } from '@/types/interface';
 import { IApiNotifications } from '@/types/api-interface';
-import api from '@/api';
-import NotificationDetailModal from '@/components/notification/NotificationDetailModal.vue';
 import { myPostIcon } from '@/utils/icons.ts';
 import { useI18n } from 'vue-i18n';
 import { timeCalculation } from '@/utils/date-time';
+import NotificationDetailModal from '@/components/notification/NotificationDetailModal.vue';
+import api from '@/api';
 
 const { t } = useI18n();
 

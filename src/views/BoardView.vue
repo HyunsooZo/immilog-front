@@ -65,17 +65,17 @@ import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
 import { useI18n } from 'vue-i18n';
 import { ISelectItem, ISelectMenu, type IState } from '@/types/interface';
+import { useRouter } from 'vue-router';
+import { applicationJsonWithToken } from '@/utils/header';
+import { AxiosResponse } from 'axios';
+import { IApiPosts } from '@/types/api-interface';
+import { emptyJobPost } from '@/utils/emptyObjects.ts';
 import SearchBar from '@/components/search/SearchBar.vue'; // .search-wrap
 import SelectDialog from '@/components/selections/SelectDialog.vue'; // .select--dialog
 import PostModal from '@/components/board/PostModal.vue'; // .post--dialog
 import BoardContent from '@/components/board/BoardContent.vue';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
 import api from '@/api';
-import { useRouter } from 'vue-router';
-import { applicationJsonWithToken } from '@/utils/header';
-import { AxiosResponse } from 'axios';
-import { IApiPosts } from '@/types/api-interface';
-import { emptyJobPost } from '@/utils/emptyObjects.ts';
 
 const { t } = useI18n();
 const alertValue = ref(false);

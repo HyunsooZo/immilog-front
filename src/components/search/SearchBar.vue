@@ -31,11 +31,11 @@
 </template>
 
 <script setup lang="ts">
-import router from '@/router';
 import { ref } from 'vue';
-import NotificationModal from '@/components/notification/NotificationModal.vue';
 import { useI18n } from 'vue-i18n';
 import { useUserInfoStore } from '@/stores/userInfo';
+import NotificationModal from '@/components/notification/NotificationModal.vue';
+import router from '@/router';
 
 const userInfo = useUserInfoStore();
 

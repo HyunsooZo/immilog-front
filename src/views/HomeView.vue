@@ -71,6 +71,8 @@ import { useI18n } from 'vue-i18n';
 import { countries } from '@/utils/selectItems.ts';
 import { useHomeCategoryStore } from '@/stores/category.ts';
 import { useHomeSortingStore } from '@/stores/sorting.ts';
+import { getCoordinate } from '@/services/geolocation';
+import { getUserInfo } from '@/services/userInfoFetch';
 import { AxiosResponse } from 'axios';
 import { emptyJobPost } from '@/utils/emptyObjects';
 import CustomAlert from '@/components/modal/CustomAlert.vue';
@@ -82,8 +84,6 @@ import NoContent from '@/components/board/NoContent.vue';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SubMenuList from '@/components/selections/SubMenuList.vue';
 import api from '@/api';
-import { getCoordinate } from '@/services/geolocation';
-import { getUserInfo } from '@/services/userInfoFetch';
 
 const { t } = useI18n();
 

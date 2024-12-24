@@ -14,7 +14,8 @@
                 <em v-if="loginStatus">{{ userInfo.userRegion }}</em>
               </div>
               <div class="list__item user button-text">
-                <strong>{{ userInfo.userNickname ? userInfo.userNickname : t('myPageView.login') }}
+                <strong
+                  >{{ userInfo.userNickname ? userInfo.userNickname : t('myPageView.login') }}
                 </strong>
               </div>
             </div>
@@ -93,16 +94,29 @@
             </svg>
             <span>{{ t('myPageView.settings') }}</span>
             <div class="input__item _switch-toggle">
-              <input type="checkbox" class="input__checkbox" name="setting" id="setting" v-model="isEnglishChecked" />
-              <label for="setting" class="input__label"><span class="blind">{{
-          isEnglishChecked ? t('myPageView.english') : t('myPageView.korean') }}</span></label>
+              <input
+                type="checkbox"
+                class="input__checkbox"
+                name="setting"
+                id="setting"
+                v-model="isEnglishChecked"
+              />
+              <label for="setting" class="input__label"
+                ><span class="blind">{{
+                  isEnglishChecked ? t('myPageView.english') : t('myPageView.korean')
+                }}</span></label
+              >
             </div>
           </div>
         </li>
       </ul>
     </div>
     <BookMark @update:bookmarkValue="offBookMark" v-if="isBookmarkOn" />
-    <UserBoard :userSeq="userInfo.userSeq ? userInfo.userSeq : 0" @close="offUserBoard" v-if="isUserBoardOn" />
+    <UserBoard
+      :userSeq="userInfo.userSeq ? userInfo.userSeq : 0"
+      @close="offUserBoard"
+      v-if="isUserBoardOn"
+    />
     <CompanyInfo v-if="isCompanyInfo" @close="offCompanyInfo" />
   </div>
   <teleport to="#modal" v-if="modalValue">
@@ -116,6 +130,7 @@ import BookMark from '@/components/board/BookMark.vue'
 import UserBoard from '@/components/board/UserBoard.vue'
 import ConfirmModal from '@/components/modal/ConfirmModal.vue'
 import CompanyInfo from '@/components/board/CompanyInfo.vue'
+import NotificationModal from '@/components/notification/NotificationModal.vue'
 import { useUserInfoStore } from '@/stores/userInfo.ts'
 import { onMounted, ref, computed, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
@@ -129,7 +144,6 @@ import {
   companyInfoIcon
 } from '@/utils/icons.ts'
 import { useI18n } from 'vue-i18n'
-import NotificationModal from '@/components/notification/NotificationModal.vue'
 
 const { t, locale } = useI18n()
 const router = useRouter()
@@ -245,5 +259,4 @@ onMounted(async () => {
     loginStatus.value = true
   }
 })
-
 </script>

@@ -36,11 +36,11 @@ import { applicationJsonWithToken } from '@/utils/header';
 import { IApiPosts } from '@/types/api-interface';
 import { IState } from '@/types/interface';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
-import BoardContent from '@/components/board/BoardContent.vue';
 import { AxiosResponse } from 'axios';
-import api from '@/api';
 import { emptyJobPost } from '@/utils/emptyObjects';
 import { useI18n } from 'vue-i18n';
+import BoardContent from '@/components/board/BoardContent.vue';
+import api from '@/api';
 
 const { t } = useI18n();
 

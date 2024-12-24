@@ -52,8 +52,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
 import type { ISearchResult } from '@/types/interface';
+import { onMounted, ref, computed } from 'vue';
 import { applicationJsonWithToken } from '@/utils/header';
 import { IApiSearchResult, IPageable } from '@/types/api-interface';
 import { useUserInfoStore } from '@/stores/userInfo.ts';

@@ -50,8 +50,6 @@
 </template>
 
 <script setup lang="ts">
-import UserProfileImage from '@/components/board/UserProfileImage.vue';
-import router from '@/router';
 import { IApiChatStart } from '@/types/api-interface';
 import { IOtherUserInfo } from '@/types/interface';
 import { applicationJsonWithToken } from '@/utils/header';
@@ -59,6 +57,8 @@ import { AxiosResponse } from 'axios';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUserInfoStore } from '@/stores/userInfo';
+import UserProfileImage from '@/components/board/UserProfileImage.vue';
+import router from '@/router';
 import UserBoard from './UserBoard.vue';
 import api from '@/api';
 

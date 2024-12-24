@@ -3,14 +3,14 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "target": "es2017",
-    "module": "ESNext",
+    "module": "Node16",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "node16", 
     "baseUrl": ".",
-    "types": ["vite/client"],
+    "types": ["vite/client", "swiper"],
     "paths": {
       "vue": ["./node_modules/vue"],
       "@/*": ["./src/*"]

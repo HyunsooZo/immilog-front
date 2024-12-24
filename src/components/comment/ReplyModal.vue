@@ -161,7 +161,6 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import ReplyWrite from '@/components/comment/ReplyWrite.vue';
 import { timeCalculation } from '@/utils/date-time.ts';
 import { useRouter } from 'vue-router';
 import { extractAtWordAndRest } from '@/utils/comment.ts';
@@ -171,6 +170,7 @@ import { useI18n } from 'vue-i18n';
 import { applicationJsonWithToken } from '@/utils/header';
 import { AxiosResponse } from 'axios';
 import { IApiPostDetail } from '@/types/api-interface';
+import ReplyWrite from '@/components/comment/ReplyWrite.vue';
 import api from '@/api';
 
 const { t } = useI18n();
