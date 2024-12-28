@@ -1,42 +1,32 @@
 <template>
 	<div class="content TheFooterButton">
-		<!-- //TheFooterButton -->
 		<TheTopBox :title="t('signUpView.signUp')" :text="t('signUpView.enterInformation')" />
-		<!-- 회원가입 -->
 		<div class="container">
-			<!-- e-mail -->
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">{{ t('signUpView.email') }}</em>
-				<!-- input__wrap -->
 				<div class="input__wrap underline-type email-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="emailRegister" type="text" class="input__element"
-								:placeholder="t('signUpView.emailPlaceHolder')" required />
+							<input v-model="emailRegister" type="text" class="input__element" :placeholder="t('signUpView.emailPlaceHolder')" required />
 						</div>
 					</div>
 				</div>
-				<!-- 에러 메시지 -->
 				<p v-if="submitted && !isValidEmail" class="input__error" aria-live="assertive">
 					{{ t('signUpView.invalidEmailFormat') }}
 				</p>
 			</div>
-			<!-- nickname -->
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">{{ t('signUpView.nickname') }}</em>
-				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userNickName" type="text" class="input__element"
-								:placeholder="t('signUpView.nicknamePlaceHolder')" required />
+							<input v-model="userNickName" type="text" class="input__element" :placeholder="t('signUpView.nicknamePlaceHolder')" required />
 						</div>
 					</div>
 					<button type="button" class="button button--primary" @click="checkNickName">
 						{{ t('signUpView.duplicationCheck') }}
 					</button>
 				</div>
-				<!-- 에러 메시지 -->
 				<p v-if="nickNameCheckDone && !isNickNameValid" class="input__error" aria-live="assertive">
 					{{ t('signUpView.alreadyInUse') }}
 				</p>
@@ -44,29 +34,22 @@
 					{{ t('signUpView.availableNickname') }}
 				</p>
 			</div>
-
-			<!-- password -->
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">{{ t('signUpView.password') }}</em>
-				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userPassword" type="password" class="input__element"
-								:placeholder="t('signUpView.passwordPlaceHolder')" required />
+							<input v-model="userPassword" type="password" class="input__element" :placeholder="t('signUpView.passwordPlaceHolder')" required />
 						</div>
 					</div>
 				</div>
-				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userPasswordConfirm" type="password" class="input__element"
-								:placeholder="t('signUpView.passwordConfirm')" required />
+							<input v-model="userPasswordConfirm" type="password" class="input__element" :placeholder="t('signUpView.passwordConfirm')" required />
 						</div>
 					</div>
 				</div>
-				<!-- 에러 메시지 -->
 				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
 					{{ t('signUpView.passwordNotMatch') }}
 				</p>
@@ -74,11 +57,8 @@
 					{{ t('signUpView.passwordFormatNotMeet') }}
 				</p>
 			</div>
-
-			<!-- country -->
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">{{ t('signUpView.country') }}</em>
-				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
@@ -87,22 +67,18 @@
 					</div>
 				</div>
 			</div>
-			<!-- interest country -->
 			<div class="input-wrap">
 				<em class="input__title">{{ t('signUpView.interestCountry') }}</em>
-				<!-- input__wrap -->
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner" @click="openSelect">
-							<input v-model="interestCountry" type="text" class="input__element"
-								:placeholder="t('signUpView.interestCountryPlaceHolder')" readonly />
+							<input v-model="interestCountry" type="text" class="input__element" :placeholder="t('signUpView.interestCountryPlaceHolder')" readonly />
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<SelectDialog v-if="isCountrySelectClicked" :title="countrySelectTitle" :list="countries" @close="closeSelect"
-			@select:value="selectedValue" />
+		<SelectDialog v-if="isCountrySelectClicked" :title="countrySelectTitle" :list="countries" @close="closeSelect" @select:value="selectedValue" />
 		<TheFooterButton :onClick="register" :condition="fullFilled && !isLoading" />
 	</div>
 	<teleport to="#modal" v-if="alertValue">
@@ -120,7 +96,7 @@ import { useI18n } from 'vue-i18n';
 import { useLocationStore } from '@/stores/location.ts';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { applicationJson } from '@/utils/header';
-import { countries } from '@/utils/selectItems'
+import { countries } from '@/utils/selectItems';
 import { AxiosResponse } from 'axios';
 import TheTopBox from '@/components/search/TheTopBox.vue';
 import TheFooterButton from '@/components/layouts/TheFooterButton.vue';
@@ -152,12 +128,10 @@ const passwordMatch = ref(false);
 const router = useRouter();
 
 const isValidEmail = computed(() => {
-	// 간단한 이메일 형식 체크 정규 표현식
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	return emailRegex.test(emailRegister.value);
 });
 
-//입력값 검증
 const fullFilled = computed(() => {
 	return (
 		emailRegister.value.trim() !== '' &&
@@ -176,6 +150,7 @@ const register = async () => {
 	}
 	if (!isNickNameValid.value) {
 		openAlert(t('signUpView.doDuplicationCheck'));
+		return;
 	}
 	if (overAllValidationCheck()) {
 		try {
@@ -198,94 +173,16 @@ const register = async () => {
 			if (response.status === 201) {
 				onResult();
 			} else {
-				openAlert(response.statusText);
-				returnSubmitValues();
+				openAlert(response.statusText || t('signUpView.unexpectedError'));
 			}
-		} catch (error) {
-			console.log(error);
+		} catch (error: any) {
+			openAlert(error.response?.data?.message || t('signUpView.failedToSignUp'));
+		} finally {
 			returnSubmitValues();
 		}
 	} else {
 		returnSubmitValues();
-
-		return;
 	}
-};
-const options = {
-	enableHighAccuracy: true,
-	timeout: 10000,
-	maximumAge: 0,
-};
-
-const errorCallback = (error: IError) => {
-	console.error(`ERROR(${error.code}): ${error.message}`);
-};
-
-const getCoordinate = async () => {
-	try {
-		if ('geolocation' in navigator) {
-			const permissionResult = await navigator.permissions.query({
-				name: 'geolocation',
-			});
-			if (permissionResult.state === 'granted') {
-				navigator.geolocation.getCurrentPosition(
-					(position: GeolocationPosition) => {
-						getCountry({
-							latitude: position.coords.latitude,
-							longitude: position.coords.longitude
-						});
-						useLocationStore().setLocation({
-							latitude: position.coords.latitude,
-							longitude: position.coords.longitude
-						});
-					},
-					errorCallback,
-					options,
-				);
-			} else if (permissionResult.state === 'prompt') {
-				const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-					navigator.geolocation.getCurrentPosition(resolve, reject, options);
-				});
-				getCountry({
-					latitude: position.coords.latitude,
-					longitude: position.coords.longitude
-				}
-				);
-			} else if (permissionResult.state === 'denied') {
-				console.error('Geolocation permission denied.');
-			}
-		}
-	} catch (error) {
-		console.error('Failed to get location:', error);
-	}
-};
-
-
-const getCountry = async (location: ILocation) => {
-	try {
-		const response: AxiosResponse<IApiLocation> = await api.get(
-			`/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
-			applicationJson,
-		);
-		if (response.data.status === 200) {
-			country.value = response.data.data.country;
-			region.value = response.data.data.region;
-		} else {
-			openAlert(t('signUpView.failedToFetchLocationInfo'));
-		}
-	} catch (error) {
-		console.log(error);
-	}
-};
-
-const overAllValidationCheck = () => {
-	return emailRegister.value &&
-		userNickName.value &&
-		userPassword.value &&
-		userPasswordConfirm.value &&
-		passwordValidation.value &&
-		passwordMatch.value &&
-		isNickNameValid.value
 };
 
 const checkNickName = async () => {
@@ -313,8 +210,7 @@ const closeAlert = () => {
 };
 
 const passwordValidationCheck = () => {
-	const regex =
-		/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
+	const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 	passwordValidation.value = regex.test(userPassword.value);
 };
 
@@ -337,28 +233,25 @@ const onResult = () => {
 	});
 };
 
-
-// modal open/close 시 body 컨트롤
 const isModalOpen = () => {
 	document.body.classList.add('inactive');
 };
+
 const isModalClose = () => {
 	document.body.classList.remove('inactive');
 };
 
-// select 관련 메소드 
 const openSelect = (event: Event) => {
 	event.preventDefault();
 	isCountrySelectClicked.value = true;
 	isModalOpen();
-}
+};
 
 const closeSelect = () => {
 	isCountrySelectClicked.value = false;
 	isModalClose();
 };
 
-// select 관련 메소드 (선택된 값 처리)
 const selectedValue = (value: ISelectItem) => {
 	if (countries.some(c => c.code === value.code)) {
 		interestCountry.value = t(value.name);
@@ -369,6 +262,69 @@ const selectedValue = (value: ISelectItem) => {
 onMounted(() => {
 	getCoordinate();
 });
+
+const getCoordinate = async () => {
+	const options = {
+		enableHighAccuracy: true,
+		timeout: 10000,
+		maximumAge: 0,
+	};
+
+	const errorCallback = (error: IError) => {
+		console.error(`ERROR(${error.code}): ${error.message}`);
+	};
+
+	try {
+		if ('geolocation' in navigator) {
+			const permissionResult = await navigator.permissions.query({
+				name: 'geolocation',
+			});
+			if (permissionResult.state === 'granted') {
+				navigator.geolocation.getCurrentPosition(
+					(position: GeolocationPosition) => {
+						getCountry({
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude,
+						});
+					},
+					errorCallback,
+					options,
+				);
+			}
+		}
+	} catch (error) {
+		console.error('Failed to get location:', error);
+	}
+};
+
+const getCountry = async (location: ILocation) => {
+	try {
+		const response: AxiosResponse<IApiLocation> = await api.get(
+			`/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
+			applicationJson,
+		);
+		if (response.data.status === 200) {
+			country.value = response.data.data.country;
+			region.value = response.data.data.region;
+		} else {
+			openAlert(t('signUpView.failedToFetchLocationInfo'));
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const overAllValidationCheck = () => {
+	return (
+		emailRegister.value &&
+		userNickName.value &&
+		userPassword.value &&
+		userPasswordConfirm.value &&
+		passwordValidation.value &&
+		passwordMatch.value &&
+		isNickNameValid.value
+	);
+};
 
 watch(
 	() => userNickName.value,
