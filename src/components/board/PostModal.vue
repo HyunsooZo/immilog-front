@@ -409,7 +409,7 @@ const imageUpload = async () => {
 			);
 		}
 		const response: AxiosResponse<IApiImage> = await api.post(
-			`/images?imagePath=content`,
+			`/images?imagePath=content&imageType=POST`,
 			formData,
 			multipartFormDataWithToken(userInfo.accessToken)
 		);

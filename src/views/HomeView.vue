@@ -340,6 +340,9 @@ const loadMoreData = async () => {
 // <-- PostModal 오픈 및 닫기
 const onPostModal = ref(false);
 const openPostModal = () => {
+	if(userInfo.userSeq === null) {
+		router.push({ name: 'SignIn' });
+	}
 	onPostModal.value = true;
 	isModalOpen();
 };
