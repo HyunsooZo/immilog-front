@@ -140,7 +140,7 @@ const callCommentApi = async () => {
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		}
 		const response: AxiosResponse<void> = await api.post(
-			`/comments/posts/${props.postSeq}`,
+			`/comments/post/${props.postSeq}/users/${userInfo.userSeq}`,
 			requestForm,
 			applicationJsonWithToken(userInfo.accessToken),
 		);

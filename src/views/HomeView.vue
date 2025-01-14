@@ -19,7 +19,7 @@
 
 		<div class="list-top-wrap">
 			<!-- 서브 메뉴 -->
-			<SubMenuList :subMenus="countries" @select:country="setCountry" />
+			<SubMenuList :subMenus="getContriesWithAll()" @select:country="setCountry" />
 			<!-- 카테고리 및 정렬 옵션 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
@@ -94,6 +94,10 @@ const homeCategory = useHomeCategoryStore();
 const homeSorting = useHomeSortingStore();
 
 const sortingListWithoutLike = sortingList.filter(s => (s.code !== 'LIKE_COUNT' && s.code !== 'CREATED_DATE'));
+
+const getContriesWithAll = () =>{
+    return [{ name: 'country.all', code: 'ALL' }, ...countries];
+};
 
 // modal open/close 시 body 컨트롤
 const isModalOpen = () => {
