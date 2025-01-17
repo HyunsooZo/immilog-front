@@ -62,12 +62,12 @@ export const postBookmark = async (seq: any) => {
   }
 }
 
-export const uploadPostApi = async (param: any) => {
+export const uploadPostApi = async (userSeq: number | null, param: any) => {
   if (!token) {
     return { status: 'unauthenticated' }
   }
   try {
-    const response = await api.post(`/posts`, param)
+    const response = await api.post(`/posts/users/${userSeq}`, param)
     return { status: response.status, data: response.data }
   } catch (error) {
     console.log(error)

@@ -444,7 +444,7 @@ const postUpload = async () => {
 	}
 	try {
 		const form = props.isJobBoard ? createJobBoardForm() : createPostForm();
-		const { status } = props.isJobBoard ? await uploadJobBoardApi(form) : await uploadPostApi(form);
+		const { status } = props.isJobBoard ? await uploadJobBoardApi(form) : await uploadPostApi(userInfo.userSeq,form);
 		if (status === 201 || status === 200) {
 			setTimeout(() => {
 				offLoading();

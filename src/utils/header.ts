@@ -1,6 +1,6 @@
 const applicationJson = {
   headers: {
-    contentType: 'application/json'
+    'Content-Type': 'application/json'
   }
 }
 const applicationJsonWithToken = (accessToken: string | null | undefined) => ({
@@ -12,13 +12,13 @@ const applicationJsonWithToken = (accessToken: string | null | undefined) => ({
 
 const multipartFormData = {
   headers: {
-    contentType: 'multipart/form-data'
+    'Content-Type': 'multipart/form-data'
   }
 }
 
 const multipartFormDataWithToken = (accessToken: string | null | undefined) => ({
   headers: {
-    contentType: 'multipart/form-data',
+    'Content-Type': 'multipart/form-data',
     Authorization: `Bearer ${accessToken ? accessToken.toString() : ''}`
   }
 })
