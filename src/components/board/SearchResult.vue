@@ -147,8 +147,8 @@ const likeApi = async () => {
 	}
 	changeLike();
 	try {
-		const response: AxiosResponse<void> = await api.patch(
-			`/posts/${props.post.seq}/like`,
+		const response: AxiosResponse<void> = await api.post(
+			`/posts/${props.post.seq}/like/users/${userSeq.value}`,
 			{},
 			applicationJsonWithToken(userInfo.accessToken),
 		);

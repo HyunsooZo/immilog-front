@@ -13,7 +13,11 @@ export const likeApi = async (path: string, seq: number) => {
   }
   try {
     // API 요청 및 응답 상태 반환
-    const response = await api.patch(`/${path}/${seq}/like`)
+    if (path === 'job-boards') {
+      const response = await api.post(`/job-boards/${seq}/like/users/${localStorage.getItem('userSeq')}`)
+      return { status: response.status }
+    }
+    const response = await api.post(`/posts/${seq}/like/users/${localStorage.getItem('userSeq')}`)
     return { status: response.status }
   } catch (error) {
     // 에러 발생 시 로그 기록 및 에러 상태 반환

@@ -4,8 +4,12 @@ import { applicationJsonWithToken } from '@/utils/header.ts'
 import api from '@/api/index.ts'
 
 let isInProgress = false
-export const fetchUserInfo = async (accessToken: string | null | undefined) => {
-  if (!accessToken) {
+export const fetchUserInfo = async (
+  accessToken: string | null | undefined, 
+  userSeq: string | null | undefined
+) => {
+  if (!accessToken || !userSeq) {
+    isInProgress = false
     throw new Error('No access token found.')
   }
   if (!isInProgress) {
@@ -14,7 +18,7 @@ export const fetchUserInfo = async (accessToken: string | null | undefined) => {
     const longitude = localStorage.getItem('longitude') || '0'
     try {
       const response: AxiosResponse<IApiUserInfo> = await api.get(
-        `/auth/user?latitude=${latitude}&longitude=${longitude}`,
+        `/auth/user/${userSeq}?latitude=${latitude}&longitude=${longitude}`,
         applicationJsonWithToken(accessToken)
       )
       if (response.status === 200 && response.data.status === 200) {

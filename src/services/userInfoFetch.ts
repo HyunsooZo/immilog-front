@@ -8,7 +8,8 @@ axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL
 export const getUserInfo = async (latitude: number, longitude: number): Promise<any> => {
   // 액세스 토큰 확인
   const accessToken = localStorage.getItem('accessToken')
-  if (!accessToken) {
+  const userSeq = localStorage.getItem('userSeq')
+  if (!accessToken || !userSeq) {
     // 액세스 토큰 미존재 시 에러 반환
     return { status: 400, error: 'No access token' }
   }
@@ -17,7 +18,7 @@ export const getUserInfo = async (latitude: number, longitude: number): Promise<
     // 요청 구성
     const config = {
       method: 'get',
-      url: `/auth/user?latitude=${latitude}&longitude=${longitude}`,
+      url: `/auth/user${userSeq}?latitude=${latitude}&longitude=${longitude}`,
       headers: {
         contentType: 'application/json',
         Authorization: `Bearer ${accessToken}`

@@ -379,7 +379,7 @@ const setToken = (data: IUserInfo) => {
 }
 
 const fetchUserInfo = async () => {
-	if (localStorage.getItem('accessToken')) {
+	if (localStorage.getItem('accessToken') && localStorage.getItem('userSeq')) {
 		await getCoordinate()
 		const lat = localStorage.getItem('latitude')
 		const lon = localStorage.getItem('longitude')
@@ -405,14 +405,15 @@ const isLoading = ref(false);
 onMounted(async () => {
 	updateMenuBar();
 	handleScrollEvent();
-	if (userInfo.userSeq === null) {
+	const userSeq = localStorage.getItem('userSeq');
+	if (!userInfo.userSeq || !userSeq) {
 		fetchUserInfo();
 		isLoading.value = true;
 		setTimeout(() => {
 			fetchBoardList('CREATED_DATE', 0);
 			setTimeout(() => {
 				isLoading.value = false;
-			}, 1000);
+			}, 500);
 		}, 4000);
 	} else {
 		checkIfUserLocationMatch();

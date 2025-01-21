@@ -202,6 +202,7 @@ const offLoading = () => {
 const setToken = (data: IUserInfo) => {
 	localStorage.setItem('accessToken', data.accessToken ? data.accessToken : '')
 	localStorage.setItem('refreshToken', data.refreshToken ? data.refreshToken : '')
+	localStorage.setItem('userSeq', data.userSeq ? data.userSeq.toString() : '')
 }
 
 const loginByGoogle = async () => {

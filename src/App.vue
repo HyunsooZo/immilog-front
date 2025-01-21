@@ -23,7 +23,13 @@ const hideFooter = computed(() => route.meta.hideFooter);
 const userInfo = useUserInfoStore();
 
 const init = async () => {
-	const response: AxiosResponse<IApiUserInfo> | any = await fetchUserInfo(localStorage.getItem('accessToken'));
+	if(!localStorage.getItem('accessToken') || !localStorage.getItem('userSeq')) {
+		return false;
+	}
+	const response: AxiosResponse<IApiUserInfo> | any = await fetchUserInfo(
+		localStorage.getItem('accessToken'),
+		localStorage.getItem('userSeq')
+	);
 	if (response.data.status === 200 && response.status === 200) {
 		localStorage.setItem('accessToken', response.data.data.accessToken as string);
 		localStorage.setItem('refreshToken', response.data.data.refreshToken as string);
