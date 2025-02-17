@@ -18,7 +18,7 @@ export const getUserInfo = async (latitude: number, longitude: number): Promise<
     // 요청 구성
     const config = {
       method: 'get',
-      url: `/auth/user${userSeq}?latitude=${latitude}&longitude=${longitude}`,
+      url: `/auth/user/${userSeq}?latitude=${latitude}&longitude=${longitude}`,
       headers: {
         contentType: 'application/json',
         Authorization: `Bearer ${accessToken}`

@@ -1,125 +1,148 @@
 <template>
-  <div class="item">
-    <div class="info__wrap">
-      <button type="button" class="item__image" :class="{
-        'image--default': isJobBoard ? !jobPost.companyLogo : !post.userProfileUrl,
-        'image--default _company': isJobBoard && !jobPost.companyLogo
-      }" @click="onUserProfileDetail">
-        <img v-if="isJobBoard ? jobPost.companyLogo : post.userProfileUrl"
-          :src="isJobBoard ? jobPost.companyLogo : post.userProfileUrl" alt=""
-          @click="isJobBoard ? null : onUserProfileDetail" />
-      </button>
-      <div class="item__fnc" @click="onUserProfileDetail">
-        <div class="list__item">
-          <button type="button" class="list__item_button ctg">
-            <em v-if="!isJobBoard">{{ t('countries.' + post.country) }}</em>
-            <strong v-if="!isJobBoard">{{ t('postCategories.' + post.category) }}</strong>
-            <strong class="em" v-if="isJobBoard">{{ jobPost.company }}</strong>
-            <em v-if="isJobBoard">{{ t('countries.' + jobPost.country) }}</em>
-            <em v-if="isJobBoard">{{ jobPost.region }}</em>
-            <span v-if="!isJobBoard && post.isPublic === 'N'" class="list__private">
-              <i class="blind">내국가에만 공개 된 글</i>
-            </span>
-          </button>
+  <div class="board-detail-view" v-bind="$attrs">
+    <div class="item">
+      <div class="info__wrap">
+        <button
+          type="button"
+          class="item__image"
+          :class="{
+            'image--default': isJobBoard ? !jobPost.companyLogo : !post.userProfileUrl,
+            'image--default _company': isJobBoard && !jobPost.companyLogo
+          }"
+          @click="onUserProfileDetail"
+        >
+          <img
+            v-if="isJobBoard ? jobPost.companyLogo : post.userProfileUrl"
+            :src="isJobBoard ? jobPost.companyLogo : post.userProfileUrl"
+            alt=""
+            @click="isJobBoard ? null : onUserProfileDetail"
+          />
+        </button>
+        <div class="item__fnc" @click="onUserProfileDetail">
+          <div class="list__item">
+            <button type="button" class="list__item_button ctg">
+              <em v-if="!isJobBoard">{{ t('countries.' + post.country) }}</em>
+              <strong v-if="!isJobBoard">{{ t('postCategories.' + post.category) }}</strong>
+              <strong class="em" v-if="isJobBoard">{{ jobPost.company }}</strong>
+              <em v-if="isJobBoard">{{ t('countries.' + jobPost.country) }}</em>
+              <em v-if="isJobBoard">{{ jobPost.region }}</em>
+              <span v-if="!isJobBoard && post.isPublic === 'N'" class="list__private">
+                <i class="blind">내국가에만 공개 된 글</i>
+              </span>
+            </button>
+          </div>
+          <div class="list__item" v-if="!isJobBoard">
+            <button type="button" class="list__item_button user">
+              <em>{{ post.region }}</em>
+              <strong>{{ post.userNickName }}</strong>
+            </button>
+          </div>
         </div>
-        <div class="list__item" v-if="!isJobBoard">
-          <button type="button" class="list__item_button user">
-            <em>{{ post.region }}</em>
-            <strong>{{ post.userNickName }}</strong>
-          </button>
+        <div class="item__fnc" v-if="detail && post.userSeq == userInfo.userSeq" @click="onMoreModal">
+          <div class="list__item">
+            <button type="button" class="list__item_button more">
+              <i class="blind">더보기</i>
+            </button>
+          </div>
         </div>
       </div>
-      <div class="item__fnc" v-if="detail && post.userSeq == userInfo.userSeq" @click="onMoreModal">
-        <div class=" list__item">
-          <button type="button" class="list__item_button more">
-            <i class="blind">더보기</i>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="text__wrap">
-      <component :is="detail ? 'div' : 'button'" :class="detail ? 'list__item' : 'list__item_button'"
-        @click="onBoardDetail">
-        <div class="text__item">
-          <p class="title">{{ isJobBoard ? jobPost.title : post.title }}</p>
-          <p class="text">{{ isJobBoard ? jobPost.content : post.content }}</p>
-          <div class="tag__wrap" v-if="isJobBoard">
-            <div class="tag__inner">
-              <div class="tag__item">
-                <span class="item--tag">
-                  <em class="em">상시채용</em>
-                </span>
-                <span class="item--tag">
-                  <em class="em">{{ calculateDeadLine(jobPost.deadline) }}</em>
-                </span>
-                <span class="item--tag">
-                  <em>경력(0년 이상)</em>
-                </span>
-                <span class="item--tag">
-                  <em>{{ jobPost.experience }}</em>
-                </span>
+      <div class="text__wrap">
+        <component
+          :is="detail ? 'div' : 'button'"
+          :class="detail ? 'list__item' : 'list__item_button'"
+          @click="onBoardDetail"
+        >
+          <div class="text__item">
+            <p class="title">{{ isJobBoard ? jobPost.title : post.title }}</p>
+            <p class="text">{{ isJobBoard ? jobPost.content : post.content }}</p>
+            <div class="tag__wrap" v-if="isJobBoard">
+              <div class="tag__inner">
+                <div class="tag__item">
+                  <span class="item--tag">
+                    <em class="em">상시채용</em>
+                  </span>
+                  <span class="item--tag">
+                    <em class="em">{{ calculateDeadLine(jobPost.deadline) }}</em>
+                  </span>
+                  <span class="item--tag">
+                    <em>경력(0년 이상)</em>
+                  </span>
+                  <span class="item--tag">
+                    <em>{{ jobPost.experience }}</em>
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="tag__wrap" :class="detail ? '_detail' : ''" v-if="(isJobBoard ? jobPost : post).tags.length > 0">
-            <div class="tag__inner">
-              <div class="tag__item">
-                <component v-for="( tag, index ) in isJobBoard ? jobPost.tags : post.tags " :key="index"
-                  class="item--hash" :is="detail ? 'button' : 'span'" @click="">
-                  <em>{{ tag }}</em>
-                </component>
+            <div class="tag__wrap" :class="detail ? '_detail' : ''" v-if="(isJobBoard ? jobPost : post).tags.length > 0">
+              <div class="tag__inner">
+                <div class="tag__item">
+                  <component
+                    v-for="(tag, index) in isJobBoard ? jobPost.tags : post.tags"
+                    :key="index"
+                    class="item--hash"
+                    :is="detail ? 'button' : 'span'"
+                    @click=""
+                  >
+                    <em>{{ tag }}</em>
+                  </component>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="attachments__wrap"
-            v-if="detail && (isJobBoard ? jobPost.attachments.length > 0 : post.attachments.length > 0)">
-            <div class="attachments__item">
-              <div class="item__display">
-                <div v-for="(attachment, index) in post.attachments" :key="index">
-                  <img :src="attachment" alt="preview">
+            <div class="attachments__wrap" v-if="detail && (isJobBoard ? jobPost.attachments.length > 0 : post.attachments.length > 0)">
+              <div class="attachments__item">
+                <div class="item__display">
+                  <div v-for="(attachment, index) in post.attachments" :key="index">
+                    <img :src="attachment" alt="preview" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="thumb" v-if="!isJobBoard && !detail && post.attachments.length > 0">
-          <img :src="thumbnail" alt="" />
-        </div>
-      </component>
-    </div>
-    <div class="util__wrap">
-      <div class="item__fnc">
-        <p class="list__item read">
-          <i class="blind">조회수</i>
-          <span class="item__count">{{ isJobBoard ? jobPost.viewCount : post.viewCount }}</span>
-        </p>
-        <button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
-          <i class="blind">좋아요</i>
-          <span class="item__count"> {{ isJobBoard ? jobPost.likeCount : likes }}</span>
-        </button>
-        <p class="list__item cmt" v-if="!isJobBoard">
-          <i class="blind">댓글</i>
-          <span class="item__count">{{ post.commentCount }}</span>
-        </p>
+          <div class="thumb" v-if="!isJobBoard && !detail && post.attachments.length > 0">
+            <img :src="thumbnail" alt="" />
+          </div>
+        </component>
       </div>
-      <div class="item__fnc">
-        <p class="list__item past">
-          <i class="blind">작성시간</i>
-          <span class="item__count">
-            {{ timeCalculation(isJobBoard ? jobPost.createdAt.toString() : post.createdAt).time }}
-            {{ t(timeCalculation(isJobBoard ? jobPost.createdAt.toString() : post.createdAt).text) }}
-          </span>
-        </p>
-        <button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="postBookmarkApi">
-          <i class="blind">북마크</i>
-        </button>
+      <div class="util__wrap">
+        <div class="item__fnc">
+          <p class="list__item read">
+            <i class="blind">조회수</i>
+            <!-- 조회수는 post 객체의 viewCount 사용 -->
+            <span class="item__count">{{ post.viewCount }}</span>
+          </p>
+          <button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
+            <i class="blind">좋아요</i>
+            <span class="item__count">{{ isJobBoard ? jobPost.likeCount : likes }}</span>
+          </button>
+          <p class="list__item cmt" v-if="!isJobBoard">
+            <i class="blind">댓글</i>
+            <span class="item__count">{{ post.commentCount }}</span>
+          </p>
+        </div>
+        <div class="item__fnc">
+          <p class="list__item past">
+            <i class="blind">작성시간</i>
+            <span class="item__count">
+              {{ timeCalculation(isJobBoard ? jobPost.createdAt.toString() : post.createdAt).time }}
+              {{ t(timeCalculation(isJobBoard ? jobPost.createdAt.toString() : post.createdAt).text) }}
+            </span>
+          </p>
+          <button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="postBookmarkApi">
+            <i class="blind">북마크</i>
+          </button>
+        </div>
       </div>
     </div>
+    <AdContent v-if="adValue" />
+    <UserProfileDetail :userProfile="postAuthorInfo" @close="offUserProfileDetail" v-if="userProfileDetailValue" />
+    <MoreModalForPost
+      v-if="moreModalValue"
+      :posetSeq="post.seq"
+      @close="closeMoreModal"
+      @edit="editPost"
+      @delete="deletePost"
+    />
   </div>
-  <AdContent v-if="adValue" />
-  <UserProfileDetail :userProfile="postAuthorInfo" @close="offUserProfileDetail" v-if="userProfileDetailValue" />
-  <MoreModalForPost v-if="moreModalValue" :posetSeq="post.seq" @close="closeMoreModal" @edit="editPost"
-    @delete="deletePost" />
 </template>
 
 <script setup lang="ts">
@@ -127,7 +150,7 @@ import { useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { timeCalculation } from '@/utils/date-time.ts';
-import { likeApi, viewApi, postBookmark } from '@/services/post.ts';
+import { likeApi, postBookmark } from '@/services/post.ts';
 import { useI18n } from 'vue-i18n';
 import { IJobPost, IOtherUserInfo, type IComment, type IPost } from '@/types/interface';
 import { AxiosResponse } from 'axios';
@@ -145,7 +168,6 @@ const isModalOpen = () => document.body.classList.add('inactive');
 const isModalClose = () => document.body.classList.remove('inactive');
 
 const userProfileDetailValue = ref(false);
-
 const onUserProfileDetail = () => {
   if (!postAuthorInfo.value.userSeq) setPostAuthorInfo();
   userProfileDetailValue.value = true;
@@ -179,6 +201,10 @@ const props = defineProps({
     type: Object as () => IJobPost,
     required: true,
   },
+  postId: {
+    type: String,
+    default: ''
+  }
 });
 
 const jobPostValue = ref(props.isJobBoard);
@@ -191,9 +217,22 @@ const thumbnail = ref(!props.isJobBoard && props.post.attachments.length > 0 ? p
 const isLiked = computed(() => likeUsers.value.includes(userSeq.value ? userSeq.value : 0));
 const isBookmarked = computed(() => bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0));
 
-const onBoardDetail = () => {
-  viewApi(jobPostValue.value ? props.jobPost.seq : props.post.seq, jobPostValue.value);
+const onBoardDetail = async () => {
+  await viewApi(jobPostValue.value ? props.jobPost.seq : props.post.seq, jobPostValue.value);
   router.push(jobPostValue.value ? `/job-board/${props.jobPost.seq}` : `/board/${props.post.seq}`);
+};
+
+const viewApi = async (seq: any, jobPostFlag: boolean) => {
+  try {
+    const response = await api.patch(jobPostFlag ? `/job-boards/${seq}/view` : `/posts/${seq}/view`);
+    if (response.status === 204) {
+      // 업데이트된 조회수를 post 객체에 반영 (이전 값 유지 후 증가)
+      props.post.viewCount = (props.post.viewCount || 0) + 1;
+    }
+  } catch (error) {
+    console.log(error);
+    return { status: 'error', error };
+  }
 };
 
 const likePost = () => {
@@ -205,7 +244,6 @@ const likePost = () => {
   );
 };
 
-// 좋아요 아이콘 상태 변경
 const changeLike = () => {
   if (isLiked.value) {
     const index = likeUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
@@ -217,7 +255,6 @@ const changeLike = () => {
   }
 };
 
-// 북마크 API
 const postBookmarkApi = async () => {
   checkIfTokenExists();
   changeBookmark();
@@ -228,7 +265,6 @@ const postBookmarkApi = async () => {
   }
 };
 
-// 북마크 변경
 const changeBookmark = () => {
   if (isBookmarked.value) {
     const index = bookmarkUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
@@ -238,7 +274,6 @@ const changeBookmark = () => {
   }
 };
 
-// 댓글 수 계산
 const allCommentCounts = (post: IPost) => {
   let result = post.comments.length;
   post.comments.forEach((comment: IComment) => {
@@ -247,13 +282,10 @@ const allCommentCounts = (post: IPost) => {
   return result;
 };
 
-// 토큰 존재여부 체크
 const checkIfTokenExists = () => {
   if (!userInfo.accessToken) router.push('/sign-in');
 };
 
-
-// <-- 게시물 작성자 정보
 const postAuthorInfo = ref<IOtherUserInfo>({
   userSeq: props.post.userSeq,
   userProfileUrl: props.post.userProfileUrl,
@@ -261,9 +293,7 @@ const postAuthorInfo = ref<IOtherUserInfo>({
   country: props.post.country,
   region: props.post.region,
 });
-// -->
 
-// <-- 게시물 작성자 정보 세팅
 const setPostAuthorInfo = () => {
   postAuthorInfo.value = {
     userSeq: props.post.userSeq,
@@ -273,9 +303,7 @@ const setPostAuthorInfo = () => {
     region: props.post.region,
   };
 };
-// -->
 
-// <-- 구인구직 마감일
 const calculateDeadLine = (deadline: string | number | Date) => {
   const date = new Date(deadline);
   const now = new Date();
@@ -284,22 +312,16 @@ const calculateDeadLine = (deadline: string | number | Date) => {
   const days = Math.floor(diff / day);
   return 'D-' + days;
 };
-// -->        
 
-// <-- 더보기 모달 관련
 const moreModalValue = ref(false);
-
 const onMoreModal = () => {
   moreModalValue.value = true;
 };
-
 const closeMoreModal = () => {
   moreModalValue.value = false;
 };
-// -->
 
-// <-- 게시물 수정/삭제 관련
-const editPost = () => { }
+const editPost = () => {};
 
 const deletePost = async () => {
   if (!props.isJobBoard) {
@@ -308,12 +330,12 @@ const deletePost = async () => {
         `/posts/${props.post.seq}/delete`,
         {},
         applicationJsonWithToken(userInfo.accessToken)
-      )
+      );
       if (response.status === 204) {
-        router.push('/')
+        router.push('/');
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   } else {
     try {
@@ -321,14 +343,13 @@ const deletePost = async () => {
         `/job-boards/${props.jobPost.seq}/delete`,
         {},
         applicationJsonWithToken(userInfo.accessToken)
-      )
+      );
       if (response.status === 204) {
-        router.push('/')
+        router.push('/');
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
-}
-// -->
+};
 </script>

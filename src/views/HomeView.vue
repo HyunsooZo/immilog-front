@@ -405,16 +405,15 @@ const isLoading = ref(false);
 onMounted(async () => {
 	updateMenuBar();
 	handleScrollEvent();
-	const userSeq = localStorage.getItem('userSeq');
-	if (!userInfo.userSeq || !userSeq) {
+	if (!userInfo.userSeq) {
 		fetchUserInfo();
 		isLoading.value = true;
 		setTimeout(() => {
 			fetchBoardList('CREATED_DATE', 0);
 			setTimeout(() => {
 				isLoading.value = false;
-			}, 500);
-		}, 4000);
+			}, 1000);
+		}, 2000);
 	} else {
 		checkIfUserLocationMatch();
 		fetchBoardList('CREATED_DATE', 0);

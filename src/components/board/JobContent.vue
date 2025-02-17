@@ -86,7 +86,7 @@ import { useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
 import { useUserInfoStore } from '@/stores/userInfo';
 import { timeCalculation } from '@/utils/date-time.ts';
-import { likeApi, viewApi, postBookmark } from '@/services/post.ts';
+import { likeApi, postBookmark } from '@/services/post.ts';
 import { useI18n } from 'vue-i18n';
 import { IJobPost } from '@/types/interface';
 import AdContent from './AdContent.vue';
@@ -151,10 +151,20 @@ const isBookmarked = computed(() => {
 });
 
 // 게시글 상세 페이지로 이동
-const onBoardDetail = () => {
-	viewApi(props.jobPost.seq, true);
+const onBoardDetail = async () => {
+	await viewApi(props.jobPost.seq, true);
 	router.push(`/board/${props.jobPost.seq}`);
 };
+
+const viewApi = async (seq: any, jobPostFlag: boolean) => {
+  try {
+    const response = await api.patch(jobPostFlag ? `/job-boards/${seq}/view` : `/posts/${seq}/view`)
+    return { status: response.status }
+  } catch (error) {
+    console.log(error)
+    return { status: 'error', error }
+  }
+}
 
 // 좋아요 API 호출
 const likePost = () => {
