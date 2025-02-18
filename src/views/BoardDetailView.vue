@@ -6,12 +6,20 @@
       <div class="list__title">
         <span class="title">{{ t('postCategories.' + post.category) }}</span>
       </div>
-      <BoardContent :post="post" :detail="true" :jobPost="emptyJobPost" :isJobBoard="false">
-      </BoardContent>
-      <!-- //.item -->
+      <BoardContent
+        :post="post"
+        :detail="true"
+        :jobPost="emptyJobPost"
+        :isJobBoard="false"
+      />
     </div>
-    <ReplyModal v-if="replyDetailModal" :post="post" :commentIndex="Number(replyIndex)" :postIndex="Number(postSeq)"
-      @close="closeReplyModal" />
+    <ReplyModal
+      v-if="replyDetailModal"
+      :post="post"
+      :commentIndex="Number(replyIndex)"
+      :postIndex="Number(postSeq)"
+      @close="closeReplyModal"
+    />
     <!-- 댓글 기능버튼 -->
     <div class="fnc-wrap">
       <div class="button__list">
@@ -37,19 +45,16 @@
       <NoContent :item="'댓글'" />
     </div>
     <div class="list-wrap reply" v-for="(comment, index) in post.comments" :key="comment.seq">
-      <!-- <div class="item item--blind"> -->
-      <!-- 댓글 신고로 숨김처리 시 -->
-      <!-- <div class="blind__text">
-					<p class="text__item">신고에 의해 숨김처리 되었습니다.</p>
-				</div> -->
-      <!-- </div> -->
       <div class="item">
         <div class="info__wrap">
           <div class="item__fnc">
             <div class="list__item">
-              <button type="button" class="list__item_button user"
-                :class="{ 'user--author': isAuthor(comment.user.seq) }" @click="onUserProfileDetail">
-                <!-- //원글작성자 댓글 .user--author -->
+              <button
+                type="button"
+                class="list__item_button user"
+                :class="{ 'user--author': isAuthor(comment.user.seq) }"
+                @click="onUserProfileDetail"
+              >
                 <em>{{ comment.user.country }}</em>
                 <strong>{{ comment.user.nickName }}</strong>
               </button>
@@ -70,10 +75,12 @@
         </div>
         <div class="util__wrap">
           <div class="item__fnc">
-            <button type="button" class="list__item_button like"
+            <button
+              type="button"
+              class="list__item_button like"
               :class="{ active: comment.likeUsers.includes(userSeq ? userSeq : 0) }"
-              @click="likeComment(comment.seq, index)">
-              <!-- //활성화 .active -->
+              @click="likeComment(comment.seq, index)"
+            >
               <i class="blind">좋아요</i>
               <span class="item__count">{{ comment.upVotes }}</span>
             </button>
@@ -82,8 +89,9 @@
             </button>
             <p class="list__item past">
               <i class="blind">작성시간</i>
-              <span class="item__count">{{ timeCalculation(comment.createdAt).time
-                }}{{ t(timeCalculation(comment.createdAt).text) }}</span>
+              <span class="item__count">
+                {{ timeCalculation(comment.createdAt).time }}{{ t(timeCalculation(comment.createdAt).text) }}
+              </span>
             </p>
           </div>
         </div>
@@ -94,9 +102,12 @@
           <div class="info__wrap">
             <div class="item__fnc">
               <div class="list__item">
-                <button type="button" class="list__item_button user"
-                  :class="{ 'user--author': isAuthor(reply.user.seq) }" @click="onUserProfileDetail">
-                  <!-- //원글작성자 댓글 .user--author -->
+                <button
+                  type="button"
+                  class="list__item_button user"
+                  :class="{ 'user--author': isAuthor(reply.user.seq) }"
+                  @click="onUserProfileDetail"
+                >
                   <em>{{ reply.user.country }}</em>
                   <strong>{{ reply.user.nickName }}</strong>
                 </button>
@@ -105,16 +116,16 @@
             <div class="item__fnc">
               <button type="button" class="list__item_button more">
                 <i class="blind">더보기</i>
-              </button><!-- //공유, 신고, 본인글인 경우 추가 :수정, 삭제 -->
+              </button>
             </div>
           </div>
           <div class="text__wrap">
             <div class="list__item">
               <div class="text__item">
                 <p class="text">
-                  <span class="comment__user" v-if="extractAtWordAndRest(reply.content).atWord">{{
-                    extractAtWordAndRest(reply.content).atWord
-                    }}</span>
+                  <span class="comment__user" v-if="extractAtWordAndRest(reply.content).atWord">
+                    {{ extractAtWordAndRest(reply.content).atWord }}
+                  </span>
                   {{ extractAtWordAndRest(reply.content).restText }}
                 </p>
               </div>
@@ -122,27 +133,29 @@
           </div>
           <div class="util__wrap">
             <div class="item__fnc">
-              <button type="button" class="list__item_button like" :class="{
-                active: post.comments[index].replies[replyIndex].likeUsers.includes(
-                  userSeq ? userSeq : 0
-                )
-              }" @click="likeReply(index, replyIndex)">
-                <!-- //활성화 .active -->
+              <button
+                type="button"
+                class="list__item_button like"
+                :class="{ active: post.comments[index].replies[replyIndex].likeUsers.includes(userSeq ? userSeq : 0) }"
+                @click="likeReply(index, replyIndex)"
+              >
                 <i class="blind">좋아요</i>
                 <span class="item__count">{{ reply.upVotes }}</span>
               </button>
-              <button type="button" class="list__item cmt" @click="openReplyWrite(index, reply.user.nickName)"></button>
+              <button
+                type="button"
+                class="list__item cmt"
+                @click="openReplyWrite(index, reply.user.nickName)"
+              ></button>
               <p class="list__item past">
                 <i class="blind">작성시간</i>
                 <span class="item__count">
-                  {{ timeCalculation(reply.createdAt).time }}
-                  {{ t(timeCalculation(reply.createdAt).text) }}
+                  {{ timeCalculation(reply.createdAt).time }}{{ t(timeCalculation(reply.createdAt).text) }}
                 </span>
               </p>
             </div>
           </div>
         </div>
-        <!-- //.item -->
       </div>
       <!-- n개 이상 대댓글 더보기 -->
       <div class="item item__more" v-if="comment.replyCount > 3">
@@ -152,117 +165,138 @@
       </div>
     </div>
   </div>
-  <ReplyWrite v-if="isCommentWriteClicked" :postSeq="post.seq" :isPostComment="true" @close="closeCommentWrite"
-    @select:value="selectedValue" />
-  <ReplyWrite v-if="isReplyWriteClicked" :commentSeq="post.comments[replyIndex].seq" :isPostComment="false"
-    :taggedUser="taggedUser" @close="closeReplyWrite" @select:value="selectedValue" />
+  <ReplyWrite
+    v-if="isCommentWriteClicked"
+    :postSeq="post.seq"
+    :isPostComment="true"
+    @close="closeCommentWrite"
+    @select:value="selectedValue"
+  />
+  <ReplyWrite
+    v-if="isReplyWriteClicked"
+    :commentSeq="post.comments[Number(replyIndex)].seq"
+    :isPostComment="false"
+    :taggedUser="taggedUser"
+    @close="closeReplyWrite"
+    @select:value="selectedValue"
+  />
   <LoadingModal v-if="isLoading" />
-  <!-- <MoreModalForPost v-if="onMorePostModal" :posetSeq="post.seq" @close="closeMoreModal" @edit="editPost"
-    @delete="deletePost" /> -->
-  <UserProfileDetail :userProfile="postAuthorInfo" @close="offUserProfileDetail" v-if="isUserProfileDetailOn" />
+  <UserProfileDetail
+    :userProfile="postAuthorInfo"
+    @close="offUserProfileDetail"
+    v-if="isUserProfileDetailOn"
+  />
 </template>
 
 <script setup lang="ts">
-import type { IPost, IComment, IOtherUserInfo } from '@/types/interface'
-import { AxiosResponse } from 'axios'
-import { emptyJobPost } from '@/utils/emptyObjects'
-import { extractAtWordAndRest } from '@/utils/comment.ts'
-import { likeApi, postBookmark } from '@/services/post.ts'
-import { writeReply, lastReply } from '@/utils/icons.ts'
-import { timeCalculation } from '@/utils/date-time.ts'
-import { applicationJson, applicationJsonWithToken } from '@/utils/header'
-import { useUserInfoStore } from '@/stores/userInfo.ts'
-import { useI18n } from 'vue-i18n'
-import { computed, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import api from '@/api'
-import BoardContent from '@/components/board/BoardContent.vue'
-import NoContent from '@/components/board/NoContent.vue'
-import UserProfileDetail from '@/components/board/UserProfileDetail.vue'
-import ReplyWrite from '@/components/comment/ReplyWrite.vue'
-import ReplyModal from '@/components/comment/ReplyModal.vue'
-import LoadingModal from '@/components/loading/LoadingModal.vue'
-import MoreModalForPost from '@/components/modal/MoreModalForPost.vue'
-import TheHeader from '@/components/layouts/TheHeader.vue'
+import { defineProps } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { AxiosResponse } from 'axios';
+import type { IPost, IComment, IOtherUserInfo } from '@/types/interface';
+import api from '@/api';
+import { emptyJobPost } from '@/utils/emptyObjects';
+import { extractAtWordAndRest } from '@/utils/comment.ts';
+import { likeApi, postBookmark } from '@/services/post.ts';
+import { writeReply, lastReply } from '@/utils/icons.ts';
+import { timeCalculation } from '@/utils/date-time.ts';
+import { applicationJson, applicationJsonWithToken } from '@/utils/header';
+import { useUserInfoStore } from '@/stores/userInfo.ts';
+import BoardContent from '@/components/board/BoardContent.vue';
+import NoContent from '@/components/board/NoContent.vue';
+import UserProfileDetail from '@/components/board/UserProfileDetail.vue';
+import ReplyWrite from '@/components/comment/ReplyWrite.vue';
+import ReplyModal from '@/components/comment/ReplyModal.vue';
+import LoadingModal from '@/components/loading/LoadingModal.vue';
+import MoreModalForPost from '@/components/modal/MoreModalForPost.vue';
+import TheHeader from '@/components/layouts/TheHeader.vue';
 
-const { t } = useI18n()
+const props = defineProps<{
+  postId: string | number;
+}>();
 
-// modal open/close 시 body 컨트롤
+const { t } = useI18n();
+const router = useRouter();
+const route = useRoute();
+const userInfo = useUserInfoStore();
+
+// Modal control functions
 const isModalOpen = () => {
-  document.body.classList.add('inactive')
-}
+  document.body.classList.add('inactive');
+};
 const isModalClose = () => {
-  document.body.classList.remove('inactive')
-}
+  document.body.classList.remove('inactive');
+};
 
-// 프로필 보기
-const isUserProfileDetailOn = ref(false)
+// User profile detail modal
+const isUserProfileDetailOn = ref(false);
 const onUserProfileDetail = () => {
   if (post.value.userSeq === userInfo.userSeq) {
-    router.push('/my-page')
+    router.push('/my-page');
   } else {
-    isUserProfileDetailOn.value = true
-    isModalOpen()
+    isUserProfileDetailOn.value = true;
+    isModalOpen();
   }
-}
+};
 const offUserProfileDetail = () => {
-  isUserProfileDetailOn.value = false
-  isModalClose()
-}
+  isUserProfileDetailOn.value = false;
+  isModalClose();
+};
 
-const isAuthor = (userSeq: number) => {
-  return userSeq === post.value.userSeq
-}
-const router = useRouter()
+// Check if user is the author
+const isAuthor = (userSeqParam: number) => {
+  return userSeqParam === post.value.userSeq;
+};
 
-const route = useRoute()
-const isLoading = ref(false)
-
-const replyDetailModal = ref(false)
-
+// Loading state and reply modal control
+const isLoading = ref(false);
+const replyDetailModal = ref(false);
+const replyIndex = ref<number | string>(0);
 const openReplyModal = (index: number) => {
-  replyIndex.value = index
-  replyDetailModal.value = true
-  isModalOpen()
-}
-
+  replyIndex.value = index;
+  replyDetailModal.value = true;
+  isModalOpen();
+};
 const closeReplyModal = () => {
-  replyDetailModal.value = false
-  isModalClose()
-}
+  replyDetailModal.value = false;
+  isModalClose();
+};
 
-// 댓글쓰기
-const isReplyWriteClicked = ref(false)
-const isCommentWriteClicked = ref(false)
-const replyIndex = ref()
-const taggedUser = ref('')
-const openReplyWrite = (index: any, nickName: string | null) => {
-  replyIndex.value = index
-  isReplyWriteClicked.value = true
-  taggedUser.value = nickName ? nickName : ''
-  isModalOpen()
-}
+// Comment and reply write modals
+const isReplyWriteClicked = ref(false);
+const isCommentWriteClicked = ref(false);
+const taggedUser = ref('');
+const openReplyWrite = (index: number, nickName: string | null) => {
+  replyIndex.value = index;
+  isReplyWriteClicked.value = true;
+  taggedUser.value = nickName ? nickName : '';
+  isModalOpen();
+};
 const closeReplyWrite = () => {
-  isReplyWriteClicked.value = false
-  taggedUser.value = ''
-  isModalClose()
+  isReplyWriteClicked.value = false;
+  taggedUser.value = '';
+  isModalClose();
   setTimeout(() => {
-    detailBoard()
-  }, 1500)
-}
+    detailBoard();
+  }, 1500);
+};
 const openCommentWrite = () => {
-  isCommentWriteClicked.value = true
-  isModalOpen()
-}
+  isCommentWriteClicked.value = true;
+  isModalOpen();
+};
 const closeCommentWrite = () => {
-  isCommentWriteClicked.value = false
-  isModalClose()
+  isCommentWriteClicked.value = false;
+  isModalClose();
   setTimeout(() => {
-    detailBoard()
-  }, 500)
-}
-const postSeq = route.params.postId
+    detailBoard();
+  }, 500);
+};
 
+// Post sequence from route parameter (or props)
+const postSeq = route.params.postId || props.postId;
+
+// Post data
 const post = ref<IPost>({
   seq: 0,
   title: '',
@@ -284,163 +318,167 @@ const post = ref<IPost>({
   status: '',
   category: '',
   createdAt: ''
-})
+});
 
-const userInfo = useUserInfoStore()
-const userSeq = ref(userInfo.userSeq)
-const likeUsers = ref(post.value.likeUsers)
-const likeCount = ref(post.value.likeCount)
-const bookmarkUsers = ref(post.value.bookmarkUsers)
+// User and like/bookmark related states
+const userSeq = ref<number>(userInfo.userSeq || 0);
+const likeUsers = ref(post.value.likeUsers);
+const likeCount = ref(post.value.likeCount);
+const bookmarkUsers = ref(post.value.bookmarkUsers);
 const isBookmarked = computed(() => {
-  return bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0)
-})
+  return bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0);
+});
 
+// Like post function
 const likePost = async () => {
-  const updatedPost = JSON.parse(JSON.stringify(post.value))
-  if (updatedPost.likeUsers.includes(userSeq.value)) {
-    updatedPost.likeCount--
-    const userIndex = updatedPost.likeUsers.indexOf(userSeq.value)
-    updatedPost.likeUsers.splice(userIndex, 1)
+  const currentUserSeq = userSeq.value;
+  if (post.value.likeUsers.includes(currentUserSeq)) {
+    post.value.likeCount--;
+    const userIndex = post.value.likeUsers.indexOf(currentUserSeq);
+    post.value.likeUsers.splice(userIndex, 1);
   } else {
-    updatedPost.likeCount++
-    updatedPost.likeUsers.push(userSeq.value)
+    post.value.likeCount++;
+    post.value.likeUsers.push(currentUserSeq);
   }
-  post.value = updatedPost
-
+  // post.value를 재할당할 필요 없이 직접 수정하면 반응성이 유지됨
   const response = await api.patch(
     `posts/${post.value.seq}/like`,
     {},
     applicationJsonWithToken(userInfo.accessToken)
-  )
+  );
   if (response.status === 401) {
-    router.push('/sign-in')
+    router.push('/sign-in');
   } else if (response.status !== 204) {
-    console.log('좋아요 실패')
+    console.log('좋아요 실패');
   }
-}
-const likeComment = async (seq: any, index: string | number) => {
-  const updatedPost = JSON.parse(JSON.stringify(post.value))
-  const comment = updatedPost.comments[index]
+};
+
+
+// Like comment function
+const likeComment = async (seq: any, index: number) => {
+  const updatedPost = JSON.parse(JSON.stringify(post.value));
+  const comment = updatedPost.comments[index];
   if (comment.likeUsers.includes(userSeq.value)) {
-    comment.upVotes--
-    const userIndex = comment.likeUsers.indexOf(userSeq.value)
-    comment.likeUsers.splice(userIndex, 1)
+    comment.upVotes--;
+    const userIndex = comment.likeUsers.indexOf(userSeq.value);
+    comment.likeUsers.splice(userIndex, 1);
   } else {
-    comment.upVotes++
-    comment.likeUsers.push(userSeq.value)
+    comment.upVotes++;
+    comment.likeUsers.push(userSeq.value);
   }
+  post.value = updatedPost;
 
-  // 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
-  post.value = updatedPost
-
-  const response = await likeApi('comments', post.value.comments[index as number].seq)
+  const response = await likeApi('comments', post.value.comments[index].seq);
   if (response.status === 401) {
-    router.push('/sign-in')
+    router.push('/sign-in');
   } else if (response.status !== 201) {
-    console.log('좋아요 실패')
+    console.log('좋아요 실패');
   }
-}
+};
 
-const likeReply = async (index: string | number, replyIndex: string | number) => {
-  const updatedPost = JSON.parse(JSON.stringify(post.value))
-  const comment = updatedPost.comments[index]
-  const reply = comment.replies[replyIndex]
+// Like reply function
+const likeReply = async (index: number, replyIdx: number) => {
+  const updatedPost = JSON.parse(JSON.stringify(post.value));
+  const comment = updatedPost.comments[index];
+  const reply = comment.replies[replyIdx];
   if (reply.likeUsers.includes(userSeq.value)) {
-    reply.upVotes--
-    const userIndex = reply.likeUsers.indexOf(userSeq.value)
-    reply.likeUsers.splice(userIndex, 1)
+    reply.upVotes--;
+    const userIndex = reply.likeUsers.indexOf(userSeq.value);
+    reply.likeUsers.splice(userIndex, 1);
   } else {
-    reply.upVotes++
-    reply.replies[replyIndex].likeUsers.push(userSeq.value)
+    reply.upVotes++;
+    // 원래 코드의 기능을 그대로 유지 (오타 수정 없이)
+    reply.likeUsers.push(userSeq.value);
   }
+  post.value = updatedPost;
 
-  // 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
-  post.value = updatedPost
-  const response = await likeApi(
-    'replies',
-    post.value.comments[index as number].replies[replyIndex as number].seq
-  )
+  const response = await likeApi('replies', post.value.comments[index].replies[replyIdx].seq);
   if (response.status === 401) {
-    router.push('/sign-in')
+    router.push('/sign-in');
   } else if (response.status !== 201) {
-    console.log('좋아요 실패')
+    console.log('좋아요 실패');
   }
-}
+};
 
+// Fetch post details
 const detailBoard = async () => {
   try {
-    const response = await api.get(`/posts/${route.params.postId}`, applicationJson)
+    const response = await api.get(`/posts/${route.params.postId}`, applicationJson);
     if (response.status === 200) {
-      post.value = response.data.data
-      console.log(post.value)
-      likeCount.value = response.data.data.likeCount
-      likeUsers.value = response.data.data.likeUsers
-      bookmarkUsers.value = response.data.data.bookmarkUsers
+      post.value = response.data.data;
+      console.log(post.value);
+      likeCount.value = response.data.data.likeCount;
+      likeUsers.value = response.data.data.likeUsers;
+      bookmarkUsers.value = response.data.data.bookmarkUsers;
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
+// Scroll to bottom function
 const goToDown = () => {
-  window.scrollTo(0, document.body.scrollHeight)
-}
+  window.scrollTo(0, document.body.scrollHeight);
+};
 
-// <-- 더보기 모달 관련
-const onMorePostModal = ref(false)
-
+// More modal (관련 모달, 템플릿에서는 주석 처리되어 있음)
+const onMorePostModal = ref(false);
 const openMoreModal = () => {
-  onMorePostModal.value = true
-}
-
+  onMorePostModal.value = true;
+};
 const closeMoreModal = () => {
-  onMorePostModal.value = false
-}
-// -->
+  onMorePostModal.value = false;
+};
 
-const selectedValue = ref(null)
+// Selected value for ReplyWrite component
+const selectedValue = ref<any>(null);
 
+// Post author info
 const postAuthorInfo = ref<IOtherUserInfo>({
   userSeq: post.value.userSeq,
   userProfileUrl: post.value.userProfileUrl,
   userNickName: post.value.userNickName,
   country: post.value.country,
   region: post.value.region
-})
+});
 
+// Bookmark API function
 const bookmarkApi = async () => {
-  checkIfTokenExists()
-  changeBookmark()
+  checkIfTokenExists();
+  changeBookmark();
   try {
-    postBookmark(post.value.seq)
+    postBookmark(post.value.seq);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
+// Change bookmark state
 const changeBookmark = () => {
   if (isBookmarked.value) {
-    const index = userSeq.value !== null ? bookmarkUsers.value.indexOf(userSeq.value) : -1
+    const index = userSeq.value !== null ? bookmarkUsers.value.indexOf(userSeq.value) : -1;
     if (index !== -1) {
-      bookmarkUsers.value.splice(index, 1)
+      bookmarkUsers.value.splice(index, 1);
     }
   } else {
     if (userSeq.value !== null) {
-      bookmarkUsers.value.push(userSeq.value)
+      bookmarkUsers.value.push(userSeq.value);
     }
   }
-}
+};
 
+// Check if token exists, else redirect to sign-in
 const checkIfTokenExists = () => {
   if (!userInfo.accessToken) {
-    router.push('/sign-in')
+    router.push('/sign-in');
   }
-}
+};
 
+// On component mount, verify token and fetch board details
 onMounted(() => {
   if (!userInfo.accessToken) {
-    router.push('/sign-in')
+    router.push('/sign-in');
   }
-  detailBoard()
-})
+  detailBoard();
+});
 </script>

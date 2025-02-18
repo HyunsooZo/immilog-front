@@ -112,7 +112,7 @@
           </p>
           <button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
             <i class="blind">좋아요</i>
-            <span class="item__count">{{ isJobBoard ? jobPost.likeCount : likes }}</span>
+            <span class="item__count">{{ likeCount }}</span>
           </button>
           <p class="list__item cmt" v-if="!isJobBoard">
             <i class="blind">댓글</i>
@@ -208,16 +208,23 @@ const props = defineProps({
 });
 
 const jobPostValue = ref(props.isJobBoard);
-const likes = ref(jobPostValue.value ? props.jobPost.likeCount : props.post.likeCount);
+const likeCount = computed(() => {
+  return jobPostValue.value ? props.jobPost.likeCount : props.post.likeCount;
+});
 const likeUsers = ref(jobPostValue.value ? props.jobPost.likeUsers : props.post.likeUsers);
 const bookmarkUsers = ref(jobPostValue.value ? props.jobPost.bookmarkUsers : props.post.bookmarkUsers);
 const userSeq = ref(userInfo.userSeq);
 const thumbnail = ref(!props.isJobBoard && props.post.attachments.length > 0 ? props.post.attachments[0] : '');
 
-const isLiked = computed(() => likeUsers.value.includes(userSeq.value ? userSeq.value : 0));
+const isLiked = computed(() => {
+  return (jobPostValue.value ? props.jobPost.likeUsers : props.post.likeUsers).includes(userSeq.value ? userSeq.value : 0);
+});
+
 const isBookmarked = computed(() => bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0));
 
 const onBoardDetail = async () => {
+  if (props.detail) return;
+  
   await viewApi(jobPostValue.value ? props.jobPost.seq : props.post.seq, jobPostValue.value);
   router.push(jobPostValue.value ? `/job-board/${props.jobPost.seq}` : `/board/${props.post.seq}`);
 };
@@ -245,13 +252,17 @@ const likePost = () => {
 };
 
 const changeLike = () => {
+  const currentUserSeq = userSeq.value || 0;
+  const targetPost = jobPostValue.value ? props.jobPost : props.post;
+  
   if (isLiked.value) {
-    const index = likeUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
-    if (index !== -1) likeUsers.value.splice(index, 1);
-    likes.value--;
+    targetPost.likeCount--;
+    targetPost.likeUsers = targetPost.likeUsers.filter(id => id !== currentUserSeq);
+    likeUsers.value = targetPost.likeUsers;
   } else {
-    if (userSeq.value !== null) likeUsers.value.push(userSeq.value);
-    likes.value++;
+    targetPost.likeCount++;
+    targetPost.likeUsers.push(currentUserSeq);
+    likeUsers.value = targetPost.likeUsers;
   }
 };
 

@@ -62,7 +62,7 @@
 import type { IPost, ISelectItem, IState, IUserInfo } from '@/types/interface';
 import type { IApiPosts, IApiUserInfo } from '@/types/api-interface';
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import { useUserInfoStore } from '@/stores/userInfo.ts';
 import { postBtn } from '@/utils/icons.ts';
 import { sortingList, categoryList } from '@/utils/selectItems.ts';
@@ -295,14 +295,18 @@ const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
 	try {
 		const response: AxiosResponse<IApiPosts> = await api.get(
-			`/posts?country=${selectCountry.value.code}
-			&sortingMethod=${sortingMethod}
-			&isPublic=Y&category=${selectCategoryValue.value.code}
-			&page=${nextPage}`, {
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+			`/posts?country=${selectCountry.value.code}`+
+			`&sortingMethod=${sortingMethod}`+
+			`&isPublic=Y`+
+			`&category=${selectCategoryValue.value.code}`+
+			`&page=${nextPage}`,
+			{
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		);
+		
 		if (response.data.status === 200) {
 			state.value.last = response.data.data.last;
 			response.data.data.content.forEach((item: IPost) => {
@@ -402,9 +406,21 @@ const fetchUserInfo = async () => {
 // 로딩화면 관련 상태
 const isLoading = ref(false);
 
+// 뒤로가기 시 상태 초기화 및 데이터 새로고침
+onBeforeRouteLeave(() => {
+  state.value.posts = [];  // posts 배열만 초기화
+  state.value.last = false;
+  currentPage.value = 0;
+  // 정렬 방식은 유지
+});
+
 onMounted(async () => {
 	updateMenuBar();
 	handleScrollEvent();
+	
+	// 상태 초기화 추가
+	initializeState();
+	
 	if (!userInfo.userSeq) {
 		fetchUserInfo();
 		isLoading.value = true;
