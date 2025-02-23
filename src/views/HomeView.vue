@@ -206,21 +206,13 @@ const selectSortingValue = ref<ISelectItem>({
 });
 const selectCountry = ref({ name: '전체', code: 'ALL' });
 
-watch(selectCategoryValue, () => {
-	homeCategory.setCategory(selectCategoryValue.value);
-	initializeState();
-	fetchBoardList(selectSortingValue.value.code, currentPage.value);
-});
-
-watch(selectSortingValue, () => {
-	homeSorting.setSorting(selectSortingValue.value);
-	initializeState();
-	fetchBoardList(selectSortingValue.value.code, currentPage.value);
-});
-
-
 // select 관련 메소드 (메뉴)
-const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
+const selectMenu = async (selectedMenu: { active: any; label?: string; }) => {
+	// 먼저 posts 배열 초기화
+	state.value.posts = [];
+	state.value.last = false;
+	currentPage.value = 0;
+
 	if (selectedMenu.label === t('homeView.recentPost')) {
 		const recent = { name: 'selectItems.sortByRecent', code: 'CREATED_DATE' };
 		selectSortingValue.value = recent;
@@ -230,15 +222,20 @@ const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
 		selectSortingValue.value = like;
 		homeSorting.setSorting(like);
 	}
+
 	selectedMenu.active.value = true;
 	menus
 		.filter(menu => menu !== selectedMenu)
 		.forEach(menu => {
 			menu.active.value = false;
 		});
-	nextTick(() => {
+
+	// 메뉴바 업데이트 후 데이터 fetch
+	await nextTick(() => {
 		updateMenuBar();
 	});
+	
+	await fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
 // select 관련 메소드 (카테고리 및 정렬)
@@ -269,7 +266,7 @@ const closeSelect = () => {
 };
 
 // select 관련 메소드 (선택된 값 처리)
-const selectedValue = (value: ISelectItem) => {
+const selectedValue = async (value: ISelectItem) => {
 	if (categoryList.some(c => c.code === value.code)) {
 		selectCategoryValue.value = value;
 		homeCategory.setCategory(value)
@@ -277,8 +274,13 @@ const selectedValue = (value: ISelectItem) => {
 		selectSortingValue.value = value;
 		homeSorting.setSorting(value);
 	}
-	initializeState();
-	fetchBoardList(selectSortingValue.value.code, currentPage.value);
+	
+	state.value.posts = [];
+	state.value.last = false;
+	currentPage.value = 0;
+	
+	await fetchBoardList(selectSortingValue.value.code, currentPage.value);
+	closeSelect();  // 선택 후 모달 닫기
 };
 
 // 게시글 목록 관련 상태
