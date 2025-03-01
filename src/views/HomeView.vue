@@ -167,21 +167,24 @@ const state = ref<IState>({
 
 // select 관련 메소드 (초기화)
 const initializeState = () => {
-	state.value.posts = [];
-	state.value.pagination = {
-		sort: {
-			sorted: false,
-			unsorted: false,
-			empty: false
+	state.value = {
+		posts: [],
+		pagination: {
+			sort: {
+				sorted: false,
+				unsorted: false,
+				empty: false
+			},
+			pageSize: 0,
+			pageNumber: 0,
+			offset: 0,
+			paged: false,
+			unpaged: false,
 		},
-		pageSize: 0,
-		pageNumber: 0,
-		offset: 0,
-		paged: false,
-		unpaged: false,
+		last: false,
+		loading: false,
 	};
-	state.value.last = false;
-	currentPage.value = 0;
+	currentPage.value = 0; // currentPage 초기화
 };
 
 // select 관련 메소드 (국가 선택)
@@ -309,19 +312,24 @@ const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 			}
 		);
 		
-		if (response.data.status === 200) {
-			state.value.last = response.data.data.last;
-			response.data.data.content.forEach((item: IPost) => {
-				state.value.posts.push(item);
-			});
-			state.value.pagination = response.data.data.pageable;
-		}
+		updateStateWithResponse(response); // 상태 업데이트 함수 호출
 	} catch (error: unknown) {
 		console.error(error);
 	} finally {
 		setTimeout(() => {
 			state.value.loading = false;
 		}, 1000);
+	}
+};
+
+// API 응답으로 상태 업데이트 함수
+const updateStateWithResponse = (response: AxiosResponse<IApiPosts>) => {
+	if (response.data.status === 200) {
+		state.value.last = response.data.data.last;
+		response.data.data.content.forEach((item: IPost) => {
+			state.value.posts.push(item);
+		});
+		state.value.pagination = response.data.data.pageable;
 	}
 };
 

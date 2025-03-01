@@ -41,11 +41,16 @@ const { t } = useI18n();
 
 const emits = defineEmits(['update:bookmarkValue']);
 
-const state = ref({
-	posts: [],
-	pagination: {},
-	loading: false,
-});
+// 상태 초기화 함수
+const initializeState = () => {
+	return {
+		posts: [],
+		pagination: {},
+		loading: false,
+	};
+};
+
+const state = ref(initializeState());
 
 const menus = [
 	{ label: t('bookMark.post'), active: ref(true) },
@@ -59,9 +64,9 @@ const closeModal = () => {
 const fetchBookmarkList = async () => {
 	state.value.loading = true;
 	try {
-		const { status, data } = await getBookmarkedPostApi();
-		if (status === 200) {
-			state.value.posts = data.data;
+		const response = await getBookmarkedPostApi();
+		if (response.status === 200 && 'data' in response) {
+			state.value.posts = response.data;
 		}
 	} catch (error) {
 		console.error(error);
@@ -80,19 +85,14 @@ const handleScrollEvent = () => {
 	if (scrollBody.value) {
 		scrollBody.value.addEventListener('scroll', handleStickyWrap);
 	}
-	return () => {
-		if (scrollBody.value) {
-			scrollBody.value.removeEventListener('scroll', handleStickyWrap);
-		}
-	};
 };
-// 레이어팝업 내 스크롤 영역
+
 const handleStickyWrap = () => {
 	if (scrollBody.value) {
 		isStickyWrap.value = scrollBody.value.scrollTop > 0;
 	}
 };
-// 메뉴바 관련 메소드
+
 const updateMenuBar = () => {
 	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
 	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
@@ -113,6 +113,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	handleScrollEvent();
+	if (scrollBody.value) {
+		scrollBody.value.removeEventListener('scroll', handleStickyWrap);
+	}
 });
 </script>

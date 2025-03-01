@@ -90,6 +90,7 @@ import { likeApi, postBookmark } from '@/services/post.ts';
 import { useI18n } from 'vue-i18n';
 import { IJobPost } from '@/types/interface';
 import AdContent from './AdContent.vue';
+import api from '@/api';
 
 const { t } = useI18n();
 
