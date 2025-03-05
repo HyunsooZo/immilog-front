@@ -12,7 +12,7 @@ export const postCompanyInfo = async (param: any) => {
 
 export const getMyCompanyInfo = async () => {
   try {
-    const response = await api.get(`/companies/my`)
+    const response = await api.get(`/companies/users/${localStorage.getItem('userSeq')}`)
     return { status: response.status, data: response.data }
   } catch (error) {
     console.error(error)

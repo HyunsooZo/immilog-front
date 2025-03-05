@@ -447,7 +447,7 @@ const bookmarkApi = async () => {
   checkIfTokenExists();
   changeBookmark();
   try {
-    postBookmark(post.value.seq);
+    postBookmark(post.value.seq, 'POST');
   } catch (error) {
     console.log(error);
   }

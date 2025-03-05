@@ -36,9 +36,7 @@
 							</div>
 							<div class="input__item">
 								<input v-model="privateYn" type="radio" class="input__radio" id="onlyMyCountry" name="postSelect"
-									value="Y" @click="
-										openAlert(t('postModal.privateDescription'))
-										" />
+									value="Y" @click="openAlert(t('postModal.privateDescription'))" />
 								<label for="onlyMyCountry" class="input__label">{{ t('postModal.private') }}</label>
 							</div>
 						</div>
@@ -120,7 +118,6 @@
 											</button>
 										</div>
 									</div>
-									<!-- //loop -->
 								</div>
 								<!-- hashtag -->
 								<div class="tag__wrap" v-if="hashTagArea">
@@ -138,7 +135,6 @@
 												</button>
 											</div>
 										</div>
-										<!-- tag__item -->
 										<div class="tag__item">
 											<span class="item--hash" v-for="tag in tags" :key="tag">
 												<em>{{ tag }}</em>
@@ -227,7 +223,6 @@ const day = today.getDate().toString().padStart(2, '0');
 const minDate = `${year}-${month}-${day}`;
 
 const PlaceholderDate = ref('날짜 선택');
-
 const updatePlaceholderDate = () => {
 	if (allDate.value) {
 		selectedDate.value = '';
@@ -252,10 +247,8 @@ watch(allCareer, () => {
 	updatePlaceholderCareer();
 });
 
-//
 const router = useRouter();
 const selectDialogValue = ref(false);
-
 const selectTitle = ref(t('postModal.selectCategory'));
 const selectedCategory = ref({ name: t('postModal.communication'), code: 'COMMUNICATION' });
 const selectedValue = (value: ISelectItem) => {
@@ -269,19 +262,16 @@ const selectedValue = (value: ISelectItem) => {
 const openCategorySelect = () => {
 	selectDialogValue.value = true;
 };
-
 const closeSelect = () => {
 	selectDialogValue.value = false;
 };
 
 const alertValue = ref(false);
 const alertText = ref('');
-
 const openAlert = (content: string) => {
 	alertValue.value = true;
 	alertText.value = content;
 };
-
 const closeAlert = () => {
 	alertValue.value = false;
 };
@@ -294,10 +284,7 @@ const title = ref('');
 
 // content 변수 및 watch
 const content = ref('');
-
-// 텍스트 영역 조정 함수
 const adjustTextarea = ref(null);
-// update character count
 const currentCharCount = ref(0);
 const maxCharCount = 500;
 const adjustTextareaHeight = () => {
@@ -306,7 +293,6 @@ const adjustTextareaHeight = () => {
 		textarea.style.height = 'auto';
 		textarea.style.height = `${textarea.scrollHeight}px`;
 	}
-	// update character count
 	currentCharCount.value = content.value.length;
 	if (currentCharCount.value > maxCharCount) {
 		content.value = content.value.slice(0, maxCharCount);
@@ -324,39 +310,40 @@ const imagePaths = ref<string[]>([]);
 
 const props = defineProps<{
 	isJobBoard: boolean;
-}>()
+}>();
 
-// 프리뷰 이미지 처리 함수
+// 프리뷰 이미지 처리 함수 - 수정: 모든 파일을 반복 처리
 const previewImage = (event: Event) => {
 	const input = event.target as HTMLInputElement;
 	if (!input.files || input.files.length === 0) {
 		openAlert(t('postModal.fileHasntBeenUploaded'));
 		return;
 	}
-	if (imagePreview.value.length > 2) {
-		openAlert(t('postModal.imageUpTo3'));
-		return;
-	}
-	const file = input.files[0];
-	imageFile.value.push(file);
-	const reader = new FileReader();
-	reader.onload = (e: ProgressEvent<FileReader>) => {
-		const result = e.target?.result;
-		if (typeof result === 'string') {
-			imagePreview.value.push(result);
+	for (let i = 0; i < input.files.length; i++) {
+		if (imagePreview.value.length >= 3) {
+			openAlert(t('postModal.imageUpTo3'));
+			break;
 		}
-	};
-	reader.readAsDataURL(file);
+		const file = input.files[i];
+		imageFile.value.push(file);
+		const reader = new FileReader();
+		reader.onload = (e: ProgressEvent<FileReader>) => {
+			const result = e.target?.result;
+			if (typeof result === 'string') {
+				imagePreview.value.push(result);
+			}
+		};
+		reader.readAsDataURL(file);
+	}
 };
 
 // 미리보기 삭제
 const removeImage = (index: number) => {
 	imagePreview.value.splice(index, 1);
+	imageFile.value.splice(index, 1);
 };
 
 const emit = defineEmits(['onPostModal:value']);
-
-// 게시물 게시 모달 닫기
 const closeModal = () => {
 	emit('onPostModal:value', false);
 };
@@ -364,15 +351,10 @@ const closeModal = () => {
 // tags 변수
 const hashTag = ref('');
 const tags = ref<string[]>([]);
-
-// 특수문자 제거 메서드
 const removeSpecialCharacters = (str: string) => {
-	// 특수 문자를 제거하기 위한 정규식
 	const regex = /[^\wㄱ-ㅎㅏ-ㅣ가-힣]/gi;
 	return str.replace(regex, '');
 };
-
-// 태그 추가 및 제거 메서드
 const addTag = () => {
 	if (tags.value.length > 7) {
 		openAlert(t('postModal.tageUpTo8'));
@@ -380,14 +362,12 @@ const addTag = () => {
 	}
 	const sanitizedTag = removeSpecialCharacters(hashTag.value);
 	tags.value.push(sanitizedTag);
-	hashTag.value = ''; // 입력 필드 비우기
+	hashTag.value = '';
 };
-
 const removeTag = (tag: string) => {
 	tags.value.splice(tags.value.indexOf(tag), 1);
 };
 
-// 해시태그 모달 오픈
 const hashTagArea = ref(false);
 const hashTagAreaOpen = () => {
 	hashTagArea.value = true;
@@ -411,10 +391,15 @@ const imageUpload = async () => {
 		const response: AxiosResponse<IApiImage> = await api.post(
 			`/images?imagePath=content&imageType=POST`,
 			formData,
-			multipartFormDataWithToken(userInfo.accessToken)
+			{
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `Bearer ${userInfo.accessToken ? userInfo.accessToken.toString() : ''}`
+				}
+			}
 		);
 		if (response.status === 200) {
-			response.data.data.imageUrl.forEach(image => {
+			response.data.data.forEach(image => {
 				imagePaths.value.push(image);
 			});
 		} else {
@@ -425,7 +410,6 @@ const imageUpload = async () => {
 		console.log(error);
 	}
 };
-
 
 // 게시물 업로드 함수
 const postUpload = async () => {
@@ -444,7 +428,7 @@ const postUpload = async () => {
 	}
 	try {
 		const form = props.isJobBoard ? createJobBoardForm() : createPostForm();
-		const { status } = props.isJobBoard ? await uploadJobBoardApi(form) : await uploadPostApi(userInfo.userSeq,form);
+		const { status } = props.isJobBoard ? await uploadJobBoardApi(form) : await uploadPostApi(userInfo.userSeq, form);
 		if (status === 201 || status === 200) {
 			setTimeout(() => {
 				offLoading();
@@ -458,13 +442,11 @@ const postUpload = async () => {
 	}
 };
 
-// 로딩 변수 및 로딩 on & off 함수
+// 로딩 변수 및 on/off 함수
 const isLoading = ref(false);
-
 const onLoading = () => {
 	isLoading.value = true;
 };
-
 const offLoading = () => {
 	isLoading.value = false;
 };
@@ -483,23 +465,21 @@ const createPostForm = () => {
 		content: content.value,
 		tags: tags.value,
 		attachments: imagePaths.value,
-		isPublic: privateYn.value === 'N' ? true : false,
+		isPublic: privateYn.value === 'N',
 		category: selectedCategory.value.code,
 	};
 };
-
 const createJobBoardForm = () => {
 	return {
 		title: title.value,
 		content: content.value,
 		tags: tags.value,
 		attachments: imagePaths.value,
-		isPublic: privateYn.value === 'N' ? true : false,
+		isPublic: privateYn.value === 'N',
 		deadline: allDate.value ? null : selectedDate.value + 'T00:00:00',
 		experience: allCareer.value ? null : selectedCareerCode.value,
 	};
 };
-
 const validateUploadPost = () => {
 	if (!title.value) {
 		openAlert(t('postModal.enterTitle'));
@@ -515,10 +495,9 @@ const validateUploadPost = () => {
 	}
 	return true;
 };
-
 const onSelectModal = () => {
 	selectDialogValue.value = true;
 	selectTitle.value = '경력 선택';
 	selectList.value = experienceList;
-}
+};
 </script>

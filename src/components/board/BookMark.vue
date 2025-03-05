@@ -42,13 +42,11 @@ const { t } = useI18n();
 const emits = defineEmits(['update:bookmarkValue']);
 
 // 상태 초기화 함수
-const initializeState = () => {
-	return {
-		posts: [],
-		pagination: {},
-		loading: false,
-	};
-};
+const initializeState = () => ({
+	posts: [],
+	pagination: {},
+	loading: false,
+});
 
 const state = ref(initializeState());
 
@@ -66,7 +64,7 @@ const fetchBookmarkList = async () => {
 	try {
 		const response = await getBookmarkedPostApi();
 		if (response.status === 200 && 'data' in response) {
-			state.value.posts = response.data;
+			state.value.posts = response.data.data;
 		}
 	} catch (error) {
 		console.error(error);

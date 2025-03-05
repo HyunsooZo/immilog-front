@@ -10,17 +10,20 @@ const api = axios.create({
 // 요청 인터셉터 설정
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('accessToken')
+    const token = localStorage.getItem('accessToken');
     if (token && config.headers) {
-      config.headers['Authorization'] = `Bearer ${token}`
-      config.headers['Content-Type'] = 'application/json'
+      config.headers['Authorization'] = `Bearer ${token}`;
+      if (!(config.data instanceof FormData)) {
+        config.headers['Content-Type'] = 'application/json';
+      }
     }
-    return config
+    return config;
   },
   (error) => {
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
+
 
 let isRefreshing = false
 let failedQueue: any[] = []

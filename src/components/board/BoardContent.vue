@@ -98,8 +98,8 @@
               </div>
             </div>
           </div>
-          <div class="thumb" v-if="!isJobBoard && !detail && post.attachments.length > 0">
-            <img :src="thumbnail" alt="" />
+          <div class="thumb" v-if="!isJobBoard && !detail && post.attachments && post.attachments.length > 0">
+            <img :src="post.attachments[0]" alt="" />
           </div>
         </component>
       </div>
@@ -107,7 +107,6 @@
         <div class="item__fnc">
           <p class="list__item read">
             <i class="blind">조회수</i>
-            <!-- 조회수는 post 객체의 viewCount 사용 -->
             <span class="item__count">{{ post.viewCount }}</span>
           </p>
           <button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
@@ -116,7 +115,7 @@
           </button>
           <p class="list__item cmt" v-if="!isJobBoard">
             <i class="blind">댓글</i>
-            <span class="item__count">{{ post.commentCount }}</span>
+            <span class="item__count">{{ post.comments ? post.comments.length : 0 }}</span>
           </p>
         </div>
         <div class="item__fnc">
@@ -270,7 +269,7 @@ const postBookmarkApi = async () => {
   checkIfTokenExists();
   changeBookmark();
   try {
-    await postBookmark(jobPostValue.value ? props.jobPost.seq : props.post.seq);
+    await postBookmark(jobPostValue.value ? props.jobPost.seq : props.post.seq, jobPostValue.value? 'JOB_BOARD' : 'POST');
   } catch (error) {
     console.error(error);
   }
@@ -363,4 +362,11 @@ const deletePost = async () => {
     }
   }
 };
+
+// 코멘트를 생성일 기준으로 정렬하는 computed 속성
+const sortedComments = computed(() => {
+  return props.post.comments ? props.post.comments.slice().sort((a, b) => {
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  }) : [];
+});
 </script>

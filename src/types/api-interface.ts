@@ -57,10 +57,8 @@ export interface IApiUserInfo extends IApiResponse {
   data: IUserInfo
 }
 
-export interface IApiImage extends IApiResponse {
-  data: {
-    imageUrl: string[]
-  }
+export interface IApiImageextends extends IApiResponse {
+  data: string[];
 }
 
 export interface IApiNotifications extends IApiResponse {

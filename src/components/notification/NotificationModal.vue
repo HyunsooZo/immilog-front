@@ -141,24 +141,27 @@
   })
   
   const getNotificationsApi = async (nextPage: number) => {
-	try {
-	  const params = { page: nextPage }
-	  const response: AxiosResponse<IApiNotifications> = await api.get(
-		`/notices/users/${userInfo.userSeq}`,
-		{
-		  params,
-		  ...applicationJsonWithToken(userInfo.accessToken)
-		}
-	  )
-	  if (response.status === 200) {
-		response.data.data.content.forEach((item) => {
-		  state.value.notifications.push(item)
-		})
-	  }
-	} catch (error) {
-	  console.log(error)
-	}
+  try {
+    const params = { page: nextPage };
+    const response: AxiosResponse<IApiNotifications> = await api.get(
+      `/notices/users/${userInfo.userSeq}`,
+      {
+        params,
+        ...applicationJsonWithToken(userInfo.accessToken)
+      }
+    );
+    if (response.status === 200 && response.data.data && response.data.data.content) {
+      response.data.data.content.forEach((item) => {
+        state.value.notifications.push(item);
+      });
+    } else {
+      console.error("Unexpected response structure", response.data);
+    }
+  } catch (error) {
+    console.log(error);
   }
+};
+
   
   // 무한 스크롤 관련 메소드 (스크롤 핸들링)
   const handleScroll = () => {

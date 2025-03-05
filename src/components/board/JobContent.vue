@@ -194,7 +194,7 @@ const postBokmarkApi = async () => {
 	checkIfTokenExists();
 	changeBookmarkStatus();
 	try {
-		postBookmark(props.jobPost.seq);
+		postBookmark(props.jobPost.seq,'JOB_BOARD');
 	} catch (error) {
 		console.log(error);
 	}
