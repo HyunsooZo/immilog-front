@@ -243,26 +243,34 @@ const checkNickName = async () => {
 
 const hostImage = async () => {
   if (!imagePreview.value || !imageFile.value) {
-    return
+    return;
   }
   try {
-    const formData = new FormData()
-    const resizedImage = await resizeImage(imageFile.value, 0.5)
-    formData.append('multipartFile', resizedImage as Blob)
+    const formData = new FormData();
+    const resizedImage = await resizeImage(imageFile.value, 0.5);
+    
+    formData.append("multipartFile", resizedImage as Blob);
+    formData.append("imagePath", "profile");
+    formData.append("imageType", "PROFILE");
+
     const response: AxiosResponse<IApiImage> = await api.post(
-      '/images?imagePath=profile',
+      "/images",
       formData,
       multipartFormData
-    )
+    );
+
     if (response.status === 200) {
-      imageUrl.value = response.data.data.imageUrl
+      console.log("Image Upload Response:", response.data);  // 🔍 디버깅 로그 추가
+      imageUrl.value = response.data.data;  // 🔥 여기서 값이 정상적으로 들어가야 함
     } else {
-      openAlert(t('profileEditView.failedToUploadImage'))
+      openAlert(t("profileEditView.failedToUploadImage"));
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
+
+
 
 const saveProfile = async () => {
   if (imageFile.value) {

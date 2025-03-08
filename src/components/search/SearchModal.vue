@@ -104,10 +104,8 @@ const callSearchApi = async () => {
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
-			response.data.data.content.forEach((element: any) => {
 				response.data.data.content.forEach((element: ISearchResult) => {
 					state.value.posts.push(element);
-				});
 			});
 			state.value.pagination = response.data.data.pageable;
 			setTimeout(() => {

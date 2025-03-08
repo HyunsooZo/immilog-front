@@ -267,7 +267,7 @@ const postImageApi = async () => {
 			multipartFormData,
 		);
 		if (response.status === 200) {
-			imageUrl.value = response.data.data.imageUrl;
+			imageUrl.value = response.data.data[0];
 		} else {
 			openAlert(t('profileEditView.failedToUploadImage'));
 		}
