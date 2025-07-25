@@ -304,7 +304,7 @@ onMounted(async () => {
 onUnmounted(() => {
 	if (stompClient && stompClient.connected) {
 		stompClient.disconnect(() => {
-			console.log('Disconnected');
+			// WebSocket 연결 해제됨
 		});
 	}
 	window.removeEventListener('scroll', handleScroll);

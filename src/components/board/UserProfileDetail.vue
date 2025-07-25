@@ -175,7 +175,7 @@ const reportApi = async (requestForm: { reason: string, description: string }) =
 		}
 	} catch (error) {
 		openAlert('신고 접수에 실패했습니다.');
-		console.log(error);
+		console.error(error);
 	}
 };
 

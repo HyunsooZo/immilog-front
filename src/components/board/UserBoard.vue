@@ -84,7 +84,7 @@ const fetchMyPostList = async (page: number) => {
 			state.value.posts = response.data.data.content;
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	} finally {
 		state.value.loading = false;
 	}

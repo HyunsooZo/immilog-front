@@ -349,7 +349,7 @@ const likePost = async () => {
   if (response.status === 401) {
     router.push('/sign-in');
   } else if (response.status !== 204) {
-    console.log('좋아요 실패');
+    console.error('좋아요 실패');
   }
 };
 
@@ -372,7 +372,7 @@ const likeComment = async (seq: any, index: number) => {
   if (response.status === 401) {
     router.push('/sign-in');
   } else if (response.status !== 201) {
-    console.log('좋아요 실패');
+    console.error('좋아요 실패');
   }
 };
 
@@ -396,7 +396,7 @@ const likeReply = async (index: number, replyIdx: number) => {
   if (response.status === 401) {
     router.push('/sign-in');
   } else if (response.status !== 201) {
-    console.log('좋아요 실패');
+    console.error('좋아요 실패');
   }
 };
 
@@ -406,13 +406,13 @@ const detailBoard = async () => {
     const response = await api.get(`/posts/${route.params.postId}`, applicationJson);
     if (response.status === 200) {
       post.value = response.data.data;
-      console.log(post.value);
+      // 게시물 데이터 업데이트됨
       likeCount.value = response.data.data.likeCount;
       likeUsers.value = response.data.data.likeUsers;
       bookmarkUsers.value = response.data.data.bookmarkUsers;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
@@ -449,7 +449,7 @@ const bookmarkApi = async () => {
   try {
     postBookmark(post.value.seq, 'POST');
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 

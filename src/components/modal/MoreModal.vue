@@ -46,7 +46,7 @@ const closeModal = () => {
 };
 
 const reportUser = () => {
-	console.log('신고하기');
+	// TODO: 신고 기능 구현
 };
 
 const getOutOfChatRoom = async () => {
@@ -55,7 +55,7 @@ const getOutOfChatRoom = async () => {
 		applicationJsonWithToken(userInfo.accessToken),
 	);
 	if (status === 204) {
-		console.log('방 나가기 성공');
+		// 방 나가기 성공
 	}
 };
 

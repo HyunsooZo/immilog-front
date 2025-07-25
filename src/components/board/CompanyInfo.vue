@@ -272,7 +272,7 @@ const postImageApi = async () => {
 			openAlert(t('profileEditView.failedToUploadImage'));
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 
@@ -288,7 +288,7 @@ const postCompanyApi = async () => {
 		}
 
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 }
 
@@ -341,7 +341,7 @@ onMounted(async () => {
 	try {
 		await fetchUserCompanyInfo();
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 });
 </script>

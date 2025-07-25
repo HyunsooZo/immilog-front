@@ -4,13 +4,13 @@ import '@/assets/contents.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
-import router from '@/router'
-import setupI18n from './i18n'
+import router from '@/router/index.js'
+import setupI18n from './i18n.js'
 
 document.addEventListener(
   'deviceready',
   () => {
-    console.log('Cordova is ready')
+    // Cordova is ready - 앱 초기화 완료
   },
   false
 )

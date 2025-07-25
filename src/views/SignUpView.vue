@@ -196,7 +196,7 @@ const checkNickName = async () => {
 			nickNameCheckDone.value = true;
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 
@@ -310,7 +310,7 @@ const getCountry = async (location: ILocation) => {
 			openAlert(t('signUpView.failedToFetchLocationInfo'));
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 

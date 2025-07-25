@@ -236,7 +236,7 @@ const viewApi = async (seq: any, jobPostFlag: boolean) => {
       props.post.viewCount = (props.post.viewCount || 0) + 1;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { status: 'error', error };
   }
 };
@@ -345,7 +345,7 @@ const deletePost = async () => {
         router.push('/');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   } else {
     try {
@@ -358,7 +358,7 @@ const deletePost = async () => {
         router.push('/');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 };

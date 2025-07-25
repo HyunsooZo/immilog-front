@@ -145,11 +145,11 @@ const callCommentApi = async () => {
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 201) {
-			console.log('댓글 등록 성공');
+			// 댓글 등록 성공
 		}
 	} catch (error) {
 		openAlert('서버와의 통신에 실패했습니다.');
-		console.log(error);
+		console.error(error);
 	}
 };
 const callReplyApi = async () => {
@@ -163,11 +163,11 @@ const callReplyApi = async () => {
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 201) {
-			console.log('대댓글 등록 성공');
+			// 대댓글 등록 성공
 		}
 	} catch (error) {
 		openAlert('서버와의 통신에 실패했습니다.');
-		console.log(error);
+		console.error(error);
 	}
 };
 

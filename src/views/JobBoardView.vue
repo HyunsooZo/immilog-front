@@ -149,7 +149,7 @@ const fetchJobBoardList = async () => {
 			fetchJobBoardList();
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	} finally {
 		state.value.loading = false;
 	}

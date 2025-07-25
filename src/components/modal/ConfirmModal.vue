@@ -2,7 +2,7 @@
 	<div class="modal" tabindex="-1" role="dialog">
 		<div class="modal-content" @click.stop>
 			<div class="modal-body">
-				<p v-html="modalText"></p>
+				<p>{{ modalText }}</p>
 			</div>
 			<div class="modal-footer">
 				<div class="button-wrap">
@@ -11,14 +11,14 @@
 						class="button button--positive"
 						@click="closeModal"
 					>
-						취소
+						{{ UI_TEXT.CANCEL_BUTTON }}
 					</button>
 					<button
 						type="button"
 						class="button button--positive"
 						@click="closeModalWithConfirm"
 					>
-						확인
+						{{ UI_TEXT.CONFIRM_BUTTON }}
 					</button>
 				</div>
 			</div>
@@ -27,7 +27,13 @@
 </template>
 
 <script setup lang="ts">
-const { modalText } = defineProps(['modalText']);
+import { UI_TEXT } from '@/constants/index.js';
+
+interface Props {
+	modalText: string;
+}
+
+const { modalText } = defineProps<Props>();
 
 const emits = defineEmits(['close', 'confirm']);
 

@@ -133,7 +133,7 @@
 import type { IApiImage, IApiLocation, IApiResponse } from '@/types/api-interface'
 import type { ILocation, ISelectItem } from '@/types/interface'
 import { applicationJson, applicationJsonWithToken, multipartFormData } from '@/utils/header'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, shallowRef } from 'vue'
 import { useUserInfoStore } from '@/stores/userInfo.ts'
 import { useLocationStore } from '@/stores/location.ts'
 import { resizeImage } from '@/utils/image.ts'
@@ -154,166 +154,170 @@ const router = useRouter()
 const nickNameCheckDone = ref(false)
 const isNickNameValid = ref(false)
 const userInfo = useUserInfoStore()
-const userNickName = ref()
-const country = ref()
-const countryCode = ref()
-const interestCountry = ref()
-const interestCountryCode = ref()
+const userNickName = ref('')
+const country = ref('')
+const countryCode = ref('')
+const interestCountry = ref('')
+const interestCountryCode = ref('')
 const isCountrySelectClicked = ref(false)
 const countrySelectTitle = t('profileEditView.selectCountry')
-const imagePreview = ref()
-const imageUrl = ref()
-const imageFile = ref(null)
+const imagePreview = ref('')
+const imageUrl = ref('')
+const imageFile = shallowRef<File | null>(null)
 const latitude = ref(parseFloat(localStorage.getItem('latitude') ?? '0.0'))
 const longitude = ref(parseFloat(localStorage.getItem('longitude') ?? '0.0'))
 const isLoading = ref(false)
 
-const isNickNameChanged = computed(() => {
-  return userNickName.value !== userInfo.userNickname
-})
+const isNickNameChanged = computed(() => 
+  userNickName.value !== userInfo.userNickname
+)
 
-const isInterestCountryChanged = computed(() => {
-  return interestCountry.value !== userInfo.userInterestCountry
-})
+const isInterestCountryChanged = computed(() => 
+  interestCountry.value !== userInfo.userInterestCountry
+)
 
-const isCountryChanged = computed(() => {
-  return countryCode && countryCode.value !== userInfo.userCountry
-})
+const isCountryChanged = computed(() => 
+  countryCode.value && countryCode.value !== userInfo.userCountry
+)
 
-const buttonClass = computed(() => {
-  if (
-    isInterestCountryChanged.value ||
-    (nickNameCheckDone.value && isNickNameValid.value && isNickNameChanged.value) ||
-    isImageChanged.value ||
-    isCountryChanged.value
-  ) {
-    return 'button--positive'
-  } else {
-    return 'button--disabled'
-  }
-})
+const isImageChanged = computed(() => 
+  imagePreview.value !== userInfo.userProfileUrl
+)
 
-const isImageChanged = computed(() => {
-  return imagePreview.value !== userInfo.userProfileUrl
-})
+const hasValidChanges = computed(() => 
+  isInterestCountryChanged.value ||
+  (nickNameCheckDone.value && isNickNameValid.value && isNickNameChanged.value) ||
+  isImageChanged.value ||
+  isCountryChanged.value
+)
 
-// 프리뷰 이미지
-const previewImage = (event: { target: any }) => {
-  const input = event.target
-  if (input.files && input.files[0]) {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      if (e.target) {
-        imagePreview.value = e.target.result
-      }
-      imageFile.value = input.files[0]
+const buttonClass = computed(() => 
+  hasValidChanges.value ? 'button--positive' : 'button--disabled'
+)
+
+const previewImage = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  
+  if (!file) return
+  
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    if (e.target?.result) {
+      imagePreview.value = e.target.result as string
+      imageFile.value = file
     }
-    reader.readAsDataURL(input.files[0])
   }
+  reader.readAsDataURL(file)
 }
 
-// 프리뷰이미지 삭제
 const removeImage = () => {
-  // 비어있는 이미지로 설정
   imagePreview.value = ''
   imageFile.value = null
-  imageUrl.value = ['']
+  imageUrl.value = ''
+  
+  const fileInput = document.getElementById('file-upload') as HTMLInputElement
+  if (fileInput) fileInput.value = ''
 }
 
-// 닉네임 중복 체크
 const checkNickName = async () => {
-  if (userNickName.value == userInfo.userNickname) {
+  if (userNickName.value === userInfo.userNickname) {
     isNickNameValid.value = true
     nickNameCheckDone.value = true
     return
   }
+  
   try {
     const { status, data } = await api.get(
       `/users/nicknames?nickname=${userNickName.value}`,
       applicationJson
     )
     if (status === 200) {
-      isNickNameValid.value = data.data ? true : false
+      isNickNameValid.value = Boolean(data.data)
       nickNameCheckDone.value = true
     }
   } catch (error) {
-    console.log(error)
+    console.error('Nickname check error:', error)
   }
 }
 
 const hostImage = async () => {
-  if (!imagePreview.value || !imageFile.value) {
-    return;
-  }
+  if (!imagePreview.value || !imageFile.value) return
+  
   try {
-    const formData = new FormData();
-    const resizedImage = await resizeImage(imageFile.value, 0.5);
+    const formData = new FormData()
+    const resizedImage = await resizeImage(imageFile.value, 0.5)
     
-    formData.append("multipartFile", resizedImage as Blob);
-    formData.append("imagePath", "profile");
-    formData.append("imageType", "PROFILE");
+    formData.append("multipartFile", resizedImage as Blob)
+    formData.append("imagePath", "profile")
+    formData.append("imageType", "PROFILE")
 
     const response: AxiosResponse<IApiImage> = await api.post(
       "/images",
       formData,
       multipartFormData
-    );
+    )
 
     if (response.status === 200) {
-      console.log("Image Upload Response:", response.data);  // 🔍 디버깅 로그 추가
-      imageUrl.value = response.data.data;  // 🔥 여기서 값이 정상적으로 들어가야 함
+      imageUrl.value = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data
     } else {
-      openAlert(t("profileEditView.failedToUploadImage"));
+      openAlert(t("profileEditView.failedToUploadImage"))
     }
   } catch (error) {
-    console.log(error);
+    console.error("Image upload error:", error)
+    openAlert(t("profileEditView.failedToUploadImage"))
   }
-};
+}
 
 
 
 const saveProfile = async () => {
+  if (!hasValidChanges.value) return
+  
   if (imageFile.value) {
     await hostImage()
   }
+  
   const formData = {
-    nickName: userNickName.value === userInfo.userNickname ? null : userNickName.value,
-    country: country.value === userInfo.userCountry ? null : countryCode.value,
-    interestCountry:
-      !interestCountry.value && interestCountry.value === userInfo.userInterestCountry
-        ? null
-        : interestCountryCode.value,
-    profileImage: isImageChanged ? imageUrl.value[0] : null,
+    nickName: isNickNameChanged.value ? userNickName.value : null,
+    country: isCountryChanged.value ? countryCode.value : null,
+    interestCountry: isInterestCountryChanged.value ? interestCountryCode.value : null,
+    profileImage: isImageChanged.value ? (Array.isArray(imageUrl.value) ? imageUrl.value[0] : imageUrl.value) : null,
     latitude: latitude.value,
     longitude: longitude.value
   }
+  
   try {
     const response: AxiosResponse<IApiResponse> = await api.patch(
       `/users/${userInfo.userSeq}/information`,
       formData,
       applicationJsonWithToken(userInfo.accessToken)
     )
+    
     if (response.status === 200) {
-      if (isNickNameChanged.value) {
-        userInfo.userNickname = userNickName.value
-      }
-      if (isImageChanged.value) {
-        userInfo.userProfileUrl = imagePreview.value
-      }
-      if (isCountryChanged.value) {
-        userInfo.userCountry = countryCode.value
-      }
-      if (isInterestCountryChanged.value) {
-        userInfo.userInterestCountry = interestCountryCode.value
-      }
+      updateUserInfo()
       router.back()
     }
   } catch (error) {
-    console.log(error)
+    console.error('Profile save error:', error)
   }
 }
 
-// <-- 알럿 관련
+const updateUserInfo = () => {
+  if (isNickNameChanged.value) {
+    userInfo.userNickname = userNickName.value
+  }
+  if (isImageChanged.value) {
+    userInfo.userProfileUrl = imagePreview.value
+  }
+  if (isCountryChanged.value) {
+    userInfo.userCountry = countryCode.value
+  }
+  if (isInterestCountryChanged.value) {
+    userInfo.userInterestCountry = interestCountryCode.value
+  }
+}
+
 const alertValue = ref(false)
 const alertText = ref('')
 
@@ -326,21 +330,18 @@ const closeAlert = () => {
   alertText.value = ''
   alertValue.value = false
 }
-// -->
 
-// select 관련 메소드
 const openSelect = (event: Event) => {
   event.preventDefault()
   isCountrySelectClicked.value = true
-  isModalOpen()
+  document.body.classList.add('inactive')
 }
 
 const closeSelect = () => {
   isCountrySelectClicked.value = false
-  isModalClose()
+  document.body.classList.remove('inactive')
 }
 
-// select 관련 메소드 (선택된 값 처리)
 const selectedValue = (value: ISelectItem) => {
   if (countries.some((c) => c.code === value.code)) {
     interestCountry.value = t('countries.' + value.code)
@@ -348,79 +349,55 @@ const selectedValue = (value: ISelectItem) => {
   }
 }
 
-// modal open/close 시 body 컨트롤
-const isModalOpen = () => {
-  document.body.classList.add('inactive')
-}
-const isModalClose = () => {
-  document.body.classList.remove('inactive')
-}
-
-const options = {
+const geolocationOptions = {
   enableHighAccuracy: true,
   timeout: 10000,
   maximumAge: 0
 }
 
-const errorCallback = (error: { code: any; message: any }) => {
-  console.error(`ERROR(${error.code}): ${error.message}`)
+const handleGeolocationError = (error: GeolocationPositionError) => {
+  console.error(`Geolocation error (${error.code}): ${error.message}`)
+  isLoading.value = false
 }
 
 const fetchLocation = async () => {
+  if (!('geolocation' in navigator)) return
+  
   try {
     isLoading.value = true
-    if ('geolocation' in navigator) {
-      const permissionResult = await navigator.permissions.query({
-        name: 'geolocation'
-      })
-      if (permissionResult.state === 'granted') {
-        navigator.geolocation.getCurrentPosition(
-          (position: GeolocationPosition) => {
-            getCountry({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            })
-            useLocationStore().setLocation({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            })
-            isLoading.value = false
-          },
-          errorCallback,
-          options
-        )
-      } else if (permissionResult.state === 'prompt') {
-        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, options)
-        })
-        getCountry({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        })
-        isLoading.value = false
-      } else if (permissionResult.state === 'denied') {
-        console.error('Geolocation permission denied.')
-        isLoading.value = false
+    const permissionResult = await navigator.permissions.query({ name: 'geolocation' })
+    
+    const handlePosition = (position: GeolocationPosition) => {
+      const coords = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
       }
+      getCountry(coords)
+      useLocationStore().setLocation(coords)
+      isLoading.value = false
+    }
+    
+    if (permissionResult.state === 'granted') {
+      navigator.geolocation.getCurrentPosition(handlePosition, handleGeolocationError, geolocationOptions)
+    } else if (permissionResult.state === 'prompt') {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, geolocationOptions)
+      })
+      handlePosition(position)
+    } else {
+      console.error('Geolocation permission denied')
+      isLoading.value = false
     }
   } catch (error) {
     console.error('Failed to get location:', error)
     isLoading.value = false
-  } finally {
-    isLoading.value = false
   }
 }
 
-const setCountryCoordinates = async (location: ILocation) => {
-  latitude.value = location.latitude ? location.latitude : 0.0
-  longitude.value = location.longitude ? location.longitude : 0.0
-}
-
 const getCountry = async (location: ILocation) => {
-  setCountryCoordinates({
-    latitude: location.latitude,
-    longitude: location.longitude
-  })
+  latitude.value = location.latitude || 0.0
+  longitude.value = location.longitude || 0.0
+  
   try {
     const response: AxiosResponse<IApiLocation> = await api.get(
       `/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
@@ -433,19 +410,19 @@ const getCountry = async (location: ILocation) => {
       openAlert(t('profileEditView.failedToFetchLocationInfo'))
     }
   } catch (error) {
-    console.log(error)
+    console.error('Location fetch error:', error)
+    openAlert(t('profileEditView.failedToFetchLocationInfo'))
   }
 }
 
 onMounted(() => {
-  userNickName.value = userInfo.userNickname
-  country.value = t('countries.' + userInfo.userCountry)
-  countryCode.value = userInfo.userCountry
-  imagePreview.value = userInfo.userProfileUrl
-  if (userInfo.userInterestCountry) {
-    interestCountry.value = t('countries.' + userInfo.userInterestCountry)
-  } else {
-    interestCountry.value = ''
-  }
+  userNickName.value = userInfo.userNickname || ''
+  country.value = userInfo.userCountry ? t('countries.' + userInfo.userCountry) : ''
+  countryCode.value = userInfo.userCountry || ''
+  imagePreview.value = userInfo.userProfileUrl || ''
+  interestCountry.value = userInfo.userInterestCountry 
+    ? t('countries.' + userInfo.userInterestCountry)
+    : ''
+  interestCountryCode.value = userInfo.userInterestCountry || ''
 })
 </script>

@@ -162,7 +162,7 @@ const viewApi = async (seq: any, jobPostFlag: boolean) => {
     const response = await api.patch(jobPostFlag ? `/job-boards/${seq}/view` : `/posts/${seq}/view`)
     return { status: response.status }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return { status: 'error', error }
   }
 }
@@ -196,7 +196,7 @@ const postBokmarkApi = async () => {
 	try {
 		postBookmark(props.jobPost.seq,'JOB_BOARD');
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 

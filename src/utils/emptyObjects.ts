@@ -47,6 +47,7 @@ export const emptyPost: IPost = {
   userProfileUrl: '',
   userNickName: '',
   comments: [],
+  commentCount: 0,
   viewCount: 0,
   likeCount: 0,
   tags: [],

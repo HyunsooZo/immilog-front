@@ -152,7 +152,7 @@ const signIn = async () => {
 			getUnreadNotificationStatus()
 		}
 	} catch (error: any) {
-		console.log(error.response.data[0])
+		console.error(error.response.data[0])
 		openAlert(t(handleError(error.response.data[0])))
 	} finally {
 		setTimeout(() => {
@@ -169,7 +169,7 @@ const getUnreadNotificationStatus = async () => {
 			useUserInfoStore().setUnreadNotification(response.data.data)
 		}
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 	}
 }
 
@@ -213,7 +213,7 @@ const loginByGoogle = async () => {
 			applicationJson
 		)
 
-		console.log('loginByGoogle')
+		// Google 로그인 처리
 		if (response.status === 200) {
 			useUserInfoStore().setUserInfo(response.data.data)
 			setToken(response.data.data)
@@ -226,7 +226,7 @@ const loginByGoogle = async () => {
 			openAlert(t('signInView.failedToSignIn'))
 		}
 	} catch (error: any) {
-		console.log(error)
+		console.error(error)
 		handleError(error)
 		openAlert(t('signInView.failedToConnect'))
 	} finally {
@@ -244,10 +244,10 @@ const loginByKakao = async () => {
 			'/users/sign-in/kakao',
 			applicationJson
 		)
-		console.log('loginByKakao')
+		// Kakao 로그인 처리
 		onLoading()
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 		openAlert(t('signInView.failedToConnect'))
 	} finally {
 		setTimeout(() => {
@@ -264,9 +264,9 @@ const loginByNaver = async () => {
 			'/users/sign-in/naver',
 			applicationJson
 		)
-		console.log('loginByNaver')
+		// Naver 로그인 처리
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 		openAlert(t('signInView.failedToConnect'))
 	} finally {
 		setTimeout(() => {

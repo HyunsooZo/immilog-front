@@ -153,7 +153,7 @@ const likeApi = async () => {
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 
@@ -168,7 +168,7 @@ const increaseViewCount = async () => {
 			props.post.viewCount++;
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 
@@ -198,7 +198,7 @@ const bookmarkApi = async () => {
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 

@@ -1,4 +1,5 @@
 import type { IPageable } from '@/types/api-interface.ts'
+import { DEFAULT_VALUES } from '@/constants/index.js'
 
 export interface ISelectMenu {
   active: any
@@ -157,8 +158,8 @@ export interface IUserInfo {
 }
 
 export interface IError {
-  code: any
-  message: any
+  code: string | number
+  message: string
 }
 
 export interface IOtherUserInfo {
@@ -239,5 +240,5 @@ export interface ICompany {
   companyCountryCode: string
   companyIndustryCode: string
   companyRegion: string
-  companyManagerUserSeq: 21
+  companyManagerUserSeq: typeof DEFAULT_VALUES.COMPANY_MANAGER_USER_SEQ
 }

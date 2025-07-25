@@ -242,7 +242,7 @@ const detailBoard = async () => {
 			isLiked.value = response.data.data.likeUsers.some((userSeq: number) => userSeq === 1);
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 
@@ -271,7 +271,7 @@ const likeComment = async (index: number) => {
 	if (response.status === 401) {
 		router.push('/sign-in');
 	} else if (response.status !== 201) {
-		console.log('좋아요 실패');
+		console.error('좋아요 실패');
 	}
 };
 
@@ -303,7 +303,7 @@ const likeReply = async (index: number, replyIndex: number) => {
 	if (response.status === 401) {
 		router.push('/sign-in');
 	} else if (response.status !== 201) {
-		console.log('좋아요 실패');
+		console.error('좋아요 실패');
 	}
 };
 

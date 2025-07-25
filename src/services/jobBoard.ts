@@ -5,11 +5,11 @@ axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL
 const token = localStorage.getItem('accessToken')
 
 export const getJobBoardsApi = async (
-  country: any,
-  sortingMethod: any,
-  industry: any,
-  experience: any,
-  page: any
+  country: string,
+  sortingMethod: string,
+  industry: string,
+  experience: string,
+  page: number
 ) => {
   if (!token) {
     return { status: 'unauthenticated' }
@@ -23,12 +23,12 @@ export const getJobBoardsApi = async (
     const response = await axios(config)
     return { status: response.status, data: response.data }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return { status: 'error', error }
   }
 }
 
-const createConfig = (method: string, url: string, data: null) => {
+const createConfig = (method: string, url: string, data: unknown) => {
   return {
     method,
     url,

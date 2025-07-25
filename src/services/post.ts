@@ -9,7 +9,7 @@ const getToken = () => localStorage.getItem('accessToken');
 const getUserSeq = () => localStorage.getItem('userSeq');
 
 // 공통 에러 핸들링 함수
-const handleError = (error: any) => {
+const handleError = (error: unknown) => {
   console.error(error);
   return { status: 'error', error };
 };
@@ -50,7 +50,7 @@ export const likeApi = async (path: string, seq: number) => {
 };
 
 // view 업데이트 API 요청 함수
-export const viewApi = async (seq: any, jobPostFlag: boolean) => {
+export const viewApi = async (seq: number, jobPostFlag: boolean) => {
   try {
     const endpoint = jobPostFlag ? `/job-boards/${seq}/view` : `/posts/${seq}/view`;
     const response = await api.patch(endpoint);

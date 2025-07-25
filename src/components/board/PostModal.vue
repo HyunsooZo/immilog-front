@@ -407,7 +407,7 @@ const imageUpload = async () => {
 			return;
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 
@@ -422,7 +422,7 @@ const postUpload = async () => {
 		try {
 			await imageUpload();
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			offLoading();
 		}
 	}
@@ -437,7 +437,7 @@ const postUpload = async () => {
 			}, 1000);
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		offLoading();
 	}
 };

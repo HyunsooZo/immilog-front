@@ -272,8 +272,7 @@ const closeSelect = () => {
 };
 
 const inquireBoardList = (category: ISelectItem, sorting: ISelectItem) => {
-	console.log(category, sorting);
-	console.log('inquireBoardList');
+	// 게시물 목록 조회 - 카테고리 및 정렬 옵션 설정
 };
 
 // 무한 스크롤 관련 메소드 (데이터 추가 호출)
@@ -302,7 +301,7 @@ const fetchBoardList = async (country: string, sortingMethod: string, nextPage: 
 			state.value.pagination = response.data.data.pageable;
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	} finally {
 		state.value.loading = false;
 	}

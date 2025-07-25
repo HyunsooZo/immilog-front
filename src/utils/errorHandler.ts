@@ -2,7 +2,7 @@ import { IApiErrorResponse } from '@/types/api-interface.ts'
 import { AxiosError } from 'axios'
 
 export const handleError = (error: string) => {
-  console.log(error)
+  console.error(error)
   const errorMessage = error
   if (errorMessage === '이메일 형식에 맞게 입력해주세요.') {
     return 'signInView.invalidEmailFormat'

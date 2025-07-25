@@ -21,11 +21,11 @@ export interface IPageable {
 }
 
 export interface IApiChatRoom extends IApiResponse {
-  data: IPagenation<IChatRoom>
+  data: IPagination<IChatRoom>
 }
 
 export interface IApiChatStart extends IApiResponse {
-  data: IPagenation<IChatRoom>
+  data: IPagination<IChatRoom>
 }
 
 export interface IApiChatRoomList extends IApiResponse {
@@ -33,20 +33,20 @@ export interface IApiChatRoomList extends IApiResponse {
 }
 
 export interface IApiChat extends IApiResponse {
-  data: IPagenation<IChat>
+  data: IPagination<IChat>
 }
 
 export interface IApiSearchResult extends IApiResponse {
-  data: IPagenation<ISearchResult>
+  data: IPagination<ISearchResult>
 }
 
 export interface IApiJobPost extends IApiResponse {
-  data: IPagenation<IJobPost>
+  data: IPagination<IJobPost>
 }
 
 // 게시글 리스트 인터페이스
 export interface IApiPosts extends IApiResponse {
-  data: IPagenation<IPost>
+  data: IPagination<IPost>
 }
 
 export interface IApiPostDetail extends IApiResponse {
@@ -57,12 +57,12 @@ export interface IApiUserInfo extends IApiResponse {
   data: IUserInfo
 }
 
-export interface IApiImageextends extends IApiResponse {
+export interface IApiImage extends IApiResponse {
   data: string[];
 }
 
 export interface IApiNotifications extends IApiResponse {
-  data: IPagenation<INotification>
+  data: IPagination<INotification>
 }
 
 export interface IApiLocation extends IApiResponse {
@@ -82,7 +82,7 @@ export interface IApiResponse {
   message: string
 }
 
-export interface IPagenation<T> {
+export interface IPagination<T> {
   content: T[]
   pageable: IPageable
   last: boolean

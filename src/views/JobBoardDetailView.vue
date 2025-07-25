@@ -73,7 +73,7 @@ const fetchJobBoardDetail = async () => {
 			jobPost.value = response.data.data
 		}
 	} catch (error) {
-		console.log(error)
+		console.error(error)
 	}
 }
 

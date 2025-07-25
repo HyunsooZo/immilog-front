@@ -151,7 +151,7 @@ const getNotificationsApi = async (nextPage: number) => {
       }
     )
     if (response.status === 204 || response.data.status ===204) {
-      console.log('공지사항이 존재하지 않습니다.')
+      // 공지사항이 없음
       return
     }
     if (response.data.status === 200 && response.data.data && response.data.data.content) {
@@ -162,7 +162,7 @@ const getNotificationsApi = async (nextPage: number) => {
       console.error('Unexpected response structure', response.data)
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
