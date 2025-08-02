@@ -1,11 +1,20 @@
 <template>
 	<!-- replydialog -->
-	<div class="modal reply--dialog" tabindex="-1" role="dialog" @click.self="closeModal">
+	<div
+		class="modal reply--dialog"
+		tabindex="-1"
+		role="dialog"
+		@click.self="closeModal"
+	>
 		<div class="modal-content">
 			<div class="modal-header">
 				<!-- 등록 -->
 				<div class="item__fnc right">
-					<button type="button" class="button-icon__s button--post_upload" @click="commentApi">
+					<button
+						type="button"
+						class="button-icon__s button--post_upload"
+						@click="commentApi"
+					>
 						<svg viewBox="0 0 16 16">
 							<path :d="postRegistrationIcon.first" />
 							<path :d="postRegistrationIcon.second" />
@@ -13,16 +22,28 @@
 						<span>등록</span>
 					</button>
 				</div>
-				<button type="button" class="button-icon button--close" @click="closeModal">
+				<button
+					type="button"
+					class="button-icon button--close"
+					@click="closeModal"
+				>
 					<i class="blind">닫기</i>
 				</button>
 			</div>
 			<div class="modal-body">
 				<div class="post-wrap">
 					<div class="post__wrap">
-						<textarea v-model="textareaContent" class="text__area" name="content" autocomplete="off"
-							:placeholder="t('replyWrite.replyWritePlaceholder')" data-autosuggest_is-input="true" ref="textareaRef"
-							@input="adjustTextareaHeight" rows="2"></textarea>
+						<textarea
+							v-model="textareaContent"
+							class="text__area"
+							name="content"
+							autocomplete="off"
+							:placeholder="t('replyWrite.replyWritePlaceholder')"
+							data-autosuggest_is-input="true"
+							ref="textareaRef"
+							@input="adjustTextareaHeight"
+							rows="2"
+						></textarea>
 						<!-- <textarea v-model="content" class="text__area" name="content" autocomplete="off"
 							placeholder="댓글을 입력해주세요. 다른 사용자로부터 일정 수 이상의 신고를 받는 경우 글이 자동으로 숨김처리 될 수 있습니다."
 							data-autosuggest_is-input="true" ref="textareaRef" @input="adjustTextareaHeight" rows="2"></textarea> -->
@@ -50,7 +71,12 @@
 			</div>
 		</div>
 	</div>
-	<CustomAlert v-if="alertValue" :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+	<CustomAlert
+		v-if="alertValue"
+		:alertValue="alertValue"
+		:alertText="alertText"
+		@update:alertValue="closeAlert"
+	/>
 	<LoadingModal v-if="isLoading" />
 </template>
 
@@ -138,7 +164,7 @@ const callCommentApi = async () => {
 	try {
 		const requestForm = {
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
-		}
+		};
 		const response: AxiosResponse<void> = await api.post(
 			`/comments/post/${props.postSeq}/users/${userInfo.userSeq}`,
 			requestForm,
@@ -156,7 +182,7 @@ const callReplyApi = async () => {
 	try {
 		const requestForm = {
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
-		}
+		};
 		const response: AxiosResponse<void> = await api.post(
 			`/replies/comments/${props.commentSeq}`,
 			requestForm,

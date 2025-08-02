@@ -23,29 +23,38 @@ const hideFooter = computed(() => route.meta.hideFooter);
 const userInfo = useUserInfoStore();
 
 const init = async () => {
-	if(!localStorage.getItem('accessToken') || !localStorage.getItem('userSeq')) {
+	if (
+		!localStorage.getItem('accessToken') ||
+		!localStorage.getItem('userSeq')
+	) {
 		return false;
 	}
 	const response: AxiosResponse<IApiUserInfo> | any = await fetchUserInfo(
 		localStorage.getItem('accessToken'),
-		localStorage.getItem('userSeq')
+		localStorage.getItem('userSeq'),
 	);
 	if (response.data.status === 200 && response.status === 200) {
-		localStorage.setItem('accessToken', response.data.data.accessToken as string);
-		localStorage.setItem('refreshToken', response.data.data.refreshToken as string);
+		localStorage.setItem(
+			'accessToken',
+			response.data.data.accessToken as string,
+		);
+		localStorage.setItem(
+			'refreshToken',
+			response.data.data.refreshToken as string,
+		);
 		userInfo.setUserInfo(response.data.data);
 		userInfo.setUserInterestCountry(response.data.data.interestCountry);
 		return true;
 	} else {
 		return false;
 	}
-}
+};
 
 onMounted(async () => {
-	locale.value = localStorage.getItem('language')==='en' ?'en':'ko';	
+	locale.value = localStorage.getItem('language') === 'en' ? 'en' : 'ko';
 	await getCoordinate();
-	if (!await init()) {
-		await nextTick()
+	if (!(await init())) {
+		await nextTick();
 		router.push('/sign-in');
 	}
 });

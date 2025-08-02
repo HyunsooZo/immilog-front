@@ -3,7 +3,11 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">내 게시물</p>
-				<button type="button" class="button-icon button--close" @click="closeModal">
+				<button
+					type="button"
+					class="button-icon button--close"
+					@click="closeModal"
+				>
 					<i class="blind">취소</i>
 				</button>
 			</div>
@@ -11,19 +15,38 @@
 				<div class="sticky-wrap" :class="{ active: isStickyWrap }">
 					<div class="menu-wrap">
 						<ul class="menu__inner">
-							<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
-								<button type="button" @click="selectMenu(menu)" class="button"
-									:aria-selected="menu.active.value ? 'true' : 'false'">
+							<li
+								v-for="(menu, index) in menus"
+								:key="index"
+								:class="{ active: menu.active.value }"
+								class="menu__list"
+							>
+								<button
+									type="button"
+									@click="selectMenu(menu)"
+									class="button"
+									:aria-selected="menu.active.value ? 'true' : 'false'"
+								>
 									{{ menu.label }}
 								</button>
 							</li>
 						</ul>
-						<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
+						<span
+							class="menu__bar"
+							:style="{ left: menuBarLeft, width: menuBarWidth }"
+						></span>
 					</div>
 				</div>
 				<div class="list-wrap">
-					<BoardContent v-for="(item, index) in state.posts" :key="index" :post="item" :jobPost="emptyJobPost"
-						:detail="false" :showAd="true" :isJobBoard="false" />
+					<BoardContent
+						v-for="(item, index) in state.posts"
+						:key="index"
+						:post="item"
+						:jobPost="emptyJobPost"
+						:detail="false"
+						:showAd="true"
+						:isJobBoard="false"
+					/>
 				</div>
 			</div>
 		</div>
@@ -78,7 +101,7 @@ const fetchMyPostList = async (page: number) => {
 	try {
 		const response: AxiosResponse<IApiPosts> = await api.get(
 			`/posts/users/${props.userSeq}/page/${page}`,
-			applicationJsonWithToken(userInfo.accessToken)
+			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
 			state.value.posts = response.data.data.content;
@@ -125,14 +148,18 @@ const handleStickyWrap = () => {
 };
 // 메뉴바 관련 메소드
 const updateMenuBar = () => {
-	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
+	const activeButton = document.querySelector(
+		'.menu__list.active .button',
+	) as HTMLElement | null;
 	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
 	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
 
-const selectMenu = (selectedMenu: { active: any; label?: string; }) => {
+const selectMenu = (selectedMenu: { active: any; label?: string }) => {
 	selectedMenu.active.value = true;
-	menus.filter(menu => menu !== selectedMenu).forEach(menu => menu.active.value = false);
+	menus
+		.filter(menu => menu !== selectedMenu)
+		.forEach(menu => (menu.active.value = false));
 	nextTick(() => updateMenuBar());
 };
 

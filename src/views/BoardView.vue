@@ -6,13 +6,26 @@
 			<!-- tab button -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li v-for="(menu, index) in menus" :key="index" :class="{ active: menu.active.value }" class="menu__list">
-						<button type="button" @click="selectMenu(menu)" class="button" :aria-selected="Boolean(menu.active.value)">
+					<li
+						v-for="(menu, index) in menus"
+						:key="index"
+						:class="{ active: menu.active.value }"
+						class="menu__list"
+					>
+						<button
+							type="button"
+							@click="selectMenu(menu)"
+							class="button"
+							:aria-selected="Boolean(menu.active.value)"
+						>
 							{{ menu.label }}
 						</button>
 					</li>
 				</ul>
-				<span class="menu__bar" :style="{ left: menuBarLeft, width: menuBarWidth }"></span>
+				<span
+					class="menu__bar"
+					:style="{ left: menuBarLeft, width: menuBarWidth }"
+				></span>
 			</div>
 		</div>
 
@@ -20,12 +33,20 @@
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button type="button" class="button--select" @click="openCategorySelect">
+					<button
+						type="button"
+						class="button--select"
+						@click="openCategorySelect"
+					>
 						<span>{{ t(selectCategoryValue.name) }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button type="button" class="button--select sort" @click="openSortingSelect">
+					<button
+						type="button"
+						class="button--select sort"
+						@click="openSortingSelect"
+					>
 						<span>{{ t(selectSortingValue.name) }}</span>
 					</button>
 				</div>
@@ -36,8 +57,13 @@
 		<!-- <BoardContent /> -->
 		<div class="list-wrap">
 			<!-- 글쓰기버튼 -->
-			<button type="button" class="button-icon button--post _sticky" :class="{ active: isStickyButton }"
-				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : '' }" @click="openPostModal">
+			<button
+				type="button"
+				class="button-icon button--post _sticky"
+				:class="{ active: isStickyButton }"
+				:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : '' }"
+				@click="openPostModal"
+			>
 				<svg viewBox="0 0 16 16">
 					<path :d="postBtn.first" />
 					<path :d="postBtn.second" />
@@ -45,15 +71,33 @@
 				<i class="blind">글쓰기</i>
 			</button>
 			<div v-for="(item, index) in state.posts" :key="index">
-				<BoardContent :post="item" :detail="false" :jobPost="emptyJobPost" :isJobBoard="false" />
+				<BoardContent
+					:post="item"
+					:detail="false"
+					:jobPost="emptyJobPost"
+					:isJobBoard="false"
+				/>
 			</div>
 		</div>
 	</div>
-	<PostModal v-if="onPostModal" :isJobBoard=false @onPostModal:value="closePostModal" />
-	<SelectDialog v-if="isCategorySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
-		@close="closeSelect" @select:value="selectedValue" />
+	<PostModal
+		v-if="onPostModal"
+		:isJobBoard="false"
+		@onPostModal:value="closePostModal"
+	/>
+	<SelectDialog
+		v-if="isCategorySelectClicked || isSortingSelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+		<CustomAlert
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
+		/>
 	</teleport>
 </template>
 
@@ -107,7 +151,9 @@ const isStickyButton = ref(false);
 const StickyWrapHeight = ref(0);
 onMounted(() => {
 	window.addEventListener('scroll', handleStickyWrap);
-	const listTopElement = document.querySelector('.list-top-wrap') as HTMLElement | null;
+	const listTopElement = document.querySelector(
+		'.list-top-wrap',
+	) as HTMLElement | null;
 	let listTopHeight = listTopElement?.getBoundingClientRect().height;
 
 	if (typeof listTopHeight === 'number') {
@@ -146,7 +192,8 @@ let menus = [
 ];
 
 const selectMenu = async (selectedMenu: ISelectMenu) => {
-	const isInterestCountryMenu = selectedMenu.label === t('postView.interestCountry');
+	const isInterestCountryMenu =
+		selectedMenu.label === t('postView.interestCountry');
 	if (isInterestCountryMenu && !userInfo.userInterestCountry) {
 		openAlert(t('postView.noInterestCountry'));
 		return;
@@ -161,22 +208,28 @@ const selectMenu = async (selectedMenu: ISelectMenu) => {
 		updateMenuBar();
 	});
 	selectCategoryValue.value = {
-		name: 'selectItems.allCategories', code: 'ALL'
+		name: 'selectItems.allCategories',
+		code: 'ALL',
 	};
 	currentPage.value = 0;
 	selectSortingValue.value = {
-		name: 'selectItems.sortByRecent', code: 'CREATED_DATE'
+		name: 'selectItems.sortByRecent',
+		code: 'CREATED_DATE',
 	};
 	initState();
 	if (isInterestCountryMenu) {
-		country.value = interestCountry.value ? interestCountry.value : country.value;
+		country.value = interestCountry.value
+			? interestCountry.value
+			: country.value;
 	} else {
 		country.value = userInfo.userCountry ? userInfo.userCountry : '';
 	}
 };
 
 const updateMenuBar = () => {
-	const activeButton = document.querySelector('.menu__list.active .button') as HTMLElement | null;
+	const activeButton = document.querySelector(
+		'.menu__list.active .button',
+	) as HTMLElement | null;
 	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
 	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
@@ -253,8 +306,8 @@ const initState = () => {
 		},
 		last: false,
 		loading: false,
-	}
-}
+	};
+};
 
 const selectedValue = (value: ISelectItem) => {
 	if (categoryList.some(c => c.code === value.code)) {
@@ -280,24 +333,34 @@ const loadMoreData = async () => {
 	if (!state.value.last && !state.value.loading) {
 		state.value.loading = true;
 		currentPage.value += 1;
-		await fetchBoardList(country.value, selectSortingValue.value.code, currentPage.value);
+		await fetchBoardList(
+			country.value,
+			selectSortingValue.value.code,
+			currentPage.value,
+		);
 		state.value.loading = false; // fetchBoardList 호출 후 loading 상태 변경
 	}
 };
 
-const fetchBoardList = async (country: string, sortingMethod: string, nextPage: number) => {
+const fetchBoardList = async (
+	country: string,
+	sortingMethod: string,
+	nextPage: number,
+) => {
 	state.value.loading = true;
 	try {
 		const response: AxiosResponse<IApiPosts> = await api.get(
 			`/posts?country=${country}` +
-			`&category=${selectCategoryValue.value.code.toUpperCase()}` +
-			`&sortingMethod=${sortingMethod}` +
-			`&isPublic=${'N'}` +
-			`&page=${nextPage}`,
+				`&category=${selectCategoryValue.value.code.toUpperCase()}` +
+				`&sortingMethod=${sortingMethod}` +
+				`&isPublic=${'N'}` +
+				`&page=${nextPage}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
-			response.data.data.content.forEach((post: any) => state.value.posts.push(post));
+			response.data.data.content.forEach((post: any) =>
+				state.value.posts.push(post),
+			);
 			state.value.pagination = response.data.data.pageable;
 		}
 	} catch (error) {
@@ -311,7 +374,7 @@ watch([selectSortingValue, selectCategoryValue, country], () => {
 	fetchBoardList(
 		country.value,
 		selectSortingValue.value.code,
-		currentPage.value
+		currentPage.value,
 	);
 });
 
@@ -320,7 +383,9 @@ onMounted(() => {
 		router.push('/sign-in');
 	}
 	country.value = userInfo.userCountry ? userInfo.userCountry : '';
-	interestCountry.value = userInfo.userInterestCountry ? userInfo.userInterestCountry : undefined;
+	interestCountry.value = userInfo.userInterestCountry
+		? userInfo.userInterestCountry
+		: undefined;
 	updateMenuBar();
 	fetchBoardList(country.value, 'CREATED_DATE', 0);
 	window.addEventListener('scroll', handleScroll);

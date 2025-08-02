@@ -1,6 +1,11 @@
 <template>
-	<div class="modal default--dialog" tabindex="-1" role="dialog" @click.self="closeModal">
-		<div class=" modal-content">
+	<div
+		class="modal default--dialog"
+		tabindex="-1"
+		role="dialog"
+		@click.self="closeModal"
+	>
+		<div class="modal-content">
 			<div class="modal-body">
 				<div class="list-wrap">
 					<ul>
@@ -19,7 +24,12 @@
 			</div>
 		</div>
 	</div>
-	<ConfirmModal v-if="onConfirmModal" :modalText="modalText" @close="closeConfirmModal" @confirm="onDeletePost" />
+	<ConfirmModal
+		v-if="onConfirmModal"
+		:modalText="modalText"
+		@close="closeConfirmModal"
+		@confirm="onDeletePost"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -31,9 +41,7 @@ const props = defineProps({
 });
 const emits = defineEmits(['close', 'delete', 'edit']);
 
-const editPost = () => {
-
-};
+const editPost = () => {};
 
 const deletePost = async () => {
 	onConfirmModal.value = true;

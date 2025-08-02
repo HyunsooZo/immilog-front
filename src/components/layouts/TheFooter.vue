@@ -31,8 +31,16 @@ const setMenuItems = () => {
 	menuItems.value = [
 		{ label: t('footer.home'), styleClass: 'home', paths: [homeIcon] },
 		{ label: t('footer.myCountry'), styleClass: 'area', paths: [areaIcon] },
-		{ label: t('footer.chat'), styleClass: 'chat', paths: [chatIcon.first, chatIcon.second] },
-		{ label: t('footer.job'), styleClass: 'job', paths: [jobIcon.first, jobIcon.second, jobIcon.third] },
+		{
+			label: t('footer.chat'),
+			styleClass: 'chat',
+			paths: [chatIcon.first, chatIcon.second],
+		},
+		{
+			label: t('footer.job'),
+			styleClass: 'job',
+			paths: [jobIcon.first, jobIcon.second, jobIcon.third],
+		},
 		{ label: t('footer.myPage'), styleClass: 'my', paths: [myPageIcon] },
 	];
 };
@@ -42,8 +50,10 @@ setMenuItems();
 
 // 언어 변경 감지하여 메뉴 아이템 업데이트
 watchEffect(() => {
-	locale.value; // 언어 변경 감지
-	setMenuItems();
+	// 언어 변경 감지를 위해 locale.value를 참조
+	if (locale.value) {
+		setMenuItems();
+	}
 });
 
 // 라우트 매핑과 메뉴 아이템 클릭 핸들러
@@ -84,13 +94,26 @@ watchEffect(() => {
 	<div class="footer">
 		<ul class="util-item-wrap">
 			<li v-for="(item, index) in menuItems" :key="index" class="util__item">
-				<button type="button" :class="{
-					active: activeItem === index,
-					item: true,
-					[item.styleClass]: true,
-				}" @click="onMenuItemClick(index)">
-					<svg :width="16" :height="16" :viewBox="iconViewBox" aria-hidden="true">
-						<path v-for="(path, pathIndex) in item.paths" :key="pathIndex" :d="path" />
+				<button
+					type="button"
+					:class="{
+						active: activeItem === index,
+						item: true,
+						[item.styleClass]: true,
+					}"
+					@click="onMenuItemClick(index)"
+				>
+					<svg
+						:width="16"
+						:height="16"
+						:viewBox="iconViewBox"
+						aria-hidden="true"
+					>
+						<path
+							v-for="(path, pathIndex) in item.paths"
+							:key="pathIndex"
+							:d="path"
+						/>
 					</svg>
 					<span>{{ item.label }}</span>
 				</button>

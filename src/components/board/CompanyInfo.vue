@@ -3,13 +3,20 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">{{ t('companyInfoView.companyInfo') }}</p>
-				<button type="button" class="button-icon button--close" @click="closeModal">
+				<button
+					type="button"
+					class="button-icon button--close"
+					@click="closeModal"
+				>
 					<i class="blind">취소</i>
 				</button>
 			</div>
 			<div class="modal-body">
 				<div class="content">
-					<TheTopBox :title="t('companyInfoView.companyRegist')" :text="t('companyInfoView.companyRegistText')" />
+					<TheTopBox
+						:title="t('companyInfoView.companyRegist')"
+						:text="t('companyInfoView.companyRegistText')"
+					/>
 					<div class="container">
 						<!-- userProfileUrl -->
 						<div class="input-wrap">
@@ -17,14 +24,30 @@
 								<div class="input__item">
 									<div class="input__item_inner">
 										<div class="input__file">
-											<input type="file" id="file-upload" class="input__element" @change="previewImage" />
+											<input
+												type="file"
+												id="file-upload"
+												class="input__element"
+												@change="previewImage"
+											/>
 											<label for="file-upload" class="button" role="button">
 												<span class="blind">회사 로고 선택</span>
 											</label>
 										</div>
-										<div class="item__display" :class="{ 'image--default _company': !imagePreview }">
-											<img v-if="imagePreview" :src="imagePreview" alt="Preview" />
-											<button type="reset" class="button--del" @click="removeImage">
+										<div
+											class="item__display"
+											:class="{ 'image--default _company': !imagePreview }"
+										>
+											<img
+												v-if="imagePreview"
+												:src="imagePreview"
+												alt="Preview"
+											/>
+											<button
+												type="reset"
+												class="button--del"
+												@click="removeImage"
+											>
 												<i class="blind">삭제</i>
 											</button>
 										</div>
@@ -32,25 +55,46 @@
 								</div>
 							</div>
 						</div>
-						<RegistWrap :fields="fields" :formFields.sync="formFields" :isFilled="doesCompanyInfoExist"
-							@openSelectForIndustry="openIndustrySelect" @openSelectForCountry="openCountrySelect" />
+						<RegistWrap
+							:fields="fields"
+							v-model:formFields="formFields"
+							:isFilled="doesCompanyInfoExist"
+							@openSelectForIndustry="openIndustrySelect"
+							@openSelectForCountry="openCountrySelect"
+						/>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<div class="button-wrap">
-					<button class="button" :class="{
-						'button button--positive': buttonActivationCriteria,
-						'button button--disabled': !buttonActivationCriteria,
-					}" :disabled="!buttonActivationCriteria" @click="submit">{{ t('companyInfoView.save') }}</button>
+					<button
+						class="button"
+						:class="{
+							'button button--positive': buttonActivationCriteria,
+							'button button--disabled': !buttonActivationCriteria,
+						}"
+						:disabled="!buttonActivationCriteria"
+						@click="submit"
+					>
+						{{ t('companyInfoView.save') }}
+					</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<SelectDialog v-if="selectOpenValue" :title="selectTitle" :list="selectList" @close="closeSelect"
-		@select:value="selectedValue" />
+	<SelectDialog
+		v-if="selectOpenValue"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
 	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+		<CustomAlert
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
+		/>
 	</teleport>
 </template>
 
@@ -93,14 +137,54 @@ const imageHasChanged = ref(false);
 const companyInfo = useCompanyInfo();
 
 const fields: IField[] = [
-	{ name: 'region', model: regionValue, label: 'Region', translationKey: 'companyInfoView.region' },
-	{ name: 'country', model: countryValue, label: 'Country', translationKey: 'companyInfoView.country' },
-	{ name: 'companyAddress', model: companyAddressValue, label: 'CompanyAddress', translationKey: 'companyInfoView.companyAddress' },
-	{ name: 'companyHomepage', model: companyHomepageValue, label: 'CompanyHomepage', translationKey: 'companyInfoView.companyHomepage' },
-	{ name: 'companyEmail', model: companyEmailValue, label: 'CompanyEmail', translationKey: 'companyInfoView.companyEmail' },
-	{ name: 'companyPhone', model: companyPhoneValue, label: 'CompanyPhone', translationKey: 'companyInfoView.companyPhone' },
-	{ name: 'industry', model: industryValue, label: 'Industry', translationKey: 'companyInfoView.industry' },
-	{ name: 'companyName', model: companyNameValue, label: 'Company', translationKey: 'companyInfoView.company' },
+	{
+		name: 'region',
+		model: regionValue,
+		label: 'Region',
+		translationKey: 'companyInfoView.region',
+	},
+	{
+		name: 'country',
+		model: countryValue,
+		label: 'Country',
+		translationKey: 'companyInfoView.country',
+	},
+	{
+		name: 'companyAddress',
+		model: companyAddressValue,
+		label: 'CompanyAddress',
+		translationKey: 'companyInfoView.companyAddress',
+	},
+	{
+		name: 'companyHomepage',
+		model: companyHomepageValue,
+		label: 'CompanyHomepage',
+		translationKey: 'companyInfoView.companyHomepage',
+	},
+	{
+		name: 'companyEmail',
+		model: companyEmailValue,
+		label: 'CompanyEmail',
+		translationKey: 'companyInfoView.companyEmail',
+	},
+	{
+		name: 'companyPhone',
+		model: companyPhoneValue,
+		label: 'CompanyPhone',
+		translationKey: 'companyInfoView.companyPhone',
+	},
+	{
+		name: 'industry',
+		model: industryValue,
+		label: 'Industry',
+		translationKey: 'companyInfoView.industry',
+	},
+	{
+		name: 'companyName',
+		model: companyNameValue,
+		label: 'Company',
+		translationKey: 'companyInfoView.company',
+	},
 ];
 
 const formFields = ref<IFormFields>({
@@ -214,8 +298,9 @@ const closeModal = () => {
 };
 
 const buttonActivationCriteria = computed(() => {
-	if (doesCompanyInfoExist) {
-		return companyInfo.companyNameValue != companyNameValue.value ||
+	if (doesCompanyInfoExist.value) {
+		return (
+			companyInfo.companyNameValue != companyNameValue.value ||
 			companyInfo.industryValue != industryValue.value ||
 			companyInfo.companyPhoneValue != companyPhoneValue.value ||
 			companyInfo.companyEmailValue != companyEmailValue.value ||
@@ -223,21 +308,23 @@ const buttonActivationCriteria = computed(() => {
 			companyInfo.companyAddressValue != companyAddressValue.value ||
 			companyInfo.countryValue != countryValue.value ||
 			companyInfo.regionValue != regionValue.value ||
-			imageHasChanged.value;
+			imageHasChanged.value
+		);
 	}
-	return companyNameValue.value &&
+	return (
+		companyNameValue.value &&
 		industryValue.value &&
 		companyPhoneValue.value &&
 		companyEmailValue.value &&
 		companyHomepageValue.value &&
 		companyAddressValue.value &&
 		countryValue.value &&
-		regionValue.value;
+		regionValue.value
+	);
 });
 
-
 // 프리뷰 이미지
-const previewImage = (event: { target: any; }) => {
+const previewImage = (event: { target: any }) => {
 	const input = event.target;
 	if (input.files && input.files[0]) {
 		const reader = new FileReader();
@@ -250,7 +337,7 @@ const previewImage = (event: { target: any; }) => {
 		};
 		reader.readAsDataURL(input.files[0]);
 	}
-}
+};
 
 // <-- 회사 정보 등록 관련
 const postImageApi = async () => {
@@ -286,18 +373,17 @@ const postCompanyApi = async () => {
 				closeModal();
 			}, 1000);
 		}
-
 	} catch (e) {
 		console.error(e);
 	}
-}
+};
 
 const submit = async () => {
 	if (imageFile.value) {
 		await postImageApi();
 	}
 	await postCompanyApi();
-}
+};
 // -->
 
 const generateRequesrForm = () => {
@@ -311,12 +397,13 @@ const generateRequesrForm = () => {
 		companyCountry: countryCode.value,
 		companyRegion: regionValue.value,
 		companyLogo: imageUrl.value[0],
-	}
-}
+	};
+};
 const doesCompanyInfoExist = ref(false);
 
 const fetchUserCompanyInfo = async () => {
-	const response: AxiosResponse<IApiCompanyInfo> | any = await getMyCompanyInfo();
+	const response: AxiosResponse<IApiCompanyInfo> | any =
+		await getMyCompanyInfo();
 	if (response.status === 200 || response.status === 201) {
 		const { data } = response.data;
 		doesCompanyInfoExist.value = true;
@@ -335,7 +422,7 @@ const fetchUserCompanyInfo = async () => {
 			imagePreview.value = data.companyLogo;
 		}
 	}
-}
+};
 
 onMounted(async () => {
 	try {

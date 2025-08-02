@@ -6,7 +6,11 @@
 			</div>
 			<div class="modal-footer">
 				<div class="button-wrap">
-					<button type="button" class="button button--positive" @click="closeModal">
+					<button
+						type="button"
+						class="button button--positive"
+						@click="closeModal"
+					>
 						{{ UI_TEXT.CONFIRM_BUTTON }}
 					</button>
 				</div>

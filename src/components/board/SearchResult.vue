@@ -1,7 +1,10 @@
 <template>
 	<div class="item">
 		<div class="info__wrap">
-			<div class="item__image" :class="{ 'image--default': !post.userProfileUrl }">
+			<div
+				class="item__image"
+				:class="{ 'image--default': !post.userProfileUrl }"
+			>
 				<img v-if="post.userProfileUrl" :src="post.userProfileUrl" alt="" />
 			</div>
 			<div class="item__fnc">
@@ -25,8 +28,14 @@
 		<div class="text__wrap">
 			<button type="button" class="list__item_button" @click="onBoardDetail">
 				<div class="text__item">
-					<p class="title" v-html="highlightKeyword(post.title, post.keyword)"></p>
-					<p class="text" v-html="highlightKeyword(post.content, post.keyword)"></p>
+					<p
+						class="title"
+						v-html="highlightKeyword(post.title, post.keyword)"
+					></p>
+					<p
+						class="text"
+						v-html="highlightKeyword(post.content, post.keyword)"
+					></p>
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<div class="tag__item">
@@ -48,7 +57,12 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ post.viewCount }}</span>
 				</p>
-				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likeApi">
+				<button
+					type="button"
+					class="list__item_button like"
+					:class="{ active: isLiked }"
+					@click="likeApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count"> {{ likes }}</span>
@@ -61,10 +75,17 @@
 			<div class="item__fnc">
 				<p class="list__item past">
 					<i class="blind">작성시간</i>
-					<span class="item__count">{{ timeCalculation(post.createdAt).time
-						}}{{ t(timeCalculation(post.createdAt).text) }}</span>
+					<span class="item__count"
+						>{{ timeCalculation(post.createdAt).time
+						}}{{ t(timeCalculation(post.createdAt).text) }}</span
+					>
 				</p>
-				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="bookmarkApi">
+				<button
+					type="button"
+					class="list__item_button mark"
+					:class="{ active: isBookmarked }"
+					@click="bookmarkApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -119,6 +140,8 @@ const props = defineProps({
 	},
 });
 
+const emits = defineEmits(['update:post']);
+
 const likes = ref(props.post.likeCount);
 const likeUsers = ref(props.post.likeUsers);
 const bookmarkUsers = ref(props.post.bookmarkUsers);
@@ -164,8 +187,16 @@ const increaseViewCount = async () => {
 			{},
 			applicationJsonWithToken(userInfo.accessToken),
 		);
-		if (response.status === 200 || response.status === 203 || response.status === 204) {
-			props.post.viewCount++;
+		if (
+			response.status === 200 ||
+			response.status === 203 ||
+			response.status === 204
+		) {
+			const updatedPost = {
+				...props.post,
+				viewCount: props.post.viewCount + 1,
+			};
+			emits('update:post', updatedPost);
 		}
 	} catch (error) {
 		console.error(error);
@@ -204,7 +235,9 @@ const bookmarkApi = async () => {
 
 const changeBookmark = () => {
 	if (isBookmarked.value) {
-		const index = bookmarkUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
+		const index = bookmarkUsers.value.indexOf(
+			userSeq.value ? userSeq.value : 0,
+		);
 		if (index !== -1) {
 			bookmarkUsers.value.splice(index, 1);
 		}

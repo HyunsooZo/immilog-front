@@ -6,18 +6,31 @@
 			<!-- 카테고리 정렬 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
-					<button type="button" class="button--select" @click="openCategorySelect">
+					<button
+						type="button"
+						class="button--select"
+						@click="openCategorySelect"
+					>
 						<span>{{ t(selectIndustryValue.name) }}</span>
 					</button>
 				</div>
 				<div class="sort__list">
-					<button type="button" class="button--select sort" @click="openSortingSelect">
+					<button
+						type="button"
+						class="button--select sort"
+						@click="openSortingSelect"
+					>
 						<span>{{ t(selectSortingValue.name) }}</span>
 					</button>
 				</div>
 				<!-- 글쓰기 버튼 -->
-				<button type="button" class="button-icon button--post" :class="{ active: isStickyButton }"
-					:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : 'auto' }" @click="openPostModal">
+				<button
+					type="button"
+					class="button-icon button--post"
+					:class="{ active: isStickyButton }"
+					:style="{ top: isStickyButton ? StickyWrapHeight + 'px' : 'auto' }"
+					@click="openPostModal"
+				>
 					<svg viewBox="0 0 16 16">
 						<path :d="postBtn.first" />
 						<path :d="postBtn.second" />
@@ -30,24 +43,46 @@
 
 		<!-- 목록 -->
 		<div class="list-wrap">
-			<NoContent v-if="state.jobPosts.length === 0" :item="t('jobContent.jobPost')" />
+			<NoContent
+				v-if="state.jobPosts.length === 0"
+				:item="t('jobContent.jobPost')"
+			/>
 			<!-- <NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="'구인/구직 글'" /> -->
 			<div v-for="(item, index) in state.jobPosts" :key="index">
-				<BoardContent :jobPost="item" :showAd="showAd(index)" :isJobBoard="true" :post="emptyPost" :detail="false" />
+				<BoardContent
+					:jobPost="item"
+					:showAd="showAd(index)"
+					:isJobBoard="true"
+					:post="emptyPost"
+					:detail="false"
+				/>
 			</div>
 		</div>
 	</div>
-	<SelectDialog v-if="isIndustrySelectClicked || isSortingSelectClicked" :title="selectTitle" :list="selectList"
-		@close="closeSelect" @select:value="selectedValue" />
-	<PostModal v-if="onPostModal" :isJobBoard=true @onPostModal:value="closePostModal" />
+	<SelectDialog
+		v-if="isIndustrySelectClicked || isSortingSelectClicked"
+		:title="selectTitle"
+		:list="selectList"
+		@close="closeSelect"
+		@select:value="selectedValue"
+	/>
+	<PostModal
+		v-if="onPostModal"
+		:isJobBoard="true"
+		@onPostModal:value="closePostModal"
+	/>
 </template>
 
 <script setup lang="ts">
-import type { IJobPost, ISelectItem } from '@/types/interface'
+import type { IJobPost, ISelectItem } from '@/types/interface';
 import type { IApiJobPost, IPageable } from '@/types/api-interface';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { postBtn } from '@/utils/icons.ts';
-import { sortingList2, experienceList, industryList } from '@/utils/selectItems.ts';
+import {
+	sortingList2,
+	experienceList,
+	industryList,
+} from '@/utils/selectItems.ts';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { showAd } from '@/utils/showAd';
@@ -87,7 +122,9 @@ let stickyButtonHandler: () => void;
 const handleScrollEvent = () => {
 	window.addEventListener('scroll', handleStickyWrap);
 
-	const listTopElement = document.querySelector('.list-top-wrap') as HTMLElement;
+	const listTopElement = document.querySelector(
+		'.list-top-wrap',
+	) as HTMLElement;
 	let listTopHeight = listTopElement?.getBoundingClientRect().height;
 
 	stickyButtonHandler = () => {
@@ -136,10 +173,10 @@ const fetchJobBoardList = async () => {
 	try {
 		const response: AxiosResponse<IApiJobPost> = await api.get(
 			`/job-boards?country=${selectedCountry.value}` +
-			`&sortingMethod=${selectedSortingMethod.value}` +
-			`&industry=${selectIndustryValue.value.code}` +
-			`&experience=${selectExperienceValue.value.code}` +
-			`&page=${currentPage.value}`,
+				`&sortingMethod=${selectedSortingMethod.value}` +
+				`&industry=${selectIndustryValue.value.code}` +
+				`&experience=${selectExperienceValue.value.code}` +
+				`&page=${currentPage.value}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
@@ -192,7 +229,6 @@ const selectIndustryValue = ref({
 	name: 'industry.all',
 	code: 'ALL',
 });
-
 
 // select 관련 메소드 (카테고리 및 정렬)
 const openCategorySelect = () => {

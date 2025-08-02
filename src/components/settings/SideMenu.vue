@@ -13,7 +13,11 @@
 				<div class="list-wrap list--link item_preview">
 					<ul>
 						<li class="item">
-							<button type="button" class="button button-text" @click="onImageBoard">
+							<button
+								type="button"
+								class="button button-text"
+								@click="onImageBoard"
+							>
 								<span>사진</span>
 							</button>
 							<div class="item__list">
@@ -27,7 +31,11 @@
 							</div>
 						</li>
 						<li class="item">
-							<button type="button" class="button button-text" @click="onLinkBoard">
+							<button
+								type="button"
+								class="button button-text"
+								@click="onLinkBoard"
+							>
 								<span>링크</span>
 							</button>
 						</li>
@@ -117,11 +125,7 @@ const offImagePreview = () => {
 	isImagePreview.value = false;
 };
 
-const onImageBoard = () => {
+const onImageBoard = () => {};
 
-}
-
-const onLinkBoard = () => {
-
-}
+const onLinkBoard = () => {};
 </script>

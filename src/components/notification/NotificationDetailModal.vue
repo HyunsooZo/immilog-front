@@ -5,7 +5,11 @@
 				<p class="modal-title">
 					{{ title }}
 				</p>
-				<button type="button" class="button-icon button--close" @click="closeModal">
+				<button
+					type="button"
+					class="button-icon button--close"
+					@click="closeModal"
+				>
 					<i class="blind">취소</i>
 				</button>
 			</div>

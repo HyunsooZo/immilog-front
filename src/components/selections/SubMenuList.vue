@@ -1,8 +1,12 @@
 <template>
 	<div class="sub-menu-wrap">
 		<ul class="sub-menu__inner">
-			<li class="sub-menu__list" v-for="(subMenu, index) in subMenus" :key="index"
-				:class="{ active: isActive(subMenu.name) }">
+			<li
+				class="sub-menu__list"
+				v-for="(subMenu, index) in subMenus"
+				:key="index"
+				:class="{ active: isActive(subMenu.name) }"
+			>
 				<button type="button" class="button" @click="setActiveRegion(subMenu)">
 					{{ t(subMenu.name) }}
 				</button>
@@ -36,7 +40,7 @@ const isActive = (name: string) => {
 const emit = defineEmits(['select:country']);
 
 // 활성화된 지역을 설정하는 함수
-const setActiveRegion = (item: { name: string; }) => {
+const setActiveRegion = (item: { name: string }) => {
 	const index = prop.subMenus.findIndex(subMenu => subMenu.name === item.name);
 	activeRegionIndex.value = index;
 	selectedCountry.value = prop.subMenus[index].code;

@@ -7,13 +7,18 @@
 
 		<!-- 목록 -->
 		<div class="list-wrap">
-			<BoardContent :jobPost="jobPost" :detail="true" :post="emptyPost" :isJobBoard="true" />
+			<BoardContent
+				:jobPost="jobPost"
+				:detail="true"
+				:post="emptyPost"
+				:isJobBoard="true"
+			/>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { applicationJson } from '@/utils/header';
 import { IJobPost } from '@/types/interface';
@@ -62,20 +67,18 @@ const jobPost = ref<IJobPost>({
 	companyLogo: '',
 	status: '',
 	createdAt: '',
-})
-
-
+});
 
 const fetchJobBoardDetail = async () => {
 	try {
-		const response = await api.get(`/job-boards/${postId}`, applicationJson)
+		const response = await api.get(`/job-boards/${postId}`, applicationJson);
 		if (response.status === 200) {
-			jobPost.value = response.data.data
+			jobPost.value = response.data.data;
 		}
 	} catch (error) {
-		console.error(error)
+		console.error(error);
 	}
-}
+};
 
 onMounted(() => {
 	fetchJobBoardDetail();

@@ -6,10 +6,22 @@
 			<div class="input-wrap">
 				<div class="input__inner">
 					<div class="input__inner-item">
-						<input v-model="searchInput" type="search" id="inputSrch" class="input__element input__element--search"
-							:placeholder="t('searchView.searchPlaceHolder')" autocomplete="off" @keyup.enter="callSearchApi(page)" />
-						<button type="reset" v-if="searchInput !== ''" class="input__button-remove" title="텍스트삭제"
-							@click="initializeSearchInput"></button>
+						<input
+							v-model="searchInput"
+							type="search"
+							id="inputSrch"
+							class="input__element input__element--search"
+							:placeholder="t('searchView.searchPlaceHolder')"
+							autocomplete="off"
+							@keyup.enter="callSearchApi(page)"
+						/>
+						<button
+							type="reset"
+							v-if="searchInput !== ''"
+							class="input__button-remove"
+							title="텍스트삭제"
+							@click="initializeSearchInput"
+						></button>
 					</div>
 					<button type="button" class="button button--close" @click="onBack">
 						<i class="blind">취소</i>
@@ -20,17 +32,33 @@
 		<!-- 검색결과 -->
 		<div class="search-result-wrap">
 			<ul class="search-result">
-				<li v-for="(item, index) in filteredSearchHistory.slice(0, 20)" :key="'history-' + index" class="item">
-					<button type="button" class="button button--result-recently" @click="reCallSearchApi(item)">
+				<li
+					v-for="(item, index) in filteredSearchHistory.slice(0, 20)"
+					:key="'history-' + index"
+					class="item"
+				>
+					<button
+						type="button"
+						class="button button--result-recently"
+						@click="reCallSearchApi(item)"
+					>
 						<em>{{ item }}</em>
 					</button>
 					<p class="item__fnc">
-						<button type="button" class="button button--del" @click="removeSearchHistory(index)">
+						<button
+							type="button"
+							class="button button--del"
+							@click="removeSearchHistory(index)"
+						>
 							<i class="blind">삭제</i>
 						</button>
 					</p>
 				</li>
-				<li v-for="(result, resultIndex) in searchResult" :key="'result-' + resultIndex" class="item">
+				<li
+					v-for="(result, resultIndex) in searchResult"
+					:key="'result-' + resultIndex"
+					class="item"
+				>
 					<button type="button" class="button button--result">
 						<em>{{ result.title }}</em>
 						<em>{{ result.userNickName }}</em>
@@ -40,7 +68,11 @@
 				</li>
 			</ul>
 			<div class="list-wrap">
-				<SearchResult v-for="(item, index) in state.posts" :key="index" :post="item" />
+				<SearchResult
+					v-for="(item, index) in state.posts"
+					:key="index"
+					:post="item"
+				/>
 			</div>
 		</div>
 	</div>
@@ -136,7 +168,9 @@ const stackSearchHistory = () => {
 	if (!searchInput.value) return;
 
 	let storedHistoryRaw = localStorage.getItem('searchInputs');
-	let storedHistory: string[] = storedHistoryRaw ? JSON.parse(storedHistoryRaw) : [];
+	let storedHistory: string[] = storedHistoryRaw
+		? JSON.parse(storedHistoryRaw)
+		: [];
 
 	// 새 검색어를 배열의 맨 앞에 추가
 	storedHistory.unshift(searchInput.value);
@@ -147,7 +181,6 @@ const stackSearchHistory = () => {
 	localStorage.setItem('searchInputs', JSON.stringify(storedHistory));
 	searchHistory.value = storedHistory;
 };
-
 
 // 검색 기록 삭제
 const removeSearchHistory = (index: number) => {
@@ -183,7 +216,7 @@ watch(searchInput, (oldValue, newValue) => {
 });
 
 // 검색어 빈값일 경우 초기화
-watch(searchInput, (newValue) => {
+watch(searchInput, newValue => {
 	if (newValue === '') {
 		initializeState();
 	}

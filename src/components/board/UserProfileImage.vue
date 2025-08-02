@@ -1,5 +1,10 @@
 <template>
-	<div class="modal _preview" tabindex="-1" role="dialog" @click.self="closeModal">
+	<div
+		class="modal _preview"
+		tabindex="-1"
+		role="dialog"
+		@click.self="closeModal"
+	>
 		<div class="modal-content">
 			<div class="modal-body">
 				<div class="item__image">
@@ -10,7 +15,11 @@
 					>
 						<i class="blind">취소</i>
 					</button> -->
-					<img v-if="userProfile.userProfileUrl" :src="userProfile.userProfileUrl" alt="" />
+					<img
+						v-if="userProfile.userProfileUrl"
+						:src="userProfile.userProfileUrl"
+						alt=""
+					/>
 				</div>
 			</div>
 		</div>

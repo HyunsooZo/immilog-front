@@ -35,14 +35,15 @@ require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
 	root: true,
-	parser: '@typescript-eslint/parser', // TypeScript 파서 추가
+	parser: 'vue-eslint-parser', // Vue 파서 사용
 	parserOptions: {
+		parser: '@typescript-eslint/parser', // TypeScript 파서를 Vue 파서 내에서 사용
 		ecmaVersion: 'latest',
-		sourceType: 'module', // 모듈 시스템 사용 지정
+		sourceType: 'module',
+		extraFileExtensions: ['.vue'], // Vue 파일 확장자 추가
 		ecmaFeatures: {
 			jsx: true,
 		},
-		project: './tsconfig.json', // TypeScript 설정 파일 지정
 	},
 	extends: [
 		'plugin:vue/vue3-essential',

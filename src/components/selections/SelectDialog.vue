@@ -1,11 +1,20 @@
 <template>
 	<!-- selectdialog -->
-	<div class="modal select--dialog" tabindex="-1" role="dialog" @click.self="closeModal">
+	<div
+		class="modal select--dialog"
+		tabindex="-1"
+		role="dialog"
+		@click.self="closeModal"
+	>
 		<transition name="slide-up">
 			<div class="modal-content" v-if="isVisible">
 				<div class="modal-header">
 					<p class="modal-title">{{ title }}</p>
-					<button type="button" class="button-icon button--close" @click="closeModal">
+					<button
+						type="button"
+						class="button-icon button--close"
+						@click="closeModal"
+					>
 						<i class="blind">닫기</i>
 					</button>
 				</div>
@@ -13,7 +22,11 @@
 					<div class="list-wrap">
 						<ul>
 							<li v-for="(item, index) in list" :key="index" class="item">
-								<button type="button" class="button" @click="selectCategory(item)">
+								<button
+									type="button"
+									class="button"
+									@click="selectCategory(item)"
+								>
 									<span>{{ t(item.name) }}</span>
 								</button>
 							</li>
@@ -40,7 +53,7 @@ defineProps({
 	list: {
 		type: Array as PropType<ISelectItem[]>,
 		required: true,
-		default: () => []
+		default: () => [],
 	},
 });
 

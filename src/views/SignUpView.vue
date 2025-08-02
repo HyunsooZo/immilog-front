@@ -1,17 +1,30 @@
 <template>
 	<div class="content TheFooterButton">
-		<TheTopBox :title="t('signUpView.signUp')" :text="t('signUpView.enterInformation')" />
+		<TheTopBox
+			:title="t('signUpView.signUp')"
+			:text="t('signUpView.enterInformation')"
+		/>
 		<div class="container">
 			<div class="input-wrap" aria-label="required">
 				<em class="input__title">{{ t('signUpView.email') }}</em>
 				<div class="input__wrap underline-type email-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="emailRegister" type="text" class="input__element" :placeholder="t('signUpView.emailPlaceHolder')" required />
+							<input
+								v-model="emailRegister"
+								type="text"
+								class="input__element"
+								:placeholder="t('signUpView.emailPlaceHolder')"
+								required
+							/>
 						</div>
 					</div>
 				</div>
-				<p v-if="submitted && !isValidEmail" class="input__error" aria-live="assertive">
+				<p
+					v-if="submitted && !isValidEmail"
+					class="input__error"
+					aria-live="assertive"
+				>
 					{{ t('signUpView.invalidEmailFormat') }}
 				</p>
 			</div>
@@ -20,17 +33,35 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userNickName" type="text" class="input__element" :placeholder="t('signUpView.nicknamePlaceHolder')" required />
+							<input
+								v-model="userNickName"
+								type="text"
+								class="input__element"
+								:placeholder="t('signUpView.nicknamePlaceHolder')"
+								required
+							/>
 						</div>
 					</div>
-					<button type="button" class="button button--primary" @click="checkNickName">
+					<button
+						type="button"
+						class="button button--primary"
+						@click="checkNickName"
+					>
 						{{ t('signUpView.duplicationCheck') }}
 					</button>
 				</div>
-				<p v-if="nickNameCheckDone && !isNickNameValid" class="input__error" aria-live="assertive">
+				<p
+					v-if="nickNameCheckDone && !isNickNameValid"
+					class="input__error"
+					aria-live="assertive"
+				>
 					{{ t('signUpView.alreadyInUse') }}
 				</p>
-				<p v-if="nickNameCheckDone && isNickNameValid" class="input__text" aria-live="assertive">
+				<p
+					v-if="nickNameCheckDone && isNickNameValid"
+					class="input__text"
+					aria-live="assertive"
+				>
 					{{ t('signUpView.availableNickname') }}
 				</p>
 			</div>
@@ -39,21 +70,41 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userPassword" type="password" class="input__element" :placeholder="t('signUpView.passwordPlaceHolder')" required />
+							<input
+								v-model="userPassword"
+								type="password"
+								class="input__element"
+								:placeholder="t('signUpView.passwordPlaceHolder')"
+								required
+							/>
 						</div>
 					</div>
 				</div>
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="userPasswordConfirm" type="password" class="input__element" :placeholder="t('signUpView.passwordConfirm')" required />
+							<input
+								v-model="userPasswordConfirm"
+								type="password"
+								class="input__element"
+								:placeholder="t('signUpView.passwordConfirm')"
+								required
+							/>
 						</div>
 					</div>
 				</div>
-				<p v-if="submitted && !passwordMatch" class="input__error" aria-live="assertive">
+				<p
+					v-if="submitted && !passwordMatch"
+					class="input__error"
+					aria-live="assertive"
+				>
 					{{ t('signUpView.passwordNotMatch') }}
 				</p>
-				<p v-if="submitted && !passwordValidation" class="input__error" aria-live="assertive">
+				<p
+					v-if="submitted && !passwordValidation"
+					class="input__error"
+					aria-live="assertive"
+				>
 					{{ t('signUpView.passwordFormatNotMeet') }}
 				</p>
 			</div>
@@ -62,7 +113,12 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner">
-							<input v-model="country" type="text" class="input__element" disabled />
+							<input
+								v-model="country"
+								type="text"
+								class="input__element"
+								disabled
+							/>
 						</div>
 					</div>
 				</div>
@@ -72,17 +128,36 @@
 				<div class="input__wrap underline-type">
 					<div class="input__item">
 						<div class="input__item_inner" @click="openSelect">
-							<input v-model="interestCountry" type="text" class="input__element" :placeholder="t('signUpView.interestCountryPlaceHolder')" readonly />
+							<input
+								v-model="interestCountry"
+								type="text"
+								class="input__element"
+								:placeholder="t('signUpView.interestCountryPlaceHolder')"
+								readonly
+							/>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<SelectDialog v-if="isCountrySelectClicked" :title="countrySelectTitle" :list="countries" @close="closeSelect" @select:value="selectedValue" />
-		<TheFooterButton :onClick="register" :condition="fullFilled && !isLoading" />
+		<SelectDialog
+			v-if="isCountrySelectClicked"
+			:title="countrySelectTitle"
+			:list="countries"
+			@close="closeSelect"
+			@select:value="selectedValue"
+		/>
+		<TheFooterButton
+			:onClick="register"
+			:condition="fullFilled && !isLoading"
+		/>
 	</div>
 	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert :alertValue="alertValue" :alertText="alertText" @update:alertValue="closeAlert" />
+		<CustomAlert
+			:alertValue="alertValue"
+			:alertText="alertText"
+			@update:alertValue="closeAlert"
+		/>
 	</teleport>
 </template>
 
@@ -176,7 +251,9 @@ const register = async () => {
 				openAlert(response.statusText || t('signUpView.unexpectedError'));
 			}
 		} catch (error: any) {
-			openAlert(error.response?.data?.message || t('signUpView.failedToSignUp'));
+			openAlert(
+				error.response?.data?.message || t('signUpView.failedToSignUp'),
+			);
 		} finally {
 			returnSubmitValues();
 		}
@@ -210,7 +287,8 @@ const closeAlert = () => {
 };
 
 const passwordValidationCheck = () => {
-	const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
+	const regex =
+		/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 	passwordValidation.value = regex.test(userPassword.value);
 };
 

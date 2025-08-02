@@ -14,9 +14,18 @@
 				<div class="list-wrap personal__view">
 					<div class="item">
 						<div class="info__wrap">
-							<button type="button" class="item__image" :class="{ 'image--default': !userProfile.userProfileUrl }"
-								role="link" @click="onUserProfileImage">
-								<img v-if="userProfile.userProfileUrl" :src="userProfile.userProfileUrl" alt="" />
+							<button
+								type="button"
+								class="item__image"
+								:class="{ 'image--default': !userProfile.userProfileUrl }"
+								role="link"
+								@click="onUserProfileImage"
+							>
+								<img
+									v-if="userProfile.userProfileUrl"
+									:src="userProfile.userProfileUrl"
+									alt=""
+								/>
 							</button>
 							<div class="item__fnc">
 								<div class="list__item">
@@ -29,14 +38,23 @@
 							</div>
 						</div>
 						<div class="button-wrap">
-							<button class="button button--primary button__s" @click="onUserBoard">
+							<button
+								class="button button--primary button__s"
+								@click="onUserBoard"
+							>
 								{{ t('userProfileDetail.posts') }}
 							</button>
 							<!-- 본인 프로필은 채팅, 신고 버튼 미노출 -->
-							<button class="button button--primary button__s" @click="onChatRoom">
+							<button
+								class="button button--primary button__s"
+								@click="onChatRoom"
+							>
 								{{ t('userProfileDetail.chat') }}
 							</button>
-							<button class="button button--primary button__s _gray" @click="onReportPopUp">
+							<button
+								class="button button--primary button__s _gray"
+								@click="onReportPopUp"
+							>
 								{{ t('userProfileDetail.report') }}
 							</button>
 						</div>
@@ -45,8 +63,16 @@
 			</div>
 		</div>
 	</div>
-	<UserProfileImage :userProfile=userProfile @close="offUserProfileImage" v-if="isUserProfileImageOn" />
-	<UserBoard :userSeq=userProfile.userSeq @close="offUserBoard" v-if="isUserBoardOn" />
+	<UserProfileImage
+		:userProfile="userProfile"
+		@close="offUserProfileImage"
+		v-if="isUserProfileImageOn"
+	/>
+	<UserBoard
+		:userSeq="userProfile.userSeq"
+		@close="offUserBoard"
+		v-if="isUserBoardOn"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -130,7 +156,6 @@ const offUserBoard = () => {
 	isModalClose();
 };
 
-
 // <-- 알럿 관련
 const alertValue = ref(false);
 const alertText = ref('');
@@ -154,15 +179,17 @@ const reportPopUpValue = ref(false);
 
 const onReportPopUp = () => {
 	reportPopUpValue.value = true;
-}
+};
 
 const setReportReason = (reason: string, description: string) => {
 	requestForm.value.reason = reason;
 	requestForm.value.description = description;
 };
 
-const reportApi = async (requestForm: { reason: string, description: string }) => {
-
+const reportApi = async (requestForm: {
+	reason: string;
+	description: string;
+}) => {
 	try {
 		const response: AxiosResponse<void> = await api.patch(
 			`/users/${props.userProfile.userSeq}/report`,
@@ -189,5 +216,4 @@ onMounted(() => {
 		router.push('/my-page');
 	}
 });
-
 </script>

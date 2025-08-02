@@ -11,7 +11,12 @@
 		<h1 class="title"><em class="header-logo">Immilog</em></h1>
 		<!-- 알림 버튼 -->
 		<div class="item__fnc" v-if="showNotification">
-			<button type="button" class="button-icon button--notice" :class="{ _new: userInfo.unreadNotification }" @click="">
+			<button
+				type="button"
+				class="button-icon button--notice"
+				:class="{ _new: userInfo.unreadNotification }"
+				@click="openNotification"
+			>
 				<i class="blind">알림</i>
 			</button>
 		</div>
@@ -28,13 +33,18 @@ const userInfo = useUserInfoStore();
 const props = defineProps({
 	showNotification: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 });
-
 
 // 뒤로 가기 기능
 const onBack = () => {
 	router.back();
+};
+
+// 알림 모달 열기
+const openNotification = () => {
+	// TODO: 알림 모달 열기 기능 구현
+	console.log('알림 버튼 클릭');
 };
 </script>

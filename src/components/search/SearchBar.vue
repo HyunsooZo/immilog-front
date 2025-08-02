@@ -3,7 +3,7 @@
 	<!-- 검색 -->
 	<div class="search-wrap">
 		<div class="input-wrap">
-			<p class="logo-wrap" style="display: none;">
+			<p class="logo-wrap" style="display: none">
 				<em class="header-logo">
 					<span>I</span>
 					<span>m</span>
@@ -20,8 +20,12 @@
 					<span>{{ t('searchBar.keywordPlaceHolder') }}</span>
 				</button>
 			</div>
-			<button type="button" class="button-icon button--notice" :class="{ _new: userInfo.unreadNotification }"
-				@click="onMenuOpen">
+			<button
+				type="button"
+				class="button-icon button--notice"
+				:class="{ _new: userInfo.unreadNotification }"
+				@click="onMenuOpen"
+			>
 				<i class="blind">알림</i>
 			</button>
 		</div>

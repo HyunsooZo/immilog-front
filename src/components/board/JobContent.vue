@@ -38,7 +38,11 @@
 					<div class="tag__wrap">
 						<div class="tag__inner">
 							<div class="tag__item">
-								<span class="item--hash" v-for="(tag, index) in jobPost.tags" :key="index">
+								<span
+									class="item--hash"
+									v-for="(tag, index) in jobPost.tags"
+									:key="index"
+								>
 									<em>{{ tag }}</em>
 								</span>
 							</div>
@@ -56,7 +60,12 @@
 					<i class="blind">조회수</i>
 					<span class="item__count">{{ jobPost.viewCount }}</span>
 				</p>
-				<button type="button" class="list__item_button like" :class="{ active: isLiked }" @click="likePost">
+				<button
+					type="button"
+					class="list__item_button like"
+					:class="{ active: isLiked }"
+					@click="likePost"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">좋아요</i>
 					<span class="item__count"> {{ jobPost.likeCount }}</span>
@@ -70,7 +79,12 @@
 						}}{{ t(timeCalculation(jobPost.createdAt.toString()).text) }}
 					</span>
 				</p>
-				<button type="button" class="list__item_button mark" :class="{ active: isBookmarked }" @click="postBokmarkApi">
+				<button
+					type="button"
+					class="list__item_button mark"
+					:class="{ active: isBookmarked }"
+					@click="postBokmarkApi"
+				>
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
 				</button>
@@ -130,7 +144,7 @@ const props = defineProps({
 	},
 	showAd: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 });
 
@@ -139,9 +153,7 @@ const likeUsers = ref(props.jobPost.likeUsers);
 const bookmarkUsers = ref(props.jobPost.bookmarkUsers);
 const userSeq = ref(userInfo.userSeq);
 const thumbnail = ref(
-	props.jobPost.attachments.length > 0 ?
-		props.jobPost.attachments[0] :
-		'',
+	props.jobPost.attachments.length > 0 ? props.jobPost.attachments[0] : '',
 );
 const isLiked = computed(() => {
 	return likeUsers.value.includes(userSeq.value ? userSeq.value : 0);
@@ -158,20 +170,21 @@ const onBoardDetail = async () => {
 };
 
 const viewApi = async (seq: any, jobPostFlag: boolean) => {
-  try {
-    const response = await api.patch(jobPostFlag ? `/job-boards/${seq}/view` : `/posts/${seq}/view`)
-    return { status: response.status }
-  } catch (error) {
-    console.error(error)
-    return { status: 'error', error }
-  }
-}
+	try {
+		const response = await api.patch(
+			jobPostFlag ? `/job-boards/${seq}/view` : `/posts/${seq}/view`,
+		);
+		return { status: response.status };
+	} catch (error) {
+		console.error(error);
+		return { status: 'error', error };
+	}
+};
 
 // 좋아요 API 호출
 const likePost = () => {
 	checkIfTokenExists();
-	changeLikeStatus
-		();
+	changeLikeStatus();
 	likeApi('posts', props.jobPost.seq);
 };
 
@@ -194,7 +207,7 @@ const postBokmarkApi = async () => {
 	checkIfTokenExists();
 	changeBookmarkStatus();
 	try {
-		postBookmark(props.jobPost.seq,'JOB_BOARD');
+		postBookmark(props.jobPost.seq, 'JOB_BOARD');
 	} catch (error) {
 		console.error(error);
 	}
@@ -203,7 +216,9 @@ const postBokmarkApi = async () => {
 // 북마크 상태 변경
 const changeBookmarkStatus = () => {
 	if (isBookmarked.value) {
-		const index = bookmarkUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
+		const index = bookmarkUsers.value.indexOf(
+			userSeq.value ? userSeq.value : 0,
+		);
 		if (index !== -1) {
 			bookmarkUsers.value.splice(index, 1);
 		}
