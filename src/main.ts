@@ -4,8 +4,8 @@ import '@/assets/contents.css';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
-import router from '@/router/index.js';
-import setupI18n from './i18n.js';
+import router from '@/core/router/index';
+import setupI18n from '@/core/i18n/index';
 
 document.addEventListener(
 	'deviceready',

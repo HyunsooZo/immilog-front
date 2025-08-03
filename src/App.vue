@@ -8,13 +8,13 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { getCoordinate } from '@/services/geolocation.ts';
-import { useUserInfoStore } from '@/stores/userInfo.ts';
-import { IApiUserInfo } from './types/api-interface.ts';
-import { fetchUserInfo } from './services/auth.ts';
+import { getCoordinate } from '@/shared/services/geolocation';
+import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import type { IApiUserInfo } from '@/features/auth/types/index';
+import { fetchUserInfo } from '@/features/auth/services/auth';
 import { AxiosResponse } from 'axios';
-import TheFooter from './components/layouts/TheFooter.vue';
-import router from './router/index.ts';
+import TheFooter from '@/shared/components/layout/TheFooter.vue';
+import router from '@/core/router/index';
 import { useI18n } from 'vue-i18n';
 
 const { locale } = useI18n();
