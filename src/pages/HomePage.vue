@@ -418,7 +418,7 @@ const loadMoreData = async () => {
 // <-- PostModal 오픈 및 닫기
 const onPostModal = ref(false);
 const openPostModal = () => {
-	if (userInfo.userSeq === null) {
+	if (userInfo.userId === null) {
 		router.push({ name: 'SignIn' });
 	}
 	onPostModal.value = true;
@@ -460,7 +460,7 @@ const setToken = (data: IUserInfo) => {
 };
 
 const fetchUserInfo = async () => {
-	if (localStorage.getItem('accessToken') && localStorage.getItem('userSeq')) {
+	if (localStorage.getItem('accessToken') && localStorage.getItem('userId')) {
 		await getCoordinate();
 		const lat = localStorage.getItem('latitude');
 		const lon = localStorage.getItem('longitude');
@@ -498,7 +498,7 @@ onMounted(async () => {
 	// 상태 초기화 추가
 	initializeState();
 
-	if (!userInfo.userSeq) {
+	if (!userInfo.userId) {
 		fetchUserInfo();
 		isLoading.value = true;
 		setTimeout(() => {

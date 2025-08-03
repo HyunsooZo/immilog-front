@@ -13,7 +13,7 @@
 			<p class="list__item user">
 				<strong
 					>{{
-						amISender(chats[0].sender.seq)
+						amISender(chats[0].sender.userId)
 							? chats[0].recipient.nickName
 							: chats[0].sender.nickName
 					}}
@@ -33,7 +33,7 @@
 				<p class="text">
 					<em class="user__name">
 						{{
-							amISender(chats[0].sender.seq)
+							amISender(chats[0].sender.userId)
 								? chats[0].recipient.nickName
 								: chats[0].sender.nickName
 						}} </em
@@ -55,10 +55,10 @@
 							class="item"
 							aria-label="받은 메시지"
 							data-content-type="text"
-							:class="{ _my: amISender(chat.sender.seq) }"
+							:class="{ _my: amISender(chat.sender.userId) }"
 						>
 							<!-- 사용자 정보 -->
-							<div class="info__wrap" v-if="!amISender(chat.sender.seq)">
+							<div class="info__wrap" v-if="!amISender(chat.sender.userId)">
 								<button
 									type="button"
 									class="item__image"
@@ -84,7 +84,10 @@
 										:class="{ active: isRead(chat.id) }"
 									>
 										<i class="blind">채팅 읽음 여부</i>
-										<span class="item__count" v-if="amISender(chat.sender.seq)">
+										<span
+											class="item__count"
+											v-if="amISender(chat.sender.userId)"
+										>
 											<!-- {{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }} -->
 											<svg viewBox="0 0 16 16">
 												<path
@@ -92,7 +95,7 @@
 												/>
 											</svg>
 										</span>
-										<!-- <span class="item__count" v-if="amISender(chat.sender.seq)">
+										<!-- <span class="item__count" v-if="amISender(chat.sender.userId)">
 											{{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }}</span> -->
 									</p>
 									<p class="list__item past">
@@ -232,7 +235,7 @@ const page = ref(0);
 let lastDate: string | null = null;
 
 // 채팅방 번호
-const chatRoomSeq = ref(route.params.chatRoomId);
+const chatRoomId = ref(route.params.chatRoomId);
 
 // 뒤로가기
 const previousComponent = () => {
@@ -277,7 +280,7 @@ const fetchChats = async () => {
 	try {
 		isLoading.value = true;
 		const response: AxiosResponse<IApiChat> = await api.get(
-			`/chat/rooms/${chatRoomSeq.value}?page=${page.value}`,
+			`/chat/rooms/${chatRoomId.value}?page=${page.value}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
@@ -309,12 +312,12 @@ const fetchChats = async () => {
 // 웹소켓 연결 및 구독 설정
 const connectWebSocket = () => {
 	stompClient.connect({}, () => {
-		stompClient.subscribe(`/topic/room/${chatRoomSeq.value}`, message => {
+		stompClient.subscribe(`/topic/room/${chatRoomId.value}`, message => {
 			const newMessage = JSON.parse(message.body);
 			chats.value.push(newMessage);
 			nextTick(() => {
 				scrollToBottom();
-				if (!amISender(newMessage.sender.seq)) {
+				if (!amISender(newMessage.sender.userId)) {
 					markMessagesAsRead(newMessage.id);
 				}
 			});
@@ -328,9 +331,9 @@ const connectWebSocket = () => {
 };
 
 // 메시지 읽음 상태를 업데이트하는 함수
-const updateReadStatus = (readChatInfo: { chatSeq: any }) => {
+const updateReadStatus = (readChatInfo: { chatId: any }) => {
 	chats.value.forEach(chat => {
-		if (chat.id === readChatInfo.chatSeq) {
+		if (chat.id === readChatInfo.chatId) {
 			chat.readStatus = true;
 		}
 	});
@@ -376,8 +379,8 @@ onUnmounted(() => {
 });
 
 // 사용자가 채팅 발신자인지 확인
-const amISender = (senderSeq: number) => {
-	return senderSeq === userInfo.userSeq;
+const amISender = (senderId: number) => {
+	return senderId === userInfo.userId;
 };
 
 // 날짜 가져오기
@@ -412,8 +415,8 @@ const formTime = (dateTime: string | number | Date) => {
 const sendMessage = () => {
 	if (content.value.trim()) {
 		const messageToSend = {
-			chatRoomSeq: chatRoomSeq.value,
-			senderSeq: userInfo.userSeq,
+			chatRoomId: chatRoomId.value,
+			senderId: userInfo.userId,
 			content: content.value,
 			attachments: [],
 		};
@@ -430,21 +433,21 @@ const markMessagesAsRead = (id: number) => {
 			'/app/chat/read',
 			{},
 			JSON.stringify({
-				chatSeq: id,
-				userSeq: userInfo.userSeq,
+				chatId: id,
+				userId: userInfo.userId,
 			}),
 		);
 	} else {
 		// 모든 메시지를 '읽음'으로 표시
 		chats.value.forEach((chat: IChat) => {
-			if (!amISender(chat.sender.seq) && !chat.readStatus) {
+			if (!amISender(chat.sender.userId) && !chat.readStatus) {
 				// 읽음 상태를 서버에 보내기
 				stompClient.send(
 					'/app/chat/read',
 					{},
 					JSON.stringify({
-						chatSeq: chat.id,
-						userSeq: userInfo.userSeq,
+						chatId: chat.id,
+						userId: userInfo.userId,
 					}),
 				);
 				// 프론트엔드에서 상태 업데이트

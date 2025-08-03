@@ -37,7 +37,7 @@ import { ref } from 'vue';
 import ConfirmModal from './ConfirmModal.vue';
 
 const props = defineProps({
-	postSeq: Number,
+	postId: String,
 });
 const emits = defineEmits(['close', 'delete', 'edit']);
 
@@ -56,7 +56,7 @@ const closeConfirmModal = () => {
 
 const onDeletePost = () => {
 	onConfirmModal.value = false;
-	emits('delete', props.postSeq);
+	emits('delete', props.postId);
 };
 
 //모달 닫는 에밋

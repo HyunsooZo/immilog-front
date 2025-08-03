@@ -116,7 +116,7 @@ const props = defineProps({
 		type: Object as () => IJobPost,
 		required: true,
 		default: () => ({
-			seq: 0,
+			postId: 0,
 			title: '',
 			content: '',
 			userDto: {},
@@ -151,7 +151,7 @@ const props = defineProps({
 const likes = ref(props.jobPost.likeCount);
 const likeUsers = ref(props.jobPost.likeUsers);
 const bookmarkUsers = ref(props.jobPost.bookmarkUsers);
-const userSeq = ref(userInfo.userSeq);
+const userSeq = ref(userInfo.userId);
 const thumbnail = ref(
 	props.jobPost.attachments.length > 0 ? props.jobPost.attachments[0] : '',
 );
@@ -165,8 +165,8 @@ const isBookmarked = computed(() => {
 
 // 게시글 상세 페이지로 이동
 const onBoardDetail = async () => {
-	await viewApi(props.jobPost.seq, true);
-	router.push(`/board/${props.jobPost.seq}`);
+	await viewApi(props.jobPost.postId, true);
+	router.push(`/board/${props.jobPost.postId}`);
 };
 
 const viewApi = async (seq: any, jobPostFlag: boolean) => {
@@ -187,7 +187,7 @@ const viewApi = async (seq: any, jobPostFlag: boolean) => {
 const likePost = () => {
 	checkIfTokenExists();
 	changeLikeStatus();
-	likeApi('posts', props.jobPost.seq);
+	likeApi('posts', props.jobPost.postId);
 };
 
 // 좋아요 상태 변경
@@ -209,7 +209,7 @@ const postBokmarkApi = async () => {
 	checkIfTokenExists();
 	changeBookmarkStatus();
 	try {
-		postBookmark(props.jobPost.seq, 'JOB_BOARD');
+		postBookmark(props.jobPost.postId, 'JOB_BOARD');
 	} catch (error) {
 		console.error(error);
 	}

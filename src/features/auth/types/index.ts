@@ -2,7 +2,7 @@ import type { IApiResponse } from '@/shared/types/common';
 
 // 사용자 정보 인터페이스
 export interface IUser {
-	userSeq: number;
+	userId: string;
 	nickname: string;
 	email: string;
 	country: string;
@@ -11,7 +11,7 @@ export interface IUser {
 }
 
 export interface IUserInfo {
-	userSeq: number;
+	userId: string;
 	accessToken: string;
 	refreshToken: string;
 	nickname: string;

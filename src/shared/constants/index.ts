@@ -13,7 +13,7 @@ export const DEFAULT_VALUES = {
 export const STORAGE_KEYS = {
 	ACCESS_TOKEN: 'accessToken',
 	REFRESH_TOKEN: 'refreshToken',
-	USER_SEQ: 'userSeq',
+	USER_ID: 'userId',
 } as const;
 
 // API 엔드포인트 상수

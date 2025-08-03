@@ -3,19 +3,19 @@ import type { IApiResponse, IPagination } from '@/shared/types/common';
 
 // 채팅 인터페이스
 export interface IChat {
-	seq: number;
+	chatId: string;
 	sender: IUser;
 	recipient: IUser;
 	content: string;
 	attachments: string[];
-	chatRoomSeq: number;
+	chatRoomId: string;
 	isRead: boolean;
 	createdAt: string;
 }
 
 // 채팅방 인터페이스
 export interface IChatRoom {
-	seq: number;
+	chatRoomId: string;
 	sender: IUser;
 	recipient: IUser;
 	lastChat: string;

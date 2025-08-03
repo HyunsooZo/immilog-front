@@ -4,11 +4,15 @@
 		<SearchBox @searchValue="callSearchApi" @refetchChatRooms="refetch" />
 
 		<div class="list-wrap _chat">
-			<div class="item" v-for="chatRoom in chatRooms" :key="chatRoom.seq">
+			<div
+				class="item"
+				v-for="chatRoom in chatRooms"
+				:key="chatRoom.chatRoomId"
+			>
 				<button
 					type="button"
 					class="list__item_button"
-					@click="onChatDetail(chatRoom.seq)"
+					@click="onChatDetail(chatRoom.chatRoomId)"
 				>
 					<div class="info__wrap">
 						<div
@@ -79,7 +83,7 @@
 					<button
 						type="button"
 						class="list__item_button more"
-						@click.stop="openMoreModal(chatRoom.seq)"
+						@click.stop="openMoreModal(chatRoom.chatRoomId)"
 					>
 						<i class="blind">더보기</i
 						><!-- //신고, 나가기 -->
@@ -108,7 +112,7 @@
 	</div>
 	<MoreModal
 		v-if="onMoreModal"
-		:chatRoomSeq="onMoreChatRoomSeq"
+		:chatRoomSeq="onMoreChatRoomId"
 		@close="closeMoreModal"
 		@closeWithDelete="closeMoreModalAndDeleteChatRoom"
 	/>
@@ -147,8 +151,8 @@ const chatRoomsPage = ref(0);
 const page = ref({});
 
 // 채팅 상세보기 관련 메서드
-const onChatDetail = (seq: number) => {
-	router.push('/chat/' + seq);
+const onChatDetail = (chatRoomId: number) => {
+	router.push('/chat/' + chatRoomId);
 };
 
 // 채팅목록 불러오기
@@ -171,13 +175,13 @@ const fetchChatList = async () => {
 
 // 사용자가 채팅 발신자인지 확인
 const amISender = (sender: IUser) => {
-	const userSeq = userInfo.userSeq;
-	return sender.seq === userSeq;
+	const userId = userInfo.userId;
+	return sender.userId === userId;
 };
 
 const updateChatRoomList = (updateChatRoom: IChatRoom) => {
 	const index = chatRooms.value.findIndex(
-		room => room.seq === updateChatRoom.seq,
+		room => room.chatRoomId === updateChatRoom.chatRoomId,
 	);
 	if (index !== -1) {
 		chatRooms.value.splice(index, 1);
@@ -190,7 +194,7 @@ const connectWebSocket = () => {
 	stompClient.connect({}, () => {
 		// 채팅방 상태 업데이트 등록
 		stompClient.subscribe(
-			`/topic/updateChatRoomList/${userInfo.userSeq}`,
+			`/topic/updateChatRoomList/${userInfo.userId}`,
 			message => {
 				updateChatRoomList(JSON.parse(message.body));
 			},
@@ -200,10 +204,10 @@ const connectWebSocket = () => {
 
 // <-- 더보기 모달 관련
 const onMoreModal = ref(false);
-const onMoreChatRoomSeq = ref(-1);
+const onMoreChatRoomId = ref(-1);
 
-const openMoreModal = (chatRoomSeq: number) => {
-	onMoreChatRoomSeq.value = chatRoomSeq;
+const openMoreModal = (chatRoomId: number) => {
+	onMoreChatRoomId.value = chatRoomId;
 	onMoreModal.value = true;
 };
 
@@ -211,10 +215,10 @@ const closeMoreModal = () => {
 	onMoreModal.value = false;
 };
 
-const closeMoreModalAndDeleteChatRoom = (chatRoomSeq: number) => {
+const closeMoreModalAndDeleteChatRoom = (chatRoomId: number) => {
 	onMoreModal.value = false;
 	const index = chatRooms.value.findIndex(
-		chatRoom => chatRoom.seq === chatRoomSeq,
+		chatRoom => chatRoom.chatRoomId === chatRoomId,
 	);
 	// 인덱스가 유효하면 해당 요소를 리스트에서 제거
 	if (index !== -1) {

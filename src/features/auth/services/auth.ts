@@ -6,9 +6,9 @@ import api from '@/core/api/index';
 let isInProgress = false;
 export const fetchUserInfo = async (
 	accessToken: string | null | undefined,
-	userSeq: string | null | undefined,
+	userId: string | null | undefined,
 ) => {
-	if (!accessToken || !userSeq) {
+	if (!accessToken || !userId) {
 		isInProgress = false;
 		throw new Error('No access token found.');
 	}

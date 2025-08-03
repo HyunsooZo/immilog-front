@@ -1,10 +1,9 @@
-import type { IUser } from '@/features/auth/types';
 import type { IApiResponse, IPagination } from '@/shared/types/common';
 
 // 채용 공고 인터페이스
 export interface IJobPost {
-	seq: number;
-	userSeq: number;
+	postId: string;
+	userId: string;
 	userNickName: string;
 	userProfileUrl: string;
 	title: string;
@@ -13,8 +12,8 @@ export interface IJobPost {
 	likeCount: number;
 	tags: string[];
 	attachments: string[];
-	likeUsers: number[];
-	bookmarkUsers: number[];
+	likeUsers: string[];
+	bookmarkUsers: string[];
 	country: string;
 	region: string;
 	companyName: string;
@@ -29,7 +28,7 @@ export interface IJobPost {
 
 // 회사 정보 인터페이스
 export interface ICompany {
-	seq: number;
+	companyId: string;
 	name: string;
 	industry: string;
 	description: string;

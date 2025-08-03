@@ -46,11 +46,11 @@ const userInfo = useUserInfoStore();
 const { t } = useI18n();
 
 const onMenu = ref(false);
-const userSeq = ref(0);
+const userId = ref('');
 
 // 알림 메뉴 열기
 const onMenuOpen = () => {
-	userSeq.value = 1;
+	userId.value = '1';
 	onMenu.value = true;
 };
 

@@ -116,10 +116,10 @@ const props = defineProps({
 		type: Object as () => ISearchResult,
 		required: true,
 		default: () => ({
-			seq: 0,
+			postId: 0,
 			title: '',
 			content: '',
-			userSeq: 0,
+			userId: 0,
 			userProfileUrl: '',
 			userNickName: '',
 			commentCounts: 0,
@@ -145,21 +145,21 @@ const emits = defineEmits(['update:post']);
 const likes = ref(props.post.likeCount);
 const likeUsers = ref(props.post.likeUsers);
 const bookmarkUsers = ref(props.post.bookmarkUsers);
-const userSeq = ref(userInfo.userSeq);
+const userId = ref(userInfo.userId);
 const thumbnail = ref(
 	props.post.attachments.length > 0 ? props.post.attachments[0] : '',
 );
 const isLiked = computed(() => {
-	return likeUsers.value.includes(userSeq.value ? userSeq.value : 0);
+	return likeUsers.value.includes(userId.value ? userId.value : 0);
 });
 
 const isBookmarked = computed(() => {
-	return bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0);
+	return bookmarkUsers.value.includes(userId.value ? userId.value : 0);
 });
 
 const onBoardDetail = () => {
 	increaseViewCount();
-	router.push(`/board/${props.post.seq}`);
+	router.push(`/board/${props.post.postId}`);
 };
 
 const likeApi = async () => {
@@ -171,7 +171,7 @@ const likeApi = async () => {
 	changeLike();
 	try {
 		const response: AxiosResponse<void> = await api.post(
-			`/posts/${props.post.seq}/like/users/${userSeq.value}`,
+			`/posts/${props.post.postId}/like/users/${userId.value}`,
 			{},
 			applicationJsonWithToken(userInfo.accessToken),
 		);
@@ -183,7 +183,7 @@ const likeApi = async () => {
 const increaseViewCount = async () => {
 	try {
 		const response: AxiosResponse<void> = await api.post(
-			`/api/v1/posts/${props.post.seq}/views`,
+			`/api/v1/posts/${props.post.postId}/views`,
 			{},
 			applicationJsonWithToken(userInfo.accessToken),
 		);
@@ -205,13 +205,13 @@ const increaseViewCount = async () => {
 
 const changeLike = () => {
 	if (isLiked.value) {
-		const index = likeUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
+		const index = likeUsers.value.indexOf(userId.value ? userId.value : 0);
 		if (index !== -1) {
 			likeUsers.value.splice(index, 1);
 		}
 		likes.value--;
 	} else {
-		likeUsers.value.push(userSeq.value ? userSeq.value : 0);
+		likeUsers.value.push(userId.value ? userId.value : 0);
 		likes.value++;
 	}
 };
@@ -225,7 +225,7 @@ const bookmarkApi = async () => {
 	changeBookmark();
 	try {
 		await api.post(
-			`/bookmarks/post/${props.post.seq}`,
+			`/bookmarks/post/${props.post.postId}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 	} catch (error) {
@@ -235,14 +235,12 @@ const bookmarkApi = async () => {
 
 const changeBookmark = () => {
 	if (isBookmarked.value) {
-		const index = bookmarkUsers.value.indexOf(
-			userSeq.value ? userSeq.value : 0,
-		);
+		const index = bookmarkUsers.value.indexOf(userId.value ? userId.value : 0);
 		if (index !== -1) {
 			bookmarkUsers.value.splice(index, 1);
 		}
 	} else {
-		bookmarkUsers.value.push(userSeq.value ? userSeq.value : 0);
+		bookmarkUsers.value.push(userId.value ? userId.value : 0);
 	}
 };
 

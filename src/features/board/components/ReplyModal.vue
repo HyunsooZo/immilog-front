@@ -33,8 +33,8 @@
 										class="list__item_button user"
 										:class="{
 											'user--author': isAuthor(
-												detailPost.userSeq,
-												detailPost.comments[commentIndex].user.seq,
+												detailPost.userId,
+												detailPost.comments[commentIndex].user.userId,
 											),
 										}"
 									>
@@ -72,7 +72,7 @@
 									:class="{
 										active:
 											detailPost.comments[commentIndex].likeUsers.includes(
-												userSeq,
+												userId,
 											),
 									}"
 									@click="likeComment(commentIndex)"
@@ -115,7 +115,7 @@
 					<div
 						class="re--reply"
 						v-for="(reply, index) in detailPost.comments[commentIndex].replies"
-						:key="reply.seq"
+						:key="reply.commentId"
 					>
 						<div class="item">
 							<div class="info__wrap">
@@ -126,8 +126,8 @@
 											class="list__item_button user"
 											:class="{
 												'user--author': isAuthor(
-													detailPost.userSeq,
-													reply.user.seq,
+													detailPost.userId,
+													reply.user.userId,
 												),
 											}"
 										>
@@ -163,7 +163,7 @@
 										type="button"
 										class="list__item_button like"
 										:class="{
-											active: reply.likeUsers.includes(userSeq),
+											active: reply.likeUsers.includes(userId),
 										}"
 										@click="likeReply(commentIndex, index)"
 									>
@@ -196,7 +196,7 @@
 	</div>
 	<ReplyWrite
 		v-if="isReplyWriteClicked"
-		:commentSeq="post.comments[commentIndex].seq"
+		:commentSeq="post.comments[commentIndex].commentId"
 		:isPostComment="false"
 		:taggedUser="taggedUser"
 		@close="closeReplyWrite"
@@ -221,7 +221,7 @@ const { t } = useI18n();
 
 const userInfo = useUserInfoStore();
 
-const userSeq = userInfo.userSeq;
+const userId = userInfo.userId;
 
 const router = useRouter();
 
@@ -284,7 +284,7 @@ const detailBoard = async () => {
 		if (response.status === 200) {
 			detailPost.value = response.data.data;
 			isLiked.value = response.data.data.likeUsers.some(
-				(userSeq: number) => userSeq === 1,
+				(userId: number) => userId === 1,
 			);
 		}
 	} catch (error) {
@@ -292,19 +292,19 @@ const detailBoard = async () => {
 	}
 };
 
-const isAuthor = (postUserSeq: number, userSeq: number) => {
-	return postUserSeq === userSeq;
+const isAuthor = (postUserId: number, commentUserId: number) => {
+	return postUserId === commentUserId;
 };
 
 const likeComment = async (index: number) => {
 	const updatedPost = detailPost.value;
-	if (updatedPost.comments[index].likeUsers.includes(userSeq)) {
+	if (updatedPost.comments[index].likeUsers.includes(userId)) {
 		updatedPost.comments[index].upVotes--;
-		const userIndex = updatedPost.comments[index].likeUsers.indexOf(userSeq);
+		const userIndex = updatedPost.comments[index].likeUsers.indexOf(userId);
 		updatedPost.comments[index].likeUsers.splice(userIndex, 1);
 	} else {
 		updatedPost.comments[index].upVotes++;
-		updatedPost.comments[index].likeUsers.push(userSeq);
+		updatedPost.comments[index].likeUsers.push(userId);
 	}
 
 	// 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
@@ -312,7 +312,7 @@ const likeComment = async (index: number) => {
 
 	const response = await likeApi(
 		'comments',
-		detailPost.value.comments[index].seq,
+		detailPost.value.comments[index].commentId,
 	);
 	if (response.status === 401) {
 		router.push('/sign-in');
@@ -324,27 +324,25 @@ const likeComment = async (index: number) => {
 const likeReply = async (index: number, replyIndex: number) => {
 	const updatedPost = detailPost.value;
 	if (
-		updatedPost.comments[index].replies[replyIndex].likeUsers.includes(userSeq)
+		updatedPost.comments[index].replies[replyIndex].likeUsers.includes(userId)
 	) {
 		updatedPost.comments[index].replies[replyIndex].upVotes--;
 		const userIndex =
-			updatedPost.comments[index].replies[replyIndex].likeUsers.indexOf(
-				userSeq,
-			);
+			updatedPost.comments[index].replies[replyIndex].likeUsers.indexOf(userId);
 		updatedPost.comments[index].replies[replyIndex].likeUsers.splice(
 			userIndex,
 			1,
 		);
 	} else {
 		updatedPost.comments[index].replies[replyIndex].upVotes++;
-		updatedPost.comments[index].replies[replyIndex].likeUsers.push(userSeq);
+		updatedPost.comments[index].replies[replyIndex].likeUsers.push(userId);
 	}
 
 	// 반응형 시스템이 변경을 감지할 수 있도록 post 업데이트
 	detailPost.value = updatedPost;
 	const response = await likeApi(
 		'replies',
-		detailPost.value.comments[index].replies[replyIndex].seq,
+		detailPost.value.comments[index].replies[replyIndex].commentId,
 	);
 	if (response.status === 401) {
 		router.push('/sign-in');

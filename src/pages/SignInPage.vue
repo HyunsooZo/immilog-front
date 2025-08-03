@@ -149,7 +149,7 @@ import { useUserInfoStore } from '@/features/auth/stores/userInfo';
 import { getCoordinate } from '@/shared/services/geolocation';
 import { getUserInfo } from '@/features/profile/services/userInfoFetch';
 import { useI18n } from 'vue-i18n';
-import { applicationJson } from '@/shared/utils/header';
+import { applicationJson, applicationJsonWithToken } from '@/shared/utils/header';
 import { handleError } from '@/shared/utils/errorHandler';
 import { AxiosResponse } from 'axios';
 import CustomAlert from '@/shared/components/ui/CustomAlert.vue';
@@ -206,16 +206,22 @@ const signIn = async () => {
 
 const getUnreadNotificationStatus = async () => {
 	try {
-		const userSeq = localStorage.getItem('userSeq');
-		const country = localStorage.getItem('country') || 'KOREA';
+		const userId = localStorage.getItem('userId');
+		const accessToken = localStorage.getItem('accessToken');
+		if (!userId || !accessToken) {
+			console.warn('No userId or accessToken found in localStorage');
+			return;
+		}
+		const country = localStorage.getItem('country') || 'SOUTH_KOREA';
 		const response: AxiosResponse<IApiUnreadNotification> = await api.get(
-			`/api/v1/notices/users/${userSeq}/unread?country=${country}`,
+			`/api/v1/notices/users/${userId}/unread?country=${country}`,
+			applicationJsonWithToken(accessToken),
 		);
-		if (response.data.status === 200) {
+		if (response?.data?.status === 200) {
 			useUserInfoStore().setUnreadNotification(response.data.data);
 		}
 	} catch (error) {
-		console.error(error);
+		console.error('Failed to get unread notification status:', error);
 	}
 };
 
@@ -251,7 +257,7 @@ const setToken = (data: IUserInfo) => {
 		'refreshToken',
 		data.refreshToken ? data.refreshToken : '',
 	);
-	localStorage.setItem('userSeq', data.userSeq ? data.userSeq.toString() : '');
+	localStorage.setItem('userId', data.userSeq ? data.userSeq.toString() : '');
 };
 
 const loginByGoogle = async () => {

@@ -29,14 +29,14 @@ const getPostType = (path: string): string => {
 };
 
 // 좋아요 API 요청 함수
-export const likeApi = async (path: string, seq: number) => {
+export const likeApi = async (path: string, postId: string) => {
 	const token = requireAuth();
 	if (!token) return { status: 'unauthenticated' };
 
 	try {
 		const postType = getPostType(path);
 		const requestBody = {
-			postId: seq,
+			postId: postId,
 			interactionType: 'LIKE',
 			postType,
 		};
@@ -48,11 +48,11 @@ export const likeApi = async (path: string, seq: number) => {
 };
 
 // view 업데이트 API 요청 함수
-export const viewApi = async (seq: number, jobPostFlag: boolean) => {
+export const viewApi = async (postId: string, jobPostFlag: boolean) => {
 	try {
 		const endpoint = jobPostFlag
-			? `/api/jobboards/${seq}/views`
-			: `/api/v1/posts/${seq}/views`;
+			? `/api/jobboards/${postId}/views`
+			: `/api/v1/posts/${postId}/views`;
 		const response = await api.post(endpoint);
 		return { status: response.status };
 	} catch (error) {
@@ -78,13 +78,13 @@ export const getBookmarkedPostApi = async () => {
 };
 
 // 포스트 북마크 API 요청 함수
-export const postBookmark = async (seq: number) => {
+export const postBookmark = async (postId: string) => {
 	const token = requireAuth();
 	if (!token) return { status: 'unauthenticated' };
 
 	try {
 		const requestBody = {
-			postId: seq,
+			postId: postId,
 			interactionType: 'BOOKMARK',
 			postType: 'POST',
 		};
@@ -96,7 +96,7 @@ export const postBookmark = async (seq: number) => {
 };
 
 // 포스트 업로드 API 요청 함수
-export const uploadPostApi = async (userSeq: number | null, param: any) => {
+export const uploadPostApi = async (userId: string | null, param: any) => {
 	const token = getToken();
 	if (!token) return { status: 'unauthenticated' };
 

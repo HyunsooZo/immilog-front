@@ -47,7 +47,7 @@ import api from '@/core/api/index';
 const userInfo = useUserInfoStore();
 
 const props = defineProps({
-	chatRoomSeq: Number,
+	chatRoomId: String,
 });
 const emits = defineEmits(['close', 'closeWithDelete']);
 
@@ -61,7 +61,7 @@ const reportUser = () => {
 
 const getOutOfChatRoom = async () => {
 	const { status } = await api.delete(
-		`/chat/rooms/${props.chatRoomSeq}`,
+		`/chat/rooms/${props.chatRoomId}`,
 		applicationJsonWithToken(userInfo.accessToken),
 	);
 	if (status === 204) {
@@ -79,7 +79,7 @@ const closeConfirmModal = () => {
 const exitChatRoom = () => {
 	onConfirmModal.value = false;
 	getOutOfChatRoom();
-	emits('closeWithDelete', props.chatRoomSeq);
+	emits('closeWithDelete', props.chatRoomId);
 };
 
 const exit = () => {

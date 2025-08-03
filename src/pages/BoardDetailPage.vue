@@ -17,7 +17,7 @@
 			v-if="replyDetailModal"
 			:post="post"
 			:commentIndex="Number(replyIndex)"
-			:postIndex="Number(postSeq)"
+			:postIndex="Number(postId)"
 			@close="closeReplyModal"
 		/>
 		<!-- 댓글 기능버튼 -->
@@ -55,7 +55,7 @@
 		<div
 			class="list-wrap reply"
 			v-for="(comment, index) in post.comments"
-			:key="comment.seq"
+			:key="comment.commentId"
 		>
 			<div class="item">
 				<div class="info__wrap">
@@ -64,7 +64,7 @@
 							<button
 								type="button"
 								class="list__item_button user"
-								:class="{ 'user--author': isAuthor(comment.user.seq) }"
+								:class="{ 'user--author': isAuthor(comment.user.userId) }"
 								@click="onUserProfileDetail"
 							>
 								<em>{{ comment.user.country }}</em>
@@ -91,9 +91,9 @@
 							type="button"
 							class="list__item_button like"
 							:class="{
-								active: comment.likeUsers.includes(userSeq ? userSeq : 0),
+								active: comment.likeUsers.includes(userId ? userId : 0),
 							}"
-							@click="likeComment(comment.seq, index)"
+							@click="likeComment(comment.commentId, index)"
 						>
 							<i class="blind">좋아요</i>
 							<span class="item__count">{{ comment.upVotes }}</span>
@@ -119,7 +119,7 @@
 			<div
 				class="re--reply"
 				v-for="(reply, replyIndex) in comment.replies.slice(0, 3)"
-				:key="reply.seq"
+				:key="reply.commentId"
 			>
 				<div class="item">
 					<div class="info__wrap">
@@ -128,7 +128,7 @@
 								<button
 									type="button"
 									class="list__item_button user"
-									:class="{ 'user--author': isAuthor(reply.user.seq) }"
+									:class="{ 'user--author': isAuthor(reply.user.userId) }"
 									@click="onUserProfileDetail"
 								>
 									<em>{{ reply.user.country }}</em>
@@ -165,7 +165,7 @@
 								:class="{
 									active: post.comments[index].replies[
 										replyIndex
-									].likeUsers.includes(userSeq ? userSeq : 0),
+									].likeUsers.includes(userId ? userId : 0),
 								}"
 								@click="likeReply(index, replyIndex)"
 							>
@@ -205,14 +205,15 @@
 	</div>
 	<ReplyWrite
 		v-if="isCommentWriteClicked"
-		:postSeq="post.seq"
+		:postId="post.postId"
 		:isPostComment="true"
 		@close="closeCommentWrite"
 		@select:value="selectedValue"
 	/>
 	<ReplyWrite
 		v-if="isReplyWriteClicked"
-		:commentSeq="post.comments[Number(replyIndex)].seq"
+		:commentId="post.comments[Number(replyIndex)].commentId"
+		:postId="post.postId"
 		:isPostComment="false"
 		:taggedUser="taggedUser"
 		@close="closeReplyWrite"
@@ -230,13 +231,12 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { AxiosResponse } from 'axios';
-import type { IPost, IComment, IOtherUserInfo } from '@/shared/types/common';
+import type { IOtherUserInfo, IPost } from '@/shared/types/common';
 import api from '@/core/api/index';
 import { emptyJobPost } from '@/shared/utils/emptyObjects';
 import { extractAtWordAndRest } from '@/shared/utils/comment';
 import { likeApi, postBookmark } from '@/features/board/services/post';
-import { writeReply, lastReply } from '@/shared/utils/icons';
+import { lastReply, writeReply } from '@/shared/utils/icons';
 import { timeCalculation } from '@/shared/utils/date-time';
 import {
 	applicationJson,
@@ -249,7 +249,6 @@ import UserProfileDetail from '@/features/board/components/UserProfileDetail.vue
 import ReplyWrite from '@/features/board/components/ReplyWrite.vue';
 import ReplyModal from '@/features/board/components/ReplyModal.vue';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
-import MoreModalForPost from '@/shared/components/ui/MoreModalForPost.vue';
 import TheHeader from '@/shared/components/layout/TheHeader.vue';
 
 const props = defineProps<{
@@ -272,7 +271,7 @@ const isModalClose = () => {
 // User profile detail modal
 const isUserProfileDetailOn = ref(false);
 const onUserProfileDetail = () => {
-	if (post.value.userSeq === userInfo.userSeq) {
+	if (post.value.userId === userInfo.userId) {
 		router.push('/my-page');
 	} else {
 		isUserProfileDetailOn.value = true;
@@ -285,8 +284,8 @@ const offUserProfileDetail = () => {
 };
 
 // Check if user is the author
-const isAuthor = (userSeqParam: number) => {
-	return userSeqParam === post.value.userSeq;
+const isAuthor = (userIdParam: string) => {
+	return userIdParam === post.value.userId;
 };
 
 // Loading state and reply modal control
@@ -333,15 +332,15 @@ const closeCommentWrite = () => {
 	}, 500);
 };
 
-// Post sequence from route parameter (or props)
-const postSeq = route.params.postId || props.postId;
+// Post ID from route parameter (or props) 
+const postId = computed(() => route.params.postId || props.postId);
 
 // Post data
 const post = ref<IPost>({
-	seq: 0,
+	postId: '',
 	title: '',
 	content: '',
-	userSeq: 0,
+	userId: '',
 	userProfileUrl: '',
 	userNickName: '',
 	comments: [],
@@ -361,28 +360,28 @@ const post = ref<IPost>({
 });
 
 // User and like/bookmark related states
-const userSeq = ref<number>(userInfo.userSeq || 0);
+const userId = ref<string>(userInfo.userId || '');
 const likeUsers = ref(post.value.likeUsers);
 const likeCount = ref(post.value.likeCount);
 const bookmarkUsers = ref(post.value.bookmarkUsers);
 const isBookmarked = computed(() => {
-	return bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0);
+	return bookmarkUsers.value.includes(userId.value ? userId.value : 0);
 });
 
 // Like post function
 const likePost = async () => {
-	const currentUserSeq = userSeq.value;
-	if (post.value.likeUsers.includes(currentUserSeq)) {
+	const currentUserId = userId.value;
+	if (post.value.likeUsers.includes(currentUserId)) {
 		post.value.likeCount--;
-		const userIndex = post.value.likeUsers.indexOf(currentUserSeq);
+		const userIndex = post.value.likeUsers.indexOf(currentUserId);
 		post.value.likeUsers.splice(userIndex, 1);
 	} else {
 		post.value.likeCount++;
-		post.value.likeUsers.push(currentUserSeq);
+		post.value.likeUsers.push(currentUserId);
 	}
 	// post.value를 재할당할 필요 없이 직접 수정하면 반응성이 유지됨
 	const requestBody = {
-		postId: post.value.seq,
+		postId: post.value.postId,
 		interactionType: 'LIKE',
 		postType: 'POST',
 	};
@@ -399,20 +398,23 @@ const likePost = async () => {
 };
 
 // Like comment function
-const likeComment = async (seq: any, index: number) => {
+const likeComment = async (commentId: any, index: number) => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
 	const comment = updatedPost.comments[index];
-	if (comment.likeUsers.includes(userSeq.value)) {
+	if (comment.likeUsers.includes(userId.value)) {
 		comment.upVotes--;
-		const userIndex = comment.likeUsers.indexOf(userSeq.value);
+		const userIndex = comment.likeUsers.indexOf(userId.value);
 		comment.likeUsers.splice(userIndex, 1);
 	} else {
 		comment.upVotes++;
-		comment.likeUsers.push(userSeq.value);
+		comment.likeUsers.push(userId.value);
 	}
 	post.value = updatedPost;
 
-	const response = await likeApi('comments', post.value.comments[index].seq);
+	const response = await likeApi(
+		'comments',
+		post.value.comments[index].commentId,
+	);
 	if (response.status === 401) {
 		router.push('/sign-in');
 	} else if (response.status !== 201) {
@@ -425,20 +427,20 @@ const likeReply = async (index: number, replyIdx: number) => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
 	const comment = updatedPost.comments[index];
 	const reply = comment.replies[replyIdx];
-	if (reply.likeUsers.includes(userSeq.value)) {
+	if (reply.likeUsers.includes(userId.value)) {
 		reply.upVotes--;
-		const userIndex = reply.likeUsers.indexOf(userSeq.value);
+		const userIndex = reply.likeUsers.indexOf(userId.value);
 		reply.likeUsers.splice(userIndex, 1);
 	} else {
 		reply.upVotes++;
 		// 원래 코드의 기능을 그대로 유지 (오타 수정 없이)
-		reply.likeUsers.push(userSeq.value);
+		reply.likeUsers.push(userId.value);
 	}
 	post.value = updatedPost;
 
 	const response = await likeApi(
 		'replies',
-		post.value.comments[index].replies[replyIdx].seq,
+		post.value.comments[index].replies[replyIdx].commentId,
 	);
 	if (response.status === 401) {
 		router.push('/sign-in');
@@ -450,8 +452,13 @@ const likeReply = async (index: number, replyIdx: number) => {
 // Fetch post details
 const detailBoard = async () => {
 	try {
+		const currentPostId = postId.value;
+		if (!currentPostId) {
+			console.error('Post ID is not defined');
+			return;
+		}
 		const response = await api.get(
-			`/api/v1/posts/${route.params.postId}`,
+			`/api/v1/posts/${currentPostId}`,
 			applicationJson,
 		);
 		if (response.status === 200) {
@@ -485,7 +492,7 @@ const selectedValue = ref<any>(null);
 
 // Post author info
 const postAuthorInfo = ref<IOtherUserInfo>({
-	userSeq: post.value.userSeq,
+	userId: post.value.userId,
 	userProfileUrl: post.value.userProfileUrl,
 	userNickName: post.value.userNickName,
 	country: post.value.country,
@@ -497,7 +504,7 @@ const bookmarkApi = async () => {
 	checkIfTokenExists();
 	changeBookmark();
 	try {
-		postBookmark(post.value.seq, 'POST');
+		postBookmark(post.value.postId, 'POST');
 	} catch (error) {
 		console.error(error);
 	}
@@ -507,13 +514,13 @@ const bookmarkApi = async () => {
 const changeBookmark = () => {
 	if (isBookmarked.value) {
 		const index =
-			userSeq.value !== null ? bookmarkUsers.value.indexOf(userSeq.value) : -1;
+			userId.value !== null ? bookmarkUsers.value.indexOf(userId.value) : -1;
 		if (index !== -1) {
 			bookmarkUsers.value.splice(index, 1);
 		}
 	} else {
-		if (userSeq.value !== null) {
-			bookmarkUsers.value.push(userSeq.value);
+		if (userId.value !== null) {
+			bookmarkUsers.value.push(userId.value);
 		}
 	}
 };

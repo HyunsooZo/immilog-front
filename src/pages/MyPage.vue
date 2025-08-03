@@ -140,7 +140,7 @@
 		</div>
 		<BookMark @update:bookmarkValue="offBookMark" v-if="isBookmarkOn" />
 		<UserBoard
-			:userSeq="userInfo.userSeq ? userInfo.userSeq : 0"
+			:userId="userInfo.userId ? userInfo.userId : 0"
 			@close="offUserBoard"
 			v-if="isUserBoardOn"
 		/>

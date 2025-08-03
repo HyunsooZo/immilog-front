@@ -148,7 +148,7 @@ const getNotificationsApi = async (nextPage: number) => {
 	try {
 		const params = { page: nextPage };
 		const response: AxiosResponse<IApiNotifications> = await api.get(
-			`/api/v1/notices/users/${userInfo.userSeq}`,
+			`/api/v1/notices/users/${userInfo.userId}`,
 			{
 				params,
 				...applicationJsonWithToken(userInfo.accessToken),

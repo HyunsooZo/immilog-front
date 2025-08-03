@@ -49,7 +49,7 @@
 				</div>
 				<div
 					class="item__fnc"
-					v-if="detail && post.userSeq == userInfo.userSeq"
+					v-if="detail && post.userId == userInfo.userId"
 					@click="onMoreModal"
 				>
 					<div class="list__item">
@@ -93,7 +93,7 @@
 						<div
 							class="tag__wrap"
 							:class="detail ? '_detail' : ''"
-							v-if="(isJobBoard ? jobPost : post).tags.length > 0"
+							v-if="(isJobBoard ? jobPost : post).tags?.length > 0"
 						>
 							<div class="tag__inner">
 								<div class="tag__item">
@@ -203,7 +203,7 @@
 		/>
 		<MoreModalForPost
 			v-if="moreModalValue"
-			:posetSeq="post.seq"
+			:posetSeq="post.postId"
 			@close="closeMoreModal"
 			@edit="editPost"
 			@delete="deletePost"
@@ -240,7 +240,7 @@ const isModalClose = () => document.body.classList.remove('inactive');
 
 const userProfileDetailValue = ref(false);
 const onUserProfileDetail = () => {
-	if (!postAuthorInfo.value.userSeq) setPostAuthorInfo();
+	if (!postAuthorInfo.value.userId) setPostAuthorInfo();
 	userProfileDetailValue.value = true;
 	isModalOpen();
 };
@@ -285,34 +285,33 @@ const likeCount = computed(() => {
 	return jobPostValue.value ? props.jobPost.likeCount : props.post.likeCount;
 });
 const likeUsers = ref(
-	jobPostValue.value ? props.jobPost.likeUsers : props.post.likeUsers,
+	(jobPostValue.value ? props.jobPost.likeUsers : props.post.likeUsers) ?? [],
 );
 const bookmarkUsers = ref(
-	jobPostValue.value ? props.jobPost.bookmarkUsers : props.post.bookmarkUsers,
+	(jobPostValue.value ? props.jobPost.bookmarkUsers : props.post.bookmarkUsers) ?? [],
 );
-const userSeq = ref(userInfo.userSeq);
+const userSeq = ref(userInfo.userId);
 
 const isLiked = computed(() => {
-	return (
-		jobPostValue.value ? props.jobPost.likeUsers : props.post.likeUsers
-	).includes(userSeq.value ? userSeq.value : 0);
+	const likeUsers = jobPostValue.value ? props.jobPost.likeUsers : props.post.likeUsers;
+	return likeUsers?.includes(userSeq.value ? userSeq.value : 0) ?? false;
 });
 
 const isBookmarked = computed(() =>
-	bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0),
+	bookmarkUsers.value?.includes(userSeq.value ? userSeq.value : 0) ?? false,
 );
 
 const onBoardDetail = async () => {
 	if (props.detail) return;
 
 	await viewApi(
-		jobPostValue.value ? props.jobPost.seq : props.post.seq,
+		jobPostValue.value ? props.jobPost.postId : props.post.postId,
 		jobPostValue.value,
 	);
 	router.push(
 		jobPostValue.value
-			? `/job-board/${props.jobPost.seq}`
-			: `/board/${props.post.seq}`,
+			? `/job-board/${props.jobPost.postId}`
+			: `/board/${props.post.postId}`,
 	);
 };
 
@@ -342,7 +341,7 @@ const likePost = () => {
 	changeLike();
 	likeApi(
 		jobPostValue.value ? 'job-boards' : 'posts',
-		jobPostValue.value ? props.jobPost.seq : props.post.seq,
+		jobPostValue.value ? props.jobPost.postId : props.post.postId,
 	);
 };
 
@@ -368,7 +367,7 @@ const postBookmarkApi = async () => {
 	changeBookmark();
 	try {
 		await postBookmark(
-			jobPostValue.value ? props.jobPost.seq : props.post.seq,
+			jobPostValue.value ? props.jobPost.postId : props.post.postId,
 			jobPostValue.value ? 'JOB_BOARD' : 'POST',
 		);
 	} catch (error) {
@@ -400,7 +399,7 @@ const checkIfTokenExists = () => {
 };
 
 const postAuthorInfo = ref<IOtherUserInfo>({
-	userSeq: props.post.userSeq,
+	userId: props.post.userId,
 	userProfileUrl: props.post.userProfileUrl,
 	userNickName: props.post.userNickName,
 	country: props.post.country,
@@ -409,7 +408,7 @@ const postAuthorInfo = ref<IOtherUserInfo>({
 
 const setPostAuthorInfo = () => {
 	postAuthorInfo.value = {
-		userSeq: props.post.userSeq,
+		userId: props.post.userId,
 		userProfileUrl: props.post.userProfileUrl,
 		userNickName: props.post.userNickName,
 		country: props.post.country,
@@ -440,7 +439,7 @@ const deletePost = async () => {
 	if (!props.isJobBoard) {
 		try {
 			const response: AxiosResponse<void> = await api.patch(
-				`/posts/${props.post.seq}/delete`,
+				`/posts/${props.post.postId}/delete`,
 				{},
 				applicationJsonWithToken(userInfo.accessToken),
 			);
@@ -453,7 +452,7 @@ const deletePost = async () => {
 	} else {
 		try {
 			const response: AxiosResponse<void> = await api.patch(
-				`/job-boards/${props.jobPost.seq}/delete`,
+				`/job-boards/${props.jobPost.postId}/delete`,
 				{},
 				applicationJsonWithToken(userInfo.accessToken),
 			);

@@ -21,7 +21,7 @@
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { applicationJson } from '@/shared/utils/header';
-import type { IJobPost } from '@/shared/types/common';
+import type { IJobPost } from '@/features/job-board/types';
 import { emptyPost } from '@/shared/utils/emptyObjects';
 import api from '@/core/api/index';
 import TheHeader from '@/shared/components/layout/TheHeader.vue';
@@ -31,22 +31,12 @@ const route = useRoute();
 const postId = route.params.postId;
 
 const jobPost = ref<IJobPost>({
-	seq: 0,
+	postId: '',
+	userId: '',
+	userNickName: '',
+	userProfileUrl: '',
 	title: '',
 	content: '',
-	user: {
-		seq: 0,
-		nickName: '',
-		email: '',
-		profileImage: '',
-		reportedCount: 0,
-		reportedDate: '',
-		country: '',
-		interestCountry: '',
-		region: '',
-		userRole: '',
-		userStatus: '',
-	},
 	viewCount: 0,
 	likeCount: 0,
 	tags: [],
@@ -55,18 +45,14 @@ const jobPost = ref<IJobPost>({
 	bookmarkUsers: [],
 	country: '',
 	region: '',
+	companyName: '',
 	industry: '',
-	deadline: '',
 	experience: '',
 	salary: '',
-	company: '',
-	companyEmail: '',
-	companyPhone: '',
-	companyAddress: '',
-	companyHomepage: '',
-	companyLogo: '',
+	workType: '',
+	deadline: '',
 	status: '',
-	createdAt: '',
+	createdAt: new Date(),
 });
 
 const fetchJobBoardDetail = async () => {

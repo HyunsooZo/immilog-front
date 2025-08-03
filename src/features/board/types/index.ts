@@ -3,8 +3,8 @@ import type { IApiResponse, IPagination } from '@/shared/types/common';
 
 // 게시글 인터페이스
 export interface IPost {
-	seq: number;
-	userSeq: number;
+	postId: string;
+	userId: string;
 	userNickName: string;
 	userProfileUrl: string;
 	title: string;
@@ -14,8 +14,8 @@ export interface IPost {
 	commentCount: number;
 	tags: string[];
 	attachments: string[];
-	likeUsers: number[];
-	bookmarkUsers: number[];
+	likeUsers: string[];
+	bookmarkUsers: string[];
 	comments: IComment[];
 	isPublic: string;
 	country: string;
@@ -27,7 +27,7 @@ export interface IPost {
 
 // 댓글 인터페이스
 export interface IComment {
-	seq: number;
+	commentId: string;
 	user: IUser;
 	content: string;
 	replies: IComment[];
@@ -41,10 +41,10 @@ export interface IComment {
 
 // 검색 결과 인터페이스
 export interface ISearchResult {
-	seq: number;
+	postId: string;
 	title: string;
 	content: string;
-	userSeq: number;
+	userId: string;
 	userProfileUrl: string;
 	userNickName: string;
 	commentCounts: number;
@@ -52,8 +52,8 @@ export interface ISearchResult {
 	likeCount: number;
 	tags: string[];
 	attachments: string[];
-	likeUsers: number[];
-	bookmarkUsers: number[];
+	likeUsers: string[];
+	bookmarkUsers: string[];
 	isPublic: string;
 	country: string;
 	region: string;

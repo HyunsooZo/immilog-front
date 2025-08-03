@@ -3,13 +3,13 @@ import type { IApiResponse, IPagination } from '@/shared/types/common';
 
 // 알림 인터페이스
 export interface INotification {
-	seq: number;
+	notificationId: string;
 	user: IUser;
 	type: string;
 	title: string;
 	content: string;
 	isRead: boolean;
-	relatedSeq: number;
+	relatedId: string;
 	createdAt: string;
 }
 

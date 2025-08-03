@@ -70,7 +70,7 @@ const { t } = useI18n();
 const userInfo = useUserInfoStore();
 
 const props = defineProps<{
-	userSeq: number;
+	userId: string;
 }>();
 
 const state = ref<IState>({

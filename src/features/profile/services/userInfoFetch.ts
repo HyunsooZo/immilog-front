@@ -11,8 +11,8 @@ export const getUserInfo = async (
 ): Promise<any> => {
 	// 액세스 토큰 확인
 	const accessToken = localStorage.getItem('accessToken');
-	const userSeq = localStorage.getItem('userSeq');
-	if (!accessToken || !userSeq) {
+	const userId = localStorage.getItem('userId');
+	if (!accessToken || !userId) {
 		// 액세스 토큰 미존재 시 에러 반환
 		return { status: 400, error: 'No access token' };
 	}

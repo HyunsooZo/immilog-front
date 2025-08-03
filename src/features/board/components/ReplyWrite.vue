@@ -101,12 +101,12 @@ const isLoading = ref(false);
 const emit = defineEmits(['close']);
 
 const props = defineProps({
-	postSeq: {
-		type: Number,
+	postId: {
+		type: String,
 		required: false,
 	},
-	commentSeq: {
-		type: Number,
+	commentId: {
+		type: String,
 		required: false,
 	},
 	isPostComment: {
@@ -163,7 +163,7 @@ const commentApi = async () => {
 const callCommentApi = async () => {
 	try {
 		const requestForm = {
-			postId: props.postSeq,
+			postId: props.postId,
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		};
 		const response: AxiosResponse<void> = await api.post(
@@ -182,8 +182,8 @@ const callCommentApi = async () => {
 const callReplyApi = async () => {
 	try {
 		const requestForm = {
-			postId: props.postSeq,
-			parentCommentId: props.commentSeq,
+			postId: props.postId,
+			parentCommentId: props.commentId,
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		};
 		const response: AxiosResponse<void> = await api.post(

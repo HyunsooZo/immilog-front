@@ -80,7 +80,7 @@ api.interceptors.response.use(
 
 			try {
 				const response: AxiosResponse<IApiRefreshToken> = await axios.get(
-					`/auth/refresh?token=${refreshToken}`,
+					`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/refresh?token=${refreshToken}`,
 				);
 				if (response.status === 200) {
 					const newAccessToken = response.data.data.accessToken;

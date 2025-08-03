@@ -69,7 +69,7 @@
 		v-if="isUserProfileImageOn"
 	/>
 	<UserBoard
-		:userSeq="userProfile.userSeq"
+		:userSeq="userProfile.userId"
 		@close="offUserBoard"
 		v-if="isUserBoardOn"
 	/>
@@ -97,7 +97,7 @@ const props = defineProps({
 		type: Object as () => IOtherUserInfo,
 		required: true,
 		default: () => ({
-			userSeq: 0,
+			userId: 0,
 			userProfileUrl: '',
 			userNickName: '',
 			country: '',
@@ -135,7 +135,7 @@ const closeModal = () => {
 
 const onChatRoom = async () => {
 	const response: AxiosResponse<IApiChatStart> = await api.post(
-		`/chat/rooms?counterpartSeq=${props.userProfile.userSeq}`,
+		`/chat/rooms?counterpartSeq=${props.userProfile.userId}`,
 		{},
 		applicationJsonWithToken(userInfo.accessToken),
 	);
@@ -192,7 +192,7 @@ const reportApi = async (requestForm: {
 }) => {
 	try {
 		const response: AxiosResponse<void> = await api.patch(
-			`/users/${props.userProfile.userSeq}/report`,
+			`/users/${props.userProfile.userId}/report`,
 			requestForm,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
@@ -207,11 +207,11 @@ const reportApi = async (requestForm: {
 };
 
 onMounted(() => {
-	if (!useUserInfoStore().userSeq) {
+	if (!useUserInfoStore().userId) {
 		closeModal();
 		router.push('/sign-in');
 	}
-	if (props.userProfile.userSeq === useUserInfoStore().userSeq) {
+	if (props.userProfile.userId === useUserInfoStore().userId) {
 		closeModal();
 		router.push('/my-page');
 	}

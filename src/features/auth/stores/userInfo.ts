@@ -2,7 +2,7 @@ import type { IUserInfo } from '@/features/auth/types/index';
 import { defineStore } from 'pinia';
 
 interface UserInfoState {
-	userSeq: number | null;
+	userId: string | null;
 	accessToken: string | null;
 	refreshToken: string | null;
 	userNickname: string | null;
@@ -17,7 +17,7 @@ interface UserInfoState {
 
 export const useUserInfoStore = defineStore('userInfo', {
 	state: (): UserInfoState => ({
-		userSeq: null,
+		userId: null,
 		accessToken: null,
 		refreshToken: null,
 		userNickname: null,
@@ -34,7 +34,7 @@ export const useUserInfoStore = defineStore('userInfo', {
 			if (!userInfo) {
 				return;
 			}
-			this.userSeq = userInfo.userSeq;
+			this.userId = userInfo.userId;
 			this.accessToken = userInfo.accessToken;
 			this.refreshToken = userInfo.refreshToken;
 			this.userNickname = userInfo.nickname;
@@ -46,7 +46,7 @@ export const useUserInfoStore = defineStore('userInfo', {
 			this.isLocationMatch = userInfo.isLocationMatch;
 		},
 		signOut(): void {
-			this.userSeq = null;
+			this.userId = null;
 			this.accessToken = null;
 			this.refreshToken = null;
 			this.userNickname = null;
