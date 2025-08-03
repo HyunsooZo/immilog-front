@@ -351,9 +351,9 @@ const fetchBoardList = async (
 	state.value.loading = true;
 	try {
 		const response: AxiosResponse<IApiPosts> = await api.get(
-			`/posts?country=${country}` +
+			`/api/v1/posts?country=${country}` +
 				`&category=${selectCategoryValue.value.code.toUpperCase()}` +
-				`&sortingMethod=${sortingMethod}` +
+				`&sort=${sortingMethod}` +
 				`&isPublic=${'N'}` +
 				`&page=${nextPage}`,
 			applicationJsonWithToken(userInfo.accessToken),

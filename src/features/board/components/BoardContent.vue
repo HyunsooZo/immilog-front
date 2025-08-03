@@ -318,8 +318,10 @@ const onBoardDetail = async () => {
 
 const viewApi = async (seq: any, jobPostFlag: boolean) => {
 	try {
-		const response = await api.patch(
-			jobPostFlag ? `/job-boards/${seq}/view` : `/posts/${seq}/view`,
+		const response = await api.post(
+			jobPostFlag
+				? `/api/jobboards/${seq}/views`
+				: `/api/v1/posts/${seq}/views`,
 		);
 		if (response.status === 204) {
 			// 업데이트된 조회수를 부모 컴포넌트에 전달

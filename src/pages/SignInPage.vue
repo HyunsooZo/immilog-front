@@ -181,7 +181,7 @@ const signIn = async () => {
 			longitude: localStorage.getItem('longitude'),
 		};
 		const response: AxiosResponse<IApiUserInfo> = await api.post(
-			'/users/sign-in',
+			'/api/v1/auth/signin',
 			requestForm,
 			applicationJson,
 		);
@@ -206,8 +206,11 @@ const signIn = async () => {
 
 const getUnreadNotificationStatus = async () => {
 	try {
-		const response: AxiosResponse<IApiUnreadNotification> =
-			await api.get('/notices/unread');
+		const userSeq = localStorage.getItem('userSeq');
+		const country = localStorage.getItem('country') || 'KOREA';
+		const response: AxiosResponse<IApiUnreadNotification> = await api.get(
+			`/api/v1/notices/users/${userSeq}/unread?country=${country}`,
+		);
 		if (response.data.status === 200) {
 			useUserInfoStore().setUnreadNotification(response.data.data);
 		}
@@ -254,8 +257,10 @@ const setToken = (data: IUserInfo) => {
 const loginByGoogle = async () => {
 	try {
 		onLoading();
+		const latitude = localStorage.getItem('latitude');
+		const longitude = localStorage.getItem('longitude');
 		const response: AxiosResponse<IApiUserInfo> = await api.get(
-			'/users/sign-in/google',
+			`/api/v1/auth/signin/google?latitude=${latitude}&longitude=${longitude}`,
 			applicationJson,
 		);
 
@@ -286,8 +291,10 @@ const loginByKakao = async () => {
 	try {
 		onLoading();
 
+		const latitude = localStorage.getItem('latitude');
+		const longitude = localStorage.getItem('longitude');
 		const response: AxiosResponse<IApiUserInfo> = await api.get(
-			'/users/sign-in/kakao',
+			`/api/v1/auth/signin/kakao?latitude=${latitude}&longitude=${longitude}`,
 			applicationJson,
 		);
 		// Kakao 로그인 처리
@@ -306,8 +313,10 @@ const loginByNaver = async () => {
 	try {
 		onLoading();
 
+		const latitude = localStorage.getItem('latitude');
+		const longitude = localStorage.getItem('longitude');
 		const response: AxiosResponse<IApiUserInfo> = await api.get(
-			'/users/sign-in/naver',
+			`/api/v1/auth/signin/naver?latitude=${latitude}&longitude=${longitude}`,
 			applicationJson,
 		);
 		// Naver 로그인 처리

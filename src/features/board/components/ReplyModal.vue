@@ -278,7 +278,7 @@ const closeReplyWrite = () => {
 const detailBoard = async () => {
 	try {
 		const response: AxiosResponse<IApiPostDetail> = await api.get(
-			`/posts/${props.postIndex}`,
+			`/api/v1/posts/${props.postIndex}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {

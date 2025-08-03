@@ -163,10 +163,11 @@ const commentApi = async () => {
 const callCommentApi = async () => {
 	try {
 		const requestForm = {
+			postId: props.postSeq,
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		};
 		const response: AxiosResponse<void> = await api.post(
-			`/comments/post/${props.postSeq}/users/${userInfo.userSeq}`,
+			'/api/comments',
 			requestForm,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
@@ -181,10 +182,12 @@ const callCommentApi = async () => {
 const callReplyApi = async () => {
 	try {
 		const requestForm = {
+			postId: props.postSeq,
+			parentCommentId: props.commentSeq,
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		};
 		const response: AxiosResponse<void> = await api.post(
-			`/replies/comments/${props.commentSeq}`,
+			'/api/comments',
 			requestForm,
 			applicationJsonWithToken(userInfo.accessToken),
 		);

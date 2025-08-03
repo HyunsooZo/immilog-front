@@ -172,10 +172,7 @@ const fetchJobBoardList = async () => {
 	state.value.loading = true;
 	try {
 		const response: AxiosResponse<IApiJobPost> = await api.get(
-			`/job-boards?country=${selectedCountry.value}` +
-				`&sortingMethod=${selectedSortingMethod.value}` +
-				`&industry=${selectIndustryValue.value.code}` +
-				`&experience=${selectExperienceValue.value.code}` +
+			`/api/jobboards?country=${selectedCountry.value}` +
 				`&page=${currentPage.value}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);

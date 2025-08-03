@@ -182,8 +182,8 @@ const likeApi = async () => {
 
 const increaseViewCount = async () => {
 	try {
-		const response: AxiosResponse<void> = await api.patch(
-			`/posts/${props.post.seq}/view`,
+		const response: AxiosResponse<void> = await api.post(
+			`/api/v1/posts/${props.post.seq}/views`,
 			{},
 			applicationJsonWithToken(userInfo.accessToken),
 		);

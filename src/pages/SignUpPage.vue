@@ -240,7 +240,7 @@ const register = async () => {
 				profileImage: null,
 			};
 			const response: AxiosResponse<void> = await api.post(
-				'/users',
+				'/api/v1/users',
 				formData,
 				applicationJson,
 			);
@@ -265,7 +265,7 @@ const register = async () => {
 const checkNickName = async () => {
 	try {
 		const response: AxiosResponse<IApiBoolean> = await api.get(
-			`/users/nicknames?nickname=${userNickName.value}`,
+			`/api/v1/users/nicknames/${userNickName.value}/availability`,
 			applicationJson,
 		);
 		if (response.status === 200) {
@@ -378,7 +378,7 @@ const getCoordinate = async () => {
 const getCountry = async (location: ILocation) => {
 	try {
 		const response: AxiosResponse<IApiLocation> = await api.get(
-			`/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
+			`/api/v1/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
 			applicationJson,
 		);
 		if (response.data.status === 200) {

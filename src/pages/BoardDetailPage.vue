@@ -238,7 +238,10 @@ import { extractAtWordAndRest } from '@/shared/utils/comment';
 import { likeApi, postBookmark } from '@/features/board/services/post';
 import { writeReply, lastReply } from '@/shared/utils/icons';
 import { timeCalculation } from '@/shared/utils/date-time';
-import { applicationJson, applicationJsonWithToken } from '@/shared/utils/header';
+import {
+	applicationJson,
+	applicationJsonWithToken,
+} from '@/shared/utils/header';
 import { useUserInfoStore } from '@/features/auth/stores/userInfo';
 import BoardContent from '@/features/board/components/BoardContent.vue';
 import NoContent from '@/features/board/components/NoContent.vue';
@@ -378,9 +381,14 @@ const likePost = async () => {
 		post.value.likeUsers.push(currentUserSeq);
 	}
 	// post.value를 재할당할 필요 없이 직접 수정하면 반응성이 유지됨
-	const response = await api.patch(
-		`posts/${post.value.seq}/like`,
-		{},
+	const requestBody = {
+		postId: post.value.seq,
+		interactionType: 'LIKE',
+		postType: 'POST',
+	};
+	const response = await api.post(
+		'/api/interactions',
+		requestBody,
 		applicationJsonWithToken(userInfo.accessToken),
 	);
 	if (response.status === 401) {
@@ -443,7 +451,7 @@ const likeReply = async (index: number, replyIdx: number) => {
 const detailBoard = async () => {
 	try {
 		const response = await api.get(
-			`/posts/${route.params.postId}`,
+			`/api/v1/posts/${route.params.postId}`,
 			applicationJson,
 		);
 		if (response.status === 200) {

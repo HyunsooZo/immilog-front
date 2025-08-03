@@ -17,7 +17,7 @@ export const getJobBoardsApi = async (
 	try {
 		const config = createConfig(
 			'get',
-			`/job-boards?country=${country}&sortingMethod=${sortingMethod}&industry=${industry}&experience=${experience}&page=${page}`,
+			`/api/jobboards?country=${country}&page=${page}`,
 			null,
 		);
 		const response = await axios(config);

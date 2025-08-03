@@ -171,8 +171,10 @@ const onBoardDetail = async () => {
 
 const viewApi = async (seq: any, jobPostFlag: boolean) => {
 	try {
-		const response = await api.patch(
-			jobPostFlag ? `/job-boards/${seq}/view` : `/posts/${seq}/view`,
+		const response = await api.post(
+			jobPostFlag
+				? `/api/jobboards/${seq}/views`
+				: `/api/v1/posts/${seq}/views`,
 		);
 		return { status: response.status };
 	} catch (error) {

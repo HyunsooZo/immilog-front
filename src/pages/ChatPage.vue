@@ -116,7 +116,10 @@
 
 <script setup lang="ts">
 import type { IChatRoom, IUser } from '@/shared/types/common';
-import type { IApiChatRoom, IApiChatRoomList } from '@/features/chat/types/index';
+import type {
+	IApiChatRoom,
+	IApiChatRoomList,
+} from '@/features/chat/types/index';
 import { applicationJsonWithToken, webSocketURL } from '@/shared/utils/header';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';

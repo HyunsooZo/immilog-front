@@ -309,11 +309,13 @@ import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { resizeImage } from '@/shared/utils/image';
 import { experienceList } from '@/shared/utils/selectItems';
-import { uploadJobBoardApi, uploadPostApi } from '@/features/board/services/post';
+import {
+	uploadJobBoardApi,
+	uploadPostApi,
+} from '@/features/board/services/post';
 import type { ISelectItem } from '@/shared/types/common';
 import type { IApiImage } from '@/shared/types/common';
 import { useUserInfoStore } from '@/features/auth/stores/userInfo';
-import { multipartFormDataWithToken } from '@/shared/utils/header';
 import {
 	postRegistrationIcon,
 	imageSelectIcon,
@@ -514,8 +516,10 @@ const imageUpload = async () => {
 				new File([resizedImage], file.name, { type: file.type }),
 			);
 		}
+		formData.append('imagePath', 'content');
+		formData.append('imageType', 'POST');
 		const response: AxiosResponse<IApiImage> = await api.post(
-			`/images?imagePath=content&imageType=POST`,
+			'/api/v1/images',
 			formData,
 			{
 				headers: {

@@ -133,7 +133,7 @@ const callSearchApi = async (pageNumber: number) => {
 	initializeStateIfKeywordChanged();
 	try {
 		const response: AxiosResponse<IApiSearchResult> = await api.get(
-			`/posts/search?keyword=${searchInput.value}&page=${pageNumber}`,
+			`/api/v1/posts?search=${searchInput.value}&page=${pageNumber}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {

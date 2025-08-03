@@ -6,7 +6,6 @@ axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 
 // 헬퍼 함수: 토큰과 userSeq 동적 획득
 const getToken = () => localStorage.getItem('accessToken');
-const getUserSeq = () => localStorage.getItem('userSeq');
 
 // 공통 에러 핸들링 함수
 const handleError = (error: unknown) => {
@@ -36,13 +35,12 @@ export const likeApi = async (path: string, seq: number) => {
 
 	try {
 		const postType = getPostType(path);
-		const response = await api.post(`/interaction/posts/${seq}`, null, {
-			params: {
-				interactionType: 'LIKE',
-				postType,
-				userSeq: getUserSeq(),
-			},
-		});
+		const requestBody = {
+			postId: seq,
+			interactionType: 'LIKE',
+			postType,
+		};
+		const response = await api.post('/api/interactions', requestBody);
 		return { status: response.status };
 	} catch (error) {
 		return handleError(error);
@@ -53,9 +51,9 @@ export const likeApi = async (path: string, seq: number) => {
 export const viewApi = async (seq: number, jobPostFlag: boolean) => {
 	try {
 		const endpoint = jobPostFlag
-			? `/job-boards/${seq}/view`
-			: `/posts/${seq}/view`;
-		const response = await api.patch(endpoint);
+			? `/api/jobboards/${seq}/views`
+			: `/api/v1/posts/${seq}/views`;
+		const response = await api.post(endpoint);
 		return { status: response.status };
 	} catch (error) {
 		return handleError(error);
@@ -68,9 +66,8 @@ export const getBookmarkedPostApi = async () => {
 	if (!token) return { status: 'unauthenticated' };
 
 	try {
-		const response = await api.get('/posts/bookmarks', {
+		const response = await api.get('/api/v1/posts/bookmarked', {
 			params: {
-				userSeq: localStorage.getItem('userSeq'),
 				postType: 'POST',
 			},
 		});
@@ -81,19 +78,17 @@ export const getBookmarkedPostApi = async () => {
 };
 
 // 포스트 북마크 API 요청 함수
-export const postBookmark = async (seq: number, post: string) => {
+export const postBookmark = async (seq: number) => {
 	const token = requireAuth();
 	if (!token) return { status: 'unauthenticated' };
 
 	try {
-		const userSeq = localStorage.getItem('userSeq');
-		const response = await api.post(`/interaction/posts/${seq}`, null, {
-			params: {
-				userSeq: userSeq,
-				interactionType: 'BOOKMARK',
-				postType: 'POST',
-			},
-		});
+		const requestBody = {
+			postId: seq,
+			interactionType: 'BOOKMARK',
+			postType: 'POST',
+		};
+		const response = await api.post('/api/interactions', requestBody);
 		return { status: response.status };
 	} catch (error) {
 		return handleError(error);
@@ -106,7 +101,7 @@ export const uploadPostApi = async (userSeq: number | null, param: any) => {
 	if (!token) return { status: 'unauthenticated' };
 
 	try {
-		const response = await api.post(`/posts/users/${userSeq}`, param);
+		const response = await api.post('/api/v1/posts', param);
 		return { status: response.status, data: response.data };
 	} catch (error) {
 		return handleError(error);
@@ -119,7 +114,7 @@ export const uploadJobBoardApi = async (param: any) => {
 	if (!token) return { status: 'unauthenticated' };
 
 	try {
-		const response = await api.post(`/job-boards`, param);
+		const response = await api.post('/api/jobboards', param);
 		return { status: response.status, data: response.data };
 	} catch (error) {
 		return handleError(error);

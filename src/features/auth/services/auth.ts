@@ -18,7 +18,7 @@ export const fetchUserInfo = async (
 		const longitude = localStorage.getItem('longitude') || '0';
 		try {
 			const response: AxiosResponse<IApiUserInfo> = await api.get(
-				`/auth/user/${userSeq}?latitude=${latitude}&longitude=${longitude}`,
+				`/api/v1/auth/me?latitude=${latitude}&longitude=${longitude}`,
 				applicationJsonWithToken(accessToken),
 			);
 			if (response.status === 200 && response.data.status === 200) {

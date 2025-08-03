@@ -110,7 +110,12 @@
 </template>
 
 <script setup lang="ts">
-import type { IPost, ISelectItem, IState, IUserInfo } from '@/shared/types/common';
+import type {
+	IPost,
+	ISelectItem,
+	IState,
+	IUserInfo,
+} from '@/shared/types/common';
 import type { IApiPosts, IApiUserInfo } from '@/features/auth/types/index';
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
@@ -359,8 +364,8 @@ const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
 	try {
 		const response: AxiosResponse<IApiPosts> = await api.get(
-			`/posts?country=${selectCountry.value.code}` +
-				`&sortingMethod=${sortingMethod}` +
+			`/api/v1/posts?country=${selectCountry.value.code}` +
+				`&sort=${sortingMethod}` +
 				`&isPublic=Y` +
 				`&category=${selectCategoryValue.value.code}` +
 				`&page=${nextPage}`,

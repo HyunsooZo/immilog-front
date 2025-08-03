@@ -71,7 +71,7 @@ const jobPost = ref<IJobPost>({
 
 const fetchJobBoardDetail = async () => {
 	try {
-		const response = await api.get(`/job-boards/${postId}`, applicationJson);
+		const response = await api.get(`/api/jobboards/${postId}`, applicationJson);
 		if (response.status === 200) {
 			jobPost.value = response.data.data;
 		}

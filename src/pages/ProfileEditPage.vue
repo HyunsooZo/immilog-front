@@ -262,7 +262,7 @@ const checkNickName = async () => {
 
 	try {
 		const { status, data } = await api.get(
-			`/users/nicknames?nickname=${userNickName.value}`,
+			`/api/v1/users/nicknames/${userNickName.value}/availability`,
 			applicationJson,
 		);
 		if (status === 200) {
@@ -286,7 +286,7 @@ const hostImage = async () => {
 		formData.append('imageType', 'PROFILE');
 
 		const response: AxiosResponse<IApiImage> = await api.post(
-			'/images',
+			'/api/v1/images',
 			formData,
 			multipartFormData,
 		);
@@ -327,8 +327,8 @@ const saveProfile = async () => {
 	};
 
 	try {
-		const response: AxiosResponse<IApiResponse> = await api.patch(
-			`/users/${userInfo.userSeq}/information`,
+		const response: AxiosResponse<IApiResponse> = await api.put(
+			'/api/v1/users',
 			formData,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
@@ -451,7 +451,7 @@ const getCountry = async (location: ILocation) => {
 
 	try {
 		const response: AxiosResponse<IApiLocation> = await api.get(
-			`/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
+			`/api/v1/locations?latitude=${location.latitude}&longitude=${location.longitude}`,
 			multipartFormData,
 		);
 		if (response.status === 200) {

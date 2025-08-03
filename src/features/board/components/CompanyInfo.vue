@@ -103,9 +103,15 @@ import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { countries, industryList } from '@/shared/utils/selectItems';
 import type { IField, IFormFields, ISelectItem } from '@/shared/types/common';
-import { postCompanyInfo, getMyCompanyInfo } from '@/features/job-board/services/companyService';
+import {
+	postCompanyInfo,
+	getMyCompanyInfo,
+} from '@/features/job-board/services/companyService';
 import { AxiosResponse } from 'axios';
-import type { IApiCompanyInfo, IApiImage } from '@/features/job-board/types/index';
+import type {
+	IApiCompanyInfo,
+	IApiImage,
+} from '@/features/job-board/types/index';
 import { multipartFormData } from '@/shared/utils/header';
 import { resizeImage } from '@/shared/utils/image';
 import { useCompanyInfo } from '@/features/job-board/stores/company';
