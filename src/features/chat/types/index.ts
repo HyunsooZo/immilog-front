@@ -1,4 +1,4 @@
-import type { IUser } from '@/features/auth/types';
+import type { IUser } from 'src/features/user/types';
 import type { IApiResponse, IPagination } from '@/shared/types/common';
 
 // 채팅 인터페이스

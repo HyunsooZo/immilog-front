@@ -315,7 +315,7 @@ import {
 } from '@/features/board/services/post';
 import type { ISelectItem } from '@/shared/types/common';
 import type { IApiImage } from '@/shared/types/common';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import {
 	postRegistrationIcon,
 	imageSelectIcon,
@@ -528,7 +528,7 @@ const imageUpload = async () => {
 				},
 			},
 		);
-		if (response.status === 200) {
+		if (response.status === 200 && response.data?.data) {
 			response.data.data.forEach(image => {
 				imagePaths.value.push(image);
 			});

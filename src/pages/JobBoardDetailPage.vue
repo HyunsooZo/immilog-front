@@ -18,10 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { applicationJson } from '@/shared/utils/header';
-import type { IJobPost } from '@/features/job-board/types';
+import type { IJobPost } from '@/features/board/types';
 import { emptyPost } from '@/shared/utils/emptyObjects';
 import api from '@/core/api/index';
 import TheHeader from '@/shared/components/layout/TheHeader.vue';
@@ -33,7 +33,7 @@ const postId = route.params.postId;
 const jobPost = ref<IJobPost>({
 	postId: '',
 	userId: '',
-	userNickName: '',
+	userNickname: '',
 	userProfileUrl: '',
 	title: '',
 	content: '',

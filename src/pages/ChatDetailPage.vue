@@ -14,8 +14,8 @@
 				<strong
 					>{{
 						amISender(chats[0].sender.userId)
-							? chats[0].recipient.nickName
-							: chats[0].sender.nickName
+							? chats[0].recipient.nickname
+							: chats[0].sender.nickname
 					}}
 				</strong>
 			</p>
@@ -26,16 +26,16 @@
 			</button>
 		</div>
 	</header>
-	<div class="content _full" v-if="chats.length > 0">
+	<div class="content _full" v-if="chats?.length > 0">
 		<div class="chat-wrap">
 			<!-- message -->
-			<div class="chat__msg" v-if="chats.length == 0">
+			<div class="chat__msg" v-if="chats?.length == 0">
 				<p class="text">
 					<em class="user__name">
 						{{
-							amISender(chats[0].sender.userId)
-								? chats[0].recipient.nickName
-								: chats[0].sender.nickName
+							amISender(chats[0]?.sender.userId)
+								? chats[0].recipient.nickname
+								: chats[0].sender.nickname
 						}} </em
 					>님과의 채팅을 시작해보세요.
 				</p>
@@ -43,7 +43,7 @@
 			<!-- chat list -->
 			<div class="chat__content">
 				<ul class="chat__list">
-					<template v-for="chat in chats" :key="chat.id">
+					<template v-for="chat in chats" :key="chat.chatId">
 						<li
 							class="item__notice"
 							v-if="lastDate !== formDate(chat.createdAt)"
@@ -51,7 +51,7 @@
 							<span class="text">{{ getDateTime(chat.createdAt) }}</span>
 						</li>
 						<li
-							:id="`message-${chat.id}`"
+							:id="`message-${chat.chatId}`"
 							class="item"
 							aria-label="받은 메시지"
 							data-content-type="text"
@@ -62,13 +62,15 @@
 								<button
 									type="button"
 									class="item__image"
-									:class="{ 'image--default': chat.sender.profileImage === '' }"
+									:class="{
+										'image--default': chat.sender.userProfileUrl === '',
+									}"
 									@click="onUserProfileDetail"
 								>
 									<img
-										:src="chat.sender.profileImage"
+										:src="chat.sender.userProfileUrl"
 										alt=""
-										v-if="chat.sender.profileImage !== ''"
+										v-if="chat.sender.userProfileUrl !== ''"
 									/></button
 								><!-- // 사용자 프로필 보기 -->
 							</div>
@@ -81,14 +83,14 @@
 								<div class="item__fnc">
 									<p
 										class="list__item read"
-										:class="{ active: isRead(chat.id) }"
+										:class="{ active: isRead(chat.chatId) }"
 									>
 										<i class="blind">채팅 읽음 여부</i>
 										<span
 											class="item__count"
 											v-if="amISender(chat.sender.userId)"
 										>
-											<!-- {{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }} -->
+											<!-- {{ isRead(chat.chatId) ? '읽음 ' : '안 읽음 ' }} -->
 											<svg viewBox="0 0 16 16">
 												<path
 													d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"
@@ -96,7 +98,7 @@
 											</svg>
 										</span>
 										<!-- <span class="item__count" v-if="amISender(chat.sender.userId)">
-											{{ isRead(chat.id) ? '읽음 ' : '안 읽음 ' }}</span> -->
+											{{ isRead(chat.chatId) ? '읽음 ' : '안 읽음 ' }}</span> -->
 									</p>
 									<p class="list__item past">
 										<i class="blind">채팅 전송시간</i>
@@ -194,7 +196,7 @@ import { computed } from 'vue';
 import { applicationJsonWithToken, webSocketURL } from '@/shared/utils/header';
 import { AxiosResponse } from 'axios';
 import SideMenu from '@/shared/components/common/SideMenu.vue';
-import UserProfileDetail from '@/features/board/components/UserProfileDetail.vue';
+import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue';
 import ChatImagePreview from '@/features/chat/components/ChatImagePreview.vue';
 import CustomAlert from '@/shared/components/ui/CustomAlert.vue';
 import SockJS from 'sockjs-client';
@@ -331,17 +333,17 @@ const connectWebSocket = () => {
 };
 
 // 메시지 읽음 상태를 업데이트하는 함수
-const updateReadStatus = (readChatInfo: { chatId: any }) => {
+const updateReadStatus = (readChatInfo: { chatId: string }) => {
 	chats.value.forEach(chat => {
-		if (chat.id === readChatInfo.chatId) {
-			chat.readStatus = true;
+		if (chat.chatId === readChatInfo.chatId) {
+			chat.isRead = true;
 		}
 	});
 };
 // 메세지가 읽혔는지 체크
-const isRead = (chatId: number): boolean => {
-	const chat = chats.value.find((chat: IChat) => chat.id === chatId);
-	return chat ? chat.readStatus : false;
+const isRead = (chatId: string): boolean => {
+	const chat = chats.value.find((chat: IChat) => chat.chatId === chatId);
+	return chat ? chat.isRead : false;
 };
 
 // 스크롤 이벤트 리스너를 추가하는 함수
@@ -379,12 +381,12 @@ onUnmounted(() => {
 });
 
 // 사용자가 채팅 발신자인지 확인
-const amISender = (senderId: number) => {
+const amISender = (senderId: string) => {
 	return senderId === userInfo.userId;
 };
 
 // 날짜 가져오기
-const getDateTime = (dateTime: any) => {
+const getDateTime = (dateTime: string | number | Date) => {
 	const result = formDate(dateTime);
 	lastDate = result;
 	return result;
@@ -440,18 +442,18 @@ const markMessagesAsRead = (id: number) => {
 	} else {
 		// 모든 메시지를 '읽음'으로 표시
 		chats.value.forEach((chat: IChat) => {
-			if (!amISender(chat.sender.userId) && !chat.readStatus) {
+			if (!amISender(chat.sender.userId) && !chat.isRead) {
 				// 읽음 상태를 서버에 보내기
 				stompClient.send(
 					'/app/chat/read',
 					{},
 					JSON.stringify({
-						chatId: chat.id,
+						chatId: chat.chatId,
 						userId: userInfo.userId,
 					}),
 				);
 				// 프론트엔드에서 상태 업데이트
-				chat.readStatus = true;
+				chat.isRead = true;
 			}
 		});
 	}
@@ -473,7 +475,7 @@ const saveFirstMessage = () => {
 const moveToFirstMessage = (currentSize: number) => {
 	if (currentSize < chats.value.length) {
 		const messageElement = document.getElementById(
-			`message-${chats.value[chats.value.length - messageLenth.value].id}`,
+			`message-${chats.value[chats.value.length - messageLenth.value].chatId}`,
 		);
 		if (messageElement) {
 			window.scrollTo(0, messageElement.offsetTop - 100);
@@ -485,17 +487,24 @@ const moveToFirstMessage = (currentSize: number) => {
 const chatImages = ref<string[]>([]);
 
 // 이미지 미리보기
-const previewImage = (event: any) => {
+const previewImage = (event: Event) => {
 	if (chatImages.value.length >= 3) {
 		openAlert('사진은 최대 3개 까지만 전송 할 수 있습니다.');
 		return;
 	}
-	const file = event.target.files[0];
-	const reader = new FileReader();
-	reader.onload = () => {
-		chatImages.value.push(reader.result as string);
-	};
-	reader.readAsDataURL(file);
+
+	const target = event.target as HTMLInputElement;
+
+	if (target.files && target.files.length > 0) {
+		const file = target.files[0];
+		const reader = new FileReader();
+
+		reader.onload = () => {
+			chatImages.value.push(reader.result as string);
+		};
+
+		reader.readAsDataURL(file);
+	}
 };
 
 // 프리뷰 삭제

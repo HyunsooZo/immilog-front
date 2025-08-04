@@ -1,10 +1,9 @@
-import type { IJobPost } from '@/features/job-board/types';
-import type { IPost } from '@/features/board/types';
+import type { IJobPost, IPost } from '@/features/board/types';
 
 export const emptyJobPost: IJobPost = {
 	postId: '',
 	userId: '',
-	userNickName: '',
+	userNickname: '',
 	userProfileUrl: '',
 	title: '',
 	content: '',
@@ -32,7 +31,7 @@ export const emptyPost: IPost = {
 	content: '',
 	userId: '',
 	userProfileUrl: '',
-	userNickName: '',
+	userNickname: '',
 	comments: [],
 	commentCount: 0,
 	viewCount: 0,

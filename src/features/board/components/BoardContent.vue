@@ -43,7 +43,7 @@
 					<div class="list__item" v-if="!isJobBoard">
 						<button type="button" class="list__item_button user">
 							<em>{{ post.region }}</em>
-							<strong>{{ post.userNickName }}</strong>
+							<strong>{{ post.userNickname }}</strong>
 						</button>
 					</div>
 				</div>
@@ -214,7 +214,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { timeCalculation } from '@/shared/utils/date-time';
 import { likeApi, postBookmark } from '@/features/board/services/post';
 import { useI18n } from 'vue-i18n';
@@ -226,7 +226,7 @@ import type {
 } from '@/shared/types/common';
 import { AxiosResponse } from 'axios';
 import { applicationJsonWithToken } from '@/shared/utils/header';
-import UserProfileDetail from '@/features/board/components/UserProfileDetail.vue';
+import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue';
 import AdContent from '@/features/board/components/AdContent.vue';
 import MoreModalForPost from '@/shared/components/ui/MoreModalForPost.vue';
 import api from '@/core/api/index';
@@ -288,24 +288,28 @@ const likeUsers = ref(
 	(jobPostValue.value ? props.jobPost.likeUsers : props.post.likeUsers) ?? [],
 );
 const bookmarkUsers = ref(
-	(jobPostValue.value ? props.jobPost.bookmarkUsers : props.post.bookmarkUsers) ?? [],
+	(jobPostValue.value
+		? props.jobPost.bookmarkUsers
+		: props.post.bookmarkUsers) ?? [],
 );
 const userSeq = ref(userInfo.userId);
 
 const isLiked = computed(() => {
-	const likeUsers = jobPostValue.value ? props.jobPost.likeUsers : props.post.likeUsers;
+	const likeUsers = jobPostValue.value
+		? props.jobPost.likeUsers
+		: props.post.likeUsers;
 	return likeUsers?.includes(userSeq.value || '') ?? false;
 });
 
-const isBookmarked = computed(() =>
-	bookmarkUsers.value?.includes(userSeq.value || '') ?? false,
+const isBookmarked = computed(
+	() => bookmarkUsers.value?.includes(userSeq.value || '') ?? false,
 );
 
 const onBoardDetail = async () => {
 	if (props.detail) return;
 
 	await viewApi(
-		jobPostValue.value ? props.jobPost.postId : props.post.postId,
+		String(jobPostValue.value ? props.jobPost.postId : props.post.postId),
 		jobPostValue.value,
 	);
 	router.push(
@@ -315,12 +319,10 @@ const onBoardDetail = async () => {
 	);
 };
 
-const viewApi = async (seq: any, jobPostFlag: boolean) => {
+const viewApi = async (id: string, jobPostFlag: boolean) => {
 	try {
 		const response = await api.post(
-			jobPostFlag
-				? `/api/jobboards/${seq}/views`
-				: `/api/v1/posts/${seq}/views`,
+			jobPostFlag ? `/api/jobboards/${id}/views` : `/api/v1/posts/${id}/views`,
 		);
 		if (response.status === 204) {
 			// 업데이트된 조회수를 부모 컴포넌트에 전달
@@ -341,7 +343,7 @@ const likePost = () => {
 	changeLike();
 	likeApi(
 		jobPostValue.value ? 'job-boards' : 'posts',
-		jobPostValue.value ? props.jobPost.postId : props.post.postId,
+		String(jobPostValue.value ? props.jobPost.postId : props.post.postId),
 	);
 };
 
@@ -367,8 +369,7 @@ const postBookmarkApi = async () => {
 	changeBookmark();
 	try {
 		await postBookmark(
-			jobPostValue.value ? props.jobPost.postId : props.post.postId,
-			jobPostValue.value ? 'JOB_BOARD' : 'POST',
+			String(jobPostValue.value ? props.jobPost.postId : props.post.postId),
 		);
 	} catch (error) {
 		console.error(error);
@@ -386,7 +387,7 @@ const changeBookmark = () => {
 	}
 };
 
-const allCommentCounts = (post: IPost) => {
+const _allCommentCounts = (post: IPost) => {
 	let result = post.comments.length;
 	post.comments.forEach((comment: IComment) => {
 		result += comment.replies.length;
@@ -401,7 +402,8 @@ const checkIfTokenExists = () => {
 const postAuthorInfo = ref<IOtherUserInfo>({
 	userId: props.post.userId,
 	userProfileUrl: props.post.userProfileUrl,
-	userNickName: props.post.userNickName,
+	nickname: props.post.userNickname,
+	email: '',
 	country: props.post.country,
 	region: props.post.region,
 });
@@ -410,7 +412,8 @@ const setPostAuthorInfo = () => {
 	postAuthorInfo.value = {
 		userId: props.post.userId,
 		userProfileUrl: props.post.userProfileUrl,
-		userNickName: props.post.userNickName,
+		nickname: props.post.userNickname,
+		email: '',
 		country: props.post.country,
 		region: props.post.region,
 	};
@@ -466,7 +469,7 @@ const deletePost = async () => {
 };
 
 // 코멘트를 생성일 기준으로 정렬하는 computed 속성
-const sortedComments = computed(() => {
+const _sortedComments = computed(() => {
 	return props.post.comments
 		? props.post.comments.slice().sort((a, b) => {
 				return (

@@ -1,4 +1,4 @@
-import type { ICompany } from '@/shared/types/common';
+import type { ICompany } from '@/shared/types/common.ts';
 import { defineStore } from 'pinia';
 
 interface UserCompanyState {
@@ -34,17 +34,17 @@ export const useCompanyInfo = defineStore('companyInfo', {
 			if (!companyInfo) {
 				return;
 			}
-			this.companyNameValue = companyInfo.company;
+			this.companyNameValue = companyInfo.company ?? null;
 			this.industryValue = companyInfo.industry;
-			this.industryCode = companyInfo.companyIndustryCode;
-			this.companyPhoneValue = companyInfo.companyPhone;
-			this.companyEmailValue = companyInfo.companyEmail;
-			this.companyHomepageValue = companyInfo.companyHomepage;
-			this.companyAddressValue = companyInfo.companyAddress;
-			this.countryValue = companyInfo.companyCountry;
-			this.countryCode = companyInfo.companyCountryCode;
-			this.regionValue = companyInfo.companyRegion;
-			this.companyLogo = companyInfo.companyLogo;
+			this.industryCode = companyInfo.companyIndustryCode ?? null;
+			this.companyPhoneValue = companyInfo.companyPhone ?? null;
+			this.companyEmailValue = companyInfo.companyEmail ?? null;
+			this.companyHomepageValue = companyInfo.companyHomepage ?? null;
+			this.companyAddressValue = companyInfo.companyAddress ?? null;
+			this.countryValue = companyInfo.companyCountry ?? null;
+			this.countryCode = companyInfo.companyCountryCode ?? null;
+			this.regionValue = companyInfo.companyRegion ?? null;
+			this.companyLogo = companyInfo.companyLogo ?? null;
 		},
 	},
 });

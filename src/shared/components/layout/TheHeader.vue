@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 const router = useRouter();
 const userInfo = useUserInfoStore();
 

@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, nextTick, onUnmounted } from 'vue';
+import { onMounted, ref, nextTick, onUnmounted, Ref } from 'vue';
 import { getBookmarkedPostApi } from '@/features/board/services/post';
 import { useI18n } from 'vue-i18n';
 import { emptyJobPost } from '@/shared/utils/emptyObjects';
@@ -122,7 +122,7 @@ const updateMenuBar = () => {
 };
 
 // 메뉴 선택
-const selectMenu = (selectedMenu: { active: any; label?: string }) => {
+const selectMenu = (selectedMenu: { active: Ref<boolean>; label?: string }) => {
 	selectedMenu.active.value = true;
 	menus
 		.filter(menu => menu !== selectedMenu)

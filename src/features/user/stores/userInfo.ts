@@ -1,4 +1,4 @@
-import type { IUserInfo } from '@/features/auth/types/index';
+import type { IUserInfo } from '@/features/user/types';
 import { defineStore } from 'pinia';
 
 interface UserInfoState {

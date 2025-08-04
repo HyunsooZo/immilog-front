@@ -96,7 +96,7 @@ export const postBookmark = async (postId: string) => {
 };
 
 // 포스트 업로드 API 요청 함수
-export const uploadPostApi = async (userId: string | null, param: any) => {
+export const uploadPostApi = async (userId: string | null, param: unknown) => {
 	const token = getToken();
 	if (!token) return { status: 'unauthenticated' };
 
@@ -109,7 +109,7 @@ export const uploadPostApi = async (userId: string | null, param: any) => {
 };
 
 // 잡보드 업로드 API 요청 함수
-export const uploadJobBoardApi = async (param: any) => {
+export const uploadJobBoardApi = async (param: unknown) => {
 	const token = getToken();
 	if (!token) return { status: 'unauthenticated' };
 

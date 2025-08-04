@@ -1,4 +1,4 @@
-import type { IApiResponse } from '@/shared/types/common';
+import type { IApiResponse } from '@/shared/types/common.ts';
 
 // 사용자 정보 인터페이스
 export interface IUser {

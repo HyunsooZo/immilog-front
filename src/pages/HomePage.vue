@@ -75,7 +75,7 @@
 				<i class="blind">글쓰기</i>
 			</button>
 			<NoContent
-				v-if="state.pagination.sort && state.posts.length === 0"
+				v-if="state.pagination?.sort && state.posts?.length === 0"
 				:item="t('homeView.post')"
 			/>
 			<BoardContent
@@ -116,8 +116,9 @@ import type {
 	IState,
 	IUserInfo,
 } from '@/shared/types/common';
-import type { IApiPosts, IApiUserInfo } from '@/features/auth/types/index';
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import type { IApiUserInfo } from '@/features/auth/types';
+import type { IApiPosts } from '@/features/board/types';
+import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import { useUserInfoStore } from '@/features/auth/stores/userInfo';
 import { postBtn } from '@/shared/utils/icons';
@@ -136,7 +137,7 @@ import SearchBar from '@/shared/components/common/SearchBar.vue';
 import SelectDialog from '@/shared/components/ui/SelectDialog.vue';
 import BoardContent from '@/features/board/components/BoardContent.vue';
 import PostModal from '@/features/board/components/PostModal.vue';
-import NoContent from '@/features/board/components/NoContent.vue';
+import NoContent from '@/shared/components/ui/NoContent.vue';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
 import SubMenuList from '@/shared/components/ui/SubMenuList.vue';
 import api from '@/core/api/index';
@@ -212,6 +213,9 @@ const updateMenuBar = () => {
 
 // 게시글 목록 관련 반응형 객체
 const state = ref<IState>({
+	isActive: false,
+	label: '',
+	value: '',
 	posts: [],
 	pagination: {
 		sort: {
@@ -232,6 +236,9 @@ const state = ref<IState>({
 // select 관련 메소드 (초기화)
 const initializeState = () => {
 	state.value = {
+		isActive: false,
+		label: '',
+		value: '',
 		posts: [],
 		pagination: {
 			sort: {
@@ -391,7 +398,9 @@ const updateStateWithResponse = (response: AxiosResponse<IApiPosts>) => {
 	if (response.data.status === 200) {
 		state.value.last = response.data.data.last;
 		response.data.data.content.forEach((item: IPost) => {
-			state.value.posts.push(item);
+			if (state.value.posts) {
+				state.value.posts.push(item);
+			}
 		});
 		state.value.pagination = response.data.data.pageable;
 	}

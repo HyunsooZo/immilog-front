@@ -169,7 +169,7 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useLocationStore } from '@/shared/stores/location';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { applicationJson } from '@/shared/utils/header';
 import { countries } from '@/shared/utils/selectItems';
 import { AxiosResponse } from 'axios';
@@ -359,7 +359,7 @@ const getCoordinate = async () => {
 			});
 			if (permissionResult.state === 'granted') {
 				navigator.geolocation.getCurrentPosition(
-					(position: GeolocationPosition) => {
+					position => {
 						getCountry({
 							latitude: position.coords.latitude,
 							longitude: position.coords.longitude,
@@ -382,8 +382,8 @@ const getCountry = async (location: ILocation) => {
 			applicationJson,
 		);
 		if (response.data.status === 200) {
-			country.value = response.data.data.country;
-			region.value = response.data.data.region;
+			country.value = response.data.data.country || '';
+			region.value = response.data.data.region || '';
 		} else {
 			openAlert(t('signUpView.failedToFetchLocationInfo'));
 		}

@@ -208,7 +208,7 @@ import { onMounted, ref } from 'vue';
 import { timeCalculation } from '@/shared/utils/date-time';
 import { useRouter } from 'vue-router';
 import { extractAtWordAndRest } from '@/shared/utils/comment';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { likeApi } from '@/features/board/services/post';
 import { useI18n } from 'vue-i18n';
 import { applicationJsonWithToken } from '@/shared/utils/header';
@@ -284,7 +284,7 @@ const detailBoard = async () => {
 		if (response.status === 200) {
 			detailPost.value = response.data.data;
 			isLiked.value = response.data.data.likeUsers.some(
-				(userId: number) => userId === 1,
+				(userId: string) => userId === '1',
 			);
 		}
 	} catch (error) {

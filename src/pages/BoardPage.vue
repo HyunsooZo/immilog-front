@@ -103,17 +103,15 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
-import { showAd } from '@/shared/utils/showAd';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { postBtn } from '@/shared/utils/icons';
-import { sortingList, categoryList } from '@/shared/utils/selectItems';
+import { categoryList, sortingList } from '@/shared/utils/selectItems';
 import { useI18n } from 'vue-i18n';
 import type { ISelectItem, IState } from '@/shared/types/common';
-import type { ISelectMenu } from '@/features/board/types/index';
+import type { IApiPosts, ISelectMenu } from '@/features/board/types/index';
 import { useRouter } from 'vue-router';
 import { applicationJsonWithToken } from '@/shared/utils/header';
 import { AxiosResponse } from 'axios';
-import type { IApiPosts } from '@/features/board/types/index';
 import { emptyJobPost } from '@/shared/utils/emptyObjects';
 import SearchBar from '@/shared/components/common/SearchBar.vue';
 import SelectDialog from '@/shared/components/ui/SelectDialog.vue';
@@ -359,9 +357,11 @@ const fetchBoardList = async (
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
-			response.data.data.content.forEach((post: any) =>
-				state.value.posts.push(post),
-			);
+			response.data.data.content.forEach((post: any) => {
+				if (state.value.posts) {
+					state.value.posts.push(post);
+				}
+			});
 			state.value.pagination = response.data.data.pageable;
 		}
 	} catch (error) {

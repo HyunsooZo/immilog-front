@@ -98,7 +98,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { timeCalculation } from '@/shared/utils/date-time';
 import { useI18n } from 'vue-i18n';
 import type { ISearchResult } from '@/shared/types/common';

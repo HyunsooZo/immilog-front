@@ -16,7 +16,7 @@
 					<!-- 로그인 상태일 때 -->
 					<template v-if="login">
 						<!-- 알림이 있을 경우 -->
-						<div v-if="state.notifications.length > 0">
+						<div v-if="state.notifications?.length > 0">
 							<div
 								class="item"
 								v-for="(item, index) in state.notifications"
@@ -91,7 +91,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { applicationJsonWithToken } from '@/shared/utils/header';
 import { AxiosResponse } from 'axios';
 import type { INotificationState } from '@/shared/types/notification';
@@ -164,7 +164,9 @@ const getNotificationsApi = async (nextPage: number) => {
 			response.data.data.content
 		) {
 			response.data.data.content.forEach(item => {
-				state.value.notifications.push(item);
+				if (state.value.notifications) {
+					state.value.notifications.push(item);
+				}
 			});
 		} else {
 			console.error('Unexpected response structure', response.data);

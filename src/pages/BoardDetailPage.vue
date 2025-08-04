@@ -4,7 +4,9 @@
 		<!-- 글 상세 -->
 		<div class="list-wrap">
 			<div class="list__title">
-				<span class="title">{{ post.category ? t('postCategories.' + post.category) : '' }}</span>
+				<span class="title">{{
+					post.category ? t('postCategories.' + post.category) : ''
+				}}</span>
 			</div>
 			<BoardContent
 				:post="post"
@@ -68,7 +70,7 @@
 								@click="onUserProfileDetail"
 							>
 								<em>{{ comment.user.country }}</em>
-								<strong>{{ comment.user.nickName }}</strong>
+								<strong>{{ comment.user.nickname }}</strong>
 							</button>
 						</div>
 					</div>
@@ -132,7 +134,7 @@
 									@click="onUserProfileDetail"
 								>
 									<em>{{ reply.user.country }}</em>
-									<strong>{{ reply.user.nickName }}</strong>
+									<strong>{{ reply.user.nickname }}</strong>
 								</button>
 							</div>
 						</div>
@@ -175,7 +177,7 @@
 							<button
 								type="button"
 								class="list__item cmt"
-								@click="openReplyWrite(index, reply.user.nickName)"
+								@click="openReplyWrite(index, reply.user.nickname)"
 							></button>
 							<p class="list__item past">
 								<i class="blind">작성시간</i>
@@ -244,8 +246,8 @@ import {
 } from '@/shared/utils/header';
 import { useUserInfoStore } from '@/features/auth/stores/userInfo';
 import BoardContent from '@/features/board/components/BoardContent.vue';
-import NoContent from '@/features/board/components/NoContent.vue';
-import UserProfileDetail from '@/features/board/components/UserProfileDetail.vue';
+import NoContent from '@/shared/components/ui/NoContent.vue';
+import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue';
 import ReplyWrite from '@/features/board/components/ReplyWrite.vue';
 import ReplyModal from '@/features/board/components/ReplyModal.vue';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
@@ -306,10 +308,10 @@ const closeReplyModal = () => {
 const isReplyWriteClicked = ref(false);
 const isCommentWriteClicked = ref(false);
 const taggedUser = ref('');
-const openReplyWrite = (index: number, nickName: string | null) => {
+const openReplyWrite = (index: number, nickname: string | null) => {
 	replyIndex.value = index;
 	isReplyWriteClicked.value = true;
-	taggedUser.value = nickName ? nickName : '';
+	taggedUser.value = nickname ? nickname : '';
 	isModalOpen();
 };
 const closeReplyWrite = () => {
@@ -332,7 +334,7 @@ const closeCommentWrite = () => {
 	}, 500);
 };
 
-// Post ID from route parameter (or props) 
+// Post ID from route parameter (or props)
 const postId = computed(() => route.params.postId || props.postId);
 
 // Post data
@@ -342,7 +344,7 @@ const post = ref<IPost>({
 	content: '',
 	userId: '',
 	userProfileUrl: '',
-	userNickName: '',
+	userNickname: '',
 	comments: [],
 	viewCount: 0,
 	likeCount: 0,
@@ -398,7 +400,7 @@ const likePost = async () => {
 };
 
 // Like comment function
-const likeComment = async (commentId: any, index: number) => {
+const likeComment = async (commentId: string, index: number) => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
 	const comment = updatedPost.comments[index];
 	if (comment.likeUsers.includes(userId.value)) {
@@ -464,7 +466,7 @@ const detailBoard = async () => {
 		if (response.status === 200) {
 			post.value = {
 				...response.data.post,
-				comments: response.data.comments || []
+				comments: response.data.comments || [],
 			};
 			// 게시물 데이터 업데이트됨
 			likeCount.value = response.data.post.likeCount;
@@ -493,13 +495,13 @@ const closeMoreModal = () => {
 // Selected value for ReplyWrite component
 const selectedValue = ref<any>(null);
 
-// Post author info
 const postAuthorInfo = ref<IOtherUserInfo>({
 	userId: post.value.userId,
-	userProfileUrl: post.value.userProfileUrl,
-	userNickName: post.value.userNickName,
+	nickname: post.value.userNickname,
+	email: '',
 	country: post.value.country,
 	region: post.value.region,
+	userProfileUrl: post.value.userProfileUrl,
 });
 
 // Bookmark API function

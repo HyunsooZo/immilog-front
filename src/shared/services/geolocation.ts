@@ -12,7 +12,7 @@ export const getCoordinate = (): Promise<void> => {
 						permissionResult.state === 'prompt'
 					) {
 						navigator.geolocation.getCurrentPosition(
-							(position: GeolocationPosition) => {
+							(position: any) => {
 								// 좌표를 localStorage에 저장
 								localStorage.setItem(
 									'latitude',
@@ -24,7 +24,7 @@ export const getCoordinate = (): Promise<void> => {
 								);
 								resolve();
 							},
-							(error: GeolocationPositionError) => {
+							(error: any) => {
 								// 위치 정보를 가져오는 데 실패한 경우 에러 출력 및 reject
 								console.error(`ERROR(${error.code}): ${error.message}`);
 								reject(error);

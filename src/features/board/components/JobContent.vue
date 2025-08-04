@@ -83,7 +83,7 @@
 					type="button"
 					class="list__item_button mark"
 					:class="{ active: isBookmarked }"
-					@click="postBokmarkApi"
+					@click="postBookmarkApi"
 				>
 					<!-- //활성화 .active -->
 					<i class="blind">북마크</i>
@@ -98,13 +98,13 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
-import { timeCalculation } from '@/shared/utils/date-time';
-import { likeApi, postBookmark } from '@/features/board/services/post';
+import { useUserInfoStore } from '@/features/user/stores/userInfo.ts';
+import { timeCalculation } from '@/shared/utils/date-time.ts';
+import { likeApi, postBookmark } from '@/features/board/services/post.ts';
 import { useI18n } from 'vue-i18n';
-import type { IJobPost } from '@/shared/types/common';
-import AdContent from './AdContent.vue';
-import api from '@/core/api/index';
+import type { IJobPost } from '@/shared/types/common.ts';
+import AdContent from '@/features/board/components/AdContent.vue';
+import api from '@/core/api';
 
 const { t } = useI18n();
 
@@ -151,16 +151,16 @@ const props = defineProps({
 const likes = ref(props.jobPost.likeCount);
 const likeUsers = ref(props.jobPost.likeUsers);
 const bookmarkUsers = ref(props.jobPost.bookmarkUsers);
-const userSeq = ref(userInfo.userId);
+const userId = ref(userInfo.userId);
 const thumbnail = ref(
 	props.jobPost.attachments.length > 0 ? props.jobPost.attachments[0] : '',
 );
 const isLiked = computed(() => {
-	return likeUsers.value.includes(userSeq.value || '');
+	return likeUsers.value.includes(userId.value || '');
 });
 
 const isBookmarked = computed(() => {
-	return bookmarkUsers.value.includes(userSeq.value || '');
+	return bookmarkUsers.value.includes(userId.value || '');
 });
 
 // 게시글 상세 페이지로 이동
@@ -169,12 +169,10 @@ const onBoardDetail = async () => {
 	router.push(`/board/${props.jobPost.postId}`);
 };
 
-const viewApi = async (seq: any, jobPostFlag: boolean) => {
+const viewApi = async (id: string, jobPostFlag: boolean) => {
 	try {
 		const response = await api.post(
-			jobPostFlag
-				? `/api/jobboards/${seq}/views`
-				: `/api/v1/posts/${seq}/views`,
+			jobPostFlag ? `/api/jobboards/${id}/views` : `/api/v1/posts/${id}/views`,
 		);
 		return { status: response.status };
 	} catch (error) {
@@ -193,23 +191,23 @@ const likePost = () => {
 // 좋아요 상태 변경
 const changeLikeStatus = () => {
 	if (isLiked.value) {
-		const index = likeUsers.value.indexOf(userSeq.value || '');
+		const index = likeUsers.value.indexOf(userId.value || '');
 		if (index !== -1) {
 			likeUsers.value.splice(index, 1);
 		}
 		likes.value--;
 	} else {
-		likeUsers.value.push(userSeq.value || '');
+		likeUsers.value.push(userId.value || '');
 		likes.value++;
 	}
 };
 
 // 북마크 API 호출
-const postBokmarkApi = async () => {
+const postBookmarkApi = async () => {
 	checkIfTokenExists();
 	changeBookmarkStatus();
 	try {
-		postBookmark(props.jobPost.postId, 'JOB_BOARD');
+		postBookmark(props.jobPost.postId);
 	} catch (error) {
 		console.error(error);
 	}
@@ -218,14 +216,12 @@ const postBokmarkApi = async () => {
 // 북마크 상태 변경
 const changeBookmarkStatus = () => {
 	if (isBookmarked.value) {
-		const index = bookmarkUsers.value.indexOf(
-			userSeq.value ? userSeq.value : 0,
-		);
+		const index = bookmarkUsers.value.indexOf(userId.value ? userId.value : '');
 		if (index !== -1) {
 			bookmarkUsers.value.splice(index, 1);
 		}
 	} else {
-		bookmarkUsers.value.push(userSeq.value || '');
+		bookmarkUsers.value.push(userId.value || '');
 	}
 };
 

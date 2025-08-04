@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<p class="modal-title">
-					{{ userProfile.userNickName }}
+					{{ userProfile.nickname }}
 					<span>{{ t('userProfileDetailView.userProfileDetail') }}</span>
 				</p>
 				<button class="button-icon button--close" @click="closeModal">
@@ -33,7 +33,7 @@
 									<em>{{ userProfile.region }}</em>
 								</div>
 								<div class="list__item user">
-									<strong>{{ userProfile.userNickName }}</strong>
+									<strong>{{ userProfile.nickname }}</strong>
 								</div>
 							</div>
 						</div>
@@ -69,21 +69,21 @@
 		v-if="isUserProfileImageOn"
 	/>
 	<UserBoard
-		:userSeq="userProfile.userId"
+		:userId="userProfile.userId"
 		@close="offUserBoard"
 		v-if="isUserBoardOn"
 	/>
 </template>
 
 <script setup lang="ts">
-import type { IApiChatStart } from '@/features/chat/types/index';
+import type { IApiChatStart } from '@/features/chat/types';
 import type { IOtherUserInfo } from '@/shared/types/common';
 import { applicationJsonWithToken } from '@/shared/utils/header';
 import { AxiosResponse } from 'axios';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
-import UserProfileImage from '@/features/board/components/UserProfileImage.vue';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
+import UserProfileImage from '@/features/user/components/UserProfileImage.vue';
 import router from '@/core/router/index';
 import UserBoard from './UserBoard.vue';
 import api from '@/core/api/index';

@@ -1,4 +1,4 @@
-import api from '@/core/api/index';
+import api from '@/core/api';
 
 export const postCompanyInfo = async (param: any) => {
 	try {

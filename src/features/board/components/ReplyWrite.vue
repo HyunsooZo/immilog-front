@@ -84,7 +84,7 @@
 import { ref } from 'vue';
 import { postRegistrationIcon } from '@/shared/utils/icons';
 import { applicationJsonWithToken } from '@/shared/utils/header';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { AxiosResponse } from 'axios';
 import { useI18n } from 'vue-i18n';
 import CustomAlert from '@/shared/components/ui/CustomAlert.vue';

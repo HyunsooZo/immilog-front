@@ -127,7 +127,7 @@ import type {
 import { applicationJsonWithToken, webSocketURL } from '@/shared/utils/header';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { timeCalculation } from '@/shared/utils/date-time';
 import { useI18n } from 'vue-i18n';
 import { AxiosResponse } from 'axios';

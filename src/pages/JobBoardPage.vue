@@ -75,7 +75,8 @@
 
 <script setup lang="ts">
 import type { IJobPost, ISelectItem } from '@/shared/types/common';
-import type { IApiJobPost, IPageable } from '@/features/job-board/types/index';
+import type { IApiJobPost } from '@/features/board/types';
+import type { IPageable } from '@/shared/types/common';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { postBtn } from '@/shared/utils/icons';
 import {
@@ -86,7 +87,7 @@ import {
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { showAd } from '@/shared/utils/showAd';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { applicationJsonWithToken } from '@/shared/utils/header';
 import { AxiosResponse } from 'axios';
 import { emptyPost } from '@/shared/utils/emptyObjects';
@@ -96,7 +97,7 @@ import BoardContent from '@/features/board/components/BoardContent.vue';
 import SelectDialog from '@/shared/components/ui/SelectDialog.vue';
 import PostModal from '@/features/board/components/PostModal.vue';
 import SubMenuList from '@/shared/components/ui/SubMenuList.vue';
-import NoContent from '@/features/board/components/NoContent.vue';
+import NoContent from '@/shared/components/ui/NoContent.vue';
 import api from '@/core/api/index';
 
 const { t } = useI18n();

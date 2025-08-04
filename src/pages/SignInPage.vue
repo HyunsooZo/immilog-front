@@ -142,14 +142,17 @@ import type { IUserInfo } from '@/shared/types/common';
 import type {
 	IApiUnreadNotification,
 	IApiUserInfo,
-} from '@/features/auth/types/index';
+} from '@/features/user/types/index';
 import { useRouter } from 'vue-router';
 import { computed, onMounted, ref } from 'vue';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { getCoordinate } from '@/shared/services/geolocation';
-import { getUserInfo } from '@/features/profile/services/userInfoFetch';
+import { getUserInfo } from '@/features/user/services/userInfoFetch';
 import { useI18n } from 'vue-i18n';
-import { applicationJson, applicationJsonWithToken } from '@/shared/utils/header';
+import {
+	applicationJson,
+	applicationJsonWithToken,
+} from '@/shared/utils/header';
 import { handleError } from '@/shared/utils/errorHandler';
 import { AxiosResponse } from 'axios';
 import CustomAlert from '@/shared/components/ui/CustomAlert.vue';

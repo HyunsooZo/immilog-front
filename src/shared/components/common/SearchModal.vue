@@ -92,7 +92,7 @@ import type { ISearchResult } from '@/types/interface';
 import { onMounted, ref, computed } from 'vue';
 import { applicationJsonWithToken } from '@/shared/utils/header';
 import { IApiSearchResult, IPageable } from '@/types/api-interface';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { AxiosResponse } from 'axios';
 import LoadingModal from '@/components/loading/LoadingModal.vue';
 import SearchResult from '../board/SearchResult.vue';

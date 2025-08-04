@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import type { IApiUserInfo } from '@/features/auth/types/index';
-import { applicationJsonWithToken } from '@/shared/utils/header';
-import api from '@/core/api/index';
+import type { IApiUserInfo } from 'src/features/user/types';
+import { applicationJsonWithToken } from '@/shared/utils/header.ts';
+import api from '@/core/api';
 
 let isInProgress = false;
 export const fetchUserInfo = async (

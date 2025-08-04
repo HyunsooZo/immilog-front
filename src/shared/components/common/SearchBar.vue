@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import NotificationModal from '@/shared/components/common/NotificationModal.vue';
 import router from '@/core/router/index';
 

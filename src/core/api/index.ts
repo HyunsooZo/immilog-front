@@ -1,4 +1,4 @@
-import type { IApiRefreshToken } from '@/features/auth/types/index';
+import type { IApiRefreshToken } from '@/features/user/types/index';
 import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
 // Axios 인스턴스 생성

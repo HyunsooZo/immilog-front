@@ -140,7 +140,7 @@
 		</div>
 		<BookMark @update:bookmarkValue="offBookMark" v-if="isBookmarkOn" />
 		<UserBoard
-			:userId="userInfo.userId ? userInfo.userId : 0"
+			:userId="userInfo.userId ? userInfo.userId : ''"
 			@close="offUserBoard"
 			v-if="isUserBoardOn"
 		/>
@@ -154,9 +154,9 @@
 
 <script setup lang="ts">
 import BookMark from '@/features/board/components/BookMark.vue';
-import UserBoard from '@/features/board/components/UserBoard.vue';
+import UserBoard from '@/features/user/components/UserBoard.vue';
 import ConfirmModal from '@/shared/components/ui/ConfirmModal.vue';
-import CompanyInfo from '@/features/board/components/CompanyInfo.vue';
+import CompanyInfo from '@/features/job-board/components/CompanyInfo.vue';
 import NotificationModal from '@/shared/components/common/NotificationModal.vue';
 import { useUserInfoStore } from '@/features/auth/stores/userInfo';
 import { onMounted, ref, computed, watchEffect } from 'vue';

@@ -1,11 +1,18 @@
 // 공통 타입 정의
 
-// 다른 모듈에서 필요한 타입들을 re-export
+// 다른 모듈에서 필요한 타입들을 import
+import type { IPost, IComment, ISearchResult } from '@/features/board/types';
+import type { IUser, IUserInfo } from 'src/features/user/types';
+import type { ILocation, IApiLocation } from '@/shared/types/location';
+import type { IChat, IChatRoom } from '@/features/chat/types';
+import type { IJobPost, ICompany } from '@/features/board/types';
+
+// re-export
 export type { IPost, IComment, ISearchResult } from '@/features/board/types';
-export type { IUser, IUserInfo } from '@/features/auth/types';
+export type { IUser, IUserInfo } from 'src/features/user/types';
 export type { ILocation, IApiLocation } from '@/shared/types/location';
 export type { IChat, IChatRoom } from '@/features/chat/types';
-export type { IJobPost, ICompany } from '@/features/job-board/types';
+export type { IJobPost, ICompany } from '@/features/board/types';
 
 export interface ISelectItem {
 	name: string;
@@ -67,10 +74,14 @@ export interface IApiErrorResponse {
 export interface IOtherUserInfo {
 	userId: string;
 	nickname: string;
+	userNickName?: string; // 백워드 호환성을 위해 유지
 	email: string;
 	country: string;
 	region: string;
 	userProfileUrl: string;
+	profileImage?: string;
+	nickName?: string; // 백워드 호환성을 위해 유지
+	userSeq?: string;
 	interestCountry?: string;
 	isLocationMatch?: boolean;
 }
@@ -80,14 +91,23 @@ export interface IState {
 	isActive: boolean;
 	label: string;
 	value: string;
-	posts?: any[];
+	posts?: IPost[];
 	last?: boolean;
 	loading?: boolean;
+	pagination?: IPageable;
+}
+
+// 단순 상태 타입 (UserBoard용)
+export interface ISimpleState {
+	posts?: IPost[];
+	last?: boolean;
+	loading?: boolean;
+	pagination?: IPageable;
 }
 
 // 에러 타입
 export interface IError {
-	code: string;
+	code: string | number;
 	message: string;
 }
 
@@ -113,4 +133,20 @@ export interface IFormFields {
 export interface IApiImage {
 	imageUrl: string[];
 	data?: string[];
+}
+
+// 알림 관련 타입들
+export interface INotification {
+	id: string;
+	title: string;
+	content: string;
+	type: string;
+	isRead: boolean;
+	createdAt: string;
+}
+
+export interface INotificationState {
+	notifications?: INotification[];
+	pagination?: IPageable;
+	loading?: boolean;
 }

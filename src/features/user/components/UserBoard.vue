@@ -54,11 +54,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, nextTick, onUnmounted } from 'vue';
+import { onMounted, ref, nextTick, onUnmounted, Ref } from 'vue';
 import { applicationJsonWithToken } from '@/shared/utils/header';
-import type { IApiPosts } from '@/features/board/types/index';
-import type { IState } from '@/shared/types/common';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import type { IApiPosts } from '@/features/board/types';
+import type { ISimpleState } from '@/shared/types/common';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { AxiosResponse } from 'axios';
 import { emptyJobPost } from '@/shared/utils/emptyObjects';
 import { useI18n } from 'vue-i18n';
@@ -73,7 +73,7 @@ const props = defineProps<{
 	userId: string;
 }>();
 
-const state = ref<IState>({
+const state = ref<ISimpleState>({
 	posts: [],
 	pagination: {
 		sort: {
@@ -155,7 +155,7 @@ const updateMenuBar = () => {
 	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
 };
 
-const selectMenu = (selectedMenu: { active: any; label?: string }) => {
+const selectMenu = (selectedMenu: { active: Ref<boolean>; label?: string }) => {
 	selectedMenu.active.value = true;
 	menus
 		.filter(menu => menu !== selectedMenu)

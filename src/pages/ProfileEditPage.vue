@@ -164,7 +164,7 @@ import {
 	multipartFormData,
 } from '@/shared/utils/header';
 import { computed, onMounted, ref, shallowRef } from 'vue';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { useLocationStore } from '@/shared/stores/location';
 import { resizeImage } from '@/shared/utils/image';
 import { useRouter } from 'vue-router';
@@ -293,8 +293,8 @@ const hostImage = async () => {
 
 		if (response.status === 200) {
 			imageUrl.value = Array.isArray(response.data.data)
-				? response.data.data[0]
-				: response.data.data;
+				? response.data.data[0] || ''
+				: response.data.data || '';
 		} else {
 			openAlert(t('profileEditView.failedToUploadImage'));
 		}
@@ -394,7 +394,7 @@ const geolocationOptions = {
 	maximumAge: 0,
 };
 
-const handleGeolocationError = (error: GeolocationPositionError) => {
+const handleGeolocationError = (error: any) => {
 	console.error(`Geolocation error (${error.code}): ${error.message}`);
 	isLoading.value = false;
 };
@@ -408,7 +408,7 @@ const fetchLocation = async () => {
 			name: 'geolocation',
 		});
 
-		const handlePosition = (position: GeolocationPosition) => {
+		const handlePosition = (position: any) => {
 			const coords = {
 				latitude: position.coords.latitude,
 				longitude: position.coords.longitude,
@@ -425,15 +425,13 @@ const fetchLocation = async () => {
 				geolocationOptions,
 			);
 		} else if (permissionResult.state === 'prompt') {
-			const position = await new Promise<GeolocationPosition>(
-				(resolve, reject) => {
-					navigator.geolocation.getCurrentPosition(
-						resolve,
-						reject,
-						geolocationOptions,
-					);
-				},
-			);
+			const position = await new Promise<any>((resolve, reject) => {
+				navigator.geolocation.getCurrentPosition(
+					resolve,
+					reject,
+					geolocationOptions,
+				);
+			});
 			handlePosition(position);
 		} else {
 			console.error('Geolocation permission denied');
@@ -456,7 +454,7 @@ const getCountry = async (location: ILocation) => {
 		);
 		if (response.status === 200) {
 			country.value = t('countries.' + response.data.data.country);
-			countryCode.value = response.data.data.country;
+			countryCode.value = response.data.data.country || '';
 		} else {
 			openAlert(t('profileEditView.failedToFetchLocationInfo'));
 		}

@@ -4,6 +4,7 @@
 // Re-exports for compatibility
 export type { ISearchResult, ISelectItem } from '@/shared/types/common';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ILegacyInterface {
 	// 필요시 레거시 인터페이스들을 여기에 추가
 }

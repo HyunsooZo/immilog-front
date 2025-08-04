@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { applicationJsonWithToken } from '@/shared/utils/header';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import ConfirmModal from './ConfirmModal.vue';
 import api from '@/core/api/index';
 

@@ -9,9 +9,9 @@
 import { computed, nextTick, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { getCoordinate } from '@/shared/services/geolocation';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
-import type { IApiUserInfo } from '@/features/auth/types/index';
-import { fetchUserInfo } from '@/features/auth/services/auth';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
+import type { IApiUserInfo } from '@/features/user/types/index';
+import { fetchUserInfo } from '@/features/user/services/auth.ts';
 import { AxiosResponse } from 'axios';
 import TheFooter from '@/shared/components/layout/TheFooter.vue';
 import router from '@/core/router/index';

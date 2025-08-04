@@ -80,13 +80,14 @@
 </template>
 
 <script setup lang="ts">
-import type { IApiSearchResult, IPageable } from '@/features/board/types/index';
+import type { IApiSearchResult } from '@/features/board/types/index';
+import type { IPageable } from '@/shared/types/common';
 import type { ISearchResult } from '@/shared/types/common';
 import { onMounted, ref, computed, onUnmounted, watch } from 'vue';
 import { applicationJsonWithToken } from '@/shared/utils/header';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { AxiosResponse } from 'axios';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
 import SearchResult from '@/features/board/components/SearchResult.vue';

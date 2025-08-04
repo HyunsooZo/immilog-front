@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import type { IField, IFormFields } from '@/shared/types/common';
-import { onMounted, watch, ref } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{

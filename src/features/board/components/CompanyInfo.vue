@@ -101,25 +101,25 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { countries, industryList } from '@/shared/utils/selectItems';
-import type { IField, IFormFields, ISelectItem } from '@/shared/types/common';
+import { countries, industryList } from '@/shared/utils/selectItems.ts';
+import type { IField, IFormFields, ISelectItem } from '@/shared/types/common.ts';
 import {
 	postCompanyInfo,
 	getMyCompanyInfo,
-} from '@/features/job-board/services/companyService';
+} from '@/features/board/services/companyService.ts';
 import { AxiosResponse } from 'axios';
 import type {
 	IApiCompanyInfo,
 	IApiImage,
-} from '@/features/job-board/types/index';
-import { multipartFormData } from '@/shared/utils/header';
-import { resizeImage } from '@/shared/utils/image';
-import { useCompanyInfo } from '@/features/job-board/stores/company';
+} from '@/features/board/types';
+import { multipartFormData } from '@/shared/utils/header.ts';
+import { resizeImage } from '@/shared/utils/image.ts';
+import { useCompanyInfo } from '@/features/board/stores/company.ts';
 import SelectDialog from '@/shared/components/ui/SelectDialog.vue';
 import TheTopBox from '@/shared/components/common/TheTopBox.vue';
 import RegistWrap from '@/features/board/components/RegistWrap.vue';
 import CustomAlert from '@/shared/components/ui/CustomAlert.vue';
-import api from '@/core/api/index';
+import api from '@/core/api';
 
 const emits = defineEmits(['close']);
 const { t } = useI18n();
@@ -137,7 +137,7 @@ const regionValue = ref('');
 
 const imagePreview = ref();
 const imageUrl = ref();
-const imageFile = ref(null);
+const imageFile = ref<File | null>(null);
 const imageHasChanged = ref(false);
 
 const companyInfo = useCompanyInfo();
@@ -330,18 +330,18 @@ const buttonActivationCriteria = computed(() => {
 });
 
 // 프리뷰 이미지
-const previewImage = (event: { target: any }) => {
-	const input = event.target;
+const previewImage = (event: Event) => {
+	const input = event.target as HTMLInputElement;
 	if (input.files && input.files[0]) {
 		const reader = new FileReader();
 		reader.onload = e => {
 			if (e.target) {
-				imagePreview.value = e.target.result;
+				imagePreview.value = (e.target as FileReader).result;
 			}
-			imageFile.value = input.files[0];
+			imageFile.value = input.files![0];
 			imageHasChanged.value = true;
 		};
-		reader.readAsDataURL(input.files[0]);
+		reader.readAsDataURL(input.files![0]);
 	}
 };
 
