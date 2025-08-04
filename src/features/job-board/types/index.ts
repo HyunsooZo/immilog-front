@@ -47,3 +47,22 @@ export interface IApiJobPost extends IApiResponse {
 export interface IApiCompanyInfo extends IApiResponse {
 	data: ICompany;
 }
+
+// 페이지 정보 인터페이스
+export interface IPageable {
+	sort: {
+		sorted: boolean;
+		unsorted: boolean;
+		empty: boolean;
+	};
+	pageSize: number;
+	pageNumber: number;
+	offset: number;
+	paged: boolean;
+	unpaged: boolean;
+}
+
+// API 이미지 인터페이스
+export interface IApiImage extends IApiResponse {
+	data: string[];
+}

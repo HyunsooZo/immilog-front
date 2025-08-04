@@ -150,11 +150,11 @@ const thumbnail = ref(
 	props.post.attachments.length > 0 ? props.post.attachments[0] : '',
 );
 const isLiked = computed(() => {
-	return likeUsers.value.includes(userId.value ? userId.value : 0);
+	return likeUsers.value.includes(userId.value || '');
 });
 
 const isBookmarked = computed(() => {
-	return bookmarkUsers.value.includes(userId.value ? userId.value : 0);
+	return bookmarkUsers.value.includes(userId.value || '');
 });
 
 const onBoardDetail = () => {
@@ -205,13 +205,13 @@ const increaseViewCount = async () => {
 
 const changeLike = () => {
 	if (isLiked.value) {
-		const index = likeUsers.value.indexOf(userId.value ? userId.value : 0);
+		const index = likeUsers.value.indexOf(userId.value || '');
 		if (index !== -1) {
 			likeUsers.value.splice(index, 1);
 		}
 		likes.value--;
 	} else {
-		likeUsers.value.push(userId.value ? userId.value : 0);
+		likeUsers.value.push(userId.value || '');
 		likes.value++;
 	}
 };
@@ -235,12 +235,12 @@ const bookmarkApi = async () => {
 
 const changeBookmark = () => {
 	if (isBookmarked.value) {
-		const index = bookmarkUsers.value.indexOf(userId.value ? userId.value : 0);
+		const index = bookmarkUsers.value.indexOf(userId.value || '');
 		if (index !== -1) {
 			bookmarkUsers.value.splice(index, 1);
 		}
 	} else {
-		bookmarkUsers.value.push(userId.value ? userId.value : 0);
+		bookmarkUsers.value.push(userId.value || '');
 	}
 };
 

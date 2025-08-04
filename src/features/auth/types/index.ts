@@ -21,6 +21,7 @@ export interface IUserInfo {
 	region: string;
 	userProfileUrl: string;
 	isLocationMatch: boolean;
+	userSeq?: string;
 }
 
 // API 응답 타입들
@@ -51,4 +52,20 @@ export interface IFormFields {
 	visibleFields: Record<string, boolean>;
 	select: Record<string, boolean>;
 	verification: Record<string, boolean>;
+}
+
+// API 게시글 목록 인터페이스
+export interface IApiPosts extends IApiResponse {
+	data: {
+		content: any[];
+		pageable: any;
+		last: boolean;
+		totalPages: number;
+		totalElements: number;
+	};
+}
+
+// API 알림 인터페이스
+export interface IApiUnreadNotification extends IApiResponse {
+	data: boolean;
 }

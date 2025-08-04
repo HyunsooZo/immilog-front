@@ -21,3 +21,10 @@ export interface IApiNotifications extends IApiResponse {
 export interface IApiUnreadNotification extends IApiResponse {
 	data: boolean;
 }
+
+// 알림 상태 인터페이스
+export interface INotificationState {
+	isRead: boolean;
+	count: number;
+	notifications?: INotification[];
+}

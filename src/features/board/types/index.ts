@@ -79,3 +79,10 @@ export interface IApiSearchResult extends IApiResponse {
 export interface IApiImage extends IApiResponse {
 	data: string[];
 }
+
+// 선택 메뉴 인터페이스
+export interface ISelectMenu {
+	active: boolean;
+	label: string;
+	value?: string;
+}

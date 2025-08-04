@@ -156,11 +156,11 @@ const thumbnail = ref(
 	props.jobPost.attachments.length > 0 ? props.jobPost.attachments[0] : '',
 );
 const isLiked = computed(() => {
-	return likeUsers.value.includes(userSeq.value ? userSeq.value : 0);
+	return likeUsers.value.includes(userSeq.value || '');
 });
 
 const isBookmarked = computed(() => {
-	return bookmarkUsers.value.includes(userSeq.value ? userSeq.value : 0);
+	return bookmarkUsers.value.includes(userSeq.value || '');
 });
 
 // 게시글 상세 페이지로 이동
@@ -193,13 +193,13 @@ const likePost = () => {
 // 좋아요 상태 변경
 const changeLikeStatus = () => {
 	if (isLiked.value) {
-		const index = likeUsers.value.indexOf(userSeq.value ? userSeq.value : 0);
+		const index = likeUsers.value.indexOf(userSeq.value || '');
 		if (index !== -1) {
 			likeUsers.value.splice(index, 1);
 		}
 		likes.value--;
 	} else {
-		likeUsers.value.push(userSeq.value ? userSeq.value : 0);
+		likeUsers.value.push(userSeq.value || '');
 		likes.value++;
 	}
 };
@@ -225,7 +225,7 @@ const changeBookmarkStatus = () => {
 			bookmarkUsers.value.splice(index, 1);
 		}
 	} else {
-		bookmarkUsers.value.push(userSeq.value ? userSeq.value : 0);
+		bookmarkUsers.value.push(userSeq.value || '');
 	}
 };
 

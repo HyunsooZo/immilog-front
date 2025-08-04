@@ -294,11 +294,11 @@ const userSeq = ref(userInfo.userId);
 
 const isLiked = computed(() => {
 	const likeUsers = jobPostValue.value ? props.jobPost.likeUsers : props.post.likeUsers;
-	return likeUsers?.includes(userSeq.value ? userSeq.value : 0) ?? false;
+	return likeUsers?.includes(userSeq.value || '') ?? false;
 });
 
 const isBookmarked = computed(() =>
-	bookmarkUsers.value?.includes(userSeq.value ? userSeq.value : 0) ?? false,
+	bookmarkUsers.value?.includes(userSeq.value || '') ?? false,
 );
 
 const onBoardDetail = async () => {

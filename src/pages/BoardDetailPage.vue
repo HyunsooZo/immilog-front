@@ -4,7 +4,7 @@
 		<!-- 글 상세 -->
 		<div class="list-wrap">
 			<div class="list__title">
-				<span class="title">{{ t('postCategories.' + post.category) }}</span>
+				<span class="title">{{ post.category ? t('postCategories.' + post.category) : '' }}</span>
 			</div>
 			<BoardContent
 				:post="post"
@@ -91,7 +91,7 @@
 							type="button"
 							class="list__item_button like"
 							:class="{
-								active: comment.likeUsers.includes(userId ? userId : 0),
+								active: comment.likeUsers.includes(userId || ''),
 							}"
 							@click="likeComment(comment.commentId, index)"
 						>
@@ -165,7 +165,7 @@
 								:class="{
 									active: post.comments[index].replies[
 										replyIndex
-									].likeUsers.includes(userId ? userId : 0),
+									].likeUsers.includes(userId || ''),
 								}"
 								@click="likeReply(index, replyIndex)"
 							>
@@ -365,7 +365,7 @@ const likeUsers = ref(post.value.likeUsers);
 const likeCount = ref(post.value.likeCount);
 const bookmarkUsers = ref(post.value.bookmarkUsers);
 const isBookmarked = computed(() => {
-	return bookmarkUsers.value.includes(userId.value ? userId.value : 0);
+	return bookmarkUsers.value.includes(userId.value || '');
 });
 
 // Like post function
@@ -462,11 +462,14 @@ const detailBoard = async () => {
 			applicationJson,
 		);
 		if (response.status === 200) {
-			post.value = response.data.data;
+			post.value = {
+				...response.data.post,
+				comments: response.data.comments || []
+			};
 			// 게시물 데이터 업데이트됨
-			likeCount.value = response.data.data.likeCount;
-			likeUsers.value = response.data.data.likeUsers;
-			bookmarkUsers.value = response.data.data.bookmarkUsers;
+			likeCount.value = response.data.post.likeCount;
+			likeUsers.value = response.data.post.likeUsers;
+			bookmarkUsers.value = response.data.post.bookmarkUsers;
 		}
 	} catch (error) {
 		console.error(error);
@@ -504,7 +507,7 @@ const bookmarkApi = async () => {
 	checkIfTokenExists();
 	changeBookmark();
 	try {
-		postBookmark(post.value.postId, 'POST');
+		postBookmark(post.value.postId);
 	} catch (error) {
 		console.error(error);
 	}
