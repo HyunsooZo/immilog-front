@@ -196,7 +196,8 @@
 	</div>
 	<ReplyWrite
 		v-if="isReplyWriteClicked"
-		:commentSeq="post.comments[commentIndex].commentId"
+		:commentId="post.comments[commentIndex].commentId"
+		:postId="post.postId"
 		:isPostComment="false"
 		:taggedUser="taggedUser"
 		@close="closeReplyWrite"

@@ -11,7 +11,7 @@
 				:jobPost="jobPost"
 				:detail="true"
 				:post="emptyPost"
-				:isJobBoard="true"
+				:boardType="BoardType.JOBBOARD"
 			/>
 		</div>
 	</div>
@@ -22,6 +22,7 @@ import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { applicationJson } from '@/shared/utils/header';
 import type { IJobPost } from '@/features/board/types';
+import { BoardType } from '@/shared/types/common';
 import { emptyPost } from '@/shared/utils/emptyObjects';
 import api from '@/core/api/index';
 import TheHeader from '@/shared/components/layout/TheHeader.vue';

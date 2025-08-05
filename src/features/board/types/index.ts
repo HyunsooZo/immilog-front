@@ -28,7 +28,11 @@ export interface IPost {
 // 댓글 인터페이스
 export interface IComment {
 	commentId: string;
-	user: IUser;
+	userId: string;
+	nickname: string;
+	userProfileUrl: string;
+	country: string;
+	region: string;
 	content: string;
 	replies: IComment[];
 	replyCount: number;
@@ -46,7 +50,7 @@ export interface ISearchResult {
 	content: string;
 	userId: string;
 	userProfileUrl: string;
-	userNickName: string;
+	userNickname: string;
 	commentCounts: number;
 	viewCount: number;
 	likeCount: number;

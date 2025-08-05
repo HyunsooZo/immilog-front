@@ -103,19 +103,21 @@ const emit = defineEmits(['close']);
 const props = defineProps({
 	postId: {
 		type: String,
-		required: false,
+		required: true,
 	},
 	commentId: {
 		type: String,
 		required: false,
 	},
-	isPostComment: {
-		type: Boolean,
+	contentType: {
+		type: String,
 		required: true,
+		validator: (value: string) => ['POST', 'COMMENT'].includes(value),
 	},
 	taggedUser: {
 		type: String,
 		required: false,
+		default: '',
 	},
 });
 
@@ -149,7 +151,7 @@ const adjustTextareaHeight = () => {
 const commentApi = async () => {
 	onLoading();
 	// 댓글 등록 api
-	if (props.isPostComment) {
+	if (props.contentType === 'POST') {
 		callCommentApi();
 	} else {
 		callReplyApi();
@@ -182,6 +184,7 @@ const callCommentApi = async () => {
 const callReplyApi = async () => {
 	try {
 		const requestForm = {
+			referenceType: props.contentType,
 			postId: props.postId,
 			parentCommentId: props.commentId,
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,

@@ -67,7 +67,7 @@
 						>
 							<button type="button" class="button button--result">
 								<em>{{ result.title }}</em>
-								<em>{{ result.userNickName }}</em>
+								<em>{{ result.userNickname }}</em>
 								<em>{{ result.content }}</em>
 								<em>{{ result.createdAt }}</em>
 							</button>

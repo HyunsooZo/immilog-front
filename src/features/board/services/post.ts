@@ -38,7 +38,7 @@ export const likeApi = async (path: string, postId: string) => {
 		const requestBody = {
 			postId: postId,
 			interactionType: 'LIKE',
-			postType,
+			contentType: postType,
 		};
 		const response = await api.post('/api/interactions', requestBody);
 		return { status: response.status };
@@ -68,7 +68,7 @@ export const getBookmarkedPostApi = async () => {
 	try {
 		const response = await api.get('/api/v1/posts/bookmarked', {
 			params: {
-				postType: 'POST',
+				contentType: 'POST',
 			},
 		});
 		return { status: response.status, data: response.data };
@@ -86,7 +86,7 @@ export const postBookmark = async (postId: string) => {
 		const requestBody = {
 			postId: postId,
 			interactionType: 'BOOKMARK',
-			postType: 'POST',
+			contentType: 'POST',
 		};
 		const response = await api.post('/api/interactions', requestBody);
 		return { status: response.status };

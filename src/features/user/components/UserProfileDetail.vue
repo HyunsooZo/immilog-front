@@ -99,7 +99,7 @@ const props = defineProps({
 		default: () => ({
 			userId: 0,
 			userProfileUrl: '',
-			userNickName: '',
+			userNickname: '',
 			country: '',
 			region: '',
 		}),

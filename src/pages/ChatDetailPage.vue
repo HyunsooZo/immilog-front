@@ -173,6 +173,7 @@
 		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
 	</div>
 	<UserProfileDetail
+		:userProfile="chatPartnerProfile"
 		@close="offUserProfileDetail"
 		v-if="isUserProfileDetailOn"
 	/>
@@ -187,9 +188,9 @@
 
 <script setup lang="ts">
 import type { IApiChat } from '@/features/chat/types/index';
-import type { IChat } from '@/shared/types/common';
+import type { IChat, IOtherUserInfo } from '@/shared/types/common';
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { imageSelectIcon, chatSendingIcon } from '@/shared/utils/icons';
 import { useRoute, useRouter } from 'vue-router';
 import { computed } from 'vue';
@@ -225,6 +226,31 @@ const offUserProfileDetail = () => {
 	isUserProfileDetailOn.value = false;
 	isModalClose();
 };
+
+// 채팅 상대방 프로필 정보 (computed)
+const chatPartnerProfile = computed((): IOtherUserInfo => {
+	if (chats.value.length > 0) {
+		const partner = amISender(chats.value[0].sender.userId) 
+			? chats.value[0].recipient 
+			: chats.value[0].sender;
+		return {
+			userId: partner.userId,
+			nickname: partner.nickname,
+			email: '',
+			country: '',
+			region: '',
+			userProfileUrl: partner.userProfileUrl || '',
+		};
+	}
+	return {
+		userId: '',
+		nickname: '',
+		email: '',
+		country: '',
+		region: '',
+		userProfileUrl: '',
+	};
+});
 
 // 웹소켓 관련 변수
 const socket = new SockJS(webSocketURL + '/ws');

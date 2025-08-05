@@ -82,10 +82,10 @@
 				v-for="(item, index) in state.posts"
 				:key="index"
 				:post="item"
-				:showAd="showAd(index)"
+				:adValue="showAd(index)"
 				:detail="false"
 				:jobPost="emptyJobPost"
-				:isJobBoard="false"
+				:boardType="BoardType.POST"
 			/>
 		</div>
 	</div>
@@ -116,11 +116,12 @@ import type {
 	IState,
 	IUserInfo,
 } from '@/shared/types/common';
-import type { IApiUserInfo } from '@/features/auth/types';
+import { BoardType } from '@/shared/types/common';
+import type { IApiUserInfo } from '@/features/user/types';
 import type { IApiPosts } from '@/features/board/types';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { postBtn } from '@/shared/utils/icons';
 import { sortingList, categoryList } from '@/shared/utils/selectItems';
 import { showAd } from '@/shared/utils/showAd';
@@ -129,7 +130,7 @@ import { countries } from '@/shared/utils/selectItems';
 import { useHomeCategoryStore } from '@/features/board/stores/category';
 import { useHomeSortingStore } from '@/features/board/stores/sorting';
 import { getCoordinate } from '@/shared/services/geolocation';
-import { getUserInfo } from '@/features/profile/services/userInfoFetch';
+import { getUserInfo } from '@/features/user/services/userInfoFetch';
 import { AxiosResponse } from 'axios';
 import { emptyJobPost } from '@/shared/utils/emptyObjects';
 import CustomAlert from '@/shared/components/ui/CustomAlert.vue';

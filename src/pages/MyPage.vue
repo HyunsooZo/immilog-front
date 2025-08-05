@@ -156,9 +156,9 @@
 import BookMark from '@/features/board/components/BookMark.vue';
 import UserBoard from '@/features/user/components/UserBoard.vue';
 import ConfirmModal from '@/shared/components/ui/ConfirmModal.vue';
-import CompanyInfo from '@/features/job-board/components/CompanyInfo.vue';
+import CompanyInfo from '@/features/board/components/CompanyInfo.vue';
 import NotificationModal from '@/shared/components/common/NotificationModal.vue';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { onMounted, ref, computed, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import {

@@ -75,7 +75,7 @@
 					:post="item"
 					:detail="false"
 					:jobPost="emptyJobPost"
-					:isJobBoard="false"
+					:boardType="BoardType.POST"
 				/>
 			</div>
 		</div>
@@ -108,6 +108,7 @@ import { postBtn } from '@/shared/utils/icons';
 import { categoryList, sortingList } from '@/shared/utils/selectItems';
 import { useI18n } from 'vue-i18n';
 import type { ISelectItem, IState } from '@/shared/types/common';
+import { BoardType } from '@/shared/types/common';
 import type { IApiPosts, ISelectMenu } from '@/features/board/types/index';
 import { useRouter } from 'vue-router';
 import { applicationJsonWithToken } from '@/shared/utils/header';

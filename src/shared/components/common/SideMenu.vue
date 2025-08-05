@@ -56,7 +56,7 @@
 										<em>region</em>
 									</div>
 									<div class="list__item user">
-										<strong>userNickName 본인</strong>
+										<strong>userNickname 본인</strong>
 									</div>
 								</div>
 							</div>
@@ -72,7 +72,7 @@
 										<em>region</em>
 									</div>
 									<div class="list__item user">
-										<strong>userNickName</strong>
+										<strong>userNickname</strong>
 									</div>
 								</div>
 							</button>
@@ -108,7 +108,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { quitIcon, settingIcon } from '@/shared/utils/icons';
-import ImagePreview from '@/features/board/components/UserProfileImage.vue';
+('');
 
 //모달 닫는 에밋
 const emits = defineEmits(['close']);

@@ -45,7 +45,7 @@
 						:jobPost="emptyJobPost"
 						:detail="false"
 						:showAd="true"
-						:isJobBoard="false"
+						:boardType="BoardType.POST"
 					/>
 				</div>
 			</div>
@@ -58,6 +58,7 @@ import { onMounted, ref, nextTick, onUnmounted, Ref } from 'vue';
 import { applicationJsonWithToken } from '@/shared/utils/header';
 import type { IApiPosts } from '@/features/board/types';
 import type { ISimpleState } from '@/shared/types/common';
+import { BoardType } from '@/shared/types/common';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { AxiosResponse } from 'axios';
 import { emptyJobPost } from '@/shared/utils/emptyObjects';

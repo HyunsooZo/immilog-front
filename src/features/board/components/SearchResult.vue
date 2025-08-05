@@ -20,7 +20,7 @@
 				<div class="list__item">
 					<button type="button" class="list__item_button user">
 						<em>{{ post.region }}</em>
-						<strong>{{ post.userNickName }}</strong>
+						<strong>{{ post.userNickname }}</strong>
 					</button>
 				</div>
 			</div>
@@ -121,7 +121,7 @@ const props = defineProps({
 			content: '',
 			userId: 0,
 			userProfileUrl: '',
-			userNickName: '',
+			userNickname: '',
 			commentCounts: 0,
 			viewCount: 0,
 			likeCount: 0,

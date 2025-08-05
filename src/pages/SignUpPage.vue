@@ -34,7 +34,7 @@
 					<div class="input__item">
 						<div class="input__item_inner">
 							<input
-								v-model="userNickName"
+								v-model="userNickname"
 								type="text"
 								class="input__element"
 								:placeholder="t('signUpView.nicknamePlaceHolder')"
@@ -183,7 +183,7 @@ const { t } = useI18n();
 
 const userInfo = useUserInfoStore();
 const emailRegister = ref('');
-const userNickName = ref('');
+const userNickname = ref('');
 const userPassword = ref('');
 const userPasswordConfirm = ref('');
 const submitted = ref(false);
@@ -210,7 +210,7 @@ const isValidEmail = computed(() => {
 const fullFilled = computed(() => {
 	return (
 		emailRegister.value.trim() !== '' &&
-		userNickName.value.trim() !== '' &&
+		userNickname.value.trim() !== '' &&
 		userPassword.value.trim() !== '' &&
 		userPasswordConfirm.value.trim() !== ''
 	);
@@ -232,7 +232,7 @@ const register = async () => {
 			isLoading.value = true;
 			const formData = {
 				email: emailRegister.value,
-				nickName: userNickName.value,
+				nickName: userNickname.value,
 				password: userPassword.value,
 				country: country.value,
 				interestCountry: interestCountryCode.value,
@@ -265,7 +265,7 @@ const register = async () => {
 const checkNickName = async () => {
 	try {
 		const response: AxiosResponse<IApiBoolean> = await api.get(
-			`/api/v1/users/nicknames/${userNickName.value}/availability`,
+			`/api/v1/users/nicknames/${userNickname.value}/availability`,
 			applicationJson,
 		);
 		if (response.status === 200) {
@@ -395,7 +395,7 @@ const getCountry = async (location: ILocation) => {
 const overAllValidationCheck = () => {
 	return (
 		emailRegister.value &&
-		userNickName.value &&
+		userNickname.value &&
 		userPassword.value &&
 		userPasswordConfirm.value &&
 		passwordValidation.value &&
@@ -405,7 +405,7 @@ const overAllValidationCheck = () => {
 };
 
 watch(
-	() => userNickName.value,
+	() => userNickname.value,
 	() => {
 		isNickNameValid.value = false;
 		nickNameCheckDone.value = false;

@@ -12,7 +12,7 @@
 				:post="post"
 				:detail="true"
 				:jobPost="emptyJobPost"
-				:isJobBoard="false"
+				:boardType="BoardType.POST"
 			/>
 		</div>
 		<ReplyModal
@@ -66,11 +66,13 @@
 							<button
 								type="button"
 								class="list__item_button user"
-								:class="{ 'user--author': isAuthor(comment.user.userId) }"
+								:class="{
+									'user--author': isAuthor(comment.userId),
+								}"
 								@click="onUserProfileDetail"
 							>
-								<em>{{ comment.user.country }}</em>
-								<strong>{{ comment.user.nickname }}</strong>
+								<em>{{ comment.country || '' }}</em>
+								<strong>{{ comment.nickname || '' }}</strong>
 							</button>
 						</div>
 					</div>
@@ -93,7 +95,7 @@
 							type="button"
 							class="list__item_button like"
 							:class="{
-								active: comment.likeUsers.includes(userId || ''),
+								active: comment.likeUsers?.includes(userId || '') ?? false,
 							}"
 							@click="likeComment(comment.commentId, index)"
 						>
@@ -130,11 +132,13 @@
 								<button
 									type="button"
 									class="list__item_button user"
-									:class="{ 'user--author': isAuthor(reply.user.userId) }"
+									:class="{
+										'user--author': isAuthor(reply.userId),
+									}"
 									@click="onUserProfileDetail"
 								>
-									<em>{{ reply.user.country }}</em>
-									<strong>{{ reply.user.nickname }}</strong>
+									<em>{{ reply.country || '' }}</em>
+									<strong>{{ reply.nickname || '' }}</strong>
 								</button>
 							</div>
 						</div>
@@ -165,9 +169,10 @@
 								type="button"
 								class="list__item_button like"
 								:class="{
-									active: post.comments[index].replies[
-										replyIndex
-									].likeUsers.includes(userId || ''),
+									active:
+										post.comments[index].replies[
+											replyIndex
+										].likeUsers?.includes(userId || '') ?? false,
 								}"
 								@click="likeReply(index, replyIndex)"
 							>
@@ -177,7 +182,7 @@
 							<button
 								type="button"
 								class="list__item cmt"
-								@click="openReplyWrite(index, reply.user.nickname)"
+								@click="openReplyWrite(index, reply.nickname || null)"
 							></button>
 							<p class="list__item past">
 								<i class="blind">작성시간</i>
@@ -208,7 +213,8 @@
 	<ReplyWrite
 		v-if="isCommentWriteClicked"
 		:postId="post.postId"
-		:isPostComment="true"
+		:contentType="'POST'"
+		:taggedUser="''"
 		@close="closeCommentWrite"
 		@select:value="selectedValue"
 	/>
@@ -216,7 +222,7 @@
 		v-if="isReplyWriteClicked"
 		:commentId="post.comments[Number(replyIndex)].commentId"
 		:postId="post.postId"
-		:isPostComment="false"
+		:contentType="'COMMENT'"
 		:taggedUser="taggedUser"
 		@close="closeReplyWrite"
 		@select:value="selectedValue"
@@ -234,6 +240,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import type { IOtherUserInfo, IPost } from '@/shared/types/common';
+import { BoardType } from '@/shared/types/common';
 import api from '@/core/api/index';
 import { emptyJobPost } from '@/shared/utils/emptyObjects';
 import { extractAtWordAndRest } from '@/shared/utils/comment';
@@ -244,7 +251,7 @@ import {
 	applicationJson,
 	applicationJsonWithToken,
 } from '@/shared/utils/header';
-import { useUserInfoStore } from '@/features/auth/stores/userInfo';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import BoardContent from '@/features/board/components/BoardContent.vue';
 import NoContent from '@/shared/components/ui/NoContent.vue';
 import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue';
@@ -370,10 +377,9 @@ const isBookmarked = computed(() => {
 	return bookmarkUsers.value.includes(userId.value || '');
 });
 
-// Like post function
 const likePost = async () => {
 	const currentUserId = userId.value;
-	if (post.value.likeUsers.includes(currentUserId)) {
+	if (post.value.likeUsers?.includes(currentUserId)) {
 		post.value.likeCount--;
 		const userIndex = post.value.likeUsers.indexOf(currentUserId);
 		post.value.likeUsers.splice(userIndex, 1);
@@ -385,7 +391,7 @@ const likePost = async () => {
 	const requestBody = {
 		postId: post.value.postId,
 		interactionType: 'LIKE',
-		postType: 'POST',
+		contentType: 'POST',
 	};
 	const response = await api.post(
 		'/api/interactions',
@@ -403,7 +409,7 @@ const likePost = async () => {
 const likeComment = async (commentId: string, index: number) => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
 	const comment = updatedPost.comments[index];
-	if (comment.likeUsers.includes(userId.value)) {
+	if (comment.likeUsers?.includes(userId.value)) {
 		comment.upVotes--;
 		const userIndex = comment.likeUsers.indexOf(userId.value);
 		comment.likeUsers.splice(userIndex, 1);
@@ -429,7 +435,7 @@ const likeReply = async (index: number, replyIdx: number) => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
 	const comment = updatedPost.comments[index];
 	const reply = comment.replies[replyIdx];
-	if (reply.likeUsers.includes(userId.value)) {
+	if (reply.likeUsers?.includes(userId.value)) {
 		reply.upVotes--;
 		const userIndex = reply.likeUsers.indexOf(userId.value);
 		reply.likeUsers.splice(userIndex, 1);
@@ -464,14 +470,26 @@ const detailBoard = async () => {
 			applicationJson,
 		);
 		if (response.status === 200) {
+			// comments의 likeUsers도 안전하게 처리
+			const processedComments = (response.data.comments || []).map(comment => ({
+				...comment,
+				likeUsers: comment.likeUsers || [],
+				replies: (comment.replies || []).map(reply => ({
+					...reply,
+					likeUsers: reply.likeUsers || [],
+				})),
+			}));
+
 			post.value = {
 				...response.data.post,
-				comments: response.data.comments || [],
+				comments: processedComments,
+				likeUsers: response.data.post.likeUsers || [],
+				bookmarkUsers: response.data.post.bookmarkUsers || [],
 			};
 			// 게시물 데이터 업데이트됨
 			likeCount.value = response.data.post.likeCount;
-			likeUsers.value = response.data.post.likeUsers;
-			bookmarkUsers.value = response.data.post.bookmarkUsers;
+			likeUsers.value = response.data.post.likeUsers || [];
+			bookmarkUsers.value = response.data.post.bookmarkUsers || [];
 		}
 	} catch (error) {
 		console.error(error);
@@ -537,7 +555,6 @@ const checkIfTokenExists = () => {
 	}
 };
 
-// On component mount, verify token and fetch board details
 onMounted(() => {
 	if (!userInfo.accessToken) {
 		router.push('/sign-in');

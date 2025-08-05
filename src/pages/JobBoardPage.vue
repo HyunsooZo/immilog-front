@@ -51,8 +51,8 @@
 			<div v-for="(item, index) in state.jobPosts" :key="index">
 				<BoardContent
 					:jobPost="item"
-					:showAd="showAd(index)"
-					:isJobBoard="true"
+					:adValue="showAd(index)"
+					:boardType="BoardType.JOBBOARD"
 					:post="emptyPost"
 					:detail="false"
 				/>
@@ -75,6 +75,7 @@
 
 <script setup lang="ts">
 import type { IJobPost, ISelectItem } from '@/shared/types/common';
+import { BoardType } from '@/shared/types/common';
 import type { IApiJobPost } from '@/features/board/types';
 import type { IPageable } from '@/shared/types/common';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';

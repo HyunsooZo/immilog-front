@@ -43,7 +43,7 @@
 						:key="index"
 						:post="item"
 						:jobPost="emptyJobPost"
-						:isJobBoard="false"
+						:boardType="BoardType.POST"
 						:detail="false"
 					/>
 				</div>
@@ -57,6 +57,7 @@ import { onMounted, ref, nextTick, onUnmounted, Ref } from 'vue';
 import { getBookmarkedPostApi } from '@/features/board/services/post';
 import { useI18n } from 'vue-i18n';
 import { emptyJobPost } from '@/shared/utils/emptyObjects';
+import { BoardType } from '@/shared/types/common';
 import BoardContent from '@/features/board/components/BoardContent.vue';
 
 const { t } = useI18n();

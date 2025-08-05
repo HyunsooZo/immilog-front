@@ -1,13 +1,17 @@
 // 공통 타입 정의
 
-// 다른 모듈에서 필요한 타입들을 import
+// BoardType enum
+export enum BoardType {
+	POST = 'POST',
+	JOBBOARD = 'JOBBOARD',
+}
+
 import type { IPost, IComment, ISearchResult } from '@/features/board/types';
 import type { IUser, IUserInfo } from 'src/features/user/types';
 import type { ILocation, IApiLocation } from '@/shared/types/location';
 import type { IChat, IChatRoom } from '@/features/chat/types';
 import type { IJobPost, ICompany } from '@/features/board/types';
 
-// re-export
 export type { IPost, IComment, ISearchResult } from '@/features/board/types';
 export type { IUser, IUserInfo } from 'src/features/user/types';
 export type { ILocation, IApiLocation } from '@/shared/types/location';
@@ -74,7 +78,7 @@ export interface IApiErrorResponse {
 export interface IOtherUserInfo {
 	userId: string;
 	nickname: string;
-	userNickName?: string; // 백워드 호환성을 위해 유지
+	userNickname?: string; // 백워드 호환성을 위해 유지
 	email: string;
 	country: string;
 	region: string;

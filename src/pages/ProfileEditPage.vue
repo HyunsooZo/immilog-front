@@ -44,7 +44,7 @@
 					<div class="input__item">
 						<div class="input__item_inner">
 							<input
-								v-model="userNickName"
+								v-model="userNickname"
 								type="text"
 								class="input__element"
 								:placeholder="t('profileEditView.nicknameChangePlaceHolder')"
@@ -184,7 +184,7 @@ const router = useRouter();
 const nickNameCheckDone = ref(false);
 const isNickNameValid = ref(false);
 const userInfo = useUserInfoStore();
-const userNickName = ref('');
+const userNickname = ref('');
 const country = ref('');
 const countryCode = ref('');
 const interestCountry = ref('');
@@ -199,7 +199,7 @@ const longitude = ref(parseFloat(localStorage.getItem('longitude') ?? '0.0'));
 const isLoading = ref(false);
 
 const isNickNameChanged = computed(
-	() => userNickName.value !== userInfo.userNickname,
+	() => userNickname.value !== userInfo.userNickname,
 );
 
 const isInterestCountryChanged = computed(
@@ -254,7 +254,7 @@ const removeImage = () => {
 };
 
 const checkNickName = async () => {
-	if (userNickName.value === userInfo.userNickname) {
+	if (userNickname.value === userInfo.userNickname) {
 		isNickNameValid.value = true;
 		nickNameCheckDone.value = true;
 		return;
@@ -262,7 +262,7 @@ const checkNickName = async () => {
 
 	try {
 		const { status, data } = await api.get(
-			`/api/v1/users/nicknames/${userNickName.value}/availability`,
+			`/api/v1/users/nicknames/${userNickname.value}/availability`,
 			applicationJson,
 		);
 		if (status === 200) {
@@ -312,7 +312,7 @@ const saveProfile = async () => {
 	}
 
 	const formData = {
-		nickName: isNickNameChanged.value ? userNickName.value : null,
+		nickName: isNickNameChanged.value ? userNickname.value : null,
 		country: isCountryChanged.value ? countryCode.value : null,
 		interestCountry: isInterestCountryChanged.value
 			? interestCountryCode.value
@@ -344,7 +344,7 @@ const saveProfile = async () => {
 
 const updateUserInfo = () => {
 	if (isNickNameChanged.value) {
-		userInfo.userNickname = userNickName.value;
+		userInfo.userNickname = userNickname.value;
 	}
 	if (isImageChanged.value) {
 		userInfo.userProfileUrl = imagePreview.value;
@@ -465,7 +465,7 @@ const getCountry = async (location: ILocation) => {
 };
 
 onMounted(() => {
-	userNickName.value = userInfo.userNickname || '';
+	userNickname.value = userInfo.userNickname || '';
 	country.value = userInfo.userCountry
 		? t('countries.' + userInfo.userCountry)
 		: '';

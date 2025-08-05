@@ -6,41 +6,71 @@
 					type="button"
 					class="item__image"
 					:class="{
-						'image--default': isJobBoard
-							? !jobPost.companyLogo
-							: !post.userProfileUrl,
-						'image--default _company': isJobBoard && !jobPost.companyLogo,
+						'image--default':
+							boardType === boardTypeRef.JOBBOARD
+								? !jobPost.companyLogo
+								: !post.userProfileUrl,
+						'image--default _company':
+							boardType === boardTypeRef.JOBBOARD && !jobPost.companyLogo,
 					}"
 					@click="onUserProfileDetail"
 				>
 					<img
-						v-if="isJobBoard ? jobPost.companyLogo : post.userProfileUrl"
-						:src="isJobBoard ? jobPost.companyLogo : post.userProfileUrl"
+						v-if="
+							boardType === boardTypeRef.JOBBOARD
+								? jobPost.companyLogo
+								: post.userProfileUrl
+						"
+						:src="
+							boardType === boardTypeRef.JOBBOARD
+								? jobPost.companyLogo
+								: post.userProfileUrl
+						"
 						alt=""
-						@click="isJobBoard ? null : onUserProfileDetail"
+						@click="
+							boardType === boardTypeRef.JOBBOARD ? null : onUserProfileDetail
+						"
 					/>
 				</button>
 				<div class="item__fnc" @click="onUserProfileDetail">
 					<div class="list__item">
 						<button type="button" class="list__item_button ctg">
-							<em v-if="!isJobBoard">{{ t('countries.' + post.country) }}</em>
-							<strong v-if="!isJobBoard">{{
-								t('postCategories.' + post.category)
-							}}</strong>
-							<strong class="em" v-if="isJobBoard">{{
+							<em
+								v-if="
+									boardType === boardTypeRef.POST &&
+									safeTranslate('countries', post.country)
+								"
+								>{{ safeTranslate('countries', post.country) }}</em
+							>
+							<strong
+								v-if="
+									boardType === boardTypeRef.POST &&
+									safeTranslate('postCategories', post.category)
+								"
+								>{{ safeTranslate('postCategories', post.category) }}</strong
+							>
+							<strong class="em" v-if="boardType === boardTypeRef.JOBBOARD">{{
 								jobPost.company
 							}}</strong>
-							<em v-if="isJobBoard">{{ t('countries.' + jobPost.country) }}</em>
-							<em v-if="isJobBoard">{{ jobPost.region }}</em>
+							<em
+								v-if="
+									boardType === boardTypeRef.JOBBOARD &&
+									safeTranslate('countries', jobPost.country)
+								"
+								>{{ safeTranslate('countries', jobPost.country) }}</em
+							>
+							<em v-if="boardType === boardTypeRef.JOBBOARD">{{
+								jobPost.region
+							}}</em>
 							<span
-								v-if="!isJobBoard && post.isPublic === 'N'"
+								v-if="boardType === boardTypeRef.POST && post.isPublic === 'N'"
 								class="list__private"
 							>
 								<i class="blind">내국가에만 공개 된 글</i>
 							</span>
 						</button>
 					</div>
-					<div class="list__item" v-if="!isJobBoard">
+					<div class="list__item" v-if="boardType === boardTypeRef.POST">
 						<button type="button" class="list__item_button user">
 							<em>{{ post.region }}</em>
 							<strong>{{ post.userNickname }}</strong>
@@ -66,11 +96,19 @@
 					@click="onBoardDetail"
 				>
 					<div class="text__item">
-						<p class="title">{{ isJobBoard ? jobPost.title : post.title }}</p>
-						<p class="text">
-							{{ isJobBoard ? jobPost.content : post.content }}
+						<p class="title">
+							{{
+								boardType === boardTypeRef.JOBBOARD ? jobPost.title : post.title
+							}}
 						</p>
-						<div class="tag__wrap" v-if="isJobBoard">
+						<p class="text">
+							{{
+								boardType === boardTypeRef.JOBBOARD
+									? jobPost.content
+									: post.content
+							}}
+						</p>
+						<div class="tag__wrap" v-if="boardType === boardTypeRef.JOBBOARD">
 							<div class="tag__inner">
 								<div class="tag__item">
 									<span class="item--tag">
@@ -93,12 +131,15 @@
 						<div
 							class="tag__wrap"
 							:class="detail ? '_detail' : ''"
-							v-if="(isJobBoard ? jobPost : post).tags?.length > 0"
+							v-if="
+								(boardType === boardTypeRef.JOBBOARD ? jobPost : post).tags
+									?.length > 0
+							"
 						>
 							<div class="tag__inner">
 								<div class="tag__item">
 									<component
-										v-for="(tag, index) in isJobBoard
+										v-for="(tag, index) in boardType === boardTypeRef.JOBBOARD
 											? jobPost.tags
 											: post.tags"
 										:key="index"
@@ -114,9 +155,9 @@
 							class="attachments__wrap"
 							v-if="
 								detail &&
-								(isJobBoard
-									? jobPost.attachments.length > 0
-									: post.attachments.length > 0)
+								(boardType === boardTypeRef.JOBBOARD
+									? jobPost.attachments?.length > 0
+									: post.attachments?.length > 0)
 							"
 						>
 							<div class="attachments__item">
@@ -134,7 +175,7 @@
 					<div
 						class="thumb"
 						v-if="
-							!isJobBoard &&
+							boardType === boardTypeRef.POST &&
 							!detail &&
 							post.attachments &&
 							post.attachments.length > 0
@@ -159,11 +200,9 @@
 						<i class="blind">좋아요</i>
 						<span class="item__count">{{ likeCount }}</span>
 					</button>
-					<p class="list__item cmt" v-if="!isJobBoard">
+					<p class="list__item cmt" v-if="boardType === boardTypeRef.POST">
 						<i class="blind">댓글</i>
-						<span class="item__count">{{
-							post.comments ? post.comments.length : 0
-						}}</span>
+						<span class="item__count">{{ post.commentCount }}</span>
 					</p>
 				</div>
 				<div class="item__fnc">
@@ -172,13 +211,17 @@
 						<span class="item__count">
 							{{
 								timeCalculation(
-									isJobBoard ? jobPost.createdAt.toString() : post.createdAt,
+									boardType === boardTypeRef.JOBBOARD
+										? jobPost.createdAt.toString()
+										: post.createdAt,
 								).time
 							}}
 							{{
 								t(
 									timeCalculation(
-										isJobBoard ? jobPost.createdAt.toString() : post.createdAt,
+										boardType === boardTypeRef.JOBBOARD
+											? jobPost.createdAt.toString()
+											: post.createdAt,
 									).text,
 								)
 							}}
@@ -218,12 +261,8 @@ import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { timeCalculation } from '@/shared/utils/date-time';
 import { likeApi, postBookmark } from '@/features/board/services/post';
 import { useI18n } from 'vue-i18n';
-import type {
-	IJobPost,
-	IOtherUserInfo,
-	IComment,
-	IPost,
-} from '@/shared/types/common';
+import type { IJobPost, IOtherUserInfo, IPost } from '@/shared/types/common';
+import { BoardType } from '@/shared/types/common';
 import { AxiosResponse } from 'axios';
 import { applicationJsonWithToken } from '@/shared/utils/header';
 import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue';
@@ -234,6 +273,13 @@ import api from '@/core/api/index';
 const { t } = useI18n();
 const router = useRouter();
 const userInfo = useUserInfoStore();
+
+const boardTypeRef = BoardType;
+
+// 안전한 번역 헬퍼 함수
+const safeTranslate = (key: string, value: string) => {
+	return value ? t(`${key}.${value}`) : '';
+};
 
 const isModalOpen = () => document.body.classList.add('inactive');
 const isModalClose = () => document.body.classList.remove('inactive');
@@ -263,10 +309,10 @@ const props = defineProps({
 		required: true,
 		default: true,
 	},
-	isJobBoard: {
-		type: Boolean,
+	boardType: {
+		type: String as () => BoardType,
 		required: true,
-		default: false,
+		default: BoardType.POST,
 	},
 	jobPost: {
 		type: Object as () => IJobPost,
@@ -280,40 +326,39 @@ const props = defineProps({
 
 const emits = defineEmits(['update:post']);
 
-const jobPostValue = ref(props.isJobBoard);
+const isJobBoard = computed(() => props.boardType === boardTypeRef.JOBBOARD);
 const likeCount = computed(() => {
-	return jobPostValue.value ? props.jobPost.likeCount : props.post.likeCount;
+	return isJobBoard.value ? props.jobPost.likeCount : props.post.likeCount;
 });
 const likeUsers = ref(
-	(jobPostValue.value ? props.jobPost.likeUsers : props.post.likeUsers) ?? [],
+	(isJobBoard.value ? props.jobPost.likeUsers : props.post.likeUsers) ?? [],
 );
 const bookmarkUsers = ref(
-	(jobPostValue.value
-		? props.jobPost.bookmarkUsers
-		: props.post.bookmarkUsers) ?? [],
+	(isJobBoard.value ? props.jobPost.bookmarkUsers : props.post.bookmarkUsers) ??
+		[],
 );
-const userSeq = ref(userInfo.userId);
+const userId = ref(userInfo.userId);
 
 const isLiked = computed(() => {
-	const likeUsers = jobPostValue.value
+	const likeUsers = isJobBoard.value
 		? props.jobPost.likeUsers
 		: props.post.likeUsers;
-	return likeUsers?.includes(userSeq.value || '') ?? false;
+	return likeUsers?.includes(userId.value || '') ?? false;
 });
 
 const isBookmarked = computed(
-	() => bookmarkUsers.value?.includes(userSeq.value || '') ?? false,
+	() => bookmarkUsers.value?.includes(userId.value || '') ?? false,
 );
 
 const onBoardDetail = async () => {
 	if (props.detail) return;
 
 	await viewApi(
-		String(jobPostValue.value ? props.jobPost.postId : props.post.postId),
-		jobPostValue.value,
+		String(isJobBoard.value ? props.jobPost.postId : props.post.postId),
+		isJobBoard.value,
 	);
 	router.push(
-		jobPostValue.value
+		isJobBoard.value
 			? `/job-board/${props.jobPost.postId}`
 			: `/board/${props.post.postId}`,
 	);
@@ -342,24 +387,24 @@ const likePost = () => {
 	checkIfTokenExists();
 	changeLike();
 	likeApi(
-		jobPostValue.value ? 'job-boards' : 'posts',
-		String(jobPostValue.value ? props.jobPost.postId : props.post.postId),
+		isJobBoard.value ? 'job-boards' : 'posts',
+		String(isJobBoard.value ? props.jobPost.postId : props.post.postId),
 	);
 };
 
 const changeLike = () => {
-	const currentUserSeq = userSeq.value || 0;
-	const targetPost = jobPostValue.value ? props.jobPost : props.post;
+	const currentUserId = userId.value || '';
+	const targetPost = isJobBoard.value ? props.jobPost : props.post;
 
 	if (isLiked.value) {
 		targetPost.likeCount--;
 		targetPost.likeUsers = targetPost.likeUsers.filter(
-			id => id !== currentUserSeq,
+			id => id !== currentUserId,
 		);
 		likeUsers.value = targetPost.likeUsers;
 	} else {
 		targetPost.likeCount++;
-		targetPost.likeUsers.push(currentUserSeq);
+		targetPost.likeUsers.push(currentUserId);
 		likeUsers.value = targetPost.likeUsers;
 	}
 };
@@ -369,7 +414,7 @@ const postBookmarkApi = async () => {
 	changeBookmark();
 	try {
 		await postBookmark(
-			String(jobPostValue.value ? props.jobPost.postId : props.post.postId),
+			String(isJobBoard.value ? props.jobPost.postId : props.post.postId),
 		);
 	} catch (error) {
 		console.error(error);
@@ -378,21 +423,11 @@ const postBookmarkApi = async () => {
 
 const changeBookmark = () => {
 	if (isBookmarked.value) {
-		const index = bookmarkUsers.value.indexOf(
-			userSeq.value ? userSeq.value : 0,
-		);
+		const index = bookmarkUsers.value.indexOf(userId.value ? userId.value : '');
 		if (index !== -1) bookmarkUsers.value.splice(index, 1);
 	} else {
-		if (userSeq.value !== null) bookmarkUsers.value.push(userSeq.value);
+		if (userId.value !== null) bookmarkUsers.value.push(userId.value);
 	}
-};
-
-const _allCommentCounts = (post: IPost) => {
-	let result = post.comments.length;
-	post.comments.forEach((comment: IComment) => {
-		result += comment.replies.length;
-	});
-	return result;
 };
 
 const checkIfTokenExists = () => {
@@ -439,7 +474,7 @@ const closeMoreModal = () => {
 const editPost = () => {};
 
 const deletePost = async () => {
-	if (!props.isJobBoard) {
+	if (props.boardType === BoardType.POST) {
 		try {
 			const response: AxiosResponse<void> = await api.patch(
 				`/posts/${props.post.postId}/delete`,
@@ -467,15 +502,4 @@ const deletePost = async () => {
 		}
 	}
 };
-
-// 코멘트를 생성일 기준으로 정렬하는 computed 속성
-const _sortedComments = computed(() => {
-	return props.post.comments
-		? props.post.comments.slice().sort((a, b) => {
-				return (
-					new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-				);
-			})
-		: [];
-});
 </script>
