@@ -1,24 +1,30 @@
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
 import type { ILocation, ICountry } from '@/shared/types/location';
 
-// 위치 정보를 위한 Pinia 스토어
-export const useLocationStore = defineStore('location', {
-	state: (): ILocation => ({
-		country: '',
-		region: '',
-		latitude: undefined,
-		longitude: undefined,
-	}),
-	actions: {
-		// 위치 설정 메서드
-		setLocation(location: ILocation): void {
-			this.latitude = location.latitude;
-			this.longitude = location.longitude;
-		},
-	},
+// 위치 정보를 위한 Pinia 스토어 (Composition API 방식)
+export const useLocationStore = defineStore('location', () => {
+	const country = ref<string>('');
+	const region = ref<string>(''); 
+	const latitude = ref<number | undefined>(undefined);
+	const longitude = ref<number | undefined>(undefined);
+
+	function setLocation(location: ILocation): void {
+		latitude.value = location.latitude;
+		longitude.value = location.longitude;
+		if (location.country) country.value = location.country;
+		if (location.region) region.value = location.region;
+	}
+
+	return {
+		country,
+		region,
+		latitude,
+		longitude,
+		setLocation
+	};
 });
 
-// 국가 정보를 위한 Pinia 스토어
 export const useCountryStore = defineStore('country', {
 	state: (): ICountry => ({
 		code: '',

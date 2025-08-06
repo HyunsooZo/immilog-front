@@ -165,7 +165,7 @@ import {
 } from '@/shared/utils/header';
 import { computed, onMounted, ref, shallowRef } from 'vue';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
-import { useLocationStore } from '@/shared/stores/location';
+// import { useLocationStore } from '@/shared/stores/location'; // 임시로 주석 처리
 import { resizeImage } from '@/shared/utils/image';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -184,6 +184,7 @@ const router = useRouter();
 const nickNameCheckDone = ref(false);
 const isNickNameValid = ref(false);
 const userInfo = useUserInfoStore();
+// const locationStore = useLocationStore(); // 임시로 주석 처리
 const userNickname = ref('');
 const country = ref('');
 const countryCode = ref('');
@@ -312,11 +313,9 @@ const saveProfile = async () => {
 	}
 
 	const formData = {
-		nickName: isNickNameChanged.value ? userNickname.value : null,
-		country: isCountryChanged.value ? countryCode.value : null,
-		interestCountry: isInterestCountryChanged.value
-			? interestCountryCode.value
-			: null,
+		nickname: userNickname.value,
+		country: countryCode.value,
+		interestCountry: interestCountryCode.value,
 		profileImage: isImageChanged.value
 			? Array.isArray(imageUrl.value)
 				? imageUrl.value[0]
@@ -383,8 +382,8 @@ const closeSelect = () => {
 
 const selectedValue = (value: ISelectItem) => {
 	if (countries.some(c => c.code === value.code)) {
-		interestCountry.value = t('countries.' + value.code);
-		interestCountryCode.value = value.code;
+		interestCountry.value = t(value.name);  // 번역된 이름을 저장
+		interestCountryCode.value = value.code;  // 코드를 저장
 	}
 };
 
@@ -414,7 +413,8 @@ const fetchLocation = async () => {
 				longitude: position.coords.longitude,
 			};
 			getCountry(coords);
-			useLocationStore().setLocation(coords);
+			localStorage.setItem('latitude', coords.latitude.toString());
+			localStorage.setItem('longitude', coords.longitude.toString());
 			isLoading.value = false;
 		};
 
@@ -466,14 +466,10 @@ const getCountry = async (location: ILocation) => {
 
 onMounted(() => {
 	userNickname.value = userInfo.userNickname || '';
-	country.value = userInfo.userCountry
-		? t('countries.' + userInfo.userCountry)
-		: '';
+	country.value = userInfo.userCountry || '';
 	countryCode.value = userInfo.userCountry || '';
 	imagePreview.value = userInfo.userProfileUrl || '';
-	interestCountry.value = userInfo.userInterestCountry
-		? t('countries.' + userInfo.userInterestCountry)
-		: '';
+	interestCountry.value = userInfo.userInterestCountry ||'';
 	interestCountryCode.value = userInfo.userInterestCountry || '';
 });
 </script>
