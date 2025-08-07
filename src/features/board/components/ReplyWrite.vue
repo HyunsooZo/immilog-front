@@ -167,6 +167,7 @@ const callCommentApi = async () => {
 		const requestForm = {
 			postId: props.postId,
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
+			referenceType: props.contentType,
 		};
 		const response: AxiosResponse<void> = await api.post(
 			'/api/comments',
@@ -195,7 +196,7 @@ const callReplyApi = async () => {
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 201) {
-			// 대댓글 등록 성공
+			console.log('답글 등록 성공');
 		}
 	} catch (error) {
 		openAlert('서버와의 통신에 실패했습니다.');

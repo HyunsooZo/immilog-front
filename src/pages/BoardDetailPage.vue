@@ -244,7 +244,7 @@ import { BoardType } from '@/shared/types/common';
 import api from '@/core/api/index';
 import { emptyJobPost } from '@/shared/utils/emptyObjects';
 import { extractAtWordAndRest } from '@/shared/utils/comment';
-import { likeApi, postBookmark } from '@/features/board/services/post';
+import { likeApi } from '@/features/board/services/post';
 import { lastReply, writeReply } from '@/shared/utils/icons';
 import { timeCalculation } from '@/shared/utils/date-time';
 import {
@@ -501,15 +501,6 @@ const goToDown = () => {
 	window.scrollTo(0, document.body.scrollHeight);
 };
 
-// More modal (관련 모달, 템플릿에서는 주석 처리되어 있음)
-const onMorePostModal = ref(false);
-const openMoreModal = () => {
-	onMorePostModal.value = true;
-};
-const closeMoreModal = () => {
-	onMorePostModal.value = false;
-};
-
 // Selected value for ReplyWrite component
 const selectedValue = ref<any>(null);
 
@@ -521,39 +512,6 @@ const postAuthorInfo = ref<IOtherUserInfo>({
 	region: post.value.region,
 	userProfileUrl: post.value.userProfileUrl,
 });
-
-// Bookmark API function
-const bookmarkApi = async () => {
-	checkIfTokenExists();
-	changeBookmark();
-	try {
-		postBookmark(post.value.postId);
-	} catch (error) {
-		console.error(error);
-	}
-};
-
-// Change bookmark state
-const changeBookmark = () => {
-	if (isBookmarked.value) {
-		const index =
-			userId.value !== null ? bookmarkUsers.value.indexOf(userId.value) : -1;
-		if (index !== -1) {
-			bookmarkUsers.value.splice(index, 1);
-		}
-	} else {
-		if (userId.value !== null) {
-			bookmarkUsers.value.push(userId.value);
-		}
-	}
-};
-
-// Check if token exists, else redirect to sign-in
-const checkIfTokenExists = () => {
-	if (!userInfo.accessToken) {
-		router.push('/sign-in');
-	}
-};
 
 onMounted(() => {
 	if (!userInfo.accessToken) {

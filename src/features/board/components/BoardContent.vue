@@ -333,7 +333,7 @@ const likeCount = computed(() => {
 const likeUsers = ref(
 	(isJobBoard.value ? props.jobPost.likeUsers : props.post.likeUsers) ?? [],
 );
-const bookmarkUsers = ref(
+const bookmarkUsers = computed(() =>
 	(isJobBoard.value ? props.jobPost.bookmarkUsers : props.post.bookmarkUsers) ??
 		[],
 );
@@ -422,11 +422,14 @@ const postBookmarkApi = async () => {
 };
 
 const changeBookmark = () => {
+	const targetPost = isJobBoard.value ? props.jobPost : props.post;
+	const currentUserId = userId.value || '';
+	
 	if (isBookmarked.value) {
-		const index = bookmarkUsers.value.indexOf(userId.value ? userId.value : '');
-		if (index !== -1) bookmarkUsers.value.splice(index, 1);
+		const index = targetPost.bookmarkUsers.indexOf(currentUserId);
+		if (index !== -1) targetPost.bookmarkUsers.splice(index, 1);
 	} else {
-		if (userId.value !== null) bookmarkUsers.value.push(userId.value);
+		if (userId.value !== null) targetPost.bookmarkUsers.push(currentUserId);
 	}
 };
 
