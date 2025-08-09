@@ -98,7 +98,7 @@ const alertValue = ref(false);
 const alertText = ref('');
 const isLoading = ref(false);
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'select:value']);
 
 const props = defineProps({
 	postId: {
