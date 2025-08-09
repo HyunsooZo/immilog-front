@@ -34,17 +34,17 @@
 										:class="{
 											'user--author': isAuthor(
 												detailPost.userId,
-												detailPost.comments[commentIndex].user.userId,
+												detailPost.comments[commentIndex].userId,
 											),
 										}"
 									>
 										<!-- //원글작성자 댓글 .user--author -->
 
 										<em>{{
-											detailPost.comments[commentIndex].user.country
+											detailPost.comments[commentIndex].country
 										}}</em>
 										<strong>{{
-											detailPost.comments[commentIndex].user.nickName
+											detailPost.comments[commentIndex].nickname
 										}}</strong>
 									</button>
 								</div>
@@ -80,7 +80,7 @@
 									<!-- //활성화 .active -->
 									<i class="blind">좋아요</i>
 									<span class="item__count">{{
-										detailPost.comments[commentIndex].upVotes
+										detailPost.comments[commentIndex].likeCount
 									}}</span>
 								</button>
 								<button
@@ -127,13 +127,13 @@
 											:class="{
 												'user--author': isAuthor(
 													detailPost.userId,
-													reply.user.userId,
+													reply.userId,
 												),
 											}"
 										>
 											<!-- //원글작성자 댓글 .user--author -->
-											<em>{{ reply.user.country }}</em>
-											<strong>{{ reply.user.nickName }}</strong>
+											<em>{{ reply.country }}</em>
+											<strong>{{ reply.nickname }}</strong>
 										</button>
 									</div>
 								</div>
@@ -169,12 +169,12 @@
 									>
 										<!-- //활성화 .active -->
 										<i class="blind">좋아요</i>
-										<span class="item__count">{{ reply.upVotes }}</span>
+										<span class="item__count">{{ reply.likeCount }}</span>
 									</button>
 									<button
 										type="button"
 										class="list__item cmt"
-										@click="openReplyWrite(index, reply.user.nickName)"
+										@click="openReplyWrite(index, reply.nickname)"
 									>
 										<!-- <span class="item__count"></span> -->
 									</button>
@@ -300,11 +300,11 @@ const isAuthor = (postUserId: number, commentUserId: number) => {
 const likeComment = async (index: number) => {
 	const updatedPost = detailPost.value;
 	if (updatedPost.comments[index].likeUsers.includes(userId)) {
-		updatedPost.comments[index].upVotes--;
+		updatedPost.comments[index].likeCount--;
 		const userIndex = updatedPost.comments[index].likeUsers.indexOf(userId);
 		updatedPost.comments[index].likeUsers.splice(userIndex, 1);
 	} else {
-		updatedPost.comments[index].upVotes++;
+		updatedPost.comments[index].likeCount++;
 		updatedPost.comments[index].likeUsers.push(userId);
 	}
 
@@ -317,7 +317,7 @@ const likeComment = async (index: number) => {
 	);
 	if (response.status === 401) {
 		router.push('/sign-in');
-	} else if (response.status !== 201) {
+	} else if (response.status !== 200 && response.status !== 201) {
 		console.error('좋아요 실패');
 	}
 };
@@ -327,7 +327,7 @@ const likeReply = async (index: number, replyIndex: number) => {
 	if (
 		updatedPost.comments[index].replies[replyIndex].likeUsers.includes(userId)
 	) {
-		updatedPost.comments[index].replies[replyIndex].upVotes--;
+		updatedPost.comments[index].replies[replyIndex].likeCount--;
 		const userIndex =
 			updatedPost.comments[index].replies[replyIndex].likeUsers.indexOf(userId);
 		updatedPost.comments[index].replies[replyIndex].likeUsers.splice(
@@ -335,7 +335,7 @@ const likeReply = async (index: number, replyIndex: number) => {
 			1,
 		);
 	} else {
-		updatedPost.comments[index].replies[replyIndex].upVotes++;
+		updatedPost.comments[index].replies[replyIndex].likeCount++;
 		updatedPost.comments[index].replies[replyIndex].likeUsers.push(userId);
 	}
 
@@ -347,7 +347,7 @@ const likeReply = async (index: number, replyIndex: number) => {
 	);
 	if (response.status === 401) {
 		router.push('/sign-in');
-	} else if (response.status !== 201) {
+	} else if (response.status !== 200 && response.status !== 201) {
 		console.error('좋아요 실패');
 	}
 };

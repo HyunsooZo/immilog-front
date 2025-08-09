@@ -23,6 +23,10 @@ const getPostType = (path: string): string => {
 			return 'JOB_BOARD';
 		case 'posts':
 			return 'POST';
+		case 'comments':
+			return 'COMMENT';
+		case 'replies':
+			return 'COMMENT'; // 대댓글도 COMMENT 타입으로 처리
 		default:
 			return 'COMMENT';
 	}
@@ -40,7 +44,9 @@ export const likeApi = async (path: string, postId: string) => {
 			interactionType: 'LIKE',
 			contentType: postType,
 		};
+		console.log('좋아요 API 요청:', requestBody);
 		const response = await api.post('/api/interactions', requestBody);
+		console.log('좋아요 API 응답:', response.status);
 		return { status: response.status };
 	} catch (error) {
 		return handleError(error);

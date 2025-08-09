@@ -100,7 +100,7 @@
 							@click="likeComment(comment.commentId, index)"
 						>
 							<i class="blind">좋아요</i>
-							<span class="item__count">{{ comment.upVotes }}</span>
+							<span class="item__count">{{ comment.likeCount }}</span>
 						</button>
 						<button
 							type="button"
@@ -177,7 +177,7 @@
 								@click="likeReply(index, replyIndex)"
 							>
 								<i class="blind">좋아요</i>
-								<span class="item__count">{{ reply.upVotes }}</span>
+								<span class="item__count">{{ reply.likeCount }}</span>
 							</button>
 							<button
 								type="button"
@@ -196,14 +196,14 @@
 				</div>
 			</div>
 			<!-- n개 이상 대댓글 더보기 -->
-			<div class="item item__more" v-if="comment.replyCount > 3">
+			<div class="item item__more" v-if="comment.replies.length > 3">
 				<button
 					type="button"
 					class="list__item_button button-text"
 					@click="openReplyModal(index)"
 				>
 					<span
-						>{{ comment.replyCount - 3
+						>{{ comment.replies.length - 3
 						}}{{ t('boardDetailView.multipleComments') }}</span
 					>
 				</button>
@@ -376,11 +376,11 @@ const likeComment = async (commentId: string, index: number) => {
 	const updatedPost = JSON.parse(JSON.stringify(post.value));
 	const comment = updatedPost.comments[index];
 	if (comment.likeUsers?.includes(userId.value)) {
-		comment.upVotes--;
+		comment.likeCount--;
 		const userIndex = comment.likeUsers.indexOf(userId.value);
 		comment.likeUsers.splice(userIndex, 1);
 	} else {
-		comment.upVotes++;
+		comment.likeCount++;
 		comment.likeUsers.push(userId.value);
 	}
 	post.value = updatedPost;
@@ -391,7 +391,7 @@ const likeComment = async (commentId: string, index: number) => {
 	);
 	if (response.status === 401) {
 		router.push('/sign-in');
-	} else if (response.status !== 201) {
+	} else if (response.status !== 200 && response.status !== 201) {
 		console.error('좋아요 실패');
 	}
 };
@@ -402,12 +402,11 @@ const likeReply = async (index: number, replyIdx: number) => {
 	const comment = updatedPost.comments[index];
 	const reply = comment.replies[replyIdx];
 	if (reply.likeUsers?.includes(userId.value)) {
-		reply.upVotes--;
+		reply.likeCount--;
 		const userIndex = reply.likeUsers.indexOf(userId.value);
 		reply.likeUsers.splice(userIndex, 1);
 	} else {
-		reply.upVotes++;
-		// 원래 코드의 기능을 그대로 유지 (오타 수정 없이)
+		reply.likeCount++;
 		reply.likeUsers.push(userId.value);
 	}
 	post.value = updatedPost;
@@ -418,8 +417,8 @@ const likeReply = async (index: number, replyIdx: number) => {
 	);
 	if (response.status === 401) {
 		router.push('/sign-in');
-	} else if (response.status !== 201) {
-		console.error('좋아요 실패');
+	} else if (response.status !== 200 && response.status !== 201) {
+		console.error('좋아요 실패', response);
 	}
 };
 
@@ -436,7 +435,7 @@ const detailBoard = async () => {
 			applicationJson,
 		);
 		if (response.status === 200) {
-			// comments의 likeUsers도 안전하게 처리
+			// comments의 likeUsers 안전하게 처리
 			const processedComments = (response.data.comments || []).map(comment => ({
 				...comment,
 				likeUsers: comment.likeUsers || [],
@@ -461,6 +460,7 @@ const detailBoard = async () => {
 		console.error(error);
 	}
 };
+
 
 // Scroll to bottom function
 const goToDown = () => {

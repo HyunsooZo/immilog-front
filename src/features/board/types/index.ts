@@ -34,13 +34,17 @@ export interface IComment {
 	country: string;
 	region: string;
 	content: string;
+	postId: string;
+	parentId?: string;
+	referenceType: 'POST' | 'COMMENT';
 	replies: IComment[];
 	replyCount: number;
 	upVotes: number;
-	downVotes: number;
+	likeCount: number;
 	likeUsers: string[];
 	status: string;
 	createdAt: string;
+	updatedAt: string;
 }
 
 // 검색 결과 인터페이스

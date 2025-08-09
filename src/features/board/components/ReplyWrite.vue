@@ -186,8 +186,8 @@ const callReplyApi = async () => {
 	try {
 		const requestForm = {
 			referenceType: props.contentType,
-			postId: props.commentId,
-			parentCommentId: props.commentId,
+			postId: props.postId,
+			parentId: props.commentId,
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		};
 		const response: AxiosResponse<void> = await api.post(
