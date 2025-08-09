@@ -247,10 +247,7 @@ import { extractAtWordAndRest } from '@/shared/utils/comment';
 import { likeApi } from '@/features/board/services/post';
 import { lastReply, writeReply } from '@/shared/utils/icons';
 import { timeCalculation } from '@/shared/utils/date-time';
-import {
-	applicationJson,
-	applicationJsonWithToken,
-} from '@/shared/utils/header';
+import { applicationJson } from '@/shared/utils/header';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import BoardContent from '@/features/board/components/BoardContent.vue';
 import NoContent from '@/shared/components/ui/NoContent.vue';
@@ -373,37 +370,6 @@ const userId = ref<string>(userInfo.userId || '');
 const likeUsers = ref(post.value.likeUsers);
 const likeCount = ref(post.value.likeCount);
 const bookmarkUsers = ref(post.value.bookmarkUsers);
-const isBookmarked = computed(() => {
-	return bookmarkUsers.value.includes(userId.value || '');
-});
-
-const likePost = async () => {
-	const currentUserId = userId.value;
-	if (post.value.likeUsers?.includes(currentUserId)) {
-		post.value.likeCount--;
-		const userIndex = post.value.likeUsers.indexOf(currentUserId);
-		post.value.likeUsers.splice(userIndex, 1);
-	} else {
-		post.value.likeCount++;
-		post.value.likeUsers.push(currentUserId);
-	}
-	// post.value를 재할당할 필요 없이 직접 수정하면 반응성이 유지됨
-	const requestBody = {
-		postId: post.value.postId,
-		interactionType: 'LIKE',
-		contentType: 'POST',
-	};
-	const response = await api.post(
-		'/api/interactions',
-		requestBody,
-		applicationJsonWithToken(userInfo.accessToken),
-	);
-	if (response.status === 401) {
-		router.push('/sign-in');
-	} else if (response.status !== 204) {
-		console.error('좋아요 실패');
-	}
-};
 
 // Like comment function
 const likeComment = async (commentId: string, index: number) => {
