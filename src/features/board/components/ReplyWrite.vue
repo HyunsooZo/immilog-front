@@ -186,7 +186,7 @@ const callReplyApi = async () => {
 	try {
 		const requestForm = {
 			referenceType: props.contentType,
-			postId: props.postId,
+			postId: props.commentId,
 			parentCommentId: props.commentId,
 			content: (textareaRef.value as HTMLTextAreaElement)?.value,
 		};
