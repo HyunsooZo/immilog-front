@@ -32,7 +32,7 @@
 		<div class="list-top-wrap">
 			<!-- 서브 메뉴 -->
 			<SubMenuList
-				:subMenus="getContriesWithAll()"
+				:subMenus="getCountriesWithAll()"
 				@select:country="setCountry"
 			/>
 			<!-- 카테고리 및 정렬 옵션 -->
@@ -126,7 +126,7 @@ import { postBtn } from '@/shared/utils/icons';
 import { sortingList, categoryList } from '@/shared/utils/selectItems';
 import { showAd } from '@/shared/utils/showAd';
 import { useI18n } from 'vue-i18n';
-import { countries } from '@/shared/utils/selectItems';
+import { useCountryStore } from '@/features/country/stores/country';
 import { useHomeCategoryStore } from '@/features/board/stores/category';
 import { useHomeSortingStore } from '@/features/board/stores/sorting';
 import { getCoordinate } from '@/shared/services/geolocation';
@@ -148,6 +148,7 @@ const { t } = useI18n();
 const router = useRouter();
 
 const userInfo = useUserInfoStore();
+const countryStore = useCountryStore();
 const homeCategory = useHomeCategoryStore();
 const homeSorting = useHomeSortingStore();
 
@@ -155,8 +156,11 @@ const sortingListWithoutLike = sortingList.filter(
 	s => s.code !== 'LIKE_COUNT' && s.code !== 'CREATED_DATE',
 );
 
-const getContriesWithAll = () => {
-	return [{ name: 'country.all', code: 'ALL' }, ...countries];
+const getCountriesWithAll = () => {
+	return [
+		{ name: t('country.all'), code: 'ALL' }, // "전체" 또는 "All" 번역 유지
+		...countryStore.countrySelectItems
+	];
 };
 
 // modal open/close 시 body 컨트롤
@@ -507,6 +511,9 @@ onMounted(async () => {
 
 	// 상태 초기화 추가
 	initializeState();
+	
+	// 국가 목록 가져오기 (번역 키 방식 사용)
+	await countryStore.fetchActiveCountries();
 
 	if (!userInfo.userId) {
 		fetchUserInfo();

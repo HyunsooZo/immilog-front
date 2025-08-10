@@ -17,6 +17,7 @@ export type { IUser, IUserInfo } from 'src/features/user/types';
 export type { ILocation, IApiLocation } from '@/shared/types/location';
 export type { IChat, IChatRoom } from '@/features/chat/types';
 export type { IJobPost, ICompany } from '@/features/board/types';
+export type { ICountry, ICountryOption, CountryStatus } from '@/shared/types/country';
 
 export interface ISelectItem {
 	name: string;

@@ -138,7 +138,7 @@
 	<SelectDialog
 		v-if="isCountrySelectClicked"
 		:title="countrySelectTitle"
-		:list="countries"
+		:list="countryStore.countrySelectItems"
 		@close="closeSelect"
 		@select:value="selectedValue"
 	/>
@@ -169,7 +169,7 @@ import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { resizeImage } from '@/shared/utils/image';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { countries } from '@/shared/utils/selectItems';
+import { useCountryStore } from '@/features/country/stores/country';
 import { AxiosResponse } from 'axios';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
 import TheHeader from '@/shared/components/layout/TheHeader.vue';
@@ -184,6 +184,7 @@ const router = useRouter();
 const nickNameCheckDone = ref(false);
 const isNickNameValid = ref(false);
 const userInfo = useUserInfoStore();
+const countryStore = useCountryStore();
 // const locationStore = useLocationStore(); // 임시로 주석 처리
 const userNickname = ref('');
 const country = ref('');
@@ -381,9 +382,11 @@ const closeSelect = () => {
 };
 
 const selectedValue = (value: ISelectItem) => {
-	if (countries.some(c => c.code === value.code)) {
-		interestCountry.value = t(value.name);  // 번역된 이름을 저장
-		interestCountryCode.value = value.code;  // 코드를 저장
+	const country = countryStore.findCountryById(value.code);
+	if (country) {
+		// 번역 키를 실제 번역된 값으로 변환해서 저장
+		interestCountry.value = t(value.name); // t('country.korea') -> '대한민국'
+		interestCountryCode.value = country.id;  // 국가 ID를 저장
 	}
 };
 
@@ -470,6 +473,8 @@ onMounted(() => {
 	countryCode.value = userInfo.userCountry || '';
 	imagePreview.value = userInfo.userProfileUrl || '';
 	interestCountry.value = userInfo.userInterestCountry ||'';
+	// 국가 목록 가져오기 (번역 키 방식 사용)
+	countryStore.fetchActiveCountries();
 	interestCountryCode.value = userInfo.userInterestCountry || '';
 });
 </script>

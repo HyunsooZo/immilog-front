@@ -71,7 +71,7 @@
 								}"
 								@click="onUserProfileDetail"
 							>
-								<em>{{ comment.country || '' }}</em>
+								<em>{{ getDisplayCountry(comment.country) }}</em>
 								<strong>{{ comment.nickname || '' }}</strong>
 							</button>
 						</div>
@@ -137,7 +137,7 @@
 									}"
 									@click="onUserProfileDetail"
 								>
-									<em>{{ reply.country || '' }}</em>
+									<em>{{ getDisplayCountry(reply.country) }}</em>
 									<strong>{{ reply.nickname || '' }}</strong>
 								</button>
 							</div>
@@ -249,6 +249,7 @@ import { lastReply, writeReply } from '@/shared/utils/icons';
 import { timeCalculation } from '@/shared/utils/date-time';
 import { applicationJson } from '@/shared/utils/header';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
+import { useCountryStore } from '@/features/country/stores/country';
 import BoardContent from '@/features/board/components/BoardContent.vue';
 import NoContent from '@/shared/components/ui/NoContent.vue';
 import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue';
@@ -265,6 +266,7 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const userInfo = useUserInfoStore();
+const countryStore = useCountryStore();
 
 // Modal control functions
 const isModalOpen = () => {
@@ -292,6 +294,19 @@ const offUserProfileDetail = () => {
 // Check if user is the author
 const isAuthor = (userIdParam: string) => {
 	return userIdParam === post.value.userId;
+};
+
+// Country 표시 헬퍼 함수
+const getDisplayCountry = (countryValue: string): string => {
+	// 새로운 API의 country ID인지 확인하고 이름으로 변환
+	const country = countryStore.findCountryById(countryValue);
+	if (country) {
+		const locale = t('locale') || 'ko';
+		return countryStore.getCountryNameByLocale(countryValue, locale);
+	}
+	
+	// 기존 enum 형태의 country인 경우 그대로 사용 (하위 호환성)
+	return countryValue || '';
 };
 
 // Loading state and reply modal control
@@ -479,10 +494,14 @@ const postAuthorInfo = ref<IOtherUserInfo>({
 	userProfileUrl: post.value.userProfileUrl,
 });
 
-onMounted(() => {
+onMounted(async () => {
 	if (!userInfo.accessToken) {
 		router.push('/sign-in');
 	}
+	
+	// 국가 목록 가져오기 (번역 키 방식 사용)
+	await countryStore.fetchActiveCountries();
+	
 	detailBoard();
 });
 </script>
