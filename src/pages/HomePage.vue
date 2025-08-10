@@ -76,13 +76,17 @@
 			</button>
 			<!-- 초기 로딩 시 시머 이펙트 -->
 			<PostListShimmer v-if="isInitialLoading" :count="5" />
-			
+
 			<!-- 게시물이 없는 경우 -->
 			<NoContent
-				v-else-if="!isInitialLoading && state.pagination?.sort && state.posts?.length === 0"
+				v-else-if="
+					!isInitialLoading &&
+					state.pagination?.sort &&
+					state.posts?.length === 0
+				"
 				:item="t('homeView.post')"
 			/>
-			
+
 			<!-- 게시물 목록 -->
 			<BoardContent
 				v-for="(item, index) in state.posts"
@@ -164,10 +168,7 @@ const sortingListWithoutLike = sortingList.filter(
 );
 
 const getCountriesWithAll = () => {
-	return [
-		{ name: t('country.all'), code: 'ALL' }, // "전체" 또는 "All" 번역 유지
-		...countryStore.countrySelectItems
-	];
+	return countryStore.countrySelectItems;
 };
 
 // modal open/close 시 body 컨트롤
@@ -382,7 +383,7 @@ const currentPage = ref(0);
 // 게시글 목록 호출 메서드
 const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
-	
+
 	try {
 		const response: AxiosResponse<IApiPosts> = await api.get(
 			`/api/v1/posts?country=${selectCountry.value.code}` +
@@ -525,7 +526,7 @@ onMounted(async () => {
 
 	// 상태 초기화 추가
 	initializeState();
-	
+
 	// 국가 목록 가져오기 (번역 키 방식 사용)
 	await countryStore.fetchActiveCountries();
 
