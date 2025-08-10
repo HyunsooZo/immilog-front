@@ -18,6 +18,7 @@
 								:placeholder="t('signInView.emailPlaceHolder')"
 								id="inputEmail"
 								required
+								@keyup.enter="handleEnterKey"
 							/>
 						</div>
 					</div>
@@ -37,6 +38,7 @@
 								:placeholder="t('signInView.passwordPlaceHolder')"
 								id="inputPassword"
 								required
+								@keyup.enter="handleEnterKey"
 							/>
 						</div>
 					</div>
@@ -171,6 +173,13 @@ const isValidLogin = computed(() => email.value && password.value);
 // 회원가입 화면으로 이동
 const onSignUp = () => {
 	router.push({ name: 'SignUp' });
+};
+
+// 엔터키 처리
+const handleEnterKey = () => {
+	if (isValidLogin.value && !isLoading.value) {
+		signIn();
+	}
 };
 
 // 로그인

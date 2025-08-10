@@ -1,8 +1,11 @@
 <template>
 	<TheHeader />
 	<div class="content">
+		<!-- 로딩 시 시머 효과 -->
+		<BoardDetailShimmer v-if="isLoading" />
+		
 		<!-- 글 상세 -->
-		<div class="list-wrap">
+		<div class="list-wrap" v-else>
 			<div class="list__title">
 				<span class="title">{{
 					post.category ? t('postCategories.' + post.category) : ''
@@ -256,6 +259,7 @@ import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue'
 import ReplyWrite from '@/features/board/components/ReplyWrite.vue';
 import ReplyModal from '@/features/board/components/ReplyModal.vue';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
+import BoardDetailShimmer from '@/shared/components/ui/BoardDetailShimmer.vue';
 import TheHeader from '@/shared/components/layout/TheHeader.vue';
 
 const props = defineProps<{
@@ -310,7 +314,7 @@ const getDisplayCountry = (countryValue: string): string => {
 };
 
 // Loading state and reply modal control
-const isLoading = ref(false);
+const isLoading = ref(true);
 const replyDetailModal = ref(false);
 const replyIndex = ref<number | string>(0);
 const openReplyModal = (index: number) => {
@@ -321,6 +325,8 @@ const openReplyModal = (index: number) => {
 const closeReplyModal = () => {
 	replyDetailModal.value = false;
 	isModalClose();
+	// ReplyModal 닫힐 때 데이터 새로고침
+	detailBoard(false);
 };
 
 // Comment and reply write modals
@@ -338,7 +344,7 @@ const closeReplyWrite = () => {
 	taggedUser.value = '';
 	isModalClose();
 	setTimeout(() => {
-		detailBoard();
+		detailBoard(false);
 	}, 1500);
 };
 const openCommentWrite = () => {
@@ -349,7 +355,7 @@ const closeCommentWrite = () => {
 	isCommentWriteClicked.value = false;
 	isModalClose();
 	setTimeout(() => {
-		detailBoard();
+		detailBoard(false);
 	}, 500);
 };
 
@@ -437,8 +443,11 @@ const likeReply = async (index: number, replyIdx: number) => {
 	}
 };
 
-// Fetch post details
-const detailBoard = async () => {
+// Fetch post details (with loading)
+const detailBoard = async (showLoading = true) => {
+	if (showLoading) {
+		isLoading.value = true;
+	}
 	try {
 		const currentPostId = postId.value;
 		if (!currentPostId) {
@@ -473,6 +482,10 @@ const detailBoard = async () => {
 		}
 	} catch (error) {
 		console.error(error);
+	} finally {
+		if (showLoading) {
+			isLoading.value = false;
+		}
 	}
 };
 

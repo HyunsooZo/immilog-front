@@ -198,6 +198,7 @@
 		v-if="isReplyWriteClicked"
 		:commentId="post.comments[commentIndex].commentId"
 		:postId="post.postId"
+		:contentType="'COMMENT'"
 		:isPostComment="false"
 		:taggedUser="taggedUser"
 		@close="closeReplyWrite"
@@ -264,16 +265,18 @@ const replyIndex = ref();
 const taggedUser = ref();
 const openReplyWrite = (index: number, nickName: string) => {
 	taggedUser.value = nickName;
-	replyIndex.value = index;
+	// 대댓글에 대한 대댓글도 원래 댓글의 commentId를 사용
+	replyIndex.value = props.commentIndex;
 	isReplyWriteClicked.value = true;
 	isModalOpen();
 };
 const closeReplyWrite = () => {
 	isReplyWriteClicked.value = false;
 	isModalClose();
+	// 대댓글 작성 후 바로 대댓글 상세 모달 닫기
 	setTimeout(() => {
-		detailBoard();
-	}, 500);
+		emit('close');
+	}, 300);
 };
 
 const detailBoard = async () => {
@@ -283,10 +286,15 @@ const detailBoard = async () => {
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
-			detailPost.value = response.data.data;
-			isLiked.value = response.data.data.likeUsers.some(
-				(userId: string) => userId === '1',
-			);
+			// 응답 구조에 따라 데이터 처리
+			const responseData = response.data.data || response.data;
+			detailPost.value = responseData;
+			
+			// 현재 사용자 ID로 좋아요 상태 확인
+			const currentUserId = userInfo.userId || userId;
+			isLiked.value = responseData.likeUsers?.some(
+				(likeUserId: string) => likeUserId === currentUserId,
+			) || false;
 		}
 	} catch (error) {
 		console.error(error);
@@ -353,6 +361,7 @@ const likeReply = async (index: number, replyIndex: number) => {
 };
 
 onMounted(() => {
+	// 초기 데이터는 props에서 가져옴
 	detailPost.value = props.post;
 });
 </script>

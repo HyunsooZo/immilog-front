@@ -1,12 +1,11 @@
 <template>
 	<TheHeader />
 	<div class="content">
-		<div class="list-top-wrap">
-			<!-- 카테고리 정렬 -->
-		</div>
-
+		<!-- 로딩 시 시머 효과 -->
+		<BoardDetailShimmer v-if="isLoading" />
+		
 		<!-- 목록 -->
-		<div class="list-wrap">
+		<div class="list-wrap" v-else>
 			<BoardContent
 				:jobPost="jobPost"
 				:detail="true"
@@ -27,9 +26,11 @@ import { emptyPost } from '@/shared/utils/emptyObjects';
 import api from '@/core/api/index';
 import TheHeader from '@/shared/components/layout/TheHeader.vue';
 import BoardContent from '@/features/board/components/BoardContent.vue';
+import BoardDetailShimmer from '@/shared/components/ui/BoardDetailShimmer.vue';
 
 const route = useRoute();
 const postId = route.params.postId;
+const isLoading = ref(true);
 
 const jobPost = ref<IJobPost>({
 	postId: '',
@@ -57,6 +58,7 @@ const jobPost = ref<IJobPost>({
 });
 
 const fetchJobBoardDetail = async () => {
+	isLoading.value = true;
 	try {
 		const response = await api.get(`/api/jobboards/${postId}`, applicationJson);
 		if (response.status === 200) {
@@ -64,6 +66,8 @@ const fetchJobBoardDetail = async () => {
 		}
 	} catch (error) {
 		console.error(error);
+	} finally {
+		isLoading.value = false;
 	}
 };
 

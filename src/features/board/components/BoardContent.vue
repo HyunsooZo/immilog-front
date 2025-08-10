@@ -246,7 +246,7 @@
 		/>
 		<MoreModalForPost
 			v-if="moreModalValue"
-			:posetSeq="post.postId"
+			:postId="post.postId"
 			@close="closeMoreModal"
 			@edit="editPost"
 			@delete="deletePost"

@@ -70,7 +70,11 @@
 				</svg>
 				<i class="blind">글쓰기</i>
 			</button>
-			<div v-for="(item, index) in state.posts" :key="index">
+			<!-- 초기 로딩 시 시머 이펙트 -->
+			<PostListShimmer v-if="isInitialLoading" :count="5" />
+			
+			<!-- 게시물 목록 -->
+			<div v-else v-for="(item, index) in state.posts" :key="index">
 				<BoardContent
 					:post="item"
 					:detail="false"
@@ -119,6 +123,7 @@ import SelectDialog from '@/shared/components/ui/SelectDialog.vue';
 import PostModal from '@/features/board/components/PostModal.vue';
 import BoardContent from '@/features/board/components/BoardContent.vue';
 import CustomAlert from '@/shared/components/ui/CustomAlert.vue';
+import PostListShimmer from '@/shared/components/ui/PostListShimmer.vue';
 import api from '@/core/api/index';
 
 const { t } = useI18n();
@@ -270,6 +275,9 @@ const openSortingSelect = () => {
 	isModalOpen();
 };
 
+// 로딩 상태
+const isInitialLoading = ref(true);
+
 // 게시글 목록 관련 반응형 객체
 const state = ref<IState>({
 	posts: [],
@@ -369,6 +377,10 @@ const fetchBoardList = async (
 		console.error(error);
 	} finally {
 		state.value.loading = false;
+		// 첫 페이지 로딩이 완료되면 초기 로딩 상태 해제
+		if (nextPage === 0) {
+			isInitialLoading.value = false;
+		}
 	}
 };
 

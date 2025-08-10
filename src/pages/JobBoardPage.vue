@@ -43,12 +43,17 @@
 
 		<!-- 목록 -->
 		<div class="list-wrap">
+			<!-- 초기 로딩 시 시머 이펙트 -->
+			<PostListShimmer v-if="isInitialLoading" :count="5" />
+			
+			<!-- 게시물이 없는 경우 -->
 			<NoContent
-				v-if="state.jobPosts.length === 0"
+				v-else-if="!isInitialLoading && state.jobPosts.length === 0"
 				:item="t('jobContent.jobPost')"
 			/>
-			<!-- <NoContent v-if="state.pagination.sort && state.posts.length === 0" :item="'구인/구직 글'" /> -->
-			<div v-for="(item, index) in state.jobPosts" :key="index">
+			
+			<!-- 게시물 목록 -->
+			<div v-else v-for="(item, index) in state.jobPosts" :key="index">
 				<BoardContent
 					:jobPost="item"
 					:adValue="showAd(index)"
@@ -99,6 +104,7 @@ import SelectDialog from '@/shared/components/ui/SelectDialog.vue';
 import PostModal from '@/features/board/components/PostModal.vue';
 import SubMenuList from '@/shared/components/ui/SubMenuList.vue';
 import NoContent from '@/shared/components/ui/NoContent.vue';
+import PostListShimmer from '@/shared/components/ui/PostListShimmer.vue';
 import api from '@/core/api/index';
 
 const { t } = useI18n();
@@ -169,6 +175,7 @@ const state = ref({
 const currentPage = ref(0);
 const selectedCountry = ref('ALL');
 const selectedSortingMethod = ref('CREATED_DATE');
+const isInitialLoading = ref(true);
 
 const fetchJobBoardList = async () => {
 	state.value.loading = true;
@@ -188,6 +195,10 @@ const fetchJobBoardList = async () => {
 		console.error(error);
 	} finally {
 		state.value.loading = false;
+		// 첫 페이지 로딩이 완료되면 초기 로딩 상태 해제
+		if (currentPage.value === 0) {
+			isInitialLoading.value = false;
+		}
 	}
 };
 
@@ -206,6 +217,7 @@ const handleStickyButton = (listTopHeight: number) => {
 
 // select 관련 메소드 (초기화)
 const initializeState = () => {
+	isInitialLoading.value = true;
 	state.value.jobPosts = [] as IJobPost[];
 	state.value.pagination = {} as IPageable;
 	currentPage.value = 0;

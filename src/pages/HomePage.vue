@@ -74,10 +74,16 @@
 				</svg>
 				<i class="blind">글쓰기</i>
 			</button>
+			<!-- 초기 로딩 시 시머 이펙트 -->
+			<PostListShimmer v-if="isInitialLoading" :count="5" />
+			
+			<!-- 게시물이 없는 경우 -->
 			<NoContent
-				v-if="state.pagination?.sort && state.posts?.length === 0"
+				v-else-if="!isInitialLoading && state.pagination?.sort && state.posts?.length === 0"
 				:item="t('homeView.post')"
 			/>
+			
+			<!-- 게시물 목록 -->
 			<BoardContent
 				v-for="(item, index) in state.posts"
 				:key="index"
@@ -140,6 +146,7 @@ import BoardContent from '@/features/board/components/BoardContent.vue';
 import PostModal from '@/features/board/components/PostModal.vue';
 import NoContent from '@/shared/components/ui/NoContent.vue';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
+import PostListShimmer from '@/shared/components/ui/PostListShimmer.vue';
 import SubMenuList from '@/shared/components/ui/SubMenuList.vue';
 import api from '@/core/api/index';
 
@@ -240,6 +247,7 @@ const state = ref<IState>({
 
 // select 관련 메소드 (초기화)
 const initializeState = () => {
+	isInitialLoading.value = true; // 초기 로딩 상태 재설정
 	state.value = {
 		isActive: false,
 		label: '',
@@ -374,6 +382,7 @@ const currentPage = ref(0);
 // 게시글 목록 호출 메서드
 const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	state.value.loading = true;
+	
 	try {
 		const response: AxiosResponse<IApiPosts> = await api.get(
 			`/api/v1/posts?country=${selectCountry.value.code}` +
@@ -394,7 +403,11 @@ const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 	} finally {
 		setTimeout(() => {
 			state.value.loading = false;
-		}, 1000);
+			// 첫 페이지 로딩이 완료되면 초기 로딩 상태 해제
+			if (nextPage === 0) {
+				isInitialLoading.value = false;
+			}
+		}, 500); // 시머 이펙트를 충분히 보여주기 위한 최소 시간
 	}
 };
 
@@ -496,6 +509,7 @@ const fetchUserInfo = async () => {
 
 // 로딩화면 관련 상태
 const isLoading = ref(false);
+const isInitialLoading = ref(true); // 초기 로딩 상태
 
 // 뒤로가기 시 상태 초기화 및 데이터 새로고침
 onBeforeRouteLeave(() => {

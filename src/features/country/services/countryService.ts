@@ -37,7 +37,7 @@ export const getCountryById = async (id: string): Promise<ICountry> => {
 // 국가 목록을 SelectDialog에서 사용할 수 있는 형태로 변환 (번역 키 사용)
 export const convertCountriesToSelectItems = (countries: ICountry[]) => {
 	return countries.map(country => ({
-		name: `country.${country.id}`, // 번역 키 형태로 변환
+		name: `countries.${country.id}`, // 번역 키 형태로 변환
 		code: country.id,
 		nameKo: country.nameKo,
 		nameEn: country.nameEn,

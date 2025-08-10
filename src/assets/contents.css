@@ -2587,6 +2587,122 @@ strong + .button-text {
   padding-left: 0.2rem;
   line-height: 1.6rem;
 }
+/* 시머 효과 스타일 */
+.shimmer {
+  background: linear-gradient(90deg, #f4f4f4 25%, #e0e0e0 50%, #f4f4f4 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.shimmer-text {
+  display: block;
+  height: 1.2rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #f4f4f4 25%, #e0e0e0 50%, #f4f4f4 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.shimmer-category {
+  display: inline-block;
+  width: 3rem;
+  margin-right: 0.4rem;
+}
+
+.shimmer-user {
+  display: inline-block;
+  width: 4rem;
+}
+
+.shimmer-location {
+  display: inline-block;
+  width: 2.5rem;
+  margin-right: 0.4rem;
+}
+
+.shimmer-nickname {
+  display: inline-block;
+  width: 5rem;
+}
+
+.shimmer-title {
+  width: 70%;
+  height: 1.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.shimmer-content-line {
+  width: 100%;
+  height: 1.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.shimmer-content-line.short {
+  width: 60%;
+}
+
+.shimmer-tag {
+  display: inline-block;
+  width: 3rem;
+  height: 1rem;
+  border-radius: 2px;
+  margin-right: 0.6rem;
+}
+
+.shimmer-tag.small {
+  width: 2rem;
+}
+
+.shimmer-icon {
+  width: 1.6rem;
+  height: 1.5rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #f4f4f4 25%, #e0e0e0 50%, #f4f4f4 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.shimmer-count {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1rem;
+  margin-left: 0.2rem;
+}
+
+/* 시머 효과에서 실제 게시물과 동일한 아이콘 간격 적용 */
+.list__item.read .shimmer-count,
+.list__item.like .shimmer-count,
+.list__item.cmt .shimmer-count {
+  padding-left: 0.2rem;
+  margin-left: 0;
+}
+
+.shimmer-time {
+  display: inline-block;
+  width: 4rem;
+}
+
+/* 상세 페이지 시머 스타일 */
+.shimmer-category-title {
+  width: 6rem;
+  height: 1.4rem;
+}
+
+.shimmer-title-detail {
+  width: 85%;
+  height: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 /* 단순목록형태 :select dialog */
 .list-wrap li.item {
   padding: 0;

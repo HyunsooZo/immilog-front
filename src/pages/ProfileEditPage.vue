@@ -386,7 +386,7 @@ const selectedValue = (value: ISelectItem) => {
 	if (country) {
 		// 번역 키를 실제 번역된 값으로 변환해서 저장
 		interestCountry.value = t(value.name); // t('country.korea') -> '대한민국'
-		interestCountryCode.value = country.id;  // 국가 ID를 저장
+		interestCountryCode.value = country.id; // 국가 ID를 저장
 	}
 };
 
@@ -469,10 +469,10 @@ const getCountry = async (location: ILocation) => {
 
 onMounted(() => {
 	userNickname.value = userInfo.userNickname || '';
-	country.value = userInfo.userCountry || '';
+	country.value = t('countries.' + userInfo.userCountry || '');
 	countryCode.value = userInfo.userCountry || '';
 	imagePreview.value = userInfo.userProfileUrl || '';
-	interestCountry.value = userInfo.userInterestCountry ||'';
+	interestCountry.value = t('countries.' + userInfo.userInterestCountry || '');
 	// 국가 목록 가져오기 (번역 키 방식 사용)
 	countryStore.fetchActiveCountries();
 	interestCountryCode.value = userInfo.userInterestCountry || '';
