@@ -53,7 +53,7 @@
 			/>
 			
 			<!-- 게시물 목록 -->
-			<div v-else v-for="(item, index) in state.jobPosts" :key="index">
+			<div v-else v-for="(item, index) in state.jobPosts" :key="item.postId">
 				<BoardContent
 					:jobPost="item"
 					:adValue="showAd(index)"

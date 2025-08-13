@@ -74,7 +74,7 @@
 			<PostListShimmer v-if="isInitialLoading" :count="5" />
 			
 			<!-- 게시물 목록 -->
-			<div v-else v-for="(item, index) in state.posts" :key="index">
+			<div v-else v-for="(item, index) in state.posts" :key="item.postId">
 				<BoardContent
 					:post="item"
 					:detail="false"
@@ -328,13 +328,10 @@ const selectedValue = (value: ISelectItem) => {
 const closeSelect = () => {
 	isCategorySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
-	inquireBoardList(selectCategoryValue.value, selectSortingValue.value);
+	// 선택 값이 변경되면 watch가 자동으로 fetchBoardList를 호출함
 	isModalClose();
 };
 
-const inquireBoardList = (category: ISelectItem, sorting: ISelectItem) => {
-	// 게시물 목록 조회 - 카테고리 및 정렬 옵션 설정
-};
 
 // 무한 스크롤 관련 메소드 (데이터 추가 호출)
 const loadMoreData = async () => {
@@ -366,6 +363,9 @@ const fetchBoardList = async (
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
+			// 마지막 페이지 여부 설정
+			state.value.last = response.data.data.last;
+			// 새로운 게시물들을 기존 목록에 추가
 			response.data.data.content.forEach((post: any) => {
 				if (state.value.posts) {
 					state.value.posts.push(post);
@@ -385,12 +385,15 @@ const fetchBoardList = async (
 };
 
 watch([selectSortingValue, selectCategoryValue, country], () => {
+	// 변경 시 목록 초기화 후 첫 페이지부터 다시 가져오기
+	initState();
+	currentPage.value = 0;
 	fetchBoardList(
 		country.value,
 		selectSortingValue.value.code,
-		currentPage.value,
+		0
 	);
-});
+}, { flush: 'post' }); // DOM 업데이트 후에 실행
 
 onMounted(() => {
 	if (!userInfo.accessToken) {
@@ -401,7 +404,7 @@ onMounted(() => {
 		? userInfo.userInterestCountry
 		: undefined;
 	updateMenuBar();
-	fetchBoardList(country.value, 'CREATED_DATE', 0);
+	// country 값 설정으로 watch가 트리거되어 fetchBoardList가 자동 호출됨
 	window.addEventListener('scroll', handleScroll);
 });
 
@@ -423,6 +426,10 @@ const openPostModal = () => {
 	isModalOpen();
 };
 const closePostModal = () => {
+	// 게시글 작성 후 목록 새로고침
+	initState();
+	currentPage.value = 0;
+	fetchBoardList(country.value, selectSortingValue.value.code, 0);
 	onPostModal.value = false;
 	isModalClose();
 };

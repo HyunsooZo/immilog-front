@@ -76,7 +76,7 @@
 					<div class="list-wrap">
 						<SearchResult
 							v-for="(item, index) in state.posts"
-							:key="index"
+							:key="item.postId"
 							:post="item"
 						/>
 					</div>

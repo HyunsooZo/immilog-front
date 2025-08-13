@@ -90,7 +90,7 @@
 			<!-- 게시물 목록 -->
 			<BoardContent
 				v-for="(item, index) in state.posts"
-				:key="index"
+				:key="item.postId"
 				:post="item"
 				:adValue="showAd(index)"
 				:detail="false"

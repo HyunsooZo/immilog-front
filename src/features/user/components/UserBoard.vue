@@ -40,7 +40,7 @@
 				<div class="list-wrap">
 					<BoardContent
 						v-for="(item, index) in state.posts"
-						:key="index"
+						:key="item.postId"
 						:post="item"
 						:jobPost="emptyJobPost"
 						:detail="false"
