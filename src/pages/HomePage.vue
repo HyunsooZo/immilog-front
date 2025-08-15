@@ -30,20 +30,41 @@
 		</div>
 
 		<div class="list-top-wrap">
-			<!-- 서브 메뉴 -->
-			<SubMenuList
-				:subMenus="getCountriesWithAll()"
-				@select:country="setCountry"
-			/>
-			<!-- 카테고리 및 정렬 옵션 -->
+			<!-- 카테고리 서브 메뉴 (이전의 국가 위치) -->
+			<div class="sub-menu-wrap">
+				<ul class="sub-menu__inner">
+					<li
+						class="sub-menu__list"
+						v-for="category in getCategoriesWithAll()"
+						:key="category.code"
+						:class="{ active: selectCategoryValue.code === category.code }"
+					>
+						<button type="button" class="button" @click="setCategory(category)">
+							{{ t(category.name) }}
+						</button>
+					</li>
+				</ul>
+			</div>
+			<!-- 국가 및 정렬 옵션 -->
 			<div class="fnc-wrap">
 				<div class="category__list">
 					<button
 						type="button"
 						class="button--select"
-						@click="openCategorySelect"
+						@click="openCountrySelect"
 					>
-						<span>{{ t(selectCategoryValue.name) }}</span>
+						<span class="country-with-flag">
+							<span 
+								v-if="getFlagCode(selectCountry.code) && getFlagCode(selectCountry.code) !== 'world' && getFlagCode(selectCountry.code) !== 'etc'"
+								:class="`fi fi-${getFlagCode(selectCountry.code)}`"
+								class="flag-icon"
+							></span>
+							<span 
+								v-else-if="getFlagCode(selectCountry.code) === 'etc'"
+								class="custom-icon flag-icon"
+							>🏳️</span>
+							{{ t(selectCountry.name) }}
+						</span>
 					</button>
 				</div>
 				<div class="sort__list">
@@ -106,7 +127,7 @@
 		@onPostModal:value="closePostModal"
 	/>
 	<SelectDialog
-		v-if="isCategorySelectClicked || isSortingSelectClicked"
+		v-if="isCountrySelectClicked || isSortingSelectClicked"
 		:title="selectTitle"
 		:list="selectList"
 		@close="closeSelect"
@@ -151,8 +172,8 @@ import PostModal from '@/features/board/components/PostModal.vue';
 import NoContent from '@/shared/components/ui/NoContent.vue';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
 import PostListShimmer from '@/shared/components/ui/PostListShimmer.vue';
-import SubMenuList from '@/shared/components/ui/SubMenuList.vue';
 import api from '@/core/api/index';
+import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
 
 const { t } = useI18n();
 
@@ -282,7 +303,7 @@ const setCountry = (value: { name: string; code: string }) => {
 // select 관련 상태 및 메소드
 const selectTitle = ref('');
 const selectList = ref<ISelectItem[]>([]);
-const isCategorySelectClicked = ref(false);
+const isCountrySelectClicked = ref(false);
 const isSortingSelectClicked = ref(false);
 const selectCategoryValue = ref<ISelectItem>({
 	name: homeCategory.name ? homeCategory.name : 'selectItems.allCategories',
@@ -292,7 +313,7 @@ const selectSortingValue = ref<ISelectItem>({
 	name: homeSorting.name ? homeSorting.name : 'selectItems.sortByRecent',
 	code: homeSorting.code ? homeSorting.code : 'CREATED_DATE',
 });
-const selectCountry = ref({ name: '전체', code: 'ALL' });
+const selectCountry = ref({ name: 'selectItems.allCountries', code: 'ALL' });
 
 // select 관련 메소드 (메뉴)
 const selectMenu = async (selectedMenu: { active: any; label?: string }) => {
@@ -326,14 +347,29 @@ const selectMenu = async (selectedMenu: { active: any; label?: string }) => {
 	await fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
-// select 관련 메소드 (카테고리 및 정렬)
-const openCategorySelect = () => {
+// select 관련 메소드 (국가 선택)
+const openCountrySelect = () => {
 	nextTick(() => {
-		selectTitle.value = t('subMenuList.category');
-		selectList.value = categoryList;
-		isCategorySelectClicked.value = true;
+		selectTitle.value = t('selectItems.country');
+		selectList.value = getCountriesWithAll();
+		isCountrySelectClicked.value = true;
 	});
 	isModalOpen();
+};
+
+// 카테고리 목록 가져오기 (이미 전체 포함됨)
+const getCategoriesWithAll = () => {
+	return categoryList;
+};
+
+// 카테고리 선택 (탭 방식)
+const setCategory = (category: ISelectItem) => {
+	selectCategoryValue.value = category;
+	// 데이터 새로 불러오기
+	state.value.posts = [];
+	state.value.last = false;
+	currentPage.value = 0;
+	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 };
 
 // select 관련 메소드 (정렬)
@@ -348,26 +384,27 @@ const openSortingSelect = () => {
 
 // select 관련 메소드 (닫기)
 const closeSelect = () => {
-	isCategorySelectClicked.value = false;
+	isCountrySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
 	isModalClose();
 };
 
 // select 관련 메소드 (선택된 값 처리)
 const selectedValue = async (value: ISelectItem) => {
-	if (categoryList.some(c => c.code === value.code)) {
-		selectCategoryValue.value = value;
-		homeCategory.setCategory(value);
+	// 국가 선택 처리
+	if (getCountriesWithAll().some(c => c.code === value.code)) {
+		selectCountry.value = { name: value.name, code: value.code };
+		setCountry(selectCountry.value);
 	} else if (sortingListWithoutLike.some(s => s.code === value.code)) {
 		selectSortingValue.value = value;
 		homeSorting.setSorting(value);
+		
+		state.value.posts = [];
+		state.value.last = false;
+		currentPage.value = 0;
+		await fetchBoardList(selectSortingValue.value.code, currentPage.value);
 	}
 
-	state.value.posts = [];
-	state.value.last = false;
-	currentPage.value = 0;
-
-	await fetchBoardList(selectSortingValue.value.code, currentPage.value);
 	closeSelect(); // 선택 후 모달 닫기
 };
 
@@ -508,6 +545,10 @@ const fetchUserInfo = async () => {
 	}
 };
 
+const getFlagCode = (countryCode: string): string => {
+	return countryCodeToFlagCode(countryCode);
+};
+
 // 로딩화면 관련 상태
 const isLoading = ref(false);
 const isInitialLoading = ref(true); // 초기 로딩 상태
@@ -550,3 +591,26 @@ onUnmounted(() => {
 	window.removeEventListener('scroll', handleScroll);
 });
 </script>
+
+<style scoped>
+.country-with-flag {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.flag-icon {
+	width: 1.2em;
+	height: 0.9em;
+	display: inline-block;
+	border-radius: 2px;
+}
+
+.custom-icon {
+	display: inline-block;
+	width: 1.2em;
+	height: 1.2em;
+	text-align: center;
+	font-size: 1em;
+}
+</style>

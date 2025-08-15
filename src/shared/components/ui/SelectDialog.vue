@@ -27,7 +27,18 @@
 									class="button"
 									@click="selectCategory(item)"
 								>
-									<span>{{ t(item.name) }}</span>
+									<span class="item-with-flag">
+										<span 
+											v-if="getFlagCode(item.code) && getFlagCode(item.code) !== 'world' && getFlagCode(item.code) !== 'etc'"
+											:class="`fi fi-${getFlagCode(item.code)}`"
+											class="flag-icon"
+										></span>
+										<span 
+											v-else-if="getFlagCode(item.code) === 'etc'"
+											class="custom-icon flag-icon"
+										>🏳️</span>
+										{{ t(item.name) }}
+									</span>
 								</button>
 							</li>
 						</ul>
@@ -42,6 +53,7 @@
 import { PropType, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { ISelectItem } from '@/shared/types/common';
+import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
 
 const { t } = useI18n();
 
@@ -71,7 +83,34 @@ const selectCategory = (item: ISelectItem) => {
 	closeModal();
 };
 
+const getFlagCode = (countryCode: string): string => {
+	return countryCodeToFlagCode(countryCode);
+};
+
 onMounted(() => {
 	isVisible.value = true;
 });
 </script>
+
+<style scoped>
+.item-with-flag {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.flag-icon {
+	width: 1.2em;
+	height: 0.9em;
+	display: inline-block;
+	border-radius: 2px;
+}
+
+.custom-icon {
+	display: inline-block;
+	width: 1.2em;
+	height: 1.2em;
+	text-align: center;
+	font-size: 1em;
+}
+</style>

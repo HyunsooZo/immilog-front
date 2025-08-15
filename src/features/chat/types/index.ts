@@ -1,42 +1,57 @@
-import type { IUser } from 'src/features/user/types';
 import type { IApiResponse, IPagination } from '@/shared/types/common';
 
-// 채팅 인터페이스
-export interface IChat {
-	chatId: string;
-	sender: IUser;
-	recipient: IUser;
-	content: string;
-	attachments: string[];
-	chatRoomId: string;
-	isRead: boolean;
-	createdAt: string;
+// 메시지 타입 열거형
+export enum MessageType {
+	TEXT = 'TEXT',
+	SYSTEM_JOIN = 'SYSTEM_JOIN',
+	SYSTEM_LEAVE = 'SYSTEM_LEAVE'
 }
 
-// 채팅방 인터페이스
-export interface IChatRoom {
+// 채팅 메시지 인터페이스 (백엔드 ChatMessageDto에 대응)
+export interface IChatMessage {
+	id: string;
 	chatRoomId: string;
-	sender: IUser;
-	recipient: IUser;
-	lastChat: string;
-	unreadCountForSender: number;
-	unreadCountForRecipient: number;
-	lastChatTime: string;
+	senderId: string;
+	senderNickname: string;
+	content: string;
+	messageType: string;
+	sentAt: string;
+	isDeleted: boolean;
+}
+
+// 채팅방 인터페이스 (백엔드 ChatRoomDto에 대응)
+export interface IChatRoom {
+	id: string;
+	name: string;
+	countryId: string;
+	participantIds: string[];
+	createdBy: string;
+	createdAt: string;
+	participantCount: number;
+	isActive: boolean;
+}
+
+// WebSocket 메시지 요청을 위한 인터페이스
+export interface IChatMessageRequest {
+	type: 'MESSAGE' | 'JOIN' | 'LEAVE';
+	senderId: string;
+	senderNickname: string;
+	content: string;
 }
 
 // API 응답 타입들
-export interface IApiChatRoom extends IApiResponse {
-	data: IPagination<IChatRoom>;
-}
-
-export interface IApiChatStart extends IApiResponse {
-	data: IPagination<IChatRoom>;
-}
-
 export interface IApiChatRoomList extends IApiResponse {
 	data: IChatRoom[];
 }
 
-export interface IApiChat extends IApiResponse {
-	data: IPagination<IChat>;
+export interface IApiChatMessageList extends IApiResponse {
+	data: IChatMessage[];
+}
+
+export interface IApiChatRoom extends IApiResponse {
+	data: IChatRoom;
+}
+
+export interface IApiChatMessage extends IApiResponse {
+	data: IChatMessage;
 }

@@ -51,6 +51,7 @@
   },
   "selectItems": {
     "allCategories": "All",
+    "allCountries": "All Countries",
     "workingHoliday": "Working Holiday",
     "blueCard": "Permanent Residency",
     "communication": "Communication",
@@ -58,7 +59,8 @@
     "sortByRecent": "Recent",
     "sortByComment": "Comments",
     "sortByView": "Views",
-    "sortByLike": "Likes"
+    "sortByLike": "Likes",
+    "country": "Select Country"
   },
   "noContent": {
     "noContent1": "No ",
@@ -214,7 +216,8 @@
   "subMenuList": {
     "industry": "Industry",
     "sorting": "Sorting Method",
-    "category": "Category"
+    "category": "Category",
+    "country": "Select Country"
   },
   "userProfileDetail": {
     "posts": "Posts",
@@ -256,6 +259,7 @@
     "jobPost": "Post Job Listing"
   },
   "countries": {
+    "ALL": "All Countries",
     "AR": "Argentina",
     "AT": "Austria",
     "AU": "Australia",

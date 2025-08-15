@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import type { IApiChatStart } from '@/features/chat/types';
+import type { IApiChatRoom } from '@/features/chat/types';
 import type { IOtherUserInfo } from '@/shared/types/common';
 import { applicationJsonWithToken } from '@/shared/utils/header';
 import { AxiosResponse } from 'axios';
@@ -134,7 +134,7 @@ const closeModal = () => {
 };
 
 const onChatRoom = async () => {
-	const response: AxiosResponse<IApiChatStart> = await api.post(
+	const response: AxiosResponse<IApiChatRoom> = await api.post(
 		`/chat/rooms?counterpartSeq=${props.userProfile.userId}`,
 		{},
 		applicationJsonWithToken(userInfo.accessToken),

@@ -207,8 +207,27 @@ const signIn = async () => {
 			getUnreadNotificationStatus();
 		}
 	} catch (error: any) {
-		console.error(error.response.data[0]);
-		openAlert(t(handleError(error.response.data[0])));
+		console.error('Sign in error:', error);
+		
+		// 에러 응답 구조 확인
+		if (error.response) {
+			console.error('Error response:', error.response);
+			console.error('Error response data:', error.response.data);
+			
+			if (error.response.data && error.response.data[0]) {
+				openAlert(t(handleError(error.response.data[0])));
+			} else if (error.response.data && error.response.data.message) {
+				openAlert(error.response.data.message);
+			} else {
+				openAlert('로그인에 실패했습니다.');
+			}
+		} else if (error.request) {
+			console.error('Network error:', error.request);
+			openAlert('네트워크 연결을 확인해주세요.');
+		} else {
+			console.error('Unknown error:', error.message);
+			openAlert('알 수 없는 오류가 발생했습니다.');
+		}
 	} finally {
 		setTimeout(() => {
 			offLoading();

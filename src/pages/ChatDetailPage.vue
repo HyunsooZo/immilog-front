@@ -1,5 +1,5 @@
 <template>
-	<header class="header _bg" v-if="chats.length > 0">
+	<header class="header _bg" v-if="chatRoom">
 		<div class="item__fnc">
 			<button
 				type="button"
@@ -11,13 +11,8 @@
 		</div>
 		<div class="title">
 			<p class="list__item user">
-				<strong
-					>{{
-						amISender(chats[0].sender.userId)
-							? chats[0].recipient.nickname
-							: chats[0].sender.nickname
-					}}
-				</strong>
+				<strong>{{ chatRoom.name }}</strong>
+				<span class="participant-count">{{ chatRoom.participantCount }}명</span>
 			</p>
 		</div>
 		<div class="item__fnc">
@@ -26,85 +21,68 @@
 			</button>
 		</div>
 	</header>
-	<div class="content _full" v-if="chats?.length > 0">
+
+	<div class="content _full" v-if="chatRoom">
 		<div class="chat-wrap">
-			<!-- message -->
-			<div class="chat__msg" v-if="chats?.length == 0">
+			<!-- 채팅방 안내 메시지 -->
+			<div class="chat__msg" v-if="messages.length === 0">
 				<p class="text">
-					<em class="user__name">
-						{{
-							amISender(chats[0]?.sender.userId)
-								? chats[0].recipient.nickname
-								: chats[0].sender.nickname
-						}} </em
-					>님과의 채팅을 시작해보세요.
+					<em class="user__name">{{ chatRoom.name }}</em
+					>에서 채팅을 시작해보세요.
 				</p>
 			</div>
-			<!-- chat list -->
-			<div class="chat__content">
+
+			<!-- 채팅 목록 -->
+			<div class="chat__content" ref="chatContent">
 				<ul class="chat__list">
-					<template v-for="chat in chats" :key="chat.chatId">
-						<li
-							class="item__notice"
-							v-if="lastDate !== formDate(chat.createdAt)"
-						>
-							<span class="text">{{ getDateTime(chat.createdAt) }}</span>
+					<template v-for="message in messages" :key="message.id">
+						<!-- 날짜 구분선 -->
+						<li class="item__notice" v-if="shouldShowDateSeparator(message)">
+							<span class="text">{{
+								formatDateSeparator(message.sentAt)
+							}}</span>
 						</li>
+
+						<!-- 메시지 -->
 						<li
-							:id="`message-${chat.chatId}`"
+							:id="`message-${message.id}`"
 							class="item"
-							aria-label="받은 메시지"
-							data-content-type="text"
-							:class="{ _my: amISender(chat.sender.userId) }"
+							:class="{
+								_my: isMyMessage(message),
+								_system: isSystemMessage(message),
+							}"
 						>
-							<!-- 사용자 정보 -->
-							<div class="info__wrap" v-if="!amISender(chat.sender.userId)">
-								<button
-									type="button"
-									class="item__image"
-									:class="{
-										'image--default': chat.sender.userProfileUrl === '',
-									}"
-									@click="onUserProfileDetail"
-								>
-									<img
-										:src="chat.sender.userProfileUrl"
-										alt=""
-										v-if="chat.sender.userProfileUrl !== ''"
-									/></button
-								><!-- // 사용자 프로필 보기 -->
-							</div>
-							<div class="chat__message">
-								<div class="item__wrap">
-									<div class="item__message">
-										<p class="text">{{ chat.content }}</p>
+							<!-- 상대방 메시지일 때 프로필 -->
+							<div
+								class="info__wrap"
+								v-if="!isMyMessage(message) && !isSystemMessage(message)"
+							>
+								<div class="item__image image--default">
+									<div class="user-avatar">
+										{{ message.senderNickname.charAt(0).toUpperCase() }}
 									</div>
 								</div>
-								<div class="item__fnc">
-									<p
-										class="list__item read"
-										:class="{ active: isRead(chat.chatId) }"
+								<div class="sender-name">{{ message.senderNickname }}</div>
+							</div>
+
+							<!-- 메시지 내용 -->
+							<div class="chat__message">
+								<div class="item__wrap">
+									<div
+										class="item__message"
+										:class="{
+											'system-message': isSystemMessage(message),
+										}"
 									>
-										<i class="blind">채팅 읽음 여부</i>
-										<span
-											class="item__count"
-											v-if="amISender(chat.sender.userId)"
-										>
-											<!-- {{ isRead(chat.chatId) ? '읽음 ' : '안 읽음 ' }} -->
-											<svg viewBox="0 0 16 16">
-												<path
-													d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"
-												/>
-											</svg>
-										</span>
-										<!-- <span class="item__count" v-if="amISender(chat.sender.userId)">
-											{{ isRead(chat.chatId) ? '읽음 ' : '안 읽음 ' }}</span> -->
-									</p>
+										<p class="text">{{ message.content }}</p>
+									</div>
+								</div>
+								<div class="item__fnc" v-if="!isSystemMessage(message)">
 									<p class="list__item past">
 										<i class="blind">채팅 전송시간</i>
-										<span class="item__count">
-											{{ formTime(chat.createdAt) }}</span
-										>
+										<span class="item__count">{{
+											formatTime(message.sentAt)
+										}}</span>
 									</p>
 								</div>
 							</div>
@@ -112,44 +90,20 @@
 					</template>
 				</ul>
 			</div>
-			<!-- chat write -->
-			<div class="chat__write">
-				<chat-image-preview
-					:chatImages="chatImages"
-					v-if="hasChatImageAttached"
-					@removeImage="deleteChatImage"
-				/>
-				<div class="chat__inner">
-					<div class="input__wrap input__attachments">
-						<div class="input__file">
-							<input
-								type="file"
-								id="file-upload"
-								multiple
-								accept="image/jpeg, image/png, image/gif, image/jpg, image/tiff"
-								@change="previewImage"
-							/>
 
-							<label for="file-upload" class="button-icon__s" role="button">
-								<svg viewBox="0 0 16 16">
-									<path :d="imageSelectIcon.first" />
-									<path :d="imageSelectIcon.second" />
-								</svg>
-								<i class="blind">사진 선택</i>
-							</label>
-						</div>
-					</div>
+			<!-- 채팅 입력 -->
+			<div class="chat__write">
+				<div class="chat__inner">
 					<div class="item__textarea">
-						<!-- //.inactive :textarea disabled placeholder="회원 신고로 인해 이용이 제한됩니다." -->
 						<textarea
-							v-model="content"
+							v-model="messageContent"
 							class="text__area"
 							name="content"
 							autocomplete="off"
 							placeholder="메시지를 입력하세요."
-							data-autosuggest_is-input="true"
-							ref="adjustTextarea"
+							ref="messageTextarea"
 							@input="adjustTextareaHeight"
+							@keypress.enter.prevent="sendMessage"
 							rows="1"
 						></textarea>
 					</div>
@@ -157,10 +111,10 @@
 						<button
 							type="button"
 							class="button-icon__s button--send"
-							:class="{ active: content.trim() !== '' }"
+							:class="{ active: messageContent.trim() !== '' }"
 							@click="sendMessage"
+							:disabled="!wsConnected"
 						>
-							<!-- 전송 버튼 아이콘 -->
 							<svg viewBox="0 0 16 16">
 								<path :d="chatSendingIcon" />
 							</svg>
@@ -172,391 +126,315 @@
 		</div>
 		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
 	</div>
-	<UserProfileDetail
-		:userProfile="chatPartnerProfile"
-		@close="offUserProfileDetail"
-		v-if="isUserProfileDetailOn"
-	/>
-	<teleport to="#modal" v-if="alertValue">
-		<CustomAlert
-			:alertValue="alertValue"
-			:alertText="alertText"
-			@update:alertValue="closeAlert"
-		/>
-	</teleport>
+
+	<!-- 로딩 상태 -->
+	<div class="loading" v-if="loading">
+		<p>채팅방을 불러오는 중...</p>
+	</div>
 </template>
 
 <script setup lang="ts">
-import type { IApiChat } from '@/features/chat/types/index';
-import type { IChat, IOtherUserInfo } from '@/shared/types/common';
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-import { useUserInfoStore } from '@/features/user/stores/userInfo';
-import { imageSelectIcon, chatSendingIcon } from '@/shared/utils/icons';
 import { useRoute, useRouter } from 'vue-router';
-import { computed } from 'vue';
-import { applicationJsonWithToken, webSocketURL } from '@/shared/utils/header';
-import { AxiosResponse } from 'axios';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
+import { chatSendingIcon } from '@/shared/utils/icons';
+import type { IChatRoom, IChatMessage } from '@/features/chat/types/index';
+import { ChatService } from '@/features/chat/services/chatService';
+import { WebSocketService } from '@/features/chat/services/webSocketService';
 import SideMenu from '@/shared/components/common/SideMenu.vue';
-import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue';
-import ChatImagePreview from '@/features/chat/components/ChatImagePreview.vue';
-import CustomAlert from '@/shared/components/ui/CustomAlert.vue';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
-import api from '@/core/api/index';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
 const route = useRoute();
 
-// modal open/close 시 body 컨트롤
-const isModalOpen = () => {
-	document.body.classList.add('inactive');
-};
-const isModalClose = () => {
-	document.body.classList.remove('inactive');
-};
+// 상태 관리
+const chatRoom = ref<IChatRoom | null>(null);
+const messages = ref<IChatMessage[]>([]);
+const messageContent = ref('');
+const loading = ref(false);
+const wsConnected = ref(false);
 
-// 프로필 보기
-const isUserProfileDetailOn = ref(false);
-const onUserProfileDetail = () => {
-	isUserProfileDetailOn.value = true;
-	isModalOpen();
-};
-const offUserProfileDetail = () => {
-	isUserProfileDetailOn.value = false;
-	isModalClose();
-};
+// UI 상태
+const isSideMenu = ref(false);
+const chatContent = ref<HTMLElement>();
+const messageTextarea = ref<HTMLTextAreaElement>();
 
-// 채팅 상대방 프로필 정보 (computed)
-const chatPartnerProfile = computed((): IOtherUserInfo => {
-	if (chats.value.length > 0) {
-		const partner = amISender(chats.value[0].sender.userId) 
-			? chats.value[0].recipient 
-			: chats.value[0].sender;
-		return {
-			userId: partner.userId,
-			nickname: partner.nickname,
-			email: '',
-			country: '',
-			region: '',
-			userProfileUrl: partner.userProfileUrl || '',
-		};
-	}
-	return {
-		userId: '',
-		nickname: '',
-		email: '',
-		country: '',
-		region: '',
-		userProfileUrl: '',
-	};
-});
+// WebSocket 서비스
+let webSocketService: WebSocketService | null = null;
 
-// 웹소켓 관련 변수
-const socket = new SockJS(webSocketURL + '/ws');
-const stompClient = Stomp.over(socket);
+// 채팅방 ID
+const chatRoomId = route.params.chatRoomId as string;
 
-// 채팅 컨텐츠 및 페이지 관련 변수
-const content = ref('');
-const pageable = ref({});
-const page = ref(0);
-let lastDate: string | null = null;
-
-// 채팅방 번호
-const chatRoomId = ref(route.params.chatRoomId);
+// 이전 메시지와 날짜가 다른지 체크
+let lastMessageDate: string | null = null;
 
 // 뒤로가기
 const previousComponent = () => {
 	router.back();
 };
 
-// 사이드 메뉴 관련 변수 및 메서드
-const isSideMenu = ref(false);
+// 사이드 메뉴
 const onSideMenu = () => {
 	isSideMenu.value = true;
 };
+
 const offSideMenu = () => {
 	isSideMenu.value = false;
 };
 
-// 텍스트 영역 조절
-const adjustTextarea = ref(null);
+// 채팅방 정보 로드
+const loadChatRoom = async () => {
+	if (!userInfo.accessToken) {
+		console.error('No access token available');
+		router.push('/sign-in');
+		return;
+	}
+
+	try {
+		loading.value = true;
+		chatRoom.value = await ChatService.getChatRoom(
+			chatRoomId,
+			userInfo.accessToken,
+		);
+
+		if (!chatRoom.value) {
+			alert('채팅방을 찾을 수 없습니다.');
+			router.back();
+			return;
+		}
+
+		await loadMessages();
+	} catch (error) {
+		console.error('Failed to load chat room:', error);
+		alert('채팅방을 불러오는데 실패했습니다.');
+		router.back();
+	} finally {
+		loading.value = false;
+	}
+};
+
+// 메시지 목록 로드
+const loadMessages = async () => {
+	if (!userInfo.accessToken) {
+		console.error('No access token available');
+		return;
+	}
+
+	try {
+		const recentMessages = await ChatService.getRecentMessages(
+			chatRoomId,
+			userInfo.accessToken,
+		);
+		messages.value = recentMessages.sort(
+			(a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime(),
+		);
+
+		nextTick(() => {
+			scrollToBottom();
+		});
+	} catch (error) {
+		console.error('Failed to load messages:', error);
+	}
+};
+
+// WebSocket 연결
+const connectWebSocket = async () => {
+	try {
+		webSocketService = new WebSocketService();
+		await webSocketService.connect(chatRoomId, (message: IChatMessage) => {
+			messages.value.push(message);
+			nextTick(() => {
+				scrollToBottom();
+			});
+		});
+		wsConnected.value = true;
+
+		// 채팅방 참여 알림
+		if (chatRoom.value && userInfo.userId) {
+			webSocketService.joinChatRoom(
+				userInfo.userId,
+				userInfo.userNickname || userInfo.userId || 'Anonymous',
+			);
+		}
+	} catch (error) {
+		console.error('Failed to connect WebSocket:', error);
+		wsConnected.value = false;
+	}
+};
+
+// WebSocket 연결 해제
+const disconnectWebSocket = () => {
+	if (webSocketService) {
+		// 채팅방 퇴장 알림
+		if (chatRoom.value && userInfo.userId) {
+			webSocketService.leaveChatRoom(
+				userInfo.userId,
+				userInfo.userNickname || userInfo.userId || 'Anonymous',
+			);
+		}
+
+		webSocketService.disconnect();
+		wsConnected.value = false;
+	}
+};
+
+// 메시지 전송
+const sendMessage = () => {
+	if (
+		!messageContent.value.trim() ||
+		!webSocketService ||
+		!wsConnected.value ||
+		!userInfo.userId
+	) {
+		return;
+	}
+
+	webSocketService.sendMessage(
+		userInfo.userId,
+		userInfo.userNickname || userInfo.userId || 'Anonymous',
+		messageContent.value.trim(),
+	);
+
+	messageContent.value = '';
+	resetTextareaHeight();
+};
+
+// 텍스트영역 높이 조절
 const adjustTextareaHeight = () => {
-	const textarea = adjustTextarea.value as unknown as HTMLTextAreaElement;
+	const textarea = messageTextarea.value;
 	if (textarea) {
 		textarea.style.height = 'auto';
 		textarea.style.height = `${textarea.scrollHeight}px`;
 	}
 };
 
-// textarea 높이 초기화 함수
 const resetTextareaHeight = () => {
-	const textarea = adjustTextarea.value as HTMLTextAreaElement | null;
+	const textarea = messageTextarea.value;
 	if (textarea) {
 		textarea.style.height = '';
 	}
 };
 
-// 채팅 내용을 담는 배열
-const chats = ref<IChat[]>([]);
-const isLoading = ref(false);
-// db에 저장된 채팅 내용을 가져오는 함수
-const fetchChats = async () => {
-	if (isLoading.value) {
-		return;
-	}
-	try {
-		isLoading.value = true;
-		const response: AxiosResponse<IApiChat> = await api.get(
-			`/chat/rooms/${chatRoomId.value}?page=${page.value}`,
-			applicationJsonWithToken(userInfo.accessToken),
-		);
-		if (response.status === 200) {
-			response.data.data.content.forEach((chat: IChat) =>
-				chats.value.push(chat),
-			);
-			chats.value.sort((a, b) => {
-				const dateA = new Date(a.createdAt);
-				const dateB = new Date(b.createdAt);
-				return dateA.getTime() - dateB.getTime();
-			});
-			pageable.value = response.data.data.pageable;
-			page.value = page.value + 1;
-		}
-	} catch (error) {
-		console.error('error: ', error);
-	} finally {
-		nextTick(() => {
-			if (page.value == 0) {
-				scrollToBottom();
-			}
-			setTimeout(() => {
-				isLoading.value = false;
-			}, 2000);
-		});
-	}
-};
-
-// 웹소켓 연결 및 구독 설정
-const connectWebSocket = () => {
-	stompClient.connect({}, () => {
-		stompClient.subscribe(`/topic/room/${chatRoomId.value}`, message => {
-			const newMessage = JSON.parse(message.body);
-			chats.value.push(newMessage);
-			nextTick(() => {
-				scrollToBottom();
-				if (!amISender(newMessage.sender.userId)) {
-					markMessagesAsRead(newMessage.id);
-				}
-			});
-		});
-		// 메시지 읽음 상태 업데이트 구독
-		stompClient.subscribe(`/topic/readChat`, message => {
-			const readChatInfo = JSON.parse(message.body);
-			updateReadStatus(readChatInfo);
-		});
-	});
-};
-
-// 메시지 읽음 상태를 업데이트하는 함수
-const updateReadStatus = (readChatInfo: { chatId: string }) => {
-	chats.value.forEach(chat => {
-		if (chat.chatId === readChatInfo.chatId) {
-			chat.isRead = true;
-		}
-	});
-};
-// 메세지가 읽혔는지 체크
-const isRead = (chatId: string): boolean => {
-	const chat = chats.value.find((chat: IChat) => chat.chatId === chatId);
-	return chat ? chat.isRead : false;
-};
-
-// 스크롤 이벤트 리스너를 추가하는 함수
-const setupScrollListener = () => {
-	window.addEventListener('scroll', handleScroll);
-};
-
-// 스크롤 이벤트 핸들러
-const handleScroll = async () => {
-	if (window.scrollY === 0 && !isLoading.value) {
-		saveFirstMessage();
-		const currentSize = chats.value.length;
-		await fetchChats();
-		moveToFirstMessage(currentSize);
-	}
-};
-
-// 화면 마운트
-onMounted(async () => {
-	connectWebSocket();
-	await fetchChats();
-	setupScrollListener();
-	nextTick(() => {
-		scrollToBottom();
-	});
-});
-
-onUnmounted(() => {
-	if (stompClient && stompClient.connected) {
-		stompClient.disconnect(() => {
-			// WebSocket 연결 해제됨
-		});
-	}
-	window.removeEventListener('scroll', handleScroll);
-});
-
-// 사용자가 채팅 발신자인지 확인
-const amISender = (senderId: string) => {
-	return senderId === userInfo.userId;
-};
-
-// 날짜 가져오기
-const getDateTime = (dateTime: string | number | Date) => {
-	const result = formDate(dateTime);
-	lastDate = result;
-	return result;
-};
-
-// 날짜 리포맷팅
-const formDate = (dateTime: string | number | Date) => {
-	const date = new Date(dateTime);
-	const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-	const day = weekdays[date.getDay()];
-
-	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, '0');
-	const dayOfMonth = String(date.getDate()).padStart(2, '0');
-	return `${year}/${month}/${dayOfMonth} (${day})`;
-};
-
-// 시간 리포맷팅
-const formTime = (dateTime: string | number | Date) => {
-	const date = new Date(dateTime);
-	const hours = String(date.getHours()).padStart(2, '0');
-	const minutes = String(date.getMinutes()).padStart(2, '0');
-	// 같다면 시간 부분만 반환
-	return `${hours}:${minutes}`;
-};
-
-// 메시지 전송
-const sendMessage = () => {
-	if (content.value.trim()) {
-		const messageToSend = {
-			chatRoomId: chatRoomId.value,
-			senderId: userInfo.userId,
-			content: content.value,
-			attachments: [],
-		};
-		stompClient.send('/app/chat/send', {}, JSON.stringify(messageToSend));
-		content.value = '';
-		resetTextareaHeight();
-	}
-};
-
-// 채팅방에 들어갔을 때 '읽음' 상태를 서버에 보내는 함수
-const markMessagesAsRead = (id: number) => {
-	if (id) {
-		stompClient.send(
-			'/app/chat/read',
-			{},
-			JSON.stringify({
-				chatId: id,
-				userId: userInfo.userId,
-			}),
-		);
-	} else {
-		// 모든 메시지를 '읽음'으로 표시
-		chats.value.forEach((chat: IChat) => {
-			if (!amISender(chat.sender.userId) && !chat.isRead) {
-				// 읽음 상태를 서버에 보내기
-				stompClient.send(
-					'/app/chat/read',
-					{},
-					JSON.stringify({
-						chatId: chat.chatId,
-						userId: userInfo.userId,
-					}),
-				);
-				// 프론트엔드에서 상태 업데이트
-				chat.isRead = true;
-			}
-		});
-	}
-};
-
-// 스크롤을 맨 아래로 내리는 함수
+// 스크롤을 맨 아래로
 const scrollToBottom = () => {
 	const pageHeight = document.documentElement.scrollHeight;
 	window.scrollTo(0, pageHeight);
 };
 
-const messageLenth = ref(0);
-
-// 로드 전 첫 채팅메세지 위치 기억하는 함수
-const saveFirstMessage = () => {
-	messageLenth.value = chats.value.length;
+// 메시지 관련 헬퍼 함수들
+const isMyMessage = (message: IChatMessage): boolean => {
+	return message.senderId === userInfo.userId;
 };
 
-const moveToFirstMessage = (currentSize: number) => {
-	if (currentSize < chats.value.length) {
-		const messageElement = document.getElementById(
-			`message-${chats.value[chats.value.length - messageLenth.value].chatId}`,
-		);
-		if (messageElement) {
-			window.scrollTo(0, messageElement.offsetTop - 100);
-		}
+const isSystemMessage = (message: IChatMessage): boolean => {
+	return (
+		message.messageType === 'SYSTEM_JOIN' ||
+		message.messageType === 'SYSTEM_LEAVE'
+	);
+};
+
+const shouldShowDateSeparator = (message: IChatMessage): boolean => {
+	const messageDate = formatDateSeparator(message.sentAt);
+	if (messageDate !== lastMessageDate) {
+		lastMessageDate = messageDate;
+		return true;
+	}
+	return false;
+};
+
+const formatDateSeparator = (dateString: string): string => {
+	const date = new Date(dateString);
+	const today = new Date();
+	const yesterday = new Date(today);
+	yesterday.setDate(yesterday.getDate() - 1);
+
+	if (date.toDateString() === today.toDateString()) {
+		return '오늘';
+	} else if (date.toDateString() === yesterday.toDateString()) {
+		return '어제';
+	} else {
+		const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+		const day = weekdays[date.getDay()];
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const dayOfMonth = String(date.getDate()).padStart(2, '0');
+		return `${year}/${month}/${dayOfMonth} (${day})`;
 	}
 };
 
-// <-- 첨부파일 관련
-const chatImages = ref<string[]>([]);
+const formatTime = (dateString: string): string => {
+	const date = new Date(dateString);
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+	return `${hours}:${minutes}`;
+};
 
-// 이미지 미리보기
-const previewImage = (event: Event) => {
-	if (chatImages.value.length >= 3) {
-		openAlert('사진은 최대 3개 까지만 전송 할 수 있습니다.');
+// 컴포넌트 마운트/언마운트
+onMounted(async () => {
+	if (!userInfo.accessToken || !userInfo.userId) {
+		router.push('/sign-in');
 		return;
 	}
 
-	const target = event.target as HTMLInputElement;
-
-	if (target.files && target.files.length > 0) {
-		const file = target.files[0];
-		const reader = new FileReader();
-
-		reader.onload = () => {
-			chatImages.value.push(reader.result as string);
-		};
-
-		reader.readAsDataURL(file);
-	}
-};
-
-// 프리뷰 삭제
-const deleteChatImage = (index: number) => {
-	chatImages.value = [
-		...Array.from(chatImages.value).slice(0, index),
-		...Array.from(chatImages.value).slice(index + 1),
-	];
-};
-// 이미지 첨부 여부
-const hasChatImageAttached = computed(() => {
-	return chatImages.value.length > 0;
+	await loadChatRoom();
+	await connectWebSocket();
 });
-// -->
 
-// <-- 알럿 관련
-const alertValue = ref(false);
-const alertText = ref('');
-
-const openAlert = (content: string) => {
-	alertValue.value = true;
-	alertText.value = content;
-};
-
-const closeAlert = () => {
-	alertValue.value = false;
-};
-// -->
+onUnmounted(() => {
+	disconnectWebSocket();
+});
 </script>
+
+<style scoped>
+.participant-count {
+	font-size: 0.8em;
+	color: #666;
+	margin-left: 0.5rem;
+}
+
+.sender-name {
+	font-size: 0.8em;
+	color: #666;
+	margin-top: 0.2rem;
+}
+
+.user-avatar {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: #007bff;
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 0.9em;
+}
+
+.item._system {
+	text-align: center;
+	margin: 1rem 0;
+}
+
+.system-message {
+	background: #f0f0f0 !important;
+	color: #666 !important;
+	font-style: italic;
+	text-align: center;
+	border-radius: 12px !important;
+	padding: 0.5rem 1rem;
+}
+
+.loading {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50vh;
+	color: #666;
+}
+
+.button--send:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+</style>
