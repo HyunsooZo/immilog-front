@@ -30,17 +30,29 @@
 		</div>
 
 		<div class="list-top-wrap">
-			<!-- 카테고리 정렬 -->
-			<div class="fnc-wrap">
-				<div class="category__list">
-					<button
-						type="button"
-						class="button--select"
-						@click="openCategorySelect"
-					>
-						<span>{{ t(selectCategoryValue.name) }}</span>
-					</button>
+			<!-- 카테고리 선택 (홈화면 스타일) -->
+			<div class="fnc-wrap category-buttons-horizontal">
+				<div class="sub-menu-wrap">
+					<ul class="sub-menu__inner">
+						<li
+							v-for="category in categoryList"
+							:key="category.code"
+							class="sub-menu__list"
+							:class="{ active: selectCategoryValue.code === category.code }"
+						>
+							<button 
+								type="button" 
+								class="button" 
+								@click="selectCategory(category)"
+							>
+								{{ t(category.name) }}
+							</button>
+						</li>
+					</ul>
 				</div>
+			</div>
+			<!-- 정렬 -->
+			<div class="fnc-wrap">
 				<div class="sort__list">
 					<button
 						type="button"
@@ -90,7 +102,7 @@
 		@onPostModal:value="closePostModal"
 	/>
 	<SelectDialog
-		v-if="isCategorySelectClicked || isSortingSelectClicked"
+		v-if="isSortingSelectClicked"
 		:title="selectTitle"
 		:list="selectList"
 		@close="closeSelect"
@@ -248,15 +260,9 @@ const selectCategoryValue = ref({
 	name: 'selectItems.allCategories',
 	code: 'ALL',
 });
-const isCategorySelectClicked = ref(false);
-
-const openCategorySelect = () => {
-	nextTick(() => {
-		selectTitle.value = t('subMenuList.category');
-		selectList.value = categoryList;
-		isCategorySelectClicked.value = true;
-	});
-	isModalOpen();
+// 카테고리 선택 함수
+const selectCategory = (category: ISelectItem) => {
+	selectCategoryValue.value = category;
 };
 
 // .sort__list
@@ -318,15 +324,12 @@ const initState = () => {
 };
 
 const selectedValue = (value: ISelectItem) => {
-	if (categoryList.some(c => c.code === value.code)) {
-		selectCategoryValue.value = value;
-	} else if (sortingList.some(s => s.code === value.code)) {
+	if (sortingList.some(s => s.code === value.code)) {
 		selectSortingValue.value = value;
 	}
 };
 
 const closeSelect = () => {
-	isCategorySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
 	// 선택 값이 변경되면 watch가 자동으로 fetchBoardList를 호출함
 	isModalClose();
@@ -434,3 +437,17 @@ const closePostModal = () => {
 	isModalClose();
 };
 </script>
+
+<style scoped>
+/* BoardPage 카테고리 버튼 강제 가로 배치 */
+.category-buttons-horizontal .sub-menu__inner {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0.5rem !important;
+  flex-wrap: nowrap !important;
+}
+
+.category-buttons-horizontal .sub-menu__list {
+  flex-shrink: 0 !important;
+}
+</style>

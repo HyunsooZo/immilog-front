@@ -41,12 +41,14 @@ export class WebSocketService {
 
 			this.webSocket.onmessage = event => {
 				try {
+					console.log('Raw WebSocket message received:', event.data);
 					const message: IChatMessage = JSON.parse(event.data);
+					console.log('Parsed WebSocket message:', message);
 					if (this.messageCallback) {
 						this.messageCallback(message);
 					}
 				} catch (error) {
-					console.error('Error parsing WebSocket message:', error);
+					console.error('Error parsing WebSocket message:', error, 'Raw data:', event.data);
 				}
 			};
 
@@ -100,7 +102,9 @@ export class WebSocketService {
 			content,
 		};
 
+		console.log('Sending WebSocket message:', message);
 		this.webSocket.send(JSON.stringify(message));
+		console.log('WebSocket message sent successfully');
 	}
 
 	// 채팅방 참여 알림

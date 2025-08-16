@@ -19,9 +19,31 @@
 					</button>
 				</div>
 				<div class="modal-body">
+					<!-- 대륙 필터 (국가 선택 모달일 때만 표시) -->
+					<div v-if="showContinentFilter" class="continent-filter category-buttons-horizontal">
+						<div class="sub-menu-wrap">
+							<ul class="sub-menu__inner">
+								<li
+									v-for="continent in continents"
+									:key="continent.code"
+									class="sub-menu__list"
+									:class="{ active: selectedContinent === continent.code }"
+								>
+									<button 
+										type="button" 
+										class="button" 
+										@click="selectContinent(continent.code)"
+									>
+										{{ t(continent.name) }}
+									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
+
 					<div class="list-wrap">
 						<ul>
-							<li v-for="(item, index) in list" :key="index" class="item">
+							<li v-for="(item, index) in filteredList" :key="index" class="item">
 								<button
 									type="button"
 									class="button"
@@ -50,14 +72,14 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, onMounted, ref } from 'vue';
+import { PropType, onMounted, ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { ISelectItem } from '@/shared/types/common';
 import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
 
 const { t } = useI18n();
 
-defineProps({
+const props = defineProps({
 	title: {
 		type: String,
 		required: true,
@@ -70,8 +92,82 @@ defineProps({
 });
 
 const isVisible = ref(false);
+const selectedContinent = ref('ALL');
 
 const emit = defineEmits(['close', 'select:value']);
+
+// 국가 선택 모달인지 확인 (continent 속성이 있는 아이템이 있으면 국가 선택 모달)
+const showContinentFilter = computed(() => {
+	return props.list.some(item => 'continent' in item);
+});
+
+// 대륙 목록 생성
+const continents = computed(() => {
+	if (!showContinentFilter.value) return [];
+	
+	const continentSet = new Set<string>();
+	props.list.forEach(item => {
+		if ('continent' in item && item.continent) {
+			// 대륙 이름 정규화
+			let normalizedContinent = item.continent.toUpperCase();
+			if (normalizedContinent === 'OTHER') normalizedContinent = 'ETC';
+			// ALL은 제외 (중복 방지)
+			if (normalizedContinent !== 'ALL') {
+				continentSet.add(normalizedContinent);
+			}
+		}
+	});
+	
+	const continentList = [];
+	
+	// 1. 전체를 맨 첫번째에 추가
+	continentList.push({ code: 'ALL', name: 'continents.ALL' });
+	
+	// 2. 기타를 제외한 다른 대륙들을 정렬해서 추가
+	const otherContinents = Array.from(continentSet).filter(c => c !== 'ETC').sort();
+	otherContinents.forEach(continent => {
+		continentList.push({
+			code: continent,
+			name: `continents.${continent}`
+		});
+	});
+	
+	// 3. 기타가 있으면 맨 마지막에 추가
+	if (continentSet.has('ETC')) {
+		continentList.push({
+			code: 'ETC',
+			name: 'continents.ETC'
+		});
+	}
+	
+	return continentList;
+});
+
+// 필터링된 목록
+const filteredList = computed(() => {
+	if (!showContinentFilter.value) {
+		return props.list;
+	}
+	
+	// 전체 대륙을 선택했을 때는 "전체국가"를 제외한 모든 실제 국가 표시
+	if (selectedContinent.value === 'ALL') {
+		return props.list.filter(item => item.code !== 'ALL');
+	}
+	
+	return props.list.filter(item => {
+		if (!('continent' in item) || !item.continent) return false;
+		
+		let normalizedContinent = item.continent.toUpperCase();
+		if (normalizedContinent === 'OTHER') normalizedContinent = 'ETC';
+		
+		return normalizedContinent === selectedContinent.value;
+	});
+});
+
+// 대륙 선택
+const selectContinent = (continentCode: string) => {
+	selectedContinent.value = continentCode;
+};
 
 const closeModal = () => {
 	isVisible.value = false;
@@ -113,4 +209,12 @@ onMounted(() => {
 	text-align: center;
 	font-size: 1em;
 }
+
+/* 대륙 필터 여백 스타일 */
+.continent-filter {
+	margin-bottom: 1rem;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 1rem;
+}
+
 </style>

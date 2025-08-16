@@ -26,6 +26,7 @@ export type {
 export interface ISelectItem {
 	name: string;
 	code: string;
+	continent?: string; // 국가 선택 시 대륙 정보 (선택적)
 }
 
 export interface ISelectMenu {

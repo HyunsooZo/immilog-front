@@ -103,8 +103,23 @@
 					<div class="info__wrap">
 						<div class="item__image">
 							<!-- 채팅방 아이콘 -->
-							<div class="chat-room-icon">
+							<div class="chat-room-icon" v-if="!chatRoom.countryId || chatRoom.countryId === 'ALL'">
 								{{ chatRoom.name.charAt(0).toUpperCase() }}
+							</div>
+							<!-- 국가별 채팅방인 경우 국기 표시 -->
+							<div class="country-flag-icon" v-else>
+								<span 
+									v-if="getFlagCode(chatRoom.countryId) && getFlagCode(chatRoom.countryId) !== 'world' && getFlagCode(chatRoom.countryId) !== 'etc'"
+									:class="`fi fi-${getFlagCode(chatRoom.countryId)}`"
+									class="flag-icon-large"
+								></span>
+								<span 
+									v-else-if="getFlagCode(chatRoom.countryId) === 'etc'"
+									class="custom-flag-icon"
+								>🏳️</span>
+								<div v-else class="fallback-icon">
+									{{ chatRoom.name.charAt(0).toUpperCase() }}
+								</div>
 							</div>
 						</div>
 						<div class="item__fnc">
@@ -117,8 +132,12 @@
 					<div class="text__wrap">
 						<div class="list__item">
 							<div class="text__item">
-								<p class="text" style="color: #999;">
+								<p class="text" style="color: #999;" v-if="!chatRoom.latestMessage">
 									채팅방에 참여해보세요!
+								</p>
+								<p class="text" v-else>
+									<span class="latest-sender">{{ chatRoom.latestMessage.senderNickname }}:</span>
+									{{ chatRoom.latestMessage.content }}
 								</p>
 							</div>
 						</div>
@@ -126,8 +145,10 @@
 					<div class="util__wrap">
 						<div class="item__fnc">
 							<p class="list__item past">
-								<i class="blind">생성시간</i>
-								<span class="item__count">{{ formatDate(chatRoom.createdAt) }}</span>
+								<i class="blind">{{ chatRoom.latestMessage ? '최근 메시지 시간' : '생성시간' }}</i>
+								<span class="item__count">{{ 
+									chatRoom.latestMessage ? formatDate(chatRoom.latestMessage.sentAt) : formatDate(chatRoom.createdAt) 
+								}}</span>
 							</p>
 						</div>
 					</div>
@@ -246,7 +267,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, onActivated, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import type { IChatRoom } from '@/features/chat/types/index';
@@ -473,6 +494,19 @@ const formatDate = (dateString: string) => {
 	}
 };
 
+// 채팅방 목록 새로고침 확인
+const checkAndRefreshChatRooms = () => {
+	const shouldRefresh = localStorage.getItem('refreshChatRooms');
+	if (shouldRefresh === 'true') {
+		localStorage.removeItem('refreshChatRooms');
+		if (activeTab.value === 'my') {
+			loadMyChatRooms();
+		} else {
+			loadCountryChatRooms();
+		}
+	}
+};
+
 // 컴포넌트 마운트
 onMounted(async () => {
 	if (!userInfo.accessToken) {
@@ -488,6 +522,19 @@ onMounted(async () => {
 	selectedCountryId.value = 'ALL';
 	
 	loadMyChatRooms();
+	
+	// 페이지 focus 이벤트 리스너 추가
+	window.addEventListener('focus', checkAndRefreshChatRooms);
+});
+
+// 컴포넌트가 활성화될 때 (라우터 캐시에서 복원될 때)
+onActivated(() => {
+	checkAndRefreshChatRooms();
+});
+
+// 컴포넌트 언마운트
+onUnmounted(() => {
+	window.removeEventListener('focus', checkAndRefreshChatRooms);
 });
 </script>
 
@@ -506,11 +553,60 @@ onMounted(async () => {
 	font-size: 1.1em;
 }
 
+/* 국가별 채팅방 국기 아이콘 스타일 */
+.country-flag-icon {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	background: #f0f0f0;
+}
+
+.flag-icon-large {
+	width: 2.5em;
+	height: 1.8em;
+	border-radius: 4px;
+}
+
+.custom-flag-icon {
+	font-size: 1.5em;
+}
+
+.fallback-icon {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background: #007bff;
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 0.9em;
+}
+
 /* 국가 선택 버튼 스타일 */
 .country-with-flag {
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
+}
+
+/* 최신 메시지 스타일 */
+.latest-sender {
+	font-weight: 500;
+	color: #007bff;
+	margin-right: 0.3rem;
+}
+
+.text__item .text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 200px;
 }
 
 .flag-icon {

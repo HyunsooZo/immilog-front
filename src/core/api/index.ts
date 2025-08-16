@@ -79,12 +79,19 @@ api.interceptors.response.use(
 			}
 
 			try {
+				console.log('Attempting token refresh with refreshToken:', refreshToken?.substring(0, 20) + '...');
+				
 				const response: AxiosResponse<IApiRefreshToken> = await axios.get(
 					`${import.meta.env.VITE_APP_API_URL}/api/v1/auth/refresh?token=${refreshToken}`,
 				);
+				
+				console.log('Refresh token response:', response);
+				
 				if (response.status === 200) {
 					const newAccessToken = response.data.data.accessToken;
 					const newRefreshToken = response.data.data.refreshToken;
+					console.log('Token refresh successful, new tokens received');
+					
 					localStorage.setItem('accessToken', newAccessToken);
 					localStorage.setItem('refreshToken', newRefreshToken);
 					api.defaults.headers.common['Authorization'] =
@@ -93,12 +100,14 @@ api.interceptors.response.use(
 					processQueue(null, newAccessToken);
 					return api(originalRequest);
 				} else {
+					console.log('Token refresh failed with status:', response.status);
 					processQueue(new Error('Failed to refresh token'), null);
 					localStorage.removeItem('accessToken');
 					localStorage.removeItem('refreshToken');
 					return Promise.reject(error);
 				}
 			} catch (refreshError) {
+				console.error('Token refresh error:', refreshError);
 				processQueue(refreshError, null);
 				localStorage.removeItem('accessToken');
 				localStorage.removeItem('refreshToken');

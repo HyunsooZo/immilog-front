@@ -25,15 +25,24 @@
 				<div class="post-wrap">
 					<!-- 일반게시판 -->
 					<!-- 카테고리 선택 -->
-					<div class="fnc-wrap" v-if="!isJobBoard">
-						<div class="category__list">
-							<button
-								type="button"
-								class="button--select"
-								@click="openCategorySelect"
-							>
-								<span>{{ selectedCategory.name }}</span>
-							</button>
+					<div class="fnc-wrap category-buttons-horizontal" v-if="!isJobBoard">
+						<div class="sub-menu-wrap">
+							<ul class="sub-menu__inner">
+								<li
+									v-for="category in postCategories"
+									:key="category.code"
+									class="sub-menu__list"
+									:class="{ active: selectedCategory.code === category.code }"
+								>
+									<button 
+										type="button" 
+										class="button" 
+										@click="selectCategory(category)"
+									>
+										{{ t(category.name) }}
+									</button>
+								</li>
+							</ul>
 						</div>
 					</div>
 					<!-- 공개 권한 선택 -->
@@ -379,6 +388,20 @@ const selectedCategory = ref({
 	name: t('postModal.communication'),
 	code: 'COMMUNICATION',
 });
+
+// 게시물 카테고리 목록
+const postCategories = ref([
+	{ name: 'postCategories.COMMUNICATION', code: 'COMMUNICATION' },
+	{ name: 'postCategories.WORKING_HOLIDAY', code: 'WORKING_HOLIDAY' },
+	{ name: 'postCategories.GREEN_CARD', code: 'GREEN_CARD' },
+	{ name: 'postCategories.QNA', code: 'QNA' }
+]);
+
+// 카테고리 선택 함수
+const selectCategory = (category: any) => {
+	selectedCategory.value = category;
+};
+
 const selectedValue = (value: ISelectItem) => {
 	if (selectTitle.value === '경력 선택') {
 		selectedCareer.value = t(value.name);
@@ -633,3 +656,18 @@ const onSelectModal = () => {
 	selectList.value = experienceList;
 };
 </script>
+
+<style scoped>
+/* 글쓰기 모달 카테고리 버튼 강제 가로 배치 */
+.category-buttons-horizontal .sub-menu__inner {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0.5rem !important;
+  flex-wrap: nowrap !important;
+}
+
+.category-buttons-horizontal .sub-menu__list {
+  flex-shrink: 0 !important;
+}
+</style>
+

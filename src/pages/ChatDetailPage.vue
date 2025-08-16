@@ -1,5 +1,6 @@
 <template>
-	<header class="header _bg" v-if="chatRoom">
+	<div class="chat-detail-page">
+		<header class="header _bg" v-if="chatRoom">
 		<div class="item__fnc">
 			<button
 				type="button"
@@ -10,10 +11,22 @@
 			</button>
 		</div>
 		<div class="title">
-			<p class="list__item user">
-				<strong>{{ chatRoom.name }}</strong>
-				<span class="participant-count">{{ chatRoom.participantCount }}명</span>
-			</p>
+			<div class="chat-room-header">
+				<!-- 국가별 채팅방인 경우 국기 표시 -->
+				<span 
+					v-if="chatRoom.countryId && getFlagCode(chatRoom.countryId) && getFlagCode(chatRoom.countryId) !== 'world' && getFlagCode(chatRoom.countryId) !== 'etc'"
+					:class="`fi fi-${getFlagCode(chatRoom.countryId)}`"
+					class="header-flag-icon"
+				></span>
+				<span 
+					v-else-if="chatRoom.countryId && getFlagCode(chatRoom.countryId) === 'etc'"
+					class="header-custom-flag"
+				>🏳️</span>
+				<p class="list__item user">
+					<strong>{{ chatRoom.name }}</strong>
+					<span class="participant-count">{{ chatRoom.participantCount }}명</span>
+				</p>
+			</div>
 		</div>
 		<div class="item__fnc">
 			<button class="button-icon button--menu" @click="onSideMenu">
@@ -127,9 +140,10 @@
 		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
 	</div>
 
-	<!-- 로딩 상태 -->
-	<div class="loading" v-if="loading">
-		<p>채팅방을 불러오는 중...</p>
+		<!-- 로딩 상태 -->
+		<div class="loading" v-if="loading">
+			<p>채팅방을 불러오는 중...</p>
+		</div>
 	</div>
 </template>
 
@@ -142,6 +156,12 @@ import type { IChatRoom, IChatMessage } from '@/features/chat/types/index';
 import { ChatService } from '@/features/chat/services/chatService';
 import { WebSocketService } from '@/features/chat/services/webSocketService';
 import SideMenu from '@/shared/components/common/SideMenu.vue';
+import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
+
+// Props 정의 (Vue warning 해결)
+const props = defineProps<{
+	chatRoomId?: string;
+}>();
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
@@ -170,6 +190,8 @@ let lastMessageDate: string | null = null;
 
 // 뒤로가기
 const previousComponent = () => {
+	// 채팅방 목록 새로고침 플래그 설정
+	localStorage.setItem('refreshChatRooms', 'true');
 	router.back();
 };
 
@@ -242,20 +264,37 @@ const connectWebSocket = async () => {
 	try {
 		webSocketService = new WebSocketService();
 		await webSocketService.connect(chatRoomId, (message: IChatMessage) => {
-			messages.value.push(message);
+			console.log('Received message via WebSocket:', message);
+			
+			// 중복 메시지 방지 - 같은 내용과 시간의 메시지가 이미 있으면 추가하지 않음
+			const isDuplicate = messages.value.some(existing => 
+				existing.senderId === message.senderId &&
+				existing.content === message.content &&
+				Math.abs(new Date(existing.sentAt).getTime() - new Date(message.sentAt).getTime()) < 5000 // 5초 내
+			);
+			
+			if (!isDuplicate) {
+				messages.value.push(message);
+				console.log('Added WebSocket message to list');
+			} else {
+				console.log('Duplicate message detected, skipping');
+			}
+			
 			nextTick(() => {
 				scrollToBottom();
 			});
 		});
 		wsConnected.value = true;
+		console.log('WebSocket connected successfully, wsConnected set to true');
 
-		// 채팅방 참여 알림
-		if (chatRoom.value && userInfo.userId) {
-			webSocketService.joinChatRoom(
-				userInfo.userId,
-				userInfo.userNickname || userInfo.userId || 'Anonymous',
-			);
-		}
+		// 채팅방 참여 알림 제거 - 매번 "참가했습니다" 메시지가 나오는 것을 방지
+		// if (chatRoom.value && userInfo.userId) {
+		// 	console.log('Sending join notification for user:', userInfo.userId);
+		// 	webSocketService.joinChatRoom(
+		// 		userInfo.userId,
+		// 		userInfo.userNickname || userInfo.userId || 'Anonymous',
+		// 	);
+		// }
 	} catch (error) {
 		console.error('Failed to connect WebSocket:', error);
 		wsConnected.value = false;
@@ -265,14 +304,8 @@ const connectWebSocket = async () => {
 // WebSocket 연결 해제
 const disconnectWebSocket = () => {
 	if (webSocketService) {
-		// 채팅방 퇴장 알림
-		if (chatRoom.value && userInfo.userId) {
-			webSocketService.leaveChatRoom(
-				userInfo.userId,
-				userInfo.userNickname || userInfo.userId || 'Anonymous',
-			);
-		}
-
+		// 채팅방에서 완전히 나가는 게 아니라 단순히 연결만 정리
+		// leaveChatRoom 호출 제거 - 나중에 다시 들어올 수 있도록 함
 		webSocketService.disconnect();
 		wsConnected.value = false;
 	}
@@ -280,23 +313,53 @@ const disconnectWebSocket = () => {
 
 // 메시지 전송
 const sendMessage = () => {
+	console.log('sendMessage called');
+	console.log('messageContent:', messageContent.value);
+	console.log('webSocketService:', webSocketService);
+	console.log('wsConnected:', wsConnected.value);
+	console.log('userInfo.userId:', userInfo.userId);
+	
 	if (
 		!messageContent.value.trim() ||
 		!webSocketService ||
 		!wsConnected.value ||
 		!userInfo.userId
 	) {
+		console.log('sendMessage: early return due to missing requirements');
 		return;
 	}
 
+	console.log('Sending message via WebSocket...');
+	
+	const messageText = messageContent.value.trim();
 	webSocketService.sendMessage(
 		userInfo.userId,
 		userInfo.userNickname || userInfo.userId || 'Anonymous',
-		messageContent.value.trim(),
+		messageText,
 	);
 
+	// 백엔드에서 메시지를 다시 브로드캐스트하지 않는 경우를 위한 임시 해결책
+	// 본인이 보낸 메시지를 로컬에서 바로 추가
+	const localMessage = {
+		id: Date.now().toString(), // 임시 ID
+		senderId: userInfo.userId,
+		senderNickname: userInfo.userNickname || userInfo.userId || 'Anonymous',
+		content: messageText,
+		sentAt: new Date().toISOString(),
+		type: 'MESSAGE'
+	};
+	
+	messages.value.push(localMessage);
+	console.log('Added message locally:', localMessage);
+	
 	messageContent.value = '';
 	resetTextareaHeight();
+	
+	nextTick(() => {
+		scrollToBottom();
+	});
+	
+	console.log('Message sent successfully');
 };
 
 // 텍스트영역 높이 조절
@@ -369,6 +432,11 @@ const formatTime = (dateString: string): string => {
 	return `${hours}:${minutes}`;
 };
 
+// 국기 코드 가져오기
+const getFlagCode = (countryCode: string): string => {
+	return countryCodeToFlagCode(countryCode);
+};
+
 // 컴포넌트 마운트/언마운트
 onMounted(async () => {
 	if (!userInfo.accessToken || !userInfo.userId) {
@@ -436,5 +504,22 @@ onUnmounted(() => {
 .button--send:disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
+}
+
+/* 채팅방 헤더 스타일 */
+.chat-room-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.header-flag-icon {
+	width: 1.5em;
+	height: 1.1em;
+	border-radius: 3px;
+}
+
+.header-custom-flag {
+	font-size: 1.2em;
 }
 </style>

@@ -66,21 +66,6 @@
 				<!-- //버튼 활성 .button--positive / 비활성 .button--disabled -->
 			</div>
 
-			<div class="input-wrap">
-				<div class="input__wrap">
-					<div class="input__item">
-						<input
-							type="checkbox"
-							class="input__checkbox _text"
-							id="loginSave"
-							name="loginSave"
-						/>
-						<label for="loginSave" class="input__label">{{
-							t('signInView.autoSignIn')
-						}}</label>
-					</div>
-				</div>
-			</div>
 		</div>
 
 		<!-- signin -->

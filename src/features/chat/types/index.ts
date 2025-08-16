@@ -19,6 +19,14 @@ export interface IChatMessage {
 	isDeleted: boolean;
 }
 
+// 최신 메시지 인터페이스 (백엔드 LatestMessageDto에 대응)
+export interface ILatestMessage {
+	content: string;
+	senderNickname: string;
+	sentAt: string;
+	messageType: string;
+}
+
 // 채팅방 인터페이스 (백엔드 ChatRoomDto에 대응)
 export interface IChatRoom {
 	id: string;
@@ -29,6 +37,7 @@ export interface IChatRoom {
 	createdAt: string;
 	participantCount: number;
 	isActive: boolean;
+	latestMessage?: ILatestMessage | null;
 }
 
 // WebSocket 메시지 요청을 위한 인터페이스

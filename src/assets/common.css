@@ -296,3 +296,35 @@ caption {
   color: #ed1651;
   color: rgb(237 22 81);
 }
+
+/* ===== 선택형 버튼 공통 스타일 ===== */
+/* 홈화면 카테고리, 대륙 필터, 글쓰기 카테고리 등에서 공통 사용 */
+
+.category-buttons-horizontal {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-buttons-horizontal .sub-menu-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-buttons-horizontal .sub-menu__inner {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: nowrap;
+  min-width: max-content;
+}
+
+.category-buttons-horizontal .sub-menu__list {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.category-buttons-horizontal .sub-menu__list button {
+  white-space: nowrap;
+}

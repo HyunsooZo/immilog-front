@@ -33,46 +33,135 @@ chatApi.interceptors.request.use(
 
 export class ChatService {
 	
-	// 국가별 채팅방 목록 가져오기
+	// 국가별 채팅방 목록 가져오기 (Flux 스트림)
 	static async getChatRoomsByCountry(countryId: string, token: string): Promise<IChatRoom[]> {
-		const response = await chatApi.get<IChatRoom[]>(
-			`/api/v1/chat/rooms/country/${countryId}`,
+		const response = await fetch(
+			`${chatApi.defaults.baseURL}/api/v1/chat/rooms/country/${countryId}`,
 			{
+				method: 'GET',
 				headers: {
 					'Authorization': `Bearer ${token}`,
 					'Content-Type': 'application/json'
 				}
 			}
 		);
-		// 백엔드가 직접 배열을 반환하므로 response.data를 사용
-		console.log('Country chat rooms response:', response.data);
-		return response.data;
+		
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		
+		const chatRooms = await response.json();
+		console.log('Country chat rooms response:', chatRooms);
+		return Array.isArray(chatRooms) ? chatRooms : [];
 	}
 
-	// 사용자 참여 채팅방 목록 가져오기  
+	// 사용자 참여 채팅방 목록 가져오기 (Flux 스트림)
 	static async getUserChatRooms(userId: string, token: string): Promise<IChatRoom[]> {
-		const response = await chatApi.get<IChatRoom[]>(
-			`/api/v1/chat/rooms/user/${userId}`,
+		const response = await fetch(
+			`${chatApi.defaults.baseURL}/api/v1/chat/rooms/user/${userId}`,
 			{
+				method: 'GET',
 				headers: {
 					'Authorization': `Bearer ${token}`,
 					'Content-Type': 'application/json'
 				}
 			}
 		);
-		// 백엔드가 직접 배열을 반환하므로 response.data를 사용
-		console.log('User chat rooms response:', response.data);
-		return response.data;
+		
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		
+		const chatRooms = await response.json();
+		console.log('User chat rooms response:', chatRooms);
+		return Array.isArray(chatRooms) ? chatRooms : [];
 	}
 
 	// 채팅방 생성
 	static async createChatRoom(name: string, countryId: string, createdBy: string, token: string): Promise<IChatRoom> {
 		console.log('Creating chat room with:', { name, countryId, createdBy });
 		
-		const response = await chatApi.post<IChatRoom>(
-			'/api/v1/chat/rooms',
-			{ name, countryId, createdBy },
+		const response = await fetch(
+			`${chatApi.defaults.baseURL}/api/v1/chat/rooms`,
 			{
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ name, countryId, createdBy })
+			}
+		);
+		
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		
+		const result = await response.json();
+		console.log('Create chat room response:', result);
+		return result;
+	}
+
+	// 특정 채팅방 정보 가져오기
+	static async getChatRoom(chatRoomId: string, token: string): Promise<IChatRoom | null> {
+		try {
+			const response = await fetch(
+				`${chatApi.defaults.baseURL}/api/v1/chat/rooms/${chatRoomId}`,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				}
+			);
+			
+			if (!response.ok) {
+				return null;
+			}
+			
+			const result = await response.json();
+			console.log('Get chat room response:', result);
+			return result;
+		} catch (error) {
+			console.error('Error getting chat room:', error);
+			return null;
+		}
+	}
+
+	// 채팅방 참여
+	static async joinChatRoom(chatRoomId: string, userId: string, token: string): Promise<IChatRoom | null> {
+		try {
+			const response = await fetch(
+				`${chatApi.defaults.baseURL}/api/v1/chat/rooms/${chatRoomId}/join?userId=${userId}`,
+				{
+					method: 'POST',
+					headers: {
+						'Authorization': `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				}
+			);
+			
+			if (!response.ok) {
+				return null;
+			}
+			
+			const result = await response.json();
+			console.log('Join chat room response:', result);
+			return result;
+		} catch (error) {
+			console.error('Error joining chat room:', error);
+			return null;
+		}
+	}
+
+	// 채팅 내역 가져오기 (페이징)
+	static async getChatHistory(chatRoomId: string, page: number = 0, size: number = 50, token: string): Promise<IChatMessage[]> {
+		const response = await fetch(
+			`${chatApi.defaults.baseURL}/api/v1/chat/rooms/${chatRoomId}/messages?page=${page}&size=${size}`,
+			{
+				method: 'GET',
 				headers: {
 					'Authorization': `Bearer ${token}`,
 					'Content-Type': 'application/json'
@@ -80,75 +169,60 @@ export class ChatService {
 			}
 		);
 		
-		console.log('Create chat room response:', response.data);
-		// 백엔드가 직접 객체를 반환하므로 response.data를 사용
-		return response.data;
-	}
-
-	// 특정 채팅방 정보 가져오기
-	static async getChatRoom(chatRoomId: string, token: string): Promise<IChatRoom | null> {
-		try {
-			const response = await chatApi.get<IChatRoom>(
-				`/api/v1/chat/rooms/${chatRoomId}`,
-				{
-					headers: {
-						'Authorization': `Bearer ${token}`,
-						'Content-Type': 'application/json'
-					}
-				}
-			);
-			console.log('Get chat room response:', response.data);
-			return response.data;
-		} catch (error) {
-			return null;
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
 		}
-	}
-
-	// 채팅 내역 가져오기 (페이징)
-	static async getChatHistory(chatRoomId: string, page: number = 0, size: number = 50, token: string): Promise<IChatMessage[]> {
-		const response = await chatApi.get<IChatMessage[]>(
-			`/api/v1/chat/rooms/${chatRoomId}/messages?page=${page}&size=${size}`,
-			{
-				headers: {
-					'Authorization': `Bearer ${token}`,
-					'Content-Type': 'application/json'
-				}
-			}
-		);
-		console.log('Chat history response:', response.data);
-		return response.data;
+		
+		const messages = await response.json();
+		console.log('Chat history response:', messages);
+		return Array.isArray(messages) ? messages : [];
 	}
 
 	// 최근 메시지 가져오기
 	static async getRecentMessages(chatRoomId: string, token: string): Promise<IChatMessage[]> {
-		const response = await chatApi.get<IChatMessage[]>(
-			`/api/v1/chat/rooms/${chatRoomId}/messages/recent`,
+		const response = await fetch(
+			`${chatApi.defaults.baseURL}/api/v1/chat/rooms/${chatRoomId}/messages/recent`,
 			{
+				method: 'GET',
 				headers: {
 					'Authorization': `Bearer ${token}`,
 					'Content-Type': 'application/json'
 				}
 			}
 		);
-		console.log('Recent messages response:', response.data);
-		return response.data;
+		
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		
+		const messages = await response.json();
+		console.log('Recent messages response:', messages);
+		return Array.isArray(messages) ? messages : [];
 	}
 
 	// 메시지 삭제
 	static async deleteMessage(messageId: string, token: string): Promise<IChatMessage | null> {
 		try {
-			const response = await chatApi.delete<IChatMessage>(
-				`/api/v1/chat/messages/${messageId}`,
+			const response = await fetch(
+				`${chatApi.defaults.baseURL}/api/v1/chat/messages/${messageId}`,
 				{
+					method: 'DELETE',
 					headers: {
 						'Authorization': `Bearer ${token}`,
 						'Content-Type': 'application/json'
 					}
 				}
 			);
-			console.log('Delete message response:', response.data);
-			return response.data;
+			
+			if (!response.ok) {
+				return null;
+			}
+			
+			const result = await response.json();
+			console.log('Delete message response:', result);
+			return result;
 		} catch (error) {
+			console.error('Error deleting message:', error);
 			return null;
 		}
 	}
