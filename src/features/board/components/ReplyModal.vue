@@ -41,7 +41,7 @@
 										<!-- //원글작성자 댓글 .user--author -->
 
 										<em>{{
-											detailPost.comments[commentIndex].country
+											safeTranslate('countries', detailPost.comments[commentIndex].country)
 										}}</em>
 										<strong>{{
 											detailPost.comments[commentIndex].nickname
@@ -132,7 +132,7 @@
 											}"
 										>
 											<!-- //원글작성자 댓글 .user--author -->
-											<em>{{ reply.country }}</em>
+											<em>{{ safeTranslate('countries', reply.country) }}</em>
 											<strong>{{ reply.nickname }}</strong>
 										</button>
 									</div>
@@ -220,6 +220,11 @@ import ReplyWrite from '@/features/board/components/ReplyWrite.vue';
 import api from '@/core/api/index';
 
 const { t } = useI18n();
+
+// 안전한 번역 헬퍼 함수
+const safeTranslate = (key: string, value: string) => {
+	return value ? t(`${key}.${value}`) : '';
+};
 
 const userInfo = useUserInfoStore();
 

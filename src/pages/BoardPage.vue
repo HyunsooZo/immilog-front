@@ -31,7 +31,6 @@
 
 		<div class="list-top-wrap">
 			<!-- 카테고리 선택 (홈화면 스타일) -->
-			<div class="fnc-wrap category-buttons-horizontal">
 				<div class="sub-menu-wrap">
 					<ul class="sub-menu__inner">
 						<li
@@ -50,7 +49,6 @@
 						</li>
 					</ul>
 				</div>
-			</div>
 			<!-- 정렬 -->
 			<div class="fnc-wrap">
 				<div class="sort__list">

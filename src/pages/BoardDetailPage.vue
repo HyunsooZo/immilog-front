@@ -3,14 +3,9 @@
 	<div class="content">
 		<!-- 로딩 시 시머 효과 -->
 		<BoardDetailShimmer v-if="isLoading" />
-		
+
 		<!-- 글 상세 -->
 		<div class="list-wrap" v-else>
-			<div class="list__title">
-				<span class="title">{{
-					post.category ? t('postCategories.' + post.category) : ''
-				}}</span>
-			</div>
 			<BoardContent
 				:post="post"
 				:detail="true"
@@ -302,14 +297,21 @@ const isAuthor = (userIdParam: string) => {
 
 // Country 표시 헬퍼 함수
 const getDisplayCountry = (countryValue: string): string => {
-	// 새로운 API의 country ID인지 확인하고 이름으로 변환
-	const country = countryStore.findCountryById(countryValue);
-	if (country) {
-		const locale = t('locale') || 'ko';
+	const locale = t('locale') || 'ko';
+
+	// 1. 먼저 country ID로 찾기 시도
+	const countryById = countryStore.findCountryById(countryValue);
+	if (countryById) {
 		return countryStore.getCountryNameByLocale(countryValue, locale);
 	}
-	
-	// 기존 enum 형태의 country인 경우 그대로 사용 (하위 호환성)
+
+	// 2. country code로 찾기 시도 (댓글/대댓글에서 주로 사용)
+	const countryByCode = countryStore.findCountryByCode(countryValue);
+	if (countryByCode) {
+		return countryStore.getCountryNameByCodeAndLocale(countryValue, locale);
+	}
+
+	// 3. 못 찾으면 원래 값 반환 (하위 호환성)
 	return countryValue || '';
 };
 
@@ -489,7 +491,6 @@ const detailBoard = async (showLoading = true) => {
 	}
 };
 
-
 // Scroll to bottom function
 const goToDown = () => {
 	window.scrollTo(0, document.body.scrollHeight);
@@ -511,10 +512,10 @@ onMounted(async () => {
 	if (!userInfo.accessToken) {
 		router.push('/sign-in');
 	}
-	
+
 	// 국가 목록 가져오기 (번역 키 방식 사용)
 	await countryStore.fetchActiveCountries();
-	
+
 	detailBoard();
 });
 </script>

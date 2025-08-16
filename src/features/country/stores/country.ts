@@ -37,6 +37,11 @@ export const useCountryStore = defineStore('country', () => {
 		return countries.value.find(country => country.id === id);
 	};
 
+	// 국가 코드로 국가 정보 찾기
+	const findCountryByCode = (code: string): ICountry | undefined => {
+		return countries.value.find(country => country.code === code);
+	};
+
 	// 국가 ID로 국가명(한국어) 가져오기
 	const getCountryNameKo = (id: string): string => {
 		const country = findCountryById(id);
@@ -49,12 +54,23 @@ export const useCountryStore = defineStore('country', () => {
 		return country?.nameEn || '';
 	};
 
-	// 현재 언어에 맞는 국가명 가져오기
+	// 현재 언어에 맞는 국가명 가져오기 (ID 기반)
 	const getCountryNameByLocale = (
 		id: string,
 		locale: string = 'ko',
 	): string => {
 		const country = findCountryById(id);
+		if (!country) return '';
+
+		return locale === 'ko' ? country.nameKo : country.nameEn;
+	};
+
+	// 현재 언어에 맞는 국가명 가져오기 (코드 기반)
+	const getCountryNameByCodeAndLocale = (
+		code: string,
+		locale: string = 'ko',
+	): string => {
+		const country = findCountryByCode(code);
 		if (!country) return '';
 
 		return locale === 'ko' ? country.nameKo : country.nameEn;
@@ -80,9 +96,11 @@ export const useCountryStore = defineStore('country', () => {
 		error,
 		fetchActiveCountries,
 		findCountryById,
+		findCountryByCode,
 		getCountryNameKo,
 		getCountryNameEn,
 		getCountryNameByLocale,
+		getCountryNameByCodeAndLocale,
 		mapLegacyCountryToId,
 	};
 });

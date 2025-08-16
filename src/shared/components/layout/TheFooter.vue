@@ -6,7 +6,7 @@ import {
 	homeIcon,
 	areaIcon,
 	chatIcon,
-	jobIcon,
+	// jobIcon,
 	myPageIcon,
 } from '@/shared/utils/icons';
 import { useI18n } from 'vue-i18n';
@@ -36,11 +36,11 @@ const setMenuItems = () => {
 			styleClass: 'chat',
 			paths: [chatIcon.first, chatIcon.second],
 		},
-		{
-			label: t('footer.job'),
-			styleClass: 'job',
-			paths: [jobIcon.first, jobIcon.second, jobIcon.third],
-		},
+		// {
+		// 	label: t('footer.job'),
+		// 	styleClass: 'job',
+		// 	paths: [jobIcon.first, jobIcon.second, jobIcon.third],
+		// },
 		{ label: t('footer.myPage'), styleClass: 'my', paths: [myPageIcon] },
 	];
 };
@@ -61,8 +61,8 @@ const routeMapping: Record<number, string> = {
 	0: '/',
 	1: '/board',
 	2: '/chat',
-	3: '/job-board',
-	4: '/my-page',
+	3: '/my-page',
+	// 3: '/job-board',
 };
 
 const onMenuItemClick = (index: number) => {

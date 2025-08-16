@@ -94,22 +94,7 @@
 					</button>
 				</li>
 			</ul>
-			<ul v-if="loginStatus">
-				<li class="item">
-					<button
-						type="button"
-						class="button button-text"
-						@click="onCompanyInfo"
-					>
-						<svg viewBox="0 0 16 16">
-							<path :d="companyInfoIcon.first" />
-							<path :d="companyInfoIcon.second" />
-							<path :d="companyInfoIcon.third" />
-						</svg>
-						<span>{{ t('myPageView.companyInfo') }}</span>
-					</button>
-				</li>
-			</ul>
+			<!--		rPthr-->
 			<ul>
 				<li class="item">
 					<div class="check">

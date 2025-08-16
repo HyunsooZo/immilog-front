@@ -20,45 +20,52 @@
 				</div>
 				<div class="modal-body">
 					<!-- 대륙 필터 (국가 선택 모달일 때만 표시) -->
-					<div v-if="showContinentFilter" class="continent-filter category-buttons-horizontal">
-						<div class="sub-menu-wrap">
-							<ul class="sub-menu__inner">
-								<li
-									v-for="continent in continents"
-									:key="continent.code"
-									class="sub-menu__list"
-									:class="{ active: selectedContinent === continent.code }"
+					<div class="sub-menu-wrap">
+						<ul class="sub-menu__inner">
+							<li
+								v-for="continent in continents"
+								:key="continent.code"
+								class="sub-menu__list"
+								:class="{ active: selectedContinent === continent.code }"
+							>
+								<button
+									type="button"
+									class="button"
+									@click="selectContinent(continent.code)"
 								>
-									<button 
-										type="button" 
-										class="button" 
-										@click="selectContinent(continent.code)"
-									>
-										{{ t(continent.name) }}
-									</button>
-								</li>
-							</ul>
-						</div>
+									{{ t(continent.name) }}
+								</button>
+							</li>
+						</ul>
 					</div>
 
 					<div class="list-wrap">
 						<ul>
-							<li v-for="(item, index) in filteredList" :key="index" class="item">
+							<li
+								v-for="(item, index) in filteredList"
+								:key="index"
+								class="item"
+							>
 								<button
 									type="button"
 									class="button"
 									@click="selectCategory(item)"
 								>
 									<span class="item-with-flag">
-										<span 
-											v-if="getFlagCode(item.code) && getFlagCode(item.code) !== 'world' && getFlagCode(item.code) !== 'etc'"
+										<span
+											v-if="
+												getFlagCode(item.code) &&
+												getFlagCode(item.code) !== 'world' &&
+												getFlagCode(item.code) !== 'etc'
+											"
 											:class="`fi fi-${getFlagCode(item.code)}`"
 											class="flag-icon"
 										></span>
-										<span 
+										<span
 											v-else-if="getFlagCode(item.code) === 'etc'"
 											class="custom-icon flag-icon"
-										>🏳️</span>
+											>🏳️</span
+										>
 										{{ t(item.name) }}
 									</span>
 								</button>
@@ -104,7 +111,7 @@ const showContinentFilter = computed(() => {
 // 대륙 목록 생성
 const continents = computed(() => {
 	if (!showContinentFilter.value) return [];
-	
+
 	const continentSet = new Set<string>();
 	props.list.forEach(item => {
 		if ('continent' in item && item.continent) {
@@ -117,29 +124,31 @@ const continents = computed(() => {
 			}
 		}
 	});
-	
+
 	const continentList = [];
-	
+
 	// 1. 전체를 맨 첫번째에 추가
 	continentList.push({ code: 'ALL', name: 'continents.ALL' });
-	
+
 	// 2. 기타를 제외한 다른 대륙들을 정렬해서 추가
-	const otherContinents = Array.from(continentSet).filter(c => c !== 'ETC').sort();
+	const otherContinents = Array.from(continentSet)
+		.filter(c => c !== 'ETC')
+		.sort();
 	otherContinents.forEach(continent => {
 		continentList.push({
 			code: continent,
-			name: `continents.${continent}`
+			name: `continents.${continent}`,
 		});
 	});
-	
+
 	// 3. 기타가 있으면 맨 마지막에 추가
 	if (continentSet.has('ETC')) {
 		continentList.push({
 			code: 'ETC',
-			name: 'continents.ETC'
+			name: 'continents.ETC',
 		});
 	}
-	
+
 	return continentList;
 });
 
@@ -148,23 +157,36 @@ const filteredList = computed(() => {
 	if (!showContinentFilter.value) {
 		return props.list;
 	}
-	
-	// 전체 대륙을 선택했을 때는 "전체국가"를 제외한 모든 실제 국가 표시
+
+	let filteredItems;
+
+	// 'ALL'이 선택된 경우 모든 국가를 반환
 	if (selectedContinent.value === 'ALL') {
-		return props.list.filter(item => item.code !== 'ALL');
+		filteredItems = props.list.filter(item => 'continent' in item && item.continent);
+		
+		// "전체국가" 옵션을 맨 앞에 추가 (전체 대륙 선택시에만)
+		const allCountriesOption = {
+			code: 'ALL',
+			name: 'countries.ALL',
+			continent: 'ALL'
+		};
+		
+		return [allCountriesOption, ...filteredItems];
+	} else {
+		// 특정 대륙이 선택된 경우에는 "전체국가" 옵션 없이 해당 대륙의 국가들만 반환
+		filteredItems = props.list.filter(item => {
+			if (!('continent' in item) || !item.continent) return false;
+
+			let normalizedContinent = item.continent.toUpperCase();
+			if (normalizedContinent === 'OTHER') normalizedContinent = 'ETC';
+
+			return normalizedContinent === selectedContinent.value;
+		});
+		
+		return filteredItems;
 	}
-	
-	return props.list.filter(item => {
-		if (!('continent' in item) || !item.continent) return false;
-		
-		let normalizedContinent = item.continent.toUpperCase();
-		if (normalizedContinent === 'OTHER') normalizedContinent = 'ETC';
-		
-		return normalizedContinent === selectedContinent.value;
-	});
 });
 
-// 대륙 선택
 const selectContinent = (continentCode: string) => {
 	selectedContinent.value = continentCode;
 };
@@ -216,5 +238,4 @@ onMounted(() => {
 	border-bottom: 1px solid #eee;
 	padding-bottom: 1rem;
 }
-
 </style>

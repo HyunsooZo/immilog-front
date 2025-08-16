@@ -10,7 +10,7 @@
 			<div class="item__fnc">
 				<div class="list__item">
 					<button type="button" class="list__item_button ctg">
-						<em>{{ post.country }}</em>
+						<em>{{ safeTranslate('countries', post.country) }}</em>
 						<strong>{{ post.category }}</strong>
 						<span v-if="post.isPublic === 'N'" class="list__private">
 							<i class="blind">내국가에만 공개 된 글</i>
@@ -107,6 +107,11 @@ import { AxiosResponse } from 'axios';
 import api from '@/core/api/index';
 
 const { t } = useI18n();
+
+// 안전한 번역 헬퍼 함수
+const safeTranslate = (key: string, value: string) => {
+	return value ? t(`${key}.${value}`) : '';
+};
 
 const userInfo = useUserInfoStore();
 const router = useRouter();

@@ -25,7 +25,6 @@
 				<div class="post-wrap">
 					<!-- 일반게시판 -->
 					<!-- 카테고리 선택 -->
-					<div class="fnc-wrap category-buttons-horizontal" v-if="!isJobBoard">
 						<div class="sub-menu-wrap">
 							<ul class="sub-menu__inner">
 								<li
@@ -34,9 +33,9 @@
 									class="sub-menu__list"
 									:class="{ active: selectedCategory.code === category.code }"
 								>
-									<button 
-										type="button" 
-										class="button" 
+									<button
+										type="button"
+										class="button"
 										@click="selectCategory(category)"
 									>
 										{{ t(category.name) }}
@@ -44,7 +43,6 @@
 								</li>
 							</ul>
 						</div>
-					</div>
 					<!-- 공개 권한 선택 -->
 					<div class="input-wrap" v-if="!isJobBoard">
 						<div class="input__wrap radio-type">
@@ -394,7 +392,7 @@ const postCategories = ref([
 	{ name: 'postCategories.COMMUNICATION', code: 'COMMUNICATION' },
 	{ name: 'postCategories.WORKING_HOLIDAY', code: 'WORKING_HOLIDAY' },
 	{ name: 'postCategories.GREEN_CARD', code: 'GREEN_CARD' },
-	{ name: 'postCategories.QNA', code: 'QNA' }
+	{ name: 'postCategories.QNA', code: 'QNA' },
 ]);
 
 // 카테고리 선택 함수
@@ -657,17 +655,16 @@ const onSelectModal = () => {
 };
 </script>
 
-<style scoped>
-/* 글쓰기 모달 카테고리 버튼 강제 가로 배치 */
-.category-buttons-horizontal .sub-menu__inner {
-  display: flex !important;
-  flex-direction: row !important;
-  gap: 0.5rem !important;
-  flex-wrap: nowrap !important;
-}
+<!--<style scoped>-->
+<!--/* 글쓰기 모달 카테고리 버튼 강제 가로 배치 */-->
+<!--.category-buttons-horizontal .sub-menu__inner {-->
+<!--	display: flex !important;-->
+<!--	flex-direction: row !important;-->
+<!--	gap: 0.5rem !important;-->
+<!--	flex-wrap: nowrap !important;-->
+<!--}-->
 
-.category-buttons-horizontal .sub-menu__list {
-  flex-shrink: 0 !important;
-}
-</style>
-
+<!--.category-buttons-horizontal .sub-menu__list {-->
+<!--	flex-shrink: 0 !important;-->
+<!--}-->
+<!--</style>-->
