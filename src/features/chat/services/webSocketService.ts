@@ -141,6 +141,24 @@ export class WebSocketService {
 		this.webSocket.send(JSON.stringify(message));
 	}
 
+	// 메시지 읽음 처리
+	markMessageAsRead(senderId: string, senderNickname: string, messageId: string): void {
+		if (!this.isConnected || !this.webSocket) {
+			console.error('WebSocket is not connected');
+			return;
+		}
+
+		const message = {
+			type: 'READ_MESSAGE',
+			senderId,
+			senderNickname,
+			content: messageId,
+		};
+
+		console.log('Sending read message status:', message);
+		this.webSocket.send(JSON.stringify(message));
+	}
+
 	// 연결 상태 확인
 	isConnectedState(): boolean {
 		return this.isConnected;

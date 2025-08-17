@@ -226,4 +226,82 @@ export class ChatService {
 			return null;
 		}
 	}
+
+	// 채팅방의 모든 메시지를 읽음 처리
+	static async markAllMessagesAsRead(chatRoomId: string, userId: string, token: string): Promise<void> {
+		try {
+			const response = await fetch(
+				`${chatApi.defaults.baseURL}/api/v1/chat/rooms/${chatRoomId}/read-all?userId=${userId}`,
+				{
+					method: 'POST',
+					headers: {
+						'Authorization': `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				}
+			);
+			
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+		} catch (error) {
+			console.error('Error marking all messages as read:', error);
+			throw error;
+		}
+	}
+
+	// 특정 채팅방의 안읽은 메시지 수 조회
+	static async getUnreadCount(chatRoomId: string, userId: string, token: string): Promise<number> {
+		try {
+			const response = await fetch(
+				`${chatApi.defaults.baseURL}/api/v1/chat/rooms/${chatRoomId}/unread-count?userId=${userId}`,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				}
+			);
+			
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			
+			const result = await response.json();
+			return result.unreadCount || 0;
+		} catch (error) {
+			console.error('Error getting unread count:', error);
+			return 0;
+		}
+	}
+
+	// 사용자의 모든 채팅방 안읽은 메시지 수 조회
+	static async getAllUnreadCounts(userId: string, token: string): Promise<{unreadCounts: Record<string, number>, totalUnreadCount: number}> {
+		try {
+			const response = await fetch(
+				`${chatApi.defaults.baseURL}/api/v1/chat/users/${userId}/unread-counts`,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				}
+			);
+			
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			
+			const result = await response.json();
+			return {
+				unreadCounts: result.unreadCounts || {},
+				totalUnreadCount: result.totalUnreadCount || 0
+			};
+		} catch (error) {
+			console.error('Error getting all unread counts:', error);
+			return { unreadCounts: {}, totalUnreadCount: 0 };
+		}
+	}
 }

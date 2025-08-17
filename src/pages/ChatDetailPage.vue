@@ -253,6 +253,7 @@ const loadMessages = async () => {
 
 		nextTick(() => {
 			scrollToBottom();
+			markAllMessagesAsRead(); // 메시지 로드 후 읽음 처리
 		});
 	} catch (error) {
 		console.error('Failed to load messages:', error);
@@ -276,6 +277,11 @@ const connectWebSocket = async () => {
 			if (!isDuplicate) {
 				messages.value.push(message);
 				console.log('Added WebSocket message to list');
+				
+				// 새 메시지가 다른 사용자의 것이면 읽음 처리
+				if (message.senderId !== userInfo.userId) {
+					markMessageAsRead(message.id);
+				}
 			} else {
 				console.log('Duplicate message detected, skipping');
 			}
@@ -437,6 +443,48 @@ const getFlagCode = (countryCode: string): string => {
 	return countryCodeToFlagCode(countryCode);
 };
 
+// 특정 메시지 읽음 처리
+const markMessageAsRead = async (messageId: string) => {
+	if (!webSocketService || !userInfo.userId || !userInfo.accessToken) {
+		return;
+	}
+
+	try {
+		// WebSocket으로 읽음 상태 전송
+		webSocketService.markMessageAsRead(
+			userInfo.userId,
+			userInfo.userNickname || userInfo.userId || 'Anonymous',
+			messageId
+		);
+	} catch (error) {
+		console.error('Failed to mark message as read:', error);
+	}
+};
+
+// 모든 메시지 읽음 처리
+const markAllMessagesAsRead = async () => {
+	if (!userInfo.userId || !userInfo.accessToken || !chatRoomId) {
+		return;
+	}
+
+	try {
+		// API로 모든 메시지 읽음 처리
+		await ChatService.markAllMessagesAsRead(
+			chatRoomId,
+			userInfo.userId,
+			userInfo.accessToken
+		);
+		console.log('Marked all messages as read');
+	} catch (error) {
+		console.error('Failed to mark all messages as read:', error);
+	}
+};
+
+// 페이지 포커스 시 읽음 처리
+const handlePageFocus = () => {
+	markAllMessagesAsRead();
+};
+
 // 컴포넌트 마운트/언마운트
 onMounted(async () => {
 	if (!userInfo.accessToken || !userInfo.userId) {
@@ -446,10 +494,15 @@ onMounted(async () => {
 
 	await loadChatRoom();
 	await connectWebSocket();
+	
+	// 페이지 포커스 이벤트 리스너 추가
+	window.addEventListener('focus', handlePageFocus);
 });
 
 onUnmounted(() => {
 	disconnectWebSocket();
+	// 페이지 포커스 이벤트 리스너 제거
+	window.removeEventListener('focus', handlePageFocus);
 });
 </script>
 

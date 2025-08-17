@@ -1,16 +1,13 @@
 <template>
 	<div class="content">
 		<TheTopBox :title="'채팅'" />
-		
+
 		<!-- 상단 고정 영역 -->
 		<div class="sticky-wrap">
 			<!-- 탭 메뉴 (HomePage 스타일 참고) -->
 			<div class="menu-wrap">
 				<ul class="menu__inner">
-					<li
-						:class="{ active: activeTab === 'my' }"
-						class="menu__list"
-					>
+					<li :class="{ active: activeTab === 'my' }" class="menu__list">
 						<button
 							type="button"
 							@click="switchTab('my')"
@@ -20,10 +17,7 @@
 							내 채팅방
 						</button>
 					</li>
-					<li
-						:class="{ active: activeTab === 'country' }"
-						class="menu__list"
-					>
+					<li :class="{ active: activeTab === 'country' }" class="menu__list">
 						<button
 							type="button"
 							@click="switchTab('country')"
@@ -51,15 +45,20 @@
 						@click="openCountrySelectForList"
 					>
 						<span class="country-with-flag" v-if="selectedCountryForList.name">
-							<span 
-								v-if="getFlagCode(selectedCountryForList.code) && getFlagCode(selectedCountryForList.code) !== 'world' && getFlagCode(selectedCountryForList.code) !== 'etc'"
+							<span
+								v-if="
+									getFlagCode(selectedCountryForList.code) &&
+									getFlagCode(selectedCountryForList.code) !== 'world' &&
+									getFlagCode(selectedCountryForList.code) !== 'etc'
+								"
 								:class="`fi fi-${getFlagCode(selectedCountryForList.code)}`"
 								class="flag-icon"
 							></span>
-							<span 
+							<span
 								v-else-if="getFlagCode(selectedCountryForList.code) === 'etc'"
 								class="custom-icon flag-icon"
-							>🏳️</span>
+								>🏳️</span
+							>
 							{{ t(selectedCountryForList.name) }}
 						</span>
 						<span v-else>국가를 선택하세요</span>
@@ -77,24 +76,27 @@
 				@click="showCreateRoomModal = true"
 			>
 				<svg viewBox="0 0 16 16">
-					<path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+					<path
+						d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
+					/>
 				</svg>
 				<i class="blind">채팅방 만들기</i>
 			</button>
 
 			<!-- 채팅방이 없을 때 -->
-			<div class="no-content" v-if="!loading && (!chatRooms || chatRooms.length === 0)">
+			<div
+				class="no-content"
+				v-if="!loading && (!chatRooms || chatRooms.length === 0)"
+			>
 				<p v-if="activeTab === 'my'">참여중인 채팅방이 없습니다.</p>
-				<p v-else-if="activeTab === 'country' && !selectedCountryId">국가를 선택해주세요.</p>
+				<p v-else-if="activeTab === 'country' && !selectedCountryId">
+					국가를 선택해주세요.
+				</p>
 				<p v-else>해당 국가의 채팅방이 없습니다.</p>
 			</div>
 
 			<!-- 채팅방 목록 -->
-			<div
-				class="item"
-				v-for="chatRoom in (chatRooms || [])"
-				:key="chatRoom.id"
-			>
+			<div class="item" v-for="chatRoom in chatRooms || []" :key="chatRoom.id">
 				<button
 					type="button"
 					class="list__item_button"
@@ -103,20 +105,28 @@
 					<div class="info__wrap">
 						<div class="item__image">
 							<!-- 채팅방 아이콘 -->
-							<div class="chat-room-icon" v-if="!chatRoom.countryId || chatRoom.countryId === 'ALL'">
+							<div
+								class="chat-room-icon"
+								v-if="!chatRoom.countryId || chatRoom.countryId === 'ALL'"
+							>
 								{{ chatRoom.name.charAt(0).toUpperCase() }}
 							</div>
 							<!-- 국가별 채팅방인 경우 국기 표시 -->
 							<div class="country-flag-icon" v-else>
-								<span 
-									v-if="getFlagCode(chatRoom.countryId) && getFlagCode(chatRoom.countryId) !== 'world' && getFlagCode(chatRoom.countryId) !== 'etc'"
+								<span
+									v-if="
+										getFlagCode(chatRoom.countryId) &&
+										getFlagCode(chatRoom.countryId) !== 'world' &&
+										getFlagCode(chatRoom.countryId) !== 'etc'
+									"
 									:class="`fi fi-${getFlagCode(chatRoom.countryId)}`"
 									class="flag-icon-large"
 								></span>
-								<span 
+								<span
 									v-else-if="getFlagCode(chatRoom.countryId) === 'etc'"
 									class="custom-flag-icon"
-								>🏳️</span>
+									>🏳️</span
+								>
 								<div v-else class="fallback-icon">
 									{{ chatRoom.name.charAt(0).toUpperCase() }}
 								</div>
@@ -132,11 +142,17 @@
 					<div class="text__wrap">
 						<div class="list__item">
 							<div class="text__item">
-								<p class="text" style="color: #999;" v-if="!chatRoom.latestMessage">
+								<p
+									class="text"
+									style="color: #999"
+									v-if="!chatRoom.latestMessage"
+								>
 									채팅방에 참여해보세요!
 								</p>
 								<p class="text" v-else>
-									<span class="latest-sender">{{ chatRoom.latestMessage.senderNickname }}:</span>
+									<span class="latest-sender"
+										>{{ chatRoom.latestMessage.senderNickname }}:</span
+									>
 									{{ chatRoom.latestMessage.content }}
 								</p>
 							</div>
@@ -145,11 +161,22 @@
 					<div class="util__wrap">
 						<div class="item__fnc">
 							<p class="list__item past">
-								<i class="blind">{{ chatRoom.latestMessage ? '최근 메시지 시간' : '생성시간' }}</i>
-								<span class="item__count">{{ 
-									chatRoom.latestMessage ? formatDate(chatRoom.latestMessage.sentAt) : formatDate(chatRoom.createdAt) 
+								<i class="blind">{{
+									chatRoom.latestMessage ? '최근 메시지 시간' : '생성시간'
+								}}</i>
+								<span class="item__count">{{
+									chatRoom.latestMessage
+										? formatDate(chatRoom.latestMessage.sentAt)
+										: formatDate(chatRoom.createdAt)
 								}}</span>
 							</p>
+							<!-- 안읽은 메시지 수 표시 -->
+							<div 
+								v-if="chatRoom.unreadCount && chatRoom.unreadCount > 0" 
+								class="unread-badge"
+							>
+								{{ chatRoom.unreadCount }}
+							</div>
 						</div>
 					</div>
 				</button>
@@ -178,7 +205,9 @@
 					:disabled="!newRoomName || !selectedCountryForChat.code"
 				>
 					<svg viewBox="0 0 16 16">
-						<path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+						<path
+							d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
+						/>
 					</svg>
 					<span>생성</span>
 				</button>
@@ -196,23 +225,33 @@
 								class="button--select"
 								@click="openCountrySelectForChat"
 							>
-								<span class="country-with-flag" v-if="selectedCountryForChat.name">
-									<span 
-										v-if="getFlagCode(selectedCountryForChat.code) && getFlagCode(selectedCountryForChat.code) !== 'world' && getFlagCode(selectedCountryForChat.code) !== 'etc'"
+								<span
+									class="country-with-flag"
+									v-if="selectedCountryForChat.name"
+								>
+									<span
+										v-if="
+											getFlagCode(selectedCountryForChat.code) &&
+											getFlagCode(selectedCountryForChat.code) !== 'world' &&
+											getFlagCode(selectedCountryForChat.code) !== 'etc'
+										"
 										:class="`fi fi-${getFlagCode(selectedCountryForChat.code)}`"
 										class="flag-icon"
 									></span>
-									<span 
-										v-else-if="getFlagCode(selectedCountryForChat.code) === 'etc'"
+									<span
+										v-else-if="
+											getFlagCode(selectedCountryForChat.code) === 'etc'
+										"
 										class="custom-icon flag-icon"
-									>🏳️</span>
+										>🏳️</span
+									>
 									{{ t(selectedCountryForChat.name) }}
 								</span>
 								<span v-else>국가를 선택하세요</span>
 							</button>
 						</div>
 					</div>
-					
+
 					<!-- 채팅방 이름 입력 -->
 					<div class="post__wrap">
 						<div class="post__title">
@@ -294,14 +333,20 @@ const loading = ref(false);
 // 채팅방 생성 모달
 const showCreateRoomModal = ref(false);
 const newRoomName = ref('');
-const selectedCountryForChat = ref<{name: string, code: string}>({ name: '', code: '' });
+const selectedCountryForChat = ref<{ name: string; code: string }>({
+	name: '',
+	code: '',
+});
 
 // 국가 선택 모달 (채팅방 생성용)
 const showCountrySelectModal = ref(false);
 
 // 국가 선택 모달 (목록 필터용)
 const showCountrySelectForListModal = ref(false);
-const selectedCountryForList = ref<{name: string, code: string}>({ name: 'selectItems.allCountries', code: 'ALL' });
+const selectedCountryForList = ref<{ name: string; code: string }>({
+	name: 'selectItems.allCountries',
+	code: 'ALL',
+});
 
 // 알림 모달
 const alertValue = ref(false);
@@ -317,7 +362,7 @@ const onMoreChatRoomId = ref('');
 const switchTab = (tab: 'my' | 'country') => {
 	activeTab.value = tab;
 	chatRooms.value = [];
-	
+
 	if (tab === 'my') {
 		loadMyChatRooms();
 	} else {
@@ -330,10 +375,16 @@ const switchTab = (tab: 'my' | 'country') => {
 // 내 채팅방 목록 로드
 const loadMyChatRooms = async () => {
 	if (loading.value || !userInfo.userId || !userInfo.accessToken) return;
-	
+
 	try {
 		loading.value = true;
-		chatRooms.value = await ChatService.getUserChatRooms(userInfo.userId, userInfo.accessToken);
+		chatRooms.value = await ChatService.getUserChatRooms(
+			userInfo.userId,
+			userInfo.accessToken,
+		);
+		
+		// 각 채팅방의 안읽은 메시지 수 로드
+		await loadUnreadCounts();
 	} catch (error) {
 		console.error('Failed to load my chat rooms:', error);
 	} finally {
@@ -343,15 +394,57 @@ const loadMyChatRooms = async () => {
 
 // 국가별 채팅방 목록 로드
 const loadCountryChatRooms = async () => {
-	if (!selectedCountryId.value || loading.value || !userInfo.accessToken) return;
-	
+	if (!selectedCountryId.value || loading.value || !userInfo.accessToken)
+		return;
+
 	try {
 		loading.value = true;
-		chatRooms.value = await ChatService.getChatRoomsByCountry(selectedCountryId.value, userInfo.accessToken);
+		chatRooms.value = await ChatService.getChatRoomsByCountry(
+			selectedCountryId.value,
+			userInfo.accessToken,
+		);
+		
+		// 각 채팅방의 안읽은 메시지 수 로드
+		await loadUnreadCounts();
 	} catch (error) {
 		console.error('Failed to load country chat rooms:', error);
 	} finally {
 		loading.value = false;
+	}
+};
+
+// 안읽은 메시지 수 로드
+const loadUnreadCounts = async () => {
+	if (!userInfo.userId || !userInfo.accessToken) return;
+
+	try {
+		// 전체 안읽은 수 API가 404 에러를 내므로 개별적으로 로드
+		const unreadCountPromises = chatRooms.value.map(async (room) => {
+			try {
+				const unreadCount = await ChatService.getUnreadCount(
+					room.id,
+					userInfo.userId!,
+					userInfo.accessToken!
+				);
+				return { roomId: room.id, unreadCount };
+			} catch (error) {
+				console.error(`Failed to get unread count for room ${room.id}:`, error);
+				return { roomId: room.id, unreadCount: 0 };
+			}
+		});
+
+		const unreadResults = await Promise.all(unreadCountPromises);
+		
+		// 채팅방 목록에 안읽은 메시지 수 추가
+		chatRooms.value = chatRooms.value.map(room => {
+			const unreadData = unreadResults.find(result => result.roomId === room.id);
+			return {
+				...room,
+				unreadCount: unreadData?.unreadCount || 0
+			};
+		});
+	} catch (error) {
+		console.error('Failed to load unread counts:', error);
 	}
 };
 
@@ -362,35 +455,40 @@ const onChatDetail = (chatRoomId: string) => {
 
 // 채팅방 생성
 const createChatRoom = async () => {
-	if (!newRoomName.value || !selectedCountryForChat.value.code || !userInfo.userId || !userInfo.accessToken) {
+	if (
+		!newRoomName.value ||
+		!selectedCountryForChat.value.code ||
+		!userInfo.userId ||
+		!userInfo.accessToken
+	) {
 		showAlert('모든 필드를 입력해주세요.');
 		return;
 	}
-	
+
 	try {
 		loading.value = true;
 		console.log('Creating chat room with data:', {
 			name: newRoomName.value,
 			countryId: selectedCountryForChat.value.code,
-			userId: userInfo.userId
+			userId: userInfo.userId,
 		});
-		
+
 		const newRoom = await ChatService.createChatRoom(
 			newRoomName.value,
 			selectedCountryForChat.value.code,
 			userInfo.userId,
-			userInfo.accessToken
+			userInfo.accessToken,
 		);
-		
+
 		console.log('Created chat room response:', newRoom);
-		
+
 		// 응답이 올바른지 확인
 		if (!newRoom || !newRoom.id) {
 			console.error('Invalid room response:', newRoom);
 			showAlert('채팅방 생성 응답이 올바르지 않습니다.');
 			return;
 		}
-		
+
 		// 생성된 채팅방으로 이동
 		router.push('/chat/' + newRoom.id);
 		closeCreateRoomModal();
@@ -421,7 +519,9 @@ const closeMoreModal = () => {
 
 const closeMoreModalAndDeleteChatRoom = (chatRoomId: string) => {
 	onMoreModal.value = false;
-	const index = chatRooms.value.findIndex(chatRoom => chatRoom.id === chatRoomId);
+	const index = chatRooms.value.findIndex(
+		chatRoom => chatRoom.id === chatRoomId,
+	);
 	if (index !== -1) {
 		chatRooms.value.splice(index, 1);
 	}
@@ -438,7 +538,7 @@ const closeCountrySelect = () => {
 };
 
 // 국가 선택 처리 (채팅방 생성용)
-const selectCountryForChat = (country: {name: string, code: string}) => {
+const selectCountryForChat = (country: { name: string; code: string }) => {
 	selectedCountryForChat.value = country;
 	closeCountrySelect();
 };
@@ -454,7 +554,7 @@ const closeCountrySelectForList = () => {
 };
 
 // 국가 선택 처리 (목록 필터용)
-const selectCountryForList = (country: {name: string, code: string}) => {
+const selectCountryForList = (country: { name: string; code: string }) => {
 	selectedCountryForList.value = country;
 	selectedCountryId.value = country.code;
 	closeCountrySelectForList();
@@ -482,9 +582,12 @@ const formatDate = (dateString: string) => {
 	const now = new Date();
 	const diffMs = now.getTime() - date.getTime();
 	const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-	
+
 	if (diffDays === 0) {
-		return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+		return date.toLocaleTimeString('ko-KR', {
+			hour: '2-digit',
+			minute: '2-digit',
+		});
 	} else if (diffDays === 1) {
 		return '어제';
 	} else if (diffDays < 7) {
@@ -513,16 +616,19 @@ onMounted(async () => {
 		router.push('/sign-in');
 		return;
 	}
-	
+
 	// 국가 목록 불러오기
 	await countryStore.fetchActiveCountries();
-	
+
 	// 국가별 채팅방 탭의 디폴트를 전체국가로 설정
-	selectedCountryForList.value = { name: 'selectItems.allCountries', code: 'ALL' };
+	selectedCountryForList.value = {
+		name: 'selectItems.allCountries',
+		code: 'ALL',
+	};
 	selectedCountryId.value = 'ALL';
-	
+
 	loadMyChatRooms();
-	
+
 	// 페이지 focus 이벤트 리스너 추가
 	window.addEventListener('focus', checkAndRefreshChatRooms);
 });
@@ -630,5 +736,21 @@ onUnmounted(() => {
 	text-align: center;
 	padding: 2rem;
 	color: #666;
+}
+
+/* 안읽은 메시지 뱃지 스타일 */
+.unread-badge {
+	background: #ff4757;
+	color: white;
+	border-radius: 10px;
+	padding: 2px 6px;
+	font-size: 0.75rem;
+	font-weight: bold;
+	min-width: 18px;
+	height: 18px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: 4px;
 }
 </style>
