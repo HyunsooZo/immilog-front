@@ -12,7 +12,7 @@ const applicationJsonWithToken = (accessToken: string | null | undefined) => ({
 
 const multipartFormData = {
 	headers: {
-		'Content-Type': 'multipart/form-data',
+		// Content-Type을 명시적으로 설정하지 않음 - 브라우저가 자동으로 boundary 설정
 	},
 };
 
@@ -20,7 +20,7 @@ const multipartFormDataWithToken = (
 	accessToken: string | null | undefined,
 ) => ({
 	headers: {
-		'Content-Type': 'multipart/form-data',
+		// Content-Type을 명시적으로 설정하지 않음 - 브라우저가 자동으로 boundary 설정
 		Authorization: `Bearer ${accessToken ? accessToken.toString() : ''}`,
 	},
 });

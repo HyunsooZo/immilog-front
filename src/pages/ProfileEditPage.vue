@@ -162,6 +162,7 @@ import {
 	applicationJson,
 	applicationJsonWithToken,
 	multipartFormData,
+	multipartFormDataWithToken,
 } from '@/shared/utils/header';
 import { computed, onMounted, ref, shallowRef } from 'vue';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
@@ -281,42 +282,79 @@ const hostImage = async () => {
 
 	try {
 		const formData = new FormData();
-		const resizedImage = await resizeImage(imageFile.value, 0.5);
+		let fileToUpload: File | Blob = imageFile.value;
 
-		formData.append('multipartFile', resizedImage as Blob);
+		// 이미지 리사이징 시도, 실패하면 원본 사용
+		try {
+			const resizedImage = await resizeImage(imageFile.value, 0.5);
+			fileToUpload = resizedImage;
+			console.log('Image resized successfully');
+		} catch (resizeError) {
+			console.warn('Image resize failed, using original file:', resizeError);
+			fileToUpload = imageFile.value;
+		}
+
+		// 백엔드에서 List<MultipartFile>을 기대하므로 배열 형태로 전송
+		formData.append('multipartFile', fileToUpload);
 		formData.append('imagePath', 'profile');
 		formData.append('imageType', 'PROFILE');
 
 		const response: AxiosResponse<IApiImage> = await api.post(
 			'/api/v1/images',
 			formData,
-			multipartFormData,
+			multipartFormDataWithToken(userInfo.accessToken),
 		);
 
 		if (response.status === 200) {
 			imageUrl.value = Array.isArray(response.data.data)
 				? response.data.data[0] || ''
 				: response.data.data || '';
+			console.log('Image uploaded successfully:', imageUrl.value);
 		} else {
 			openAlert(t('profileEditView.failedToUploadImage'));
+			throw new Error('Image upload failed with status: ' + response.status);
 		}
 	} catch (error) {
 		console.error('Image upload error:', error);
 		openAlert(t('profileEditView.failedToUploadImage'));
+		throw error; // 에러를 다시 throw하여 saveProfile에서 처리할 수 있도록 함
 	}
 };
 
 const saveProfile = async () => {
-	if (!hasValidChanges.value) return;
+	console.log('saveProfile called');
+	console.log('hasValidChanges:', hasValidChanges.value);
+	console.log('isNickNameChanged:', isNickNameChanged.value);
+	console.log('isImageChanged:', isImageChanged.value);
+	console.log('isCountryChanged:', isCountryChanged.value);
+	console.log('isInterestCountryChanged:', isInterestCountryChanged.value);
+	console.log('nickNameCheckDone:', nickNameCheckDone.value);
+	console.log('isNickNameValid:', isNickNameValid.value);
+	
+	if (!hasValidChanges.value) {
+		console.log('No valid changes, returning early');
+		return;
+	}
 
 	if (imageFile.value) {
-		await hostImage();
+		try {
+			await hostImage();
+			// 이미지 업로드가 실패했는데 imageUrl이 비어있다면 중단
+			if (isImageChanged.value && !imageUrl.value) {
+				openAlert(t('profileEditView.failedToUploadImage'));
+				return;
+			}
+		} catch (error) {
+			console.error('Image upload failed:', error);
+			openAlert(t('profileEditView.failedToUploadImage'));
+			return;
+		}
 	}
 
 	const formData = {
 		nickname: userNickname.value,
-		country: countryCode.value,
-		interestCountry: interestCountryCode.value,
+		countryId: countryCode.value,
+		interestCountryId: interestCountryCode.value,
 		profileImage: isImageChanged.value
 			? Array.isArray(imageUrl.value)
 				? imageUrl.value[0]
@@ -327,15 +365,20 @@ const saveProfile = async () => {
 	};
 
 	try {
+		console.log('Sending profile update with formData:', formData);
 		const response: AxiosResponse<IApiResponse> = await api.put(
 			'/api/v1/users',
 			formData,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 
-		if (response.status === 200) {
+		console.log('Profile update response:', response);
+		if (response.status === 200 || response.status === 204) {
+			console.log('Profile update successful, calling updateUserInfo...');
 			updateUserInfo();
 			router.back();
+		} else {
+			console.log('Profile update failed with status:', response.status);
 		}
 	} catch (error) {
 		console.error('Profile save error:', error);
@@ -343,17 +386,34 @@ const saveProfile = async () => {
 };
 
 const updateUserInfo = () => {
+	console.log('updateUserInfo called');
+	console.log('isNickNameChanged:', isNickNameChanged.value);
+	console.log('isImageChanged:', isImageChanged.value);
+	console.log('imageUrl.value:', imageUrl.value);
+	console.log('current userInfo.userProfileUrl:', userInfo.userProfileUrl);
+
 	if (isNickNameChanged.value) {
 		userInfo.userNickname = userNickname.value;
+		console.log('Updated nickname to:', userNickname.value);
 	}
-	if (isImageChanged.value) {
-		userInfo.userProfileUrl = imagePreview.value;
+	if (isImageChanged.value && imageUrl.value) {
+		// 서버에 업로드된 실제 이미지 URL로 업데이트
+		const uploadedImageUrl = Array.isArray(imageUrl.value) 
+			? imageUrl.value[0] 
+			: imageUrl.value;
+		console.log('About to update userProfileUrl from', userInfo.userProfileUrl, 'to', uploadedImageUrl);
+		
+		// store action을 사용해서 업데이트
+		userInfo.setUserProfileUrl(uploadedImageUrl);
+		console.log('Updated userProfileUrl using action to:', userInfo.userProfileUrl);
 	}
 	if (isCountryChanged.value) {
 		userInfo.userCountry = countryCode.value;
+		console.log('Updated country to:', countryCode.value);
 	}
 	if (isInterestCountryChanged.value) {
 		userInfo.userInterestCountry = interestCountryCode.value;
+		console.log('Updated interest country to:', interestCountryCode.value);
 	}
 };
 

@@ -66,5 +66,8 @@ export const useUserInfoStore = defineStore('userInfo', {
 		setLocationMatch(isLocationMatch: boolean): void {
 			this.isLocationMatch = isLocationMatch;
 		},
+		setUserProfileUrl(userProfileUrl: string): void {
+			this.userProfileUrl = userProfileUrl;
+		},
 	},
 });
