@@ -171,8 +171,8 @@
 								}}</span>
 							</p>
 							<!-- 안읽은 메시지 수 표시 -->
-							<div 
-								v-if="chatRoom.unreadCount && chatRoom.unreadCount > 0" 
+							<div
+								v-if="chatRoom.unreadCount && chatRoom.unreadCount > 0"
 								class="unread-badge"
 							>
 								{{ chatRoom.unreadCount }}
@@ -318,10 +318,12 @@ import CustomAlert from '@/shared/components/ui/CustomAlert.vue';
 import { useCountryStore } from '@/features/country/stores/country';
 import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
 import { useI18n } from 'vue-i18n';
+import { useChatUnreadStore } from '@/features/chat/stores/chatUnread';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
 const countryStore = useCountryStore();
+const chatUnreadStore = useChatUnreadStore();
 const { t } = useI18n();
 
 // 상태 관리
@@ -366,7 +368,13 @@ const switchTab = (tab: 'my' | 'country') => {
 	if (tab === 'my') {
 		loadMyChatRooms();
 	} else {
-		selectedCountryId.value = '';
+		// 국가별 채팅방 탭으로 전환 시 바로 전체국가 채팅방 조회
+		selectedCountryId.value = 'ALL';
+		selectedCountryForList.value = {
+			name: 'selectItems.allCountries',
+			code: 'ALL',
+		};
+		loadCountryChatRooms();
 	}
 };
 
@@ -382,7 +390,7 @@ const loadMyChatRooms = async () => {
 			userInfo.userId,
 			userInfo.accessToken,
 		);
-		
+
 		// 각 채팅방의 안읽은 메시지 수 로드
 		await loadUnreadCounts();
 	} catch (error) {
@@ -403,7 +411,7 @@ const loadCountryChatRooms = async () => {
 			selectedCountryId.value,
 			userInfo.accessToken,
 		);
-		
+
 		// 각 채팅방의 안읽은 메시지 수 로드
 		await loadUnreadCounts();
 	} catch (error) {
@@ -419,12 +427,12 @@ const loadUnreadCounts = async () => {
 
 	try {
 		// 전체 안읽은 수 API가 404 에러를 내므로 개별적으로 로드
-		const unreadCountPromises = chatRooms.value.map(async (room) => {
+		const unreadCountPromises = chatRooms.value.map(async room => {
 			try {
 				const unreadCount = await ChatService.getUnreadCount(
 					room.id,
 					userInfo.userId!,
-					userInfo.accessToken!
+					userInfo.accessToken!,
 				);
 				return { roomId: room.id, unreadCount };
 			} catch (error) {
@@ -434,15 +442,26 @@ const loadUnreadCounts = async () => {
 		});
 
 		const unreadResults = await Promise.all(unreadCountPromises);
+
+		// 채팅방 목록에 안읽은 메시지 수 추가 및 store 업데이트
+		const unreadCountsMap: Record<string, number> = {};
 		
-		// 채팅방 목록에 안읽은 메시지 수 추가
 		chatRooms.value = chatRooms.value.map(room => {
-			const unreadData = unreadResults.find(result => result.roomId === room.id);
+			const unreadData = unreadResults.find(
+				result => result.roomId === room.id,
+			);
+			const unreadCount = unreadData?.unreadCount || 0;
+			unreadCountsMap[room.id] = unreadCount;
+			
 			return {
 				...room,
-				unreadCount: unreadData?.unreadCount || 0
+				unreadCount,
 			};
 		});
+		
+		// Store에 모든 안읽은 수 업데이트
+		chatUnreadStore.setAllUnreadCounts(unreadCountsMap);
+		console.log('Updated unread counts in store:', unreadCountsMap);
 	} catch (error) {
 		console.error('Failed to load unread counts:', error);
 	}

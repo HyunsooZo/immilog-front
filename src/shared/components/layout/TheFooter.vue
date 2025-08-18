@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, onMounted, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useMenuStore } from '@/shared/stores/menu';
 import {
@@ -10,11 +10,15 @@ import {
 	myPageIcon,
 } from '@/shared/utils/icons';
 import { useI18n } from 'vue-i18n';
+import { useUserInfoStore } from '@/features/user/stores/userInfo';
+import { useChatUnreadStore } from '@/features/chat/stores/chatUnread';
 
 const { t, locale } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
+const userInfo = useUserInfoStore();
+const chatUnreadStore = useChatUnreadStore();
 const iconViewBox = '0 0 16 16'; // 모든 아이콘에 적용되는 viewBox 값
 
 interface MenuItem {
@@ -87,6 +91,8 @@ watchEffect(() => {
 		activeItem.value = mappedIndex;
 	}
 });
+
+// 이제 store에서 실시간으로 관리되므로 별도 로직 불필요
 </script>
 
 <template>
@@ -103,21 +109,56 @@ watchEffect(() => {
 					}"
 					@click="onMenuItemClick(index)"
 				>
-					<svg
-						:width="16"
-						:height="16"
-						:viewBox="iconViewBox"
-						aria-hidden="true"
-					>
-						<path
-							v-for="(path, pathIndex) in item.paths"
-							:key="pathIndex"
-							:d="path"
-						/>
-					</svg>
+					<div class="icon-wrapper">
+						<svg
+							:width="16"
+							:height="16"
+							:viewBox="iconViewBox"
+							aria-hidden="true"
+						>
+							<path
+								v-for="(path, pathIndex) in item.paths"
+								:key="pathIndex"
+								:d="path"
+							/>
+						</svg>
+						<!-- 채팅 탭에만 안읽은 메시지 뱃지 표시 -->
+						<div 
+							v-if="index === 2 && chatUnreadStore.getTotalUnreadCount > 0" 
+							class="chat-badge"
+						>
+							{{ chatUnreadStore.getTotalUnreadCount > 99 ? '99+' : chatUnreadStore.getTotalUnreadCount }}
+						</div>
+					</div>
 					<span>{{ item.label }}</span>
 				</button>
 			</li>
 		</ul>
 	</div>
 </template>
+
+<style scoped>
+.icon-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
+.chat-badge {
+	position: absolute;
+	top: -8px;
+	right: -8px;
+	background: #ff4757;
+	color: white;
+	border-radius: 10px;
+	padding: 2px 6px;
+	font-size: 0.7rem;
+	font-weight: bold;
+	min-width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+</style>

@@ -157,6 +157,7 @@ import { ChatService } from '@/features/chat/services/chatService';
 import { WebSocketService } from '@/features/chat/services/webSocketService';
 import SideMenu from '@/shared/components/common/SideMenu.vue';
 import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
+import { useChatUnreadStore } from '@/features/chat/stores/chatUnread';
 
 // Props 정의 (Vue warning 해결)
 const props = defineProps<{
@@ -164,6 +165,7 @@ const props = defineProps<{
 }>();
 
 const userInfo = useUserInfoStore();
+const chatUnreadStore = useChatUnreadStore();
 const router = useRouter();
 const route = useRoute();
 
@@ -278,10 +280,12 @@ const connectWebSocket = async () => {
 				messages.value.push(message);
 				console.log('Added WebSocket message to list');
 				
-				// 새 메시지가 다른 사용자의 것이면 읽음 처리
+				// 새 메시지가 다른 사용자의 것이면 읽음 처리 및 즉시 읽음으로 마킹
 				if (message.senderId !== userInfo.userId) {
 					markMessageAsRead(message.id);
+					// 현재 채팅방을 보고 있으므로 즉시 읽음 처리되어 카운트 증가하지 않음
 				}
+				// 내가 보낸 메시지는 카운트에 영향 없음
 			} else {
 				console.log('Duplicate message detected, skipping');
 			}
@@ -474,6 +478,9 @@ const markAllMessagesAsRead = async () => {
 			userInfo.userId,
 			userInfo.accessToken
 		);
+		
+		// Store에서 해당 채팅방의 안읽은 수를 0으로 설정
+		chatUnreadStore.markAllAsRead(chatRoomId);
 		console.log('Marked all messages as read');
 	} catch (error) {
 		console.error('Failed to mark all messages as read:', error);
