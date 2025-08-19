@@ -382,14 +382,26 @@ const switchTab = (tab: 'my' | 'country') => {
 
 // 내 채팅방 목록 로드
 const loadMyChatRooms = async () => {
-	if (loading.value || !userInfo.userId || !userInfo.accessToken) return;
+	if (loading.value || !userInfo.userId || !userInfo.accessToken) {
+		console.log('loadMyChatRooms blocked:', {
+			loading: loading.value,
+			userId: userInfo.userId,
+			hasToken: !!userInfo.accessToken
+		});
+		return;
+	}
 
 	try {
 		loading.value = true;
+		console.log('Loading user chat rooms for userId:', userInfo.userId);
+		
 		chatRooms.value = await ChatService.getUserChatRooms(
 			userInfo.userId,
 			userInfo.accessToken,
 		);
+		
+		console.log('Loaded chat rooms:', chatRooms.value);
+		console.log('Total chat rooms count:', chatRooms.value.length);
 
 		// 각 채팅방의 안읽은 메시지 수 로드
 		await loadUnreadCounts();
@@ -507,6 +519,15 @@ const createChatRoom = async () => {
 			showAlert('채팅방 생성 응답이 올바르지 않습니다.');
 			return;
 		}
+
+		// 생성한 채팅방에 명시적으로 참여
+		console.log('Joining created chat room:', newRoom.id);
+		const joinResult = await ChatService.joinChatRoom(
+			newRoom.id,
+			userInfo.userId,
+			userInfo.accessToken,
+		);
+		console.log('Join result:', joinResult);
 
 		// 생성된 채팅방으로 이동
 		router.push('/chat/' + newRoom.id);

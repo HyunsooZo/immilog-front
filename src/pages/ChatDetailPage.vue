@@ -227,6 +227,15 @@ const loadChatRoom = async () => {
 			return;
 		}
 
+		// 채팅방에 참여 (이미 참여한 경우 백엔드에서 처리)
+		console.log('Joining chat room:', chatRoomId);
+		const joinResult = await ChatService.joinChatRoom(
+			chatRoomId,
+			userInfo.userId,
+			userInfo.accessToken,
+		);
+		console.log('Chat room join result:', joinResult);
+
 		await loadMessages();
 	} catch (error) {
 		console.error('Failed to load chat room:', error);

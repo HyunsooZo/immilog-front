@@ -57,23 +57,30 @@ export class ChatService {
 
 	// 사용자 참여 채팅방 목록 가져오기 (Flux 스트림)
 	static async getUserChatRooms(userId: string, token: string): Promise<IChatRoom[]> {
-		const response = await fetch(
-			`${chatApi.defaults.baseURL}/api/v1/chat/rooms/user/${userId}`,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': `Bearer ${token}`,
-					'Content-Type': 'application/json'
-				}
+		const url = `${chatApi.defaults.baseURL}/api/v1/chat/rooms/user/${userId}`;
+		console.log('Fetching user chat rooms from URL:', url);
+		console.log('Using userId:', userId);
+		
+		const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+				'Authorization': `Bearer ${token}`,
+				'Content-Type': 'application/json'
 			}
-		);
+		});
+		
+		console.log('getUserChatRooms response status:', response.status);
 		
 		if (!response.ok) {
+			console.error('getUserChatRooms failed:', response.status, response.statusText);
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		
 		const chatRooms = await response.json();
 		console.log('User chat rooms response:', chatRooms);
+		console.log('Response is array:', Array.isArray(chatRooms));
+		console.log('Response length:', Array.isArray(chatRooms) ? chatRooms.length : 'N/A');
+		
 		return Array.isArray(chatRooms) ? chatRooms : [];
 	}
 
