@@ -69,19 +69,6 @@
 
 		<!-- 채팅방 목록 -->
 		<div class="list-wrap _chat">
-			<!-- 채팅방 만들기 플로팅 버튼 -->
-			<button
-				type="button"
-				class="button-icon button--post _sticky"
-				@click="showCreateRoomModal = true"
-			>
-				<svg viewBox="0 0 16 16">
-					<path
-						d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
-					/>
-				</svg>
-				<i class="blind">채팅방 만들기</i>
-			</button>
 
 			<!-- 채팅방이 없을 때 -->
 			<div
@@ -192,6 +179,21 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- 채팅방 만들기 플로팅 버튼 (국가별 채팅방 탭에서만 표시) -->
+	<button
+		v-if="activeTab === 'country'"
+		type="button"
+		class="floating-add-button"
+		@click="showCreateRoomModal = true"
+	>
+		<svg viewBox="0 0 16 16" width="24" height="24">
+			<path
+				d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
+				fill="white"
+			/>
+		</svg>
+	</button>
 
 	<!-- 채팅방 생성 모달 -->
 	<div v-if="showCreateRoomModal" class="modal modal--full post--dialog">
@@ -781,5 +783,34 @@ onUnmounted(() => {
 	align-items: center;
 	justify-content: center;
 	margin-left: 4px;
+}
+
+/* 플로팅 버튼 스타일 */
+.floating-add-button {
+	position: fixed;
+	bottom: 100px; /* 바텀 네비게이션 위에 위치 */
+	right: 20px;
+	width: 4rem; /* 홈화면과 동일한 크기 */
+	height: 4rem; /* 홈화면과 동일한 크기 */
+	border-radius: 50%;
+	border: 1px solid #ccc;
+	background: rgb(0 0 0 / 0.5); /* 홈화면과 동일한 색상 */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	z-index: 1000;
+}
+
+.floating-add-button svg {
+	fill: rgb(255 255 255 / 1);
+}
+
+.floating-add-button:hover {
+	opacity: 0.8;
+}
+
+.floating-add-button:active {
+	transform: scale(0.95);
 }
 </style>
