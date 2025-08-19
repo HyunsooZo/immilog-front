@@ -172,10 +172,10 @@
 							</p>
 							<!-- 안읽은 메시지 수 표시 -->
 							<div
-								v-if="chatRoom.unreadCount && chatRoom.unreadCount > 0"
+								v-if="chatUnreadStore.getUnreadCount(chatRoom.id) > 0"
 								class="unread-badge"
 							>
-								{{ chatRoom.unreadCount }}
+								{{ chatUnreadStore.getUnreadCount(chatRoom.id) }}
 							</div>
 						</div>
 					</div>
@@ -386,7 +386,7 @@ const loadMyChatRooms = async () => {
 		console.log('loadMyChatRooms blocked:', {
 			loading: loading.value,
 			userId: userInfo.userId,
-			hasToken: !!userInfo.accessToken
+			hasToken: !!userInfo.accessToken,
 		});
 		return;
 	}
@@ -394,12 +394,12 @@ const loadMyChatRooms = async () => {
 	try {
 		loading.value = true;
 		console.log('Loading user chat rooms for userId:', userInfo.userId);
-		
+
 		chatRooms.value = await ChatService.getUserChatRooms(
 			userInfo.userId,
 			userInfo.accessToken,
 		);
-		
+
 		console.log('Loaded chat rooms:', chatRooms.value);
 		console.log('Total chat rooms count:', chatRooms.value.length);
 
@@ -455,23 +455,12 @@ const loadUnreadCounts = async () => {
 
 		const unreadResults = await Promise.all(unreadCountPromises);
 
-		// 채팅방 목록에 안읽은 메시지 수 추가 및 store 업데이트
-		const unreadCountsMap: Record<string, number> = {};
-		
-		chatRooms.value = chatRooms.value.map(room => {
-			const unreadData = unreadResults.find(
-				result => result.roomId === room.id,
-			);
-			const unreadCount = unreadData?.unreadCount || 0;
-			unreadCountsMap[room.id] = unreadCount;
-			
-			return {
-				...room,
-				unreadCount,
-			};
-		});
-		
 		// Store에 모든 안읽은 수 업데이트
+		const unreadCountsMap: Record<string, number> = {};
+		unreadResults.forEach(result => {
+			unreadCountsMap[result.roomId] = result.unreadCount;
+		});
+
 		chatUnreadStore.setAllUnreadCounts(unreadCountsMap);
 		console.log('Updated unread counts in store:', unreadCountsMap);
 	} catch (error) {
