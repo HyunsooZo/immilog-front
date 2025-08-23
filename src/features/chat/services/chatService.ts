@@ -109,6 +109,69 @@ export class ChatService {
 		return result;
 	}
 
+	// 기존 개인 채팅방 찾기
+	static async findExistingPrivateChatRoom(targetUserId: string, currentUserId: string, token: string): Promise<string | null> {
+		try {
+			// 내 채팅방 목록에서 해당 사용자와의 개인 채팅방 찾기
+			const myRooms = await this.getUserChatRooms(currentUserId, token);
+			
+			// isPrivateChat이 true이고 상대방이 참여자에 포함된 채팅방 찾기
+			const existingRoom = myRooms.find(room => 
+				room.isPrivateChat && 
+				room.participantIds.includes(targetUserId) &&
+				room.participantIds.includes(currentUserId)
+			);
+			
+			return existingRoom ? existingRoom.id : null;
+		} catch (error) {
+			console.error('Error finding existing private chat room:', error);
+			return null;
+		}
+	}
+
+	// 개인 채팅방 생성 또는 기존 채팅방 반환
+	static async createOrFindPrivateChatRoom(targetUserId: string, createdBy: string, token: string): Promise<string | null> {
+		try {
+			// 먼저 기존 개인 채팅방이 있는지 확인
+			const existingRoomId = await this.findExistingPrivateChatRoom(targetUserId, createdBy, token);
+			if (existingRoomId) {
+				console.log('Found existing private chat room:', existingRoomId);
+				return existingRoomId;
+			}
+
+			// 기존 채팅방이 없으면 새로 생성
+			const response = await fetch(
+				`${chatApi.defaults.baseURL}/api/v1/chat/rooms/private?createdBy=${createdBy}`,
+				{
+					method: 'POST',
+					headers: {
+						'Authorization': `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ targetUserId })
+				}
+			);
+			
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			
+			const result = await response.json();
+			console.log('Create private chat room response:', result);
+			
+			// 백엔드에서 직접 ChatRoomDto를 반환하므로 result.id 사용
+			return result.id || null;
+		} catch (error) {
+			console.error('Error creating or finding private chat room:', error);
+			return null;
+		}
+	}
+
+	// 기존 createPrivateChatRoom은 deprecated, createOrFindPrivateChatRoom 사용 권장
+	static async createPrivateChatRoom(targetUserId: string, createdBy: string, token: string): Promise<string | null> {
+		return this.createOrFindPrivateChatRoom(targetUserId, createdBy, token);
+	}
+
 	// 특정 채팅방 정보 가져오기
 	static async getChatRoom(chatRoomId: string, token: string): Promise<IChatRoom | null> {
 		try {

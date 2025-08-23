@@ -286,6 +286,13 @@ const isModalClose = () => document.body.classList.remove('inactive');
 
 const userProfileDetailValue = ref(false);
 const onUserProfileDetail = () => {
+	// 본인 게시글이면 마이페이지로 이동
+	if (props.post.userId === userInfo.userId) {
+		router.push('/my-page');
+		return;
+	}
+	
+	// 다른 사람 게시글이면 프로필 디테일 모달 표시
 	if (!postAuthorInfo.value.userId) setPostAuthorInfo();
 	userProfileDetailValue.value = true;
 	isModalOpen();

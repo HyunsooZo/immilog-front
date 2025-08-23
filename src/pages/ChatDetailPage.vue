@@ -69,6 +69,8 @@
 							<div
 								class="info__wrap"
 								v-if="!isMyMessage(message) && !isSystemMessage(message)"
+								@click="onUserProfile(message.senderId, message.senderNickname)"
+								style="cursor: pointer;"
 							>
 								<div class="item__image image--default">
 									<div class="user-avatar">
@@ -138,6 +140,11 @@
 			</div>
 		</div>
 		<SideMenu @close="offSideMenu" v-if="isSideMenu" />
+		<UserProfileDetail
+			:userProfile="selectedUserProfile"
+			@close="offUserProfile"
+			v-if="isUserProfileDetailVisible"
+		/>
 	</div>
 
 		<!-- 로딩 상태 -->
@@ -158,6 +165,8 @@ import { WebSocketService } from '@/features/chat/services/webSocketService';
 import SideMenu from '@/shared/components/common/SideMenu.vue';
 import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
 import { useChatUnreadStore } from '@/features/chat/stores/chatUnread';
+import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue';
+import type { IOtherUserInfo } from '@/shared/types/common';
 
 // Props 정의 (Vue warning 해결)
 const props = defineProps<{
@@ -180,6 +189,15 @@ const wsConnected = ref(false);
 const isSideMenu = ref(false);
 const chatContent = ref<HTMLElement>();
 const messageTextarea = ref<HTMLTextAreaElement>();
+const isUserProfileDetailVisible = ref(false);
+const selectedUserProfile = ref<IOtherUserInfo>({
+	userId: '',
+	userProfileUrl: '',
+	nickname: '',
+	email: '',
+	country: '',
+	region: ''
+});
 
 // WebSocket 서비스
 let webSocketService: WebSocketService | null = null;
@@ -204,6 +222,63 @@ const onSideMenu = () => {
 
 const offSideMenu = () => {
 	isSideMenu.value = false;
+};
+
+// 사용자 프로필
+const onUserProfile = async (userId: string, nickname: string) => {
+	try {
+		// API로 사용자 정보 가져오기 시도
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_API_URL}/api/v1/users/${userId}`,
+			{
+				headers: {
+					'Authorization': `Bearer ${userInfo.accessToken}`,
+					'Content-Type': 'application/json'
+				}
+			}
+		);
+		
+		if (response.ok) {
+			const userData = await response.json();
+			selectedUserProfile.value = {
+				userId: userData.userId || userId,
+				userProfileUrl: userData.userProfileUrl || '',
+				nickname: userData.userNickname || nickname,
+				email: userData.email || '',
+				country: userData.country || '',
+				region: userData.region || ''
+			};
+		} else {
+			// API 실패시 기본 정보만 사용
+			selectedUserProfile.value = {
+				userId: userId,
+				userProfileUrl: '',
+				nickname: nickname,
+				email: '',
+				country: '',
+				region: ''
+			};
+		}
+	} catch (error) {
+		console.error('사용자 정보 가져오기 실패:', error);
+		// 에러 발생시 기본 정보만 사용
+		selectedUserProfile.value = {
+			userId: userId,
+			userProfileUrl: '',
+			nickname: nickname,
+			email: '',
+			country: '',
+			region: ''
+		};
+	}
+	
+	isUserProfileDetailVisible.value = true;
+	document.body.classList.add('inactive');
+};
+
+const offUserProfile = () => {
+	isUserProfileDetailVisible.value = false;
+	document.body.classList.remove('inactive');
 };
 
 // 채팅방 정보 로드

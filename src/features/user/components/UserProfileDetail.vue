@@ -87,6 +87,7 @@ import UserProfileImage from '@/features/user/components/UserProfileImage.vue';
 import router from '@/core/router/index';
 import UserBoard from './UserBoard.vue';
 import api from '@/core/api/index';
+import { ChatService } from '@/features/chat/services/chatService';
 
 const { t } = useI18n();
 
@@ -134,14 +135,24 @@ const closeModal = () => {
 };
 
 const onChatRoom = async () => {
-	const response: AxiosResponse<IApiChatRoom> = await api.post(
-		`/chat/rooms?counterpartSeq=${props.userProfile.userId}`,
-		{},
-		applicationJsonWithToken(userInfo.accessToken),
-	);
+	try {
+		// localStorage에서 실제 userId 가져오기
+		const actualUserId = localStorage.getItem('userId') || userInfo.userId;
+		
+		const chatRoomId = await ChatService.createPrivateChatRoom(
+			props.userProfile.userId,
+			actualUserId,
+			userInfo.accessToken
+		);
 
-	if (response.data.status === 200) {
-		router.push(`/chat/${response.data.data}`);
+		if (chatRoomId) {
+			// 모달 닫기
+			closeModal();
+			// 채팅방으로 이동
+			router.push(`/chat/${chatRoomId}`);
+		}
+	} catch (error) {
+		console.error('개인 채팅방 생성 실패:', error);
 	}
 };
 

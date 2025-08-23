@@ -91,15 +91,20 @@
 				>
 					<div class="info__wrap">
 						<div class="item__image">
-							<!-- 채팅방 아이콘 -->
-							<div
-								class="chat-room-icon"
-								v-if="!chatRoom.countryId || chatRoom.countryId === 'ALL'"
-							>
-								{{ chatRoom.name.charAt(0).toUpperCase() }}
+							<!-- 개인 채팅방인 경우 상대방 프로필 이미지 -->
+							<div v-if="isPrivateChat(chatRoom)" class="private-chat-profile">
+								<img 
+									v-if="getChatRoomProfileUrl(chatRoom)"
+									:src="getChatRoomProfileUrl(chatRoom)"
+									:alt="getChatRoomDisplayName(chatRoom)"
+									class="profile-image"
+								/>
+								<div v-else class="chat-room-icon">
+									{{ getChatRoomDisplayName(chatRoom).charAt(0).toUpperCase() }}
+								</div>
 							</div>
 							<!-- 국가별 채팅방인 경우 국기 표시 -->
-							<div class="country-flag-icon" v-else>
+							<div v-else-if="chatRoom.countryId && chatRoom.countryId !== 'ALL'" class="country-flag-icon">
 								<span
 									v-if="
 										getFlagCode(chatRoom.countryId) &&
@@ -115,13 +120,17 @@
 									>🏳️</span
 								>
 								<div v-else class="fallback-icon">
-									{{ chatRoom.name.charAt(0).toUpperCase() }}
+									{{ getChatRoomDisplayName(chatRoom).charAt(0).toUpperCase() }}
 								</div>
+							</div>
+							<!-- 일반 채팅방 아이콘 (개인 채팅도 아니고 특정 국가도 아닌 경우) -->
+							<div v-else class="chat-room-icon">
+								{{ getChatRoomDisplayName(chatRoom).charAt(0).toUpperCase() }}
 							</div>
 						</div>
 						<div class="item__fnc">
 							<div class="list__item user">
-								<strong>{{ chatRoom.name }}</strong>
+								<strong>{{ getChatRoomDisplayName(chatRoom) }}</strong>
 								<em>참여자 {{ chatRoom.participantCount }}명</em>
 							</div>
 						</div>
@@ -333,6 +342,7 @@ const activeTab = ref<'my' | 'country'>('my');
 const chatRooms = ref<IChatRoom[]>([]);
 const selectedCountryId = ref('');
 const loading = ref(false);
+const otherUsersInfo = ref<Record<string, { nickname: string; profileUrl: string }>>({});
 
 // 채팅방 생성 모달
 const showCreateRoomModal = ref(false);
@@ -359,6 +369,66 @@ const alertText = ref('');
 // 더보기 모달
 const onMoreModal = ref(false);
 const onMoreChatRoomId = ref('');
+
+// 개인 채팅방인지 확인 (백엔드에서 isPrivateChat 필드 제공)
+const isPrivateChat = (chatRoom: IChatRoom) => {
+	return chatRoom.isPrivateChat === true;
+};
+
+// 개인 채팅방의 상대방 ID 가져오기
+const getOtherUserId = (chatRoom: IChatRoom) => {
+	if (!isPrivateChat(chatRoom)) return null;
+	return chatRoom.participantIds.find(id => id !== userInfo.userId) || null;
+};
+
+// 개인 채팅방의 상대방 정보 가져오기
+const loadOtherUserInfo = async (userId: string) => {
+	if (otherUsersInfo.value[userId]) return; // 이미 로드됨
+	
+	try {
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_API_URL}/api/v1/users/${userId}`,
+			{
+				headers: {
+					'Authorization': `Bearer ${userInfo.accessToken}`,
+					'Content-Type': 'application/json'
+				}
+			}
+		);
+		
+		if (response.ok) {
+			const userData = await response.json();
+			otherUsersInfo.value[userId] = {
+				nickname: userData.userNickname || '알 수 없음',
+				profileUrl: userData.userProfileUrl || ''
+			};
+		}
+	} catch (error) {
+		console.error(`Failed to load user info for ${userId}:`, error);
+		otherUsersInfo.value[userId] = {
+			nickname: '알 수 없음',
+			profileUrl: ''
+		};
+	}
+};
+
+// 채팅방 표시용 이름 가져오기
+const getChatRoomDisplayName = (chatRoom: IChatRoom) => {
+	if (isPrivateChat(chatRoom)) {
+		const otherUserId = getOtherUserId(chatRoom);
+		return otherUserId ? otherUsersInfo.value[otherUserId]?.nickname || '개인 채팅' : '개인 채팅';
+	}
+	return chatRoom.name || '채팅방';
+};
+
+// 채팅방 표시용 프로필 이미지 URL 가져오기
+const getChatRoomProfileUrl = (chatRoom: IChatRoom) => {
+	if (isPrivateChat(chatRoom)) {
+		const otherUserId = getOtherUserId(chatRoom);
+		return otherUserId ? otherUsersInfo.value[otherUserId]?.profileUrl || '' : '';
+	}
+	return '';
+};
 
 // 국가 목록은 countryStore에서 가져옴
 
@@ -404,6 +474,15 @@ const loadMyChatRooms = async () => {
 
 		console.log('Loaded chat rooms:', chatRooms.value);
 		console.log('Total chat rooms count:', chatRooms.value.length);
+
+		// 개인 채팅방의 상대방 정보 로드
+		const privateChats = chatRooms.value.filter(isPrivateChat);
+		for (const chatRoom of privateChats) {
+			const otherUserId = getOtherUserId(chatRoom);
+			if (otherUserId) {
+				await loadOtherUserInfo(otherUserId);
+			}
+		}
 
 		// 각 채팅방의 안읽은 메시지 수 로드
 		await loadUnreadCounts();
@@ -812,5 +891,21 @@ onUnmounted(() => {
 
 .floating-add-button:active {
 	transform: scale(0.95);
+}
+
+/* 개인 채팅방 프로필 이미지 스타일 */
+.private-chat-profile {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.profile-image {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
 }
 </style>

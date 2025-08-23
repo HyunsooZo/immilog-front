@@ -37,6 +37,7 @@ export interface IChatRoom {
 	createdAt: string;
 	participantCount: number;
 	isActive: boolean;
+	isPrivateChat?: boolean;
 	latestMessage?: ILatestMessage | null;
 }
 
