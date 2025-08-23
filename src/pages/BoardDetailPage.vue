@@ -237,6 +237,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { useModal } from '@/shared/composables/useModal';
 import type { IOtherUserInfo, IPost } from '@/shared/types/common';
 import { BoardType } from '@/shared/types/common';
 import api from '@/core/api/index';
@@ -262,18 +263,12 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
+const { openModal, closeModal } = useModal();
 const router = useRouter();
 const route = useRoute();
 const userInfo = useUserInfoStore();
 const countryStore = useCountryStore();
 
-// Modal control functions
-const isModalOpen = () => {
-	document.body.classList.add('inactive');
-};
-const isModalClose = () => {
-	document.body.classList.remove('inactive');
-};
 
 // User profile detail modal
 const isUserProfileDetailOn = ref(false);
@@ -282,12 +277,12 @@ const onUserProfileDetail = () => {
 		router.push('/my-page');
 	} else {
 		isUserProfileDetailOn.value = true;
-		isModalOpen();
+		openModal();
 	}
 };
 const offUserProfileDetail = () => {
 	isUserProfileDetailOn.value = false;
-	isModalClose();
+	closeModal();
 };
 
 // Check if user is the author
@@ -322,11 +317,11 @@ const replyIndex = ref<number | string>(0);
 const openReplyModal = (index: number) => {
 	replyIndex.value = index;
 	replyDetailModal.value = true;
-	isModalOpen();
+	openModal();
 };
 const closeReplyModal = () => {
 	replyDetailModal.value = false;
-	isModalClose();
+	closeModal();
 	// ReplyModal 닫힐 때 데이터 새로고침
 	detailBoard(false);
 };
@@ -339,23 +334,23 @@ const openReplyWrite = (index: number, nickname: string | null) => {
 	replyIndex.value = index;
 	isReplyWriteClicked.value = true;
 	taggedUser.value = nickname ? nickname : '';
-	isModalOpen();
+	openModal();
 };
 const closeReplyWrite = () => {
 	isReplyWriteClicked.value = false;
 	taggedUser.value = '';
-	isModalClose();
+	closeModal();
 	setTimeout(() => {
 		detailBoard(false);
 	}, 1500);
 };
 const openCommentWrite = () => {
 	isCommentWriteClicked.value = true;
-	isModalOpen();
+	openModal();
 };
 const closeCommentWrite = () => {
 	isCommentWriteClicked.value = false;
-	isModalClose();
+	closeModal();
 	setTimeout(() => {
 		detailBoard(false);
 	}, 500);

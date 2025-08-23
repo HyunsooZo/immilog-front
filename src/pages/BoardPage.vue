@@ -118,6 +118,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
+import { useModal } from '@/shared/composables/useModal';
 import { postBtn } from '@/shared/utils/icons';
 import { categoryList, sortingList } from '@/shared/utils/selectItems';
 import { useI18n } from 'vue-i18n';
@@ -137,6 +138,7 @@ import PostListShimmer from '@/shared/components/ui/PostListShimmer.vue';
 import api from '@/core/api/index';
 
 const { t } = useI18n();
+const { openModal, closeModal } = useModal();
 const alertValue = ref(false);
 const alertText = ref('');
 const country = ref('');
@@ -152,13 +154,6 @@ const closeAlert = () => {
 };
 
 const router = useRouter();
-// modal open/close 시 body 컨트롤
-const isModalOpen = () => {
-	document.body.classList.add('inactive');
-};
-const isModalClose = () => {
-	document.body.classList.remove('inactive');
-};
 
 // 스크롤 :상단고정영역, 글쓰기버튼
 const isStickyWrap = ref(false);
@@ -276,7 +271,7 @@ const openSortingSelect = () => {
 		selectList.value = sortingList;
 		isSortingSelectClicked.value = true;
 	});
-	isModalOpen();
+	openModal();
 };
 
 // 로딩 상태
@@ -330,7 +325,7 @@ const selectedValue = (value: ISelectItem) => {
 const closeSelect = () => {
 	isSortingSelectClicked.value = false;
 	// 선택 값이 변경되면 watch가 자동으로 fetchBoardList를 호출함
-	isModalClose();
+	closeModal();
 };
 
 
@@ -424,7 +419,7 @@ const handleScroll = () => {
 const onPostModal = ref(false);
 const openPostModal = () => {
 	onPostModal.value = true;
-	isModalOpen();
+	openModal();
 };
 const closePostModal = () => {
 	// 게시글 작성 후 목록 새로고침
@@ -432,7 +427,7 @@ const closePostModal = () => {
 	currentPage.value = 0;
 	fetchBoardList(country.value, selectSortingValue.value.code, 0);
 	onPostModal.value = false;
-	isModalClose();
+	closeModal();
 };
 </script>
 

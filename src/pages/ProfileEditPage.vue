@@ -167,6 +167,7 @@ import {
 import { computed, onMounted, ref, shallowRef } from 'vue';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
 // import { useLocationStore } from '@/shared/stores/location'; // 임시로 주석 처리
+import { useModal } from '@/shared/composables/useModal';
 import { resizeImage } from '@/shared/utils/image';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -180,6 +181,7 @@ import CustomAlert from '@/shared/components/ui/CustomAlert.vue';
 import api from '@/core/api/index';
 
 const { t } = useI18n();
+const { openModal, closeModal } = useModal();
 
 const router = useRouter();
 const nickNameCheckDone = ref(false);
@@ -433,12 +435,12 @@ const closeAlert = () => {
 const openSelect = (event: Event) => {
 	event.preventDefault();
 	isCountrySelectClicked.value = true;
-	document.body.classList.add('inactive');
+	openModal();
 };
 
 const closeSelect = () => {
 	isCountrySelectClicked.value = false;
-	document.body.classList.remove('inactive');
+	closeModal();
 };
 
 const selectedValue = (value: ISelectItem) => {

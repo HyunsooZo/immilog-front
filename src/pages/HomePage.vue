@@ -151,6 +151,7 @@ import { BoardType } from '@/shared/types/common';
 import type { IApiUserInfo } from '@/features/user/types';
 import type { IApiPosts } from '@/features/board/types';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { useModal } from '@/shared/composables/useModal';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { postBtn } from '@/shared/utils/icons';
@@ -193,12 +194,7 @@ const getCountriesWithAll = () => {
 };
 
 // modal open/close 시 body 컨트롤
-const isModalOpen = () => {
-	document.body.classList.add('inactive');
-};
-const isModalClose = () => {
-	document.body.classList.remove('inactive');
-};
+const { openModal, closeModal } = useModal();
 
 // 스크롤 관련 상태 및 이벤트 핸들러
 const isStickyWrap = ref(false);
@@ -354,7 +350,7 @@ const openCountrySelect = () => {
 		selectList.value = getCountriesWithAll();
 		isCountrySelectClicked.value = true;
 	});
-	isModalOpen();
+	openModal();
 };
 
 // 카테고리 목록 가져오기 (이미 전체 포함됨)
@@ -379,14 +375,14 @@ const openSortingSelect = () => {
 		selectList.value = sortingListWithoutLike;
 		isSortingSelectClicked.value = true;
 	});
-	isModalOpen();
+	openModal();
 };
 
 // select 관련 메소드 (닫기)
 const closeSelect = () => {
 	isCountrySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
-	isModalClose();
+	closeModal();
 };
 
 // select 관련 메소드 (선택된 값 처리)
@@ -487,13 +483,13 @@ const openPostModal = () => {
 		router.push({ name: 'SignIn' });
 	}
 	onPostModal.value = true;
-	isModalOpen();
+	openModal();
 };
 const closePostModal = () => {
 	state.value.posts = [];
 	fetchBoardList(selectSortingValue.value.code, currentPage.value);
 	onPostModal.value = false;
-	isModalClose();
+	closeModal();
 };
 // -->
 const alertValue = ref(false);
@@ -501,13 +497,13 @@ const alertText = ref('');
 const openAlert = (content: string) => {
 	alertValue.value = true;
 	alertText.value = content;
-	isModalOpen();
+	openModal();
 };
 
 const closeAlert = () => {
 	alertValue.value = false;
 	userInfo.setLocationMatch(true);
-	isModalClose();
+	closeModal();
 };
 
 const checkIfUserLocationMatch = () => {

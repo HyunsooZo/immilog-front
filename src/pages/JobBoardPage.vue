@@ -84,6 +84,7 @@ import { BoardType } from '@/shared/types/common';
 import type { IApiJobPost } from '@/features/board/types';
 import type { IPageable } from '@/shared/types/common';
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { useModal } from '@/shared/composables/useModal';
 import { postBtn } from '@/shared/utils/icons';
 import {
 	sortingList2,
@@ -108,16 +109,10 @@ import PostListShimmer from '@/shared/components/ui/PostListShimmer.vue';
 import api from '@/core/api/index';
 
 const { t } = useI18n();
+const { openModal, closeModal } = useModal();
 
 const router = useRouter();
 
-// modal open/close 시 body 컨트롤
-const isModalOpen = () => {
-	document.body.classList.add('inactive');
-};
-const isModalClose = () => {
-	document.body.classList.remove('inactive');
-};
 
 const userInfo = useUserInfoStore();
 
@@ -157,13 +152,13 @@ const handleScrollEvent = () => {
 const onPostModal = ref(false);
 const openPostModal = () => {
 	onPostModal.value = true;
-	isModalOpen();
+	openModal();
 };
 const closePostModal = () => {
 	onPostModal.value = false;
 	initializeState();
 	fetchJobBoardList();
-	isModalClose();
+	closeModal();
 };
 
 const state = ref({
@@ -248,7 +243,7 @@ const openCategorySelect = () => {
 		selectList.value = industryList;
 		isIndustrySelectClicked.value = true;
 	});
-	isModalOpen();
+	openModal();
 };
 
 // select 관련 메소드 (정렬)
@@ -258,14 +253,14 @@ const openSortingSelect = () => {
 		selectList.value = sortingList2;
 		isSortingSelectClicked.value = true;
 	});
-	isModalOpen();
+	openModal();
 };
 
 // select 관련 메소드 (닫기)
 const closeSelect = () => {
 	isIndustrySelectClicked.value = false;
 	isSortingSelectClicked.value = false;
-	isModalClose();
+	closeModal();
 };
 
 // select 관련 메소드 (선택된 값 처리)

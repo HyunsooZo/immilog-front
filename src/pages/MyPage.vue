@@ -132,7 +132,7 @@
 		<CompanyInfo v-if="isCompanyInfo" @close="offCompanyInfo" />
 	</div>
 	<teleport to="#modal" v-if="modalValue">
-		<ConfirmModal :modalText="modalText" @modalValue="closeModal" />
+		<ConfirmModal :modalText="modalText" @modalValue="closeConfirmModal" />
 	</teleport>
 	<NotificationModal v-if="isNotificationModal" @close="offNotificationModal" />
 </template>
@@ -144,6 +144,7 @@ import ConfirmModal from '@/shared/components/ui/ConfirmModal.vue';
 import CompanyInfo from '@/features/board/components/CompanyInfo.vue';
 import NotificationModal from '@/shared/components/common/NotificationModal.vue';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
+import { useModal } from '@/shared/composables/useModal';
 import { onMounted, ref, computed, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import {
@@ -158,6 +159,7 @@ import {
 import { useI18n } from 'vue-i18n';
 
 const { t, locale } = useI18n();
+const { openModal, closeModal } = useModal();
 const router = useRouter();
 const userInfo = useUserInfoStore();
 const loginStatus = ref(false);
@@ -175,13 +177,6 @@ watchEffect(() => {
 	locale.value = language;
 });
 
-// modal open/close 시 body 컨트롤
-const isModalOpen = () => {
-	document.body.classList.add('inactive');
-};
-const isModalClose = () => {
-	document.body.classList.remove('inactive');
-};
 
 // 프로필 수정 페이지로 이동
 const onProfileEdit = () => {
@@ -195,22 +190,22 @@ const onProfileEdit = () => {
 const isUserBoardOn = ref(false);
 const onMyBoard = () => {
 	isUserBoardOn.value = true;
-	isModalOpen();
+	openModal();
 };
 const offUserBoard = () => {
 	isUserBoardOn.value = false;
-	isModalClose();
+	closeModal();
 };
 
 // 북마크 표시 상태
 const isBookmarkOn = ref(false);
 const onBookmark = () => {
 	isBookmarkOn.value = true;
-	isModalOpen();
+	openModal();
 };
 const offBookMark = () => {
 	isBookmarkOn.value = false;
-	isModalClose();
+	closeModal();
 };
 
 // 공지사항
@@ -251,7 +246,7 @@ const openEmailForm = () => {
 // 모달 상태
 const modalValue = ref(false);
 const modalText = ref('로그아웃 하시겠습니까?');
-const closeModal = () => {
+const closeConfirmModal = () => {
 	modalValue.value = false;
 };
 

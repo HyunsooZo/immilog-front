@@ -171,6 +171,7 @@ import { useI18n } from 'vue-i18n';
 import { useLocationStore } from '@/shared/stores/location';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { useCountryStore } from '@/features/country/stores/country';
+import { useModal } from '@/shared/composables/useModal';
 import { applicationJson } from '@/shared/utils/header';
 import { AxiosResponse } from 'axios';
 import TheTopBox from '@/shared/components/common/TheTopBox.vue';
@@ -180,6 +181,7 @@ import SelectDialog from '@/shared/components/ui/SelectDialog.vue';
 import api from '@/core/api/index';
 
 const { t } = useI18n();
+const { openModal, closeModal } = useModal();
 
 const userInfo = useUserInfoStore();
 const countryStore = useCountryStore();
@@ -312,23 +314,16 @@ const onResult = () => {
 	});
 };
 
-const isModalOpen = () => {
-	document.body.classList.add('inactive');
-};
-
-const isModalClose = () => {
-	document.body.classList.remove('inactive');
-};
 
 const openSelect = (event: Event) => {
 	event.preventDefault();
 	isCountrySelectClicked.value = true;
-	isModalOpen();
+	openModal();
 };
 
 const closeSelect = () => {
 	isCountrySelectClicked.value = false;
-	isModalClose();
+	closeModal();
 };
 
 const selectedValue = (value: ISelectItem) => {
