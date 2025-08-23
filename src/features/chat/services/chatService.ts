@@ -115,11 +115,10 @@ export class ChatService {
 			// 내 채팅방 목록에서 해당 사용자와의 개인 채팅방 찾기
 			const myRooms = await this.getUserChatRooms(currentUserId, token);
 			
-			// isPrivateChat이 true이고 상대방이 참여자에 포함된 채팅방 찾기
+			// isPrivateChat이 true이고 participants에 targetUserId가 포함된 채팅방 찾기
 			const existingRoom = myRooms.find(room => 
 				room.isPrivateChat && 
-				room.participantIds.includes(targetUserId) &&
-				room.participantIds.includes(currentUserId)
+				room.participants.some(p => p.userId === targetUserId)
 			);
 			
 			return existingRoom ? existingRoom.id : null;

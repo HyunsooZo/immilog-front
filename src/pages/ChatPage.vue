@@ -342,7 +342,6 @@ const activeTab = ref<'my' | 'country'>('my');
 const chatRooms = ref<IChatRoom[]>([]);
 const selectedCountryId = ref('');
 const loading = ref(false);
-const otherUsersInfo = ref<Record<string, { nickname: string; profileUrl: string }>>({});
 
 // 채팅방 생성 모달
 const showCreateRoomModal = ref(false);
@@ -375,48 +374,17 @@ const isPrivateChat = (chatRoom: IChatRoom) => {
 	return chatRoom.isPrivateChat === true;
 };
 
-// 개인 채팅방의 상대방 ID 가져오기
-const getOtherUserId = (chatRoom: IChatRoom) => {
+// 개인 채팅방에서 상대방 참가자 찾기
+const getOtherParticipant = (chatRoom: IChatRoom) => {
 	if (!isPrivateChat(chatRoom)) return null;
-	return chatRoom.participantIds.find(id => id !== userInfo.userId) || null;
-};
-
-// 개인 채팅방의 상대방 정보 가져오기
-const loadOtherUserInfo = async (userId: string) => {
-	if (otherUsersInfo.value[userId]) return; // 이미 로드됨
-	
-	try {
-		const response = await fetch(
-			`${import.meta.env.VITE_APP_API_URL}/api/v1/users/${userId}`,
-			{
-				headers: {
-					'Authorization': `Bearer ${userInfo.accessToken}`,
-					'Content-Type': 'application/json'
-				}
-			}
-		);
-		
-		if (response.ok) {
-			const userData = await response.json();
-			otherUsersInfo.value[userId] = {
-				nickname: userData.userNickname || '알 수 없음',
-				profileUrl: userData.userProfileUrl || ''
-			};
-		}
-	} catch (error) {
-		console.error(`Failed to load user info for ${userId}:`, error);
-		otherUsersInfo.value[userId] = {
-			nickname: '알 수 없음',
-			profileUrl: ''
-		};
-	}
+	return chatRoom.participants.find(p => p.userId !== userInfo.userId) || null;
 };
 
 // 채팅방 표시용 이름 가져오기
 const getChatRoomDisplayName = (chatRoom: IChatRoom) => {
 	if (isPrivateChat(chatRoom)) {
-		const otherUserId = getOtherUserId(chatRoom);
-		return otherUserId ? otherUsersInfo.value[otherUserId]?.nickname || '개인 채팅' : '개인 채팅';
+		const otherParticipant = getOtherParticipant(chatRoom);
+		return otherParticipant?.nickname || otherParticipant?.userId || '개인 채팅';
 	}
 	return chatRoom.name || '채팅방';
 };
@@ -424,10 +392,27 @@ const getChatRoomDisplayName = (chatRoom: IChatRoom) => {
 // 채팅방 표시용 프로필 이미지 URL 가져오기
 const getChatRoomProfileUrl = (chatRoom: IChatRoom) => {
 	if (isPrivateChat(chatRoom)) {
-		const otherUserId = getOtherUserId(chatRoom);
-		return otherUserId ? otherUsersInfo.value[otherUserId]?.profileUrl || '' : '';
+		const otherParticipant = getOtherParticipant(chatRoom);
+		return otherParticipant?.profileImage || '';
 	}
 	return '';
+};
+
+// 채팅방 목록 정렬 (최근 메시지 순)
+const sortChatRoomsByLatestMessage = (rooms: IChatRoom[]) => {
+	return rooms.sort((a, b) => {
+		// 최근 메시지가 있는 채팅방을 위로
+		if (a.latestMessage && b.latestMessage) {
+			return new Date(b.latestMessage.sentAt).getTime() - new Date(a.latestMessage.sentAt).getTime();
+		}
+		
+		// 한쪽만 최근 메시지가 있으면 있는 쪽을 위로
+		if (a.latestMessage && !b.latestMessage) return -1;
+		if (!a.latestMessage && b.latestMessage) return 1;
+		
+		// 둘 다 최근 메시지가 없으면 생성일 순으로
+		return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+	});
 };
 
 // 국가 목록은 countryStore에서 가져옴
@@ -467,22 +452,16 @@ const loadMyChatRooms = async () => {
 		loading.value = true;
 		console.log('Loading user chat rooms for userId:', userInfo.userId);
 
-		chatRooms.value = await ChatService.getUserChatRooms(
+		const loadedRooms = await ChatService.getUserChatRooms(
 			userInfo.userId,
 			userInfo.accessToken,
 		);
 
+		// 최근 메시지 순으로 정렬 (가장 최근 메시지가 맨 위)
+		chatRooms.value = sortChatRoomsByLatestMessage(loadedRooms);
+
 		console.log('Loaded chat rooms:', chatRooms.value);
 		console.log('Total chat rooms count:', chatRooms.value.length);
-
-		// 개인 채팅방의 상대방 정보 로드
-		const privateChats = chatRooms.value.filter(isPrivateChat);
-		for (const chatRoom of privateChats) {
-			const otherUserId = getOtherUserId(chatRoom);
-			if (otherUserId) {
-				await loadOtherUserInfo(otherUserId);
-			}
-		}
 
 		// 각 채팅방의 안읽은 메시지 수 로드
 		await loadUnreadCounts();
@@ -500,10 +479,13 @@ const loadCountryChatRooms = async () => {
 
 	try {
 		loading.value = true;
-		chatRooms.value = await ChatService.getChatRoomsByCountry(
+		const loadedRooms = await ChatService.getChatRoomsByCountry(
 			selectedCountryId.value,
 			userInfo.accessToken,
 		);
+
+		// 최근 메시지 순으로 정렬
+		chatRooms.value = sortChatRoomsByLatestMessage(loadedRooms);
 
 		// 각 채팅방의 안읽은 메시지 수 로드
 		await loadUnreadCounts();

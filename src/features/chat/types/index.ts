@@ -27,12 +27,19 @@ export interface ILatestMessage {
 	messageType: string;
 }
 
+// 참가자 정보 인터페이스
+export interface IChatParticipant {
+	userId: string;
+	nickname: string;
+	profileImage?: string | null;
+}
+
 // 채팅방 인터페이스 (백엔드 ChatRoomDto에 대응)
 export interface IChatRoom {
 	id: string;
 	name: string;
 	countryId: string;
-	participantIds: string[];
+	participants: IChatParticipant[];
 	createdBy: string;
 	createdAt: string;
 	participantCount: number;
