@@ -431,6 +431,7 @@ const fetchBoardList = async (sortingMethod: string, nextPage: number) => {
 			},
 		);
 
+
 		updateStateWithResponse(response); // 상태 업데이트 함수 호출
 	} catch (error: unknown) {
 		console.error(error);

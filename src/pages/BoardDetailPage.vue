@@ -59,6 +59,23 @@
 		>
 			<div class="item">
 				<div class="info__wrap">
+					<!-- 댓글 작성자 프로필 이미지 -->
+					<button
+						type="button"
+						class="item__image"
+						:class="{ 'image--default': !comment.userProfileUrl }"
+						@click="onCommentUserProfile(comment.userId, comment.nickname, comment.userProfileUrl)"
+						style="cursor: pointer;"
+					>
+						<img
+							v-if="comment.userProfileUrl"
+							:src="comment.userProfileUrl"
+							:alt="comment.nickname"
+						/>
+						<div v-else class="user-avatar">
+							{{ comment.nickname?.charAt(0).toUpperCase() }}
+						</div>
+					</button>
 					<div class="item__fnc">
 						<div class="list__item">
 							<button
@@ -67,7 +84,7 @@
 								:class="{
 									'user--author': isAuthor(comment.userId),
 								}"
-								@click="onUserProfileDetail"
+								@click="onCommentUserProfile(comment.userId, comment.nickname, comment.userProfileUrl)"
 							>
 								<em>{{ getDisplayCountry(comment.country) }}</em>
 								<strong>{{ comment.nickname || '' }}</strong>
@@ -125,6 +142,23 @@
 			>
 				<div class="item">
 					<div class="info__wrap">
+						<!-- 대댓글 작성자 프로필 이미지 -->
+						<button
+							type="button"
+							class="item__image"
+							:class="{ 'image--default': !reply.userProfileUrl }"
+							@click="onReplyUserProfile(reply.userId, reply.nickname, reply.userProfileUrl)"
+							style="cursor: pointer;"
+						>
+							<img
+								v-if="reply.userProfileUrl"
+								:src="reply.userProfileUrl"
+								:alt="reply.nickname"
+							/>
+							<div v-else class="user-avatar">
+								{{ reply.nickname?.charAt(0).toUpperCase() }}
+							</div>
+						</button>
 						<div class="item__fnc">
 							<div class="list__item">
 								<button
@@ -133,7 +167,7 @@
 									:class="{
 										'user--author': isAuthor(reply.userId),
 									}"
-									@click="onUserProfileDetail"
+									@click="onReplyUserProfile(reply.userId, reply.nickname, reply.userProfileUrl)"
 								>
 									<em>{{ getDisplayCountry(reply.country) }}</em>
 									<strong>{{ reply.nickname || '' }}</strong>
@@ -231,6 +265,12 @@
 		@close="offUserProfileDetail"
 		v-if="isUserProfileDetailOn"
 	/>
+	<!-- 댓글/대댓글 작성자 프로필 모달 -->
+	<UserProfileDetail
+		:userProfile="selectedUserProfile"
+		@close="() => { isUserProfileDetailVisible = false; closeModal(); }"
+		v-if="isUserProfileDetailVisible"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -272,6 +312,15 @@ const countryStore = useCountryStore();
 
 // User profile detail modal
 const isUserProfileDetailOn = ref(false);
+const isUserProfileDetailVisible = ref(false);
+const selectedUserProfile = ref<IOtherUserInfo>({
+	userId: '',
+	userProfileUrl: '',
+	nickname: '',
+	email: '',
+	country: '',
+	region: ''
+});
 const onUserProfileDetail = () => {
 	if (post.value.userId === userInfo.userId) {
 		router.push('/my-page');
@@ -284,6 +333,68 @@ const offUserProfileDetail = () => {
 	isUserProfileDetailOn.value = false;
 	closeModal();
 };
+
+// 댓글 사용자 프로필
+const onCommentUserProfile = async (userId: string, nickname: string, userProfileUrl: string) => {
+	if (userId === userInfo.userId) {
+		router.push('/my-page');
+		return;
+	}
+	
+	try {
+		// API로 사용자 정보 가져오기 시도
+		const response = await fetch(
+			`${import.meta.env.VITE_APP_API_URL}/api/v1/users/${userId}`,
+			{
+				headers: {
+					'Authorization': `Bearer ${userInfo.accessToken}`,
+					'Content-Type': 'application/json'
+				}
+			}
+		);
+		
+		if (response.ok) {
+			const userData = await response.json();
+			selectedUserProfile.value = {
+				userId: userData.userId,
+				userProfileUrl: userData.userProfileUrl || userProfileUrl || '',
+				nickname: userData.nickname || nickname,
+				email: userData.email || '',
+				country: userData.country || '',
+				region: userData.region || ''
+			};
+		} else {
+			// API 실패 시 기본 정보 사용
+			selectedUserProfile.value = {
+				userId: userId,
+				userProfileUrl: userProfileUrl || '',
+				nickname: nickname,
+				email: '',
+				country: '',
+				region: ''
+			};
+		}
+		
+		isUserProfileDetailVisible.value = true;
+		openModal();
+	} catch (error) {
+		console.error('Error fetching user profile:', error);
+		// 에러 시 기본 정보 사용
+		selectedUserProfile.value = {
+			userId: userId,
+			userProfileUrl: userProfileUrl || '',
+			nickname: nickname,
+			email: '',
+			country: '',
+			region: ''
+		};
+		isUserProfileDetailVisible.value = true;
+		openModal();
+	}
+};
+
+// 대댓글 사용자 프로필 (같은 로직)
+const onReplyUserProfile = onCommentUserProfile;
 
 // Check if user is the author
 const isAuthor = (userIdParam: string) => {
@@ -456,6 +567,7 @@ const detailBoard = async (showLoading = true) => {
 			applicationJson,
 		);
 		if (response.status === 200) {
+			
 			// comments의 likeUsers 안전하게 처리
 			const processedComments = (response.data.comments || []).map(comment => ({
 				...comment,

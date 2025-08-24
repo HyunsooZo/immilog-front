@@ -9,7 +9,7 @@
 						'image--default':
 							boardType === boardTypeRef.JOBBOARD
 								? !jobPost.companyLogo
-								: !post.userProfileUrl,
+								: !getUserProfileImage(),
 						'image--default _company':
 							boardType === boardTypeRef.JOBBOARD && !jobPost.companyLogo,
 					}"
@@ -19,12 +19,12 @@
 						v-if="
 							boardType === boardTypeRef.JOBBOARD
 								? jobPost.companyLogo
-								: post.userProfileUrl
+								: getUserProfileImage()
 						"
 						:src="
 							boardType === boardTypeRef.JOBBOARD
 								? jobPost.companyLogo
-								: post.userProfileUrl
+								: getUserProfileImage()
 						"
 						alt=""
 						@click="
@@ -444,9 +444,14 @@ const checkIfTokenExists = () => {
 	if (!userInfo.accessToken) router.push('/sign-in');
 };
 
+const getUserProfileImage = (): string | null => {
+	// post.userProfileUrl이 있으면 사용, 없으면 post.profileImage 확인
+	return props.post.userProfileUrl || (props.post as any).profileImage || null;
+};
+
 const postAuthorInfo = ref<IOtherUserInfo>({
 	userId: props.post.userId,
-	userProfileUrl: props.post.userProfileUrl,
+	userProfileUrl: getUserProfileImage(),
 	nickname: props.post.userNickname,
 	email: '',
 	country: props.post.country,
