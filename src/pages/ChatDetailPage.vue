@@ -72,8 +72,16 @@
 								@click="onUserProfile(message.senderId, message.senderNickname)"
 								style="cursor: pointer;"
 							>
-								<div class="item__image image--default">
-									<div class="user-avatar">
+								<div 
+									class="item__image"
+									:class="{ 'image--default': !getParticipantProfileImage(message.senderId) }"
+								>
+									<img
+										v-if="getParticipantProfileImage(message.senderId)"
+										:src="getParticipantProfileImage(message.senderId)"
+										:alt="message.senderNickname"
+									/>
+									<div v-else class="user-avatar">
 										{{ message.senderNickname.charAt(0).toUpperCase() }}
 									</div>
 								</div>
@@ -488,6 +496,13 @@ const isSystemMessage = (message: IChatMessage): boolean => {
 		message.messageType === 'SYSTEM_JOIN' ||
 		message.messageType === 'SYSTEM_LEAVE'
 	);
+};
+
+const getParticipantProfileImage = (userId: string): string | null => {
+	if (!chatRoom.value?.participants) return null;
+	
+	const participant = chatRoom.value.participants.find(p => p.userId === userId);
+	return participant?.profileImage || null;
 };
 
 const shouldShowDateSeparator = (message: IChatMessage): boolean => {
