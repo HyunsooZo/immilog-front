@@ -101,7 +101,7 @@ const fetchMyPostList = async (page: number) => {
 	state.value.loading = true;
 	try {
 		const response: AxiosResponse<IApiPosts> = await api.get(
-			`/api/v1/posts/my?page=${page}`,
+			`/api/v1/posts/users/${props.userId}?page=${page}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {

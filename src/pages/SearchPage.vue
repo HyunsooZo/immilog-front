@@ -30,7 +30,7 @@
 			</div>
 		</div>
 		<!-- 검색결과 -->
-		<div class="search-result-wrap">
+		<div class="search-result-wrap" ref="scrollContainer">
 			<ul class="search-result">
 				<li
 					v-for="(item, index) in filteredSearchHistory.slice(0, 20)"
@@ -129,12 +129,15 @@ const offLoading = () => {
 
 // 검색 API 호출
 const callSearchApi = async (pageNumber: number) => {
+	if (!searchInput.value.trim()) return;
+	
 	onLoading();
+	searchApiCalled.value = true;
 	stackSearchHistory();
 	initializeStateIfKeywordChanged();
 	try {
 		const response: AxiosResponse<IApiSearchResult> = await api.get(
-			`/api/v1/posts?search=${searchInput.value}&page=${pageNumber}`,
+			`/api/v1/posts?keyword=${searchInput.value}&page=${pageNumber}`,
 			applicationJsonWithToken(userInfo.accessToken),
 		);
 		if (response.status === 200) {
@@ -159,6 +162,7 @@ const callSearchApi = async (pageNumber: number) => {
 const reCallSearchApi = (item: string) => {
 	searchInput.value = item;
 	searchApiCalled.value = true;
+	page.value = 0;
 	callSearchApi(0);
 };
 
@@ -223,6 +227,8 @@ watch(searchInput, newValue => {
 	}
 });
 
+const scrollContainer = ref<HTMLElement | null>(null);
+
 // 페이지 마운트
 onMounted(() => {
 	// 초기 검색 기록 로드
@@ -230,12 +236,18 @@ onMounted(() => {
 	if (storedHistory) {
 		searchHistory.value = JSON.parse(storedHistory);
 	}
-	window.addEventListener('scroll', handleScroll);
+	
+	// 스크롤 컨테이너에 이벤트 리스너 추가
+	if (scrollContainer.value) {
+		scrollContainer.value.addEventListener('scroll', handleScroll);
+	}
 });
 
 // 페이지 언마운트
 onUnmounted(() => {
-	window.removeEventListener('scroll', handleScroll);
+	if (scrollContainer.value) {
+		scrollContainer.value.removeEventListener('scroll', handleScroll);
+	}
 });
 
 const filteredSearchHistory = computed(() => {
@@ -248,16 +260,18 @@ const filteredSearchHistory = computed(() => {
 let canCall = true;
 
 // 스크롤 이벤트 핸들러
-const handleScroll = () => {
-	if (!canCall) return; // canCall이 false면 함수를 종료
+const handleScroll = (event: Event) => {
+	if (!canCall || !searchApiCalled.value || isLoading.value) return;
 
-	const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+	const target = event.target as HTMLElement;
+	const { scrollTop, clientHeight, scrollHeight } = target;
+	
 	if (scrollTop + clientHeight >= scrollHeight - 10) {
 		callSearchApi(++page.value);
-		canCall = false; // 함수 호출 후 canCall을 false로 설정
+		canCall = false;
 		setTimeout(() => {
-			canCall = true; // 3초 후에 canCall을 true로 변경
-		}, 3000); // 3초 후에 다시 호출할 수 있도록 설정
+			canCall = true;
+		}, 1000);
 	}
 };
 
