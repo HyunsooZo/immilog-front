@@ -318,7 +318,7 @@ strong + .button-text {
 }
 [class*='header'] [class*='title'] .header-logo {
   color: #333;
-  background: linear-gradient(45deg, #3f51b5 50%, #00bcd4 70%, #3f51b5 100%);
+  background: linear-gradient(45deg, #3730a3 50%, #a5b4fc 70%, #3730a3 100%);
   background-size: 200% auto;
   background-clip: text;
   text-fill-color: transparent;
@@ -327,6 +327,7 @@ strong + .button-text {
   animation: animateLogo 5s linear infinite;
   font: 500 1.8rem / 2rem 'LeckerliOne';
 }
+
 @keyframes animateLogo {
   to {
     background-position: 200% center;

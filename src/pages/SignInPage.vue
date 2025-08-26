@@ -213,10 +213,7 @@ const signIn = async () => {
 			console.error('Unknown error:', error.message);
 			openAlert('알 수 없는 오류가 발생했습니다.');
 		}
-	} finally {
-		setTimeout(() => {
-			offLoading();
-		}, 2000);
+		offLoading();
 	}
 };
 
