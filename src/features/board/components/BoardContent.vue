@@ -203,6 +203,19 @@
 					<p class="list__item cmt" v-if="boardType === boardTypeRef.POST">
 						<i class="blind">댓글</i>
 						<span class="item__count">{{ post.commentCount }}</span>
+						<!-- Badge Icons -->
+						<span 
+							v-if="post.badge" 
+							class="badge-icon" 
+							:class="`badge--${post.badge?.toLowerCase()}`"
+							@click="showBadgeTooltip = !showBadgeTooltip"
+						></span>
+						<!-- Badge Tooltip -->
+						<div v-if="showBadgeTooltip && post.badge" class="badge-tooltip" @click="showBadgeTooltip = false">
+							<div class="tooltip-content" @click.stop>
+								<p class="tooltip-text">{{ getBadgeDescription(post.badge) }}</p>
+							</div>
+						</div>
 					</p>
 				</div>
 				<div class="item__fnc">
@@ -488,6 +501,20 @@ const closeMoreModal = () => {
 
 const editPost = () => {};
 
+// Badge tooltip
+const showBadgeTooltip = ref(false);
+
+const getBadgeDescription = (badge: string): string => {
+	switch (badge) {
+		case 'MOST_VIEWED':
+			return t('badge.mostViewed');
+		case 'HOT':
+			return t('badge.hot');
+		default:
+			return '';
+	}
+};
+
 const deletePost = async () => {
 	if (props.boardType === BoardType.POST) {
 		try {
@@ -518,3 +545,94 @@ const deletePost = async () => {
 	}
 };
 </script>
+
+<style scoped>
+.badge-icon {
+	display: inline-block;
+	width: 1.4rem;
+	height: 1.4rem;
+	margin-left: 1rem;
+	vertical-align: middle;
+	cursor: pointer;
+	position: relative;
+}
+
+.badge--most_viewed {
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23fbbf24' viewBox='0 0 16 16'%3e%3cpath d='M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z'/%3e%3c/svg%3e");
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.badge--hot {
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ef4444' viewBox='0 0 16 16'%3e%3cpath d='M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15'/%3e%3c/svg%3e");
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	animation: pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+	0% {
+		opacity: 0.8;
+		transform: scale(1);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1.1);
+	}
+}
+
+.badge-tooltip {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.3);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	animation: fadeIn 0.2s ease-out;
+}
+
+.tooltip-content {
+	background: white;
+	border-radius: 12px;
+	padding: 1.5rem 2rem;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+	max-width: 300px;
+	width: 90%;
+	animation: slideUp 0.3s ease-out;
+}
+
+.tooltip-text {
+	color: #333;
+	font-size: 1.4rem;
+	line-height: 1.5;
+	margin: 0;
+	text-align: center;
+	word-break: keep-all;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes slideUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+</style>
