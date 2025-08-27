@@ -269,6 +269,7 @@ const openSortingSelect = () => {
 	nextTick(() => {
 		selectTitle.value = t('subMenuList.sorting');
 		selectList.value = sortingList;
+		console.log('sortingList:', sortingList);
 		isSortingSelectClicked.value = true;
 	});
 	openModal();

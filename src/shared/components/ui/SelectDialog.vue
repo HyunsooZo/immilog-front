@@ -20,7 +20,7 @@
 				</div>
 				<div class="modal-body">
 					<!-- 대륙 필터 (국가 선택 모달일 때만 표시) -->
-					<div class="sub-menu-wrap">
+					<div class="sub-menu-wrap" v-if="showContinentFilter">
 						<ul class="sub-menu__inner">
 							<li
 								v-for="continent in continents"

@@ -185,9 +185,7 @@ const countryStore = useCountryStore();
 const homeCategory = useHomeCategoryStore();
 const homeSorting = useHomeSortingStore();
 
-const sortingListWithoutLike = sortingList.filter(
-	s => s.code !== 'LIKE_COUNT' && s.code !== 'CREATED_DATE',
-);
+const sortingListWithoutLike = sortingList;
 
 const getCountriesWithAll = () => {
 	return countryStore.countrySelectItems;
