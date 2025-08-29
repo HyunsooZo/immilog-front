@@ -351,9 +351,15 @@ const loginByNaver = async () => {
 
 onMounted(async () => {
 	if (localStorage.getItem('accessToken')) {
-		await getCoordinate();
-		const lat = localStorage.getItem('latitude');
-		const lon = localStorage.getItem('longitude');
+		// 위치정보가 없을 때만 호출 (App.vue에서 이미 호출됨)
+		let lat = localStorage.getItem('latitude');
+		let lon = localStorage.getItem('longitude');
+		
+		if (!lat || !lon) {
+			await getCoordinate();
+			lat = localStorage.getItem('latitude');
+			lon = localStorage.getItem('longitude');
+		}
 		if (lat && lon) {
 			const response: AxiosResponse<IApiUserInfo> = await getUserInfo(
 				parseFloat(lat ? lat : '0'),
