@@ -2021,14 +2021,14 @@ strong + .button-text {
 }
 /* 목록 글쓰기 */
 .button--post._sticky {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
   width: 4rem;
   height: 4rem;
   border: 1px solid #ccc;
   border-radius: 50%;
-  z-index: 2;
+  z-index: 1000;
 }
 .button--post._sticky.active {
   position: fixed;

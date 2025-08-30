@@ -849,13 +849,13 @@ onUnmounted(() => {
 /* 플로팅 버튼 스타일 */
 .floating-add-button {
 	position: fixed;
-	bottom: 100px; /* 바텀 네비게이션 위에 위치 */
+	bottom: 80px;
 	right: 20px;
-	width: 4rem; /* 홈화면과 동일한 크기 */
-	height: 4rem; /* 홈화면과 동일한 크기 */
+	width: 4rem;
+	height: 4rem;
 	border-radius: 50%;
 	border: 1px solid #ccc;
-	background: rgb(0 0 0 / 0.5); /* 홈화면과 동일한 색상 */
+	background: rgb(0 0 0 / 0.5);
 	display: flex;
 	align-items: center;
 	justify-content: center;
