@@ -29,7 +29,7 @@
 			</div>
 		</div>
 
-		<div class="list-top-wrap">
+		<div class="list-top-wrap" v-if="!isPopularTab">
 			<!-- 카테고리 서브 메뉴 (이전의 국가 위치) -->
 			<div class="sub-menu-wrap">
 				<ul class="sub-menu__inner">
@@ -81,8 +81,9 @@
 
 		<!-- 게시글 목록 -->
 		<div class="list-wrap">
-			<!-- 글쓰기 버튼 -->
+			<!-- 최신글일 때만 글쓰기 버튼 표시 -->
 			<button
+				v-if="!isPopularTab"
 				type="button"
 				class="button-icon button--post _sticky"
 				@click="openPostModal"
@@ -96,18 +97,15 @@
 			<!-- 초기 로딩 시 시머 이펙트 -->
 			<PostListShimmer v-if="isInitialLoading" :count="5" />
 
-			<!-- 게시물이 없는 경우 -->
+			<!-- 최신글일 때만 게시물 없는 경우 표시 -->
 			<NoContent
-				v-else-if="
-					!isInitialLoading &&
-					state.pagination?.sort &&
-					state.posts?.length === 0
-				"
+				v-if="!isPopularTab && !isInitialLoading && state.pagination?.sort && state.posts?.length === 0"
 				:item="t('homeView.post')"
 			/>
 
-			<!-- 게시물 목록 -->
+			<!-- 최신글일 때는 기존 방식 -->
 			<BoardContent
+				v-if="!isPopularTab"
 				v-for="(item, index) in state.posts"
 				:key="item.postId"
 				:post="item"
@@ -115,6 +113,13 @@
 				:detail="false"
 				:jobPost="emptyJobPost"
 				:boardType="BoardType.POST"
+			/>
+
+			<!-- 인기글일 때는 PopularPostsView 컴포넌트 -->
+			<PopularPostsView
+				v-if="isPopularTab"
+				:country="selectCountry.code"
+				:category="selectCategoryValue.code"
 			/>
 		</div>
 	</div>
@@ -171,6 +176,7 @@ import PostModal from '@/features/board/components/PostModal.vue';
 import NoContent from '@/shared/components/ui/NoContent.vue';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
 import PostListShimmer from '@/shared/components/ui/PostListShimmer.vue';
+import PopularPostsView from '@/features/board/components/PopularPostsView.vue';
 import api from '@/core/api/index';
 import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
 
@@ -315,10 +321,12 @@ const selectMenu = async (selectedMenu: { active: any; label?: string }) => {
 	currentPage.value = 0;
 
 	if (selectedMenu.label === t('homeView.recentPost')) {
+		isPopularTab.value = false;
 		const recent = { name: 'selectItems.sortByRecent', code: 'CREATED_DATE' };
 		selectSortingValue.value = recent;
 		homeSorting.setSorting(recent);
 	} else if (selectedMenu.label === t('homeView.popularPost')) {
+		isPopularTab.value = true;
 		const like = { name: 'selectItems.sortByLike', code: 'LIKE_COUNT' };
 		selectSortingValue.value = like;
 		homeSorting.setSorting(like);
@@ -336,7 +344,9 @@ const selectMenu = async (selectedMenu: { active: any; label?: string }) => {
 		updateMenuBar();
 	});
 
-	await fetchBoardList(selectSortingValue.value.code, currentPage.value);
+	if (!isPopularTab.value) {
+		await fetchBoardList(selectSortingValue.value.code, currentPage.value);
+	}
 };
 
 // select 관련 메소드 (국가 선택)
@@ -406,6 +416,9 @@ let menus = [
 	{ label: t('homeView.popularPost'), active: ref(false) },
 ];
 
+// 인기글 탭 관련 상태
+const isPopularTab = ref(false);
+
 // 게시글 목록 관련 페이징 값
 const currentPage = ref(0);
 
@@ -454,6 +467,7 @@ const updateStateWithResponse = (response: AxiosResponse<IApiPosts>) => {
 		state.value.pagination = response.data.data.pageable;
 	}
 };
+
 
 // 무한 스크롤 관련 메소드 (스크롤 핸들링)
 const handleScroll = () => {
@@ -612,5 +626,6 @@ onUnmounted(() => {
 	text-align: center;
 	font-size: 1em;
 }
+
 
 </style>
