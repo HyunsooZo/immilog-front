@@ -86,7 +86,17 @@
 								}"
 								@click="onCommentUserProfile(comment.userId, comment.nickname, comment.userProfileUrl)"
 							>
-								<em>{{ getDisplayCountry(comment.country) }}</em>
+								<span class="country-flag">
+									<span 
+										v-if="!isCustomIcon(comment.country)"
+										:class="getFlagClass(comment.country)"
+										class="flag-icon small"
+									></span>
+									<span 
+										v-else-if="getCustomIconEmoji(comment.country)"
+										class="custom-icon flag-icon small"
+									>{{ getCustomIconEmoji(comment.country) }}</span>
+								</span>
 								<strong>{{ comment.nickname || '' }}</strong>
 							</button>
 						</div>
@@ -169,7 +179,17 @@
 									}"
 									@click="onReplyUserProfile(reply.userId, reply.nickname, reply.userProfileUrl)"
 								>
-									<em>{{ getDisplayCountry(reply.country) }}</em>
+									<span class="country-flag">
+										<span 
+											v-if="!isCustomIcon(reply.country)"
+											:class="getFlagClass(reply.country)"
+											class="flag-icon small"
+										></span>
+										<span 
+											v-else-if="getCustomIconEmoji(reply.country)"
+											class="custom-icon flag-icon small"
+										>{{ getCustomIconEmoji(reply.country) }}</span>
+									</span>
 									<strong>{{ reply.nickname || '' }}</strong>
 								</button>
 							</div>
@@ -294,6 +314,7 @@ import NoContent from '@/shared/components/ui/NoContent.vue';
 import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue';
 import ReplyWrite from '@/features/board/components/ReplyWrite.vue';
 import ReplyModal from '@/features/board/components/ReplyModal.vue';
+import { useFlagStore } from '@/shared/stores/flag';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
 import BoardDetailShimmer from '@/shared/components/ui/BoardDetailShimmer.vue';
 import TheHeader from '@/shared/components/layout/TheHeader.vue';
@@ -308,6 +329,7 @@ const router = useRouter();
 const route = useRoute();
 const userInfo = useUserInfoStore();
 const countryStore = useCountryStore();
+const flagStore = useFlagStore();
 
 
 // User profile detail modal
@@ -419,6 +441,19 @@ const getDisplayCountry = (countryValue: string): string => {
 
 	// 3. 못 찾으면 원래 값 반환 (하위 호환성)
 	return countryValue || '';
+};
+
+// 국기 정보 헬퍼 함수들
+const getFlagClass = (countryCode: string): string => {
+	return flagStore.getFlagClass(countryCode);
+};
+
+const isCustomIcon = (countryCode: string): boolean => {
+	return flagStore.isCustomIcon(countryCode);
+};
+
+const getCustomIconEmoji = (countryCode: string): string => {
+	return flagStore.getCustomIconEmoji(countryCode);
 };
 
 // Loading state and reply modal control

@@ -55,14 +55,14 @@
 					>
 						<span class="country-with-flag">
 							<span 
-								v-if="getFlagCode(selectCountry.code) && getFlagCode(selectCountry.code) !== 'world' && getFlagCode(selectCountry.code) !== 'etc'"
-								:class="`fi fi-${getFlagCode(selectCountry.code)}`"
+								v-if="!isCustomIcon(selectCountry.code)"
+								:class="getFlagClass(selectCountry.code)"
 								class="flag-icon"
 							></span>
 							<span 
-								v-else-if="getFlagCode(selectCountry.code) === 'etc'"
+								v-else-if="getCustomIconEmoji(selectCountry.code)"
 								class="custom-icon flag-icon"
-							>🏳️</span>
+							>{{ getCustomIconEmoji(selectCountry.code) }}</span>
 							{{ t(selectCountry.name) }}
 						</span>
 					</button>
@@ -178,9 +178,10 @@ import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
 import PostListShimmer from '@/shared/components/ui/PostListShimmer.vue';
 import PopularPostsView from '@/features/board/components/PopularPostsView.vue';
 import api from '@/core/api/index';
-import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
+import { useFlagStore } from '@/shared/stores/flag';
 
 const { t } = useI18n();
+const flagStore = useFlagStore();
 
 const router = useRouter();
 
@@ -558,8 +559,16 @@ const fetchUserInfo = async () => {
 	}
 };
 
-const getFlagCode = (countryCode: string): string => {
-	return countryCodeToFlagCode(countryCode);
+const getFlagClass = (countryCode: string): string => {
+	return flagStore.getFlagClass(countryCode);
+};
+
+const isCustomIcon = (countryCode: string): boolean => {
+	return flagStore.isCustomIcon(countryCode);
+};
+
+const getCustomIconEmoji = (countryCode: string): string => {
+	return flagStore.getCustomIconEmoji(countryCode);
 };
 
 // 로딩화면 관련 상태
@@ -612,20 +621,6 @@ onUnmounted(() => {
 	gap: 0.5rem;
 }
 
-.flag-icon {
-	width: 1.2em;
-	height: 0.9em;
-	display: inline-block;
-	border-radius: 2px;
-}
-
-.custom-icon {
-	display: inline-block;
-	width: 1.2em;
-	height: 1.2em;
-	text-align: center;
-	font-size: 1em;
-}
 
 
 </style>

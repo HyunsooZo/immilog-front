@@ -16,11 +16,13 @@ import { AxiosResponse } from 'axios';
 import TheFooter from '@/shared/components/layout/TheFooter.vue';
 import router from '@/core/router/index';
 import { useI18n } from 'vue-i18n';
+import { useFlagStore } from '@/shared/stores/flag';
 
 const { locale } = useI18n();
 const route = useRoute();
 const hideFooter = computed(() => route.meta.hideFooter);
 const userInfo = useUserInfoStore();
+const flagStore = useFlagStore();
 
 const init = async () => {
 	const accessToken = localStorage.getItem('accessToken');
@@ -140,6 +142,11 @@ const init = async () => {
 
 onMounted(async () => {
 	console.log('App.vue onMounted started');
+	
+	// 국기 아이콘 미리 로드 (성능 최적화)
+	flagStore.preloadCommonFlags();
+	console.log('Flag icons preloaded');
+	
 	locale.value = localStorage.getItem('language') === 'en' ? 'en' : 'ko';
 	console.log('Locale set to:', locale.value);
 	
@@ -159,3 +166,7 @@ onMounted(async () => {
 	}
 });
 </script>
+
+<style>
+@import '@/assets/flags.css';
+</style>

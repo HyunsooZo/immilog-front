@@ -126,3 +126,13 @@ export const uploadJobBoardApi = async (param: unknown) => {
 		return handleError(error);
 	}
 };
+
+// 인기 포스트 조회 API 요청 함수
+export const getPopularPostsApi = async () => {
+	try {
+		const response = await api.get('/api/v1/posts/popular');
+		return { status: response.status, data: response.data };
+	} catch (error) {
+		return handleError(error);
+	}
+};

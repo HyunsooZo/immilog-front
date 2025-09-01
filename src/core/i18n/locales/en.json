@@ -8,6 +8,8 @@
     "post": "Post",
     "recentPost": "Recent",
     "popularPost": "Popular",
+    "weeklyBest": "Weekly Best",
+    "hotPosts": "HOT Posts",
     "locationMismatch": "Location mismatch. Please set your location in MyPage > EditProfile"
   },
   "bookMarkView": {

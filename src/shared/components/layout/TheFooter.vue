@@ -84,8 +84,8 @@ const routeToIndexMapping: { [key: string]: number } = {
 	'/': 0,
 	'/board': 1,
 	'/chat': 2,
-	'/job-board': 3,
-	'/my-page': 4,
+	'/my-page': 3,
+	// '/job-board': 3,
 };
 
 // 현재 라우트가 변경될 때마다 실행되는 watchEffect

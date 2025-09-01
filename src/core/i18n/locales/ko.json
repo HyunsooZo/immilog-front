@@ -8,6 +8,8 @@
     "post": "글",
     "recentPost": "최신 글",
     "popularPost": "인기 글",
+    "weeklyBest": "주간 베스트",
+    "hotPosts": "HOT 글",
     "locationMismatch": "위치 정보가 일치하지 않습니다. 마이페이지 > 프로필 수정에서 위치를 설정해주세요."
   },
   "bookMarkView": {

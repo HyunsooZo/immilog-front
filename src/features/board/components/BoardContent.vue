@@ -35,13 +35,20 @@
 				<div class="item__fnc" @click="onUserProfileDetail">
 					<div class="list__item">
 						<button type="button" class="list__item_button ctg">
-							<em
-								v-if="
-									boardType === boardTypeRef.POST &&
-									safeTranslate('countries', post.country)
-								"
-								>{{ safeTranslate('countries', post.country) }}</em
+							<span
+								v-if="boardType === boardTypeRef.POST && post.country"
+								class="country-flag"
 							>
+								<span 
+									v-if="!isCustomIcon(post.country)"
+									:class="getFlagClass(post.country)"
+									class="flag-icon"
+								></span>
+								<span 
+									v-else-if="getCustomIconEmoji(post.country)"
+									class="custom-icon flag-icon"
+								>{{ getCustomIconEmoji(post.country) }}</span>
+							</span>
 							<strong
 								v-if="
 									boardType === boardTypeRef.POST &&
@@ -52,13 +59,20 @@
 							<strong class="em" v-if="boardType === boardTypeRef.JOBBOARD">{{
 								jobPost.company
 							}}</strong>
-							<em
-								v-if="
-									boardType === boardTypeRef.JOBBOARD &&
-									safeTranslate('countries', jobPost.country)
-								"
-								>{{ safeTranslate('countries', jobPost.country) }}</em
+							<span
+								v-if="boardType === boardTypeRef.JOBBOARD && jobPost.country"
+								class="country-flag"
 							>
+								<span 
+									v-if="!isCustomIcon(jobPost.country)"
+									:class="getFlagClass(jobPost.country)"
+									class="flag-icon"
+								></span>
+								<span 
+									v-else-if="getCustomIconEmoji(jobPost.country)"
+									class="custom-icon flag-icon"
+								>{{ getCustomIconEmoji(jobPost.country) }}</span>
+							</span>
 							<em v-if="boardType === boardTypeRef.JOBBOARD">{{
 								jobPost.region
 							}}</em>
@@ -282,16 +296,31 @@ import UserProfileDetail from '@/features/user/components/UserProfileDetail.vue'
 import AdContent from '@/features/board/components/AdContent.vue';
 import MoreModalForPost from '@/shared/components/ui/MoreModalForPost.vue';
 import api from '@/core/api/index';
+import { useFlagStore } from '@/shared/stores/flag';
 
 const { t } = useI18n();
 const router = useRouter();
 const userInfo = useUserInfoStore();
+const flagStore = useFlagStore();
 
 const boardTypeRef = BoardType;
 
 // 안전한 번역 헬퍼 함수
 const safeTranslate = (key: string, value: string) => {
 	return value ? t(`${key}.${value}`) : '';
+};
+
+// 국기 정보 헬퍼 함수들
+const getFlagClass = (countryCode: string): string => {
+	return flagStore.getFlagClass(countryCode);
+};
+
+const isCustomIcon = (countryCode: string): boolean => {
+	return flagStore.isCustomIcon(countryCode);
+};
+
+const getCustomIconEmoji = (countryCode: string): string => {
+	return flagStore.getCustomIconEmoji(countryCode);
 };
 
 const isModalOpen = () => document.body.classList.add('inactive');
@@ -635,4 +664,5 @@ const deletePost = async () => {
 		transform: translateY(0);
 	}
 }
+
 </style>

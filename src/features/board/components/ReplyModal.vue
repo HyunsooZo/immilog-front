@@ -40,9 +40,17 @@
 									>
 										<!-- //원글작성자 댓글 .user--author -->
 
-										<em>{{
-											safeTranslate('countries', detailPost.comments[commentIndex].country)
-										}}</em>
+										<span class="country-flag">
+											<span 
+												v-if="!isCustomIcon(detailPost.comments[commentIndex].country)"
+												:class="getFlagClass(detailPost.comments[commentIndex].country)"
+												class="flag-icon small"
+											></span>
+											<span 
+												v-else-if="getCustomIconEmoji(detailPost.comments[commentIndex].country)"
+												class="custom-icon flag-icon small"
+											>{{ getCustomIconEmoji(detailPost.comments[commentIndex].country) }}</span>
+										</span>
 										<strong>{{
 											detailPost.comments[commentIndex].nickname
 										}}</strong>
@@ -132,7 +140,17 @@
 											}"
 										>
 											<!-- //원글작성자 댓글 .user--author -->
-											<em>{{ safeTranslate('countries', reply.country) }}</em>
+											<span class="country-flag">
+												<span 
+													v-if="!isCustomIcon(reply.country)"
+													:class="getFlagClass(reply.country)"
+													class="flag-icon small"
+												></span>
+												<span 
+													v-else-if="getCustomIconEmoji(reply.country)"
+													class="custom-icon flag-icon small"
+												>{{ getCustomIconEmoji(reply.country) }}</span>
+											</span>
 											<strong>{{ reply.nickname }}</strong>
 										</button>
 									</div>
@@ -218,12 +236,27 @@ import { AxiosResponse } from 'axios';
 import type { IApiPostDetail } from '@/features/board/types/index';
 import ReplyWrite from '@/features/board/components/ReplyWrite.vue';
 import api from '@/core/api/index';
+import { useFlagStore } from '@/shared/stores/flag';
 
 const { t } = useI18n();
+const flagStore = useFlagStore();
 
 // 안전한 번역 헬퍼 함수
 const safeTranslate = (key: string, value: string) => {
 	return value ? t(`${key}.${value}`) : '';
+};
+
+// 국기 정보 헬퍼 함수들
+const getFlagClass = (countryCode: string): string => {
+	return flagStore.getFlagClass(countryCode);
+};
+
+const isCustomIcon = (countryCode: string): boolean => {
+	return flagStore.isCustomIcon(countryCode);
+};
+
+const getCustomIconEmoji = (countryCode: string): string => {
+	return flagStore.getCustomIconEmoji(countryCode);
 };
 
 const userInfo = useUserInfoStore();
@@ -370,3 +403,11 @@ onMounted(() => {
 	detailPost.value = props.post;
 });
 </script>
+
+<style scoped>
+/* 회색 배경으로 카드가 잘 보이도록 */
+.modal-body {
+	background: #f6f6f6;
+	min-height: 100vh;
+}
+</style>

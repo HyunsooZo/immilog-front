@@ -1,0 +1,131 @@
+/* 국기 아이콘 공통 스타일 */
+
+/* 기본 국기 아이콘 */
+.flag-icon {
+	width: 1.2em;
+	height: 0.9em;
+	display: inline-block;
+	border-radius: 2px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	flex-shrink: 0;
+}
+
+/* 커스텀 이모지 국기 아이콘 */
+.custom-icon.flag-icon {
+	width: 1.2em;
+	height: 1.2em;
+	text-align: center;
+	font-size: 1em;
+	border: none;
+	box-shadow: none;
+	flex-shrink: 0;
+}
+
+/* 국가 국기 컨테이너 */
+.country-with-flag {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+/* 국기만 표시하는 컨테이너 */
+.country-flag {
+	display: inline-flex;
+	align-items: center;
+	vertical-align: middle;
+}
+
+/* 작은 사이즈 국기 (댓글용) */
+.flag-icon.small {
+	width: 1em;
+	height: 0.75em;
+}
+
+.custom-icon.flag-icon.small {
+	width: 1em;
+	height: 1em;
+	font-size: 0.9em;
+}
+
+/* 중간 사이즈 국기 (리스트용) */
+.flag-icon.medium {
+	width: 1.1em;
+	height: 0.8em;
+}
+
+.custom-icon.flag-icon.medium {
+	width: 1.1em;
+	height: 1.1em;
+	font-size: 0.9em;
+}
+
+/* BoardContent 카테고리 영역 */
+.list__item_button.ctg {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+/* 작성자 정보 영역 */
+.post-author {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	color: #999;
+	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* 댓글 작성자 정보 */
+.comment-author {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 12px;
+	color: #666;
+}
+
+/* 사용자 프로필 영역 */
+.user-profile {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* 대댓글 들여쓰기 */
+.re--reply {
+	margin-left: 48px;
+}
+
+/* 대댓글 내부 요소들 전체적으로 왼쪽 정렬 */
+.re--reply .item {
+	padding-left: 12px;
+}
+
+.re--reply .info__wrap,
+.re--reply .text__wrap {
+	padding-left: 0;
+	margin-left: -12px;
+}
+
+/* 댓글/대댓글 카드 높이 줄이기 */
+.list-wrap.reply .item,
+.re--reply .item {
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
+.list-wrap.reply .text__wrap,
+.re--reply .text__wrap {
+	margin-top: 8px;
+	margin-bottom: 0;
+}
+
+.list-wrap.reply .info__wrap,
+.re--reply .info__wrap {
+	margin-bottom: 4px;
+}

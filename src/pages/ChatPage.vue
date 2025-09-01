@@ -1,6 +1,12 @@
 <template>
 	<div class="content">
-		<TheTopBox :title="'채팅'" />
+		<!-- 채팅 아이콘 헤더 -->
+		<div class="chat-header">
+			<svg class="chat-icon" viewBox="0 0 16 16">
+				<path :d="chatIcon.first" />
+				<path :d="chatIcon.second" />
+			</svg>
+		</div>
 
 		<!-- 상단 고정 영역 -->
 		<div class="sticky-wrap">
@@ -330,6 +336,7 @@ import { useCountryStore } from '@/features/country/stores/country';
 import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
 import { useI18n } from 'vue-i18n';
 import { useChatUnreadStore } from '@/features/chat/stores/chatUnread';
+import { chatIcon } from '@/shared/utils/icons';
 
 const userInfo = useUserInfoStore();
 const router = useRouter();
@@ -889,5 +896,21 @@ onUnmounted(() => {
 	height: 100%;
 	border-radius: 50%;
 	object-fit: cover;
+}
+
+/* 채팅 헤더 아이콘 스타일 */
+.chat-header {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 1rem;
+	background: #fff;
+	border-bottom: 1px solid #eee;
+}
+
+.chat-icon {
+	width: 24px;
+	height: 24px;
+	fill: #666;
 }
 </style>
