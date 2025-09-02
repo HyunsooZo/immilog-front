@@ -10,7 +10,14 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <title>Vite App</title>
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self' data: gap: https://ssl.gstatic.com https://api.ko-meet-back.com wss://api.ko-meet-back.com 'unsafe-eval' 'unsafe-inline'; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+                   font-src 'self' https://fonts.gstatic.com; 
+                   img-src 'self' data: https:; 
+                   connect-src 'self' https://api.ko-meet-back.com wss://api.ko-meet-back.com; 
+                   script-src 'self' 'unsafe-eval' 'unsafe-inline';">
+    <title>KoMeet</title>
     <script>
       global = globalThis
     </script>
