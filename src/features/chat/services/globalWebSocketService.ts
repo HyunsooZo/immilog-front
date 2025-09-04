@@ -37,9 +37,19 @@ export class GlobalWebSocketService {
 			const wsUrl = `${baseUrl}/ws/user/${userId}/notifications`;
 
 			console.log('Connecting to global WebSocket:', wsUrl);
+			
+			// 연결 타임아웃 설정 (5초)
+			const connectionTimeout = setTimeout(() => {
+				if (this.webSocket) {
+					this.webSocket.close();
+				}
+				reject(new Error('WebSocket connection timeout'));
+			}, 5000);
+
 			this.webSocket = new WebSocket(wsUrl);
 
 			this.webSocket.onopen = () => {
+				clearTimeout(connectionTimeout);
 				this.isConnected = true;
 				this.reconnectAttempts = 0;
 				console.log(`Global WebSocket connected for user: ${userId}`);
@@ -87,6 +97,7 @@ export class GlobalWebSocketService {
 			};
 
 			this.webSocket.onerror = error => {
+				clearTimeout(connectionTimeout);
 				console.error('Global WebSocket error:', error);
 				reject(error);
 			};

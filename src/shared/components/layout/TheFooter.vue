@@ -154,7 +154,8 @@ const connectGlobalWebSocket = async (userId: string) => {
 		await globalWebSocketService.connect(userId);
 		console.log('Global WebSocket connected successfully');
 	} catch (error) {
-		console.error('Failed to connect global WebSocket:', error);
+		console.warn('Failed to connect global WebSocket (this is optional):', error);
+		// WebSocket 연결 실패는 치명적이지 않으므로 경고로만 처리
 	}
 };
 
