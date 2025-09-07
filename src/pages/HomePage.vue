@@ -4,29 +4,11 @@
 		<div class="sticky-wrap" :class="{ active: isStickyWrap }">
 			<SearchBar />
 			<!-- 탭 메뉴 -->
-			<div class="menu-wrap">
-				<ul class="menu__inner">
-					<li
-						v-for="(menu, index) in menus"
-						:key="index"
-						:class="{ active: menu.active.value }"
-						class="menu__list"
-					>
-						<button
-							type="button"
-							@click="selectMenu(menu)"
-							class="button"
-							:aria-selected="menu.active.value ? 'true' : 'false'"
-						>
-							{{ menu.label }}
-						</button>
-					</li>
-				</ul>
-				<span
-					class="menu__bar"
-					:style="{ left: menuBarLeft, width: menuBarWidth }"
-				></span>
-			</div>
+			<TabMenu
+				:tabs="tabMenuItems"
+				:modelValue="activeTabIndex"
+				@tab-change="onTabChange"
+			/>
 		</div>
 
 		<div class="list-top-wrap" v-if="!isPopularTab">
@@ -153,7 +135,7 @@ import type {
 import { BoardType } from '@/shared/types/common';
 import type { IApiUserInfo } from '@/features/user/types';
 import type { IApiPosts } from '@/features/board/types';
-import { nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useModal } from '@/shared/composables/useModal';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
@@ -177,6 +159,7 @@ import NoContent from '@/shared/components/ui/NoContent.vue';
 import LoadingModal from '@/shared/components/ui/LoadingModal.vue';
 import PostListShimmer from '@/shared/components/ui/PostListShimmer.vue';
 import PopularPostsView from '@/features/board/components/PopularPostsView.vue';
+import TabMenu from '@/shared/components/ui/TabMenu.vue';
 import api from '@/core/api/index';
 import { useFlagStore } from '@/shared/stores/flag';
 
@@ -203,8 +186,7 @@ const { openModal, closeModal } = useModal();
 const isStickyWrap = ref(false);
 const isStickyButton = ref(false);
 const StickyWrapHeight = ref(0);
-const menuBarLeft = ref('0px');
-const menuBarWidth = ref('0px');
+const activeTabIndex = ref(0);
 
 const handleScrollEvent = () => {
 	window.addEventListener('scroll', handleStickyWrap);
@@ -235,13 +217,35 @@ const handleStickyWrap = () => {
 const handleStickyButton = (listTopHeight: number) => {
 	isStickyButton.value = window.scrollY > listTopHeight;
 };
-// 메뉴바 관련 메소드
-const updateMenuBar = () => {
-	const activeButton = document.querySelector(
-		'.menu__list.active .button',
-	) as HTMLElement | null;
-	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
-	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
+// 탭 메뉴 데이터
+const tabMenuItems = computed(() => [
+	{ label: t('homeView.recentPost'), active: activeTabIndex.value === 0 },
+	{ label: t('homeView.popularPost'), active: activeTabIndex.value === 1 },
+]);
+
+// 탭 변경 핸들러
+const onTabChange = (index: number) => {
+	activeTabIndex.value = index;
+	// 먼저 posts 배열 초기화
+	state.value.posts = [];
+	state.value.last = false;
+	currentPage.value = 0;
+
+	if (index === 0) {
+		isPopularTab.value = false;
+		const recent = { name: 'selectItems.sortByRecent', code: 'CREATED_DATE' };
+		selectSortingValue.value = recent;
+		homeSorting.setSorting(recent);
+	} else if (index === 1) {
+		isPopularTab.value = true;
+		const like = { name: 'selectItems.sortByLike', code: 'LIKE_COUNT' };
+		selectSortingValue.value = like;
+		homeSorting.setSorting(like);
+	}
+
+	if (!isPopularTab.value) {
+		fetchBoardList(selectSortingValue.value.code, currentPage.value);
+	}
 };
 
 // 게시글 목록 관련 반응형 객체
@@ -314,41 +318,6 @@ const selectSortingValue = ref<ISelectItem>({
 });
 const selectCountry = ref({ name: 'selectItems.allCountries', code: 'ALL' });
 
-// select 관련 메소드 (메뉴)
-const selectMenu = async (selectedMenu: { active: any; label?: string }) => {
-	// 먼저 posts 배열 초기화
-	state.value.posts = [];
-	state.value.last = false;
-	currentPage.value = 0;
-
-	if (selectedMenu.label === t('homeView.recentPost')) {
-		isPopularTab.value = false;
-		const recent = { name: 'selectItems.sortByRecent', code: 'CREATED_DATE' };
-		selectSortingValue.value = recent;
-		homeSorting.setSorting(recent);
-	} else if (selectedMenu.label === t('homeView.popularPost')) {
-		isPopularTab.value = true;
-		const like = { name: 'selectItems.sortByLike', code: 'LIKE_COUNT' };
-		selectSortingValue.value = like;
-		homeSorting.setSorting(like);
-	}
-
-	selectedMenu.active.value = true;
-	menus
-		.filter(menu => menu !== selectedMenu)
-		.forEach(menu => {
-			menu.active.value = false;
-		});
-
-	// 메뉴바 업데이트 후 데이터 fetch
-	await nextTick(() => {
-		updateMenuBar();
-	});
-
-	if (!isPopularTab.value) {
-		await fetchBoardList(selectSortingValue.value.code, currentPage.value);
-	}
-};
 
 // select 관련 메소드 (국가 선택)
 const openCountrySelect = () => {
@@ -410,12 +379,6 @@ const selectedValue = async (value: ISelectItem) => {
 
 	closeSelect(); // 선택 후 모달 닫기
 };
-
-// 게시글 목록 관련 상태
-let menus = [
-	{ label: t('homeView.recentPost'), active: ref(true) },
-	{ label: t('homeView.popularPost'), active: ref(false) },
-];
 
 // 인기글 탭 관련 상태
 const isPopularTab = ref(false);
@@ -584,7 +547,6 @@ onBeforeRouteLeave(() => {
 });
 
 onMounted(async () => {
-	updateMenuBar();
 	handleScrollEvent();
 
 	// 상태 초기화 추가
@@ -620,7 +582,4 @@ onUnmounted(() => {
 	align-items: center;
 	gap: 0.5rem;
 }
-
-
-
 </style>

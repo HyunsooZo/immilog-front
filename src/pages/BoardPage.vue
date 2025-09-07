@@ -4,29 +4,11 @@
 		<div class="sticky-wrap" :class="{ active: isStickyWrap }">
 			<SearchBar />
 			<!-- tab button -->
-			<div class="menu-wrap">
-				<ul class="menu__inner">
-					<li
-						v-for="(menu, index) in menus"
-						:key="index"
-						:class="{ active: menu.active.value }"
-						class="menu__list"
-					>
-						<button
-							type="button"
-							@click="selectMenu(menu)"
-							class="button"
-							:aria-selected="Boolean(menu.active.value)"
-						>
-							{{ menu.label }}
-						</button>
-					</li>
-				</ul>
-				<span
-					class="menu__bar"
-					:style="{ left: menuBarLeft, width: menuBarWidth }"
-				></span>
-			</div>
+			<TabMenu
+				:tabs="tabMenuItems"
+				:modelValue="activeTabIndex"
+				@tab-change="onTabChange"
+			/>
 		</div>
 
 		<div class="list-top-wrap">
@@ -116,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import { useModal } from '@/shared/composables/useModal';
 import { postBtn } from '@/shared/utils/icons';
@@ -135,6 +117,7 @@ import PostModal from '@/features/board/components/PostModal.vue';
 import BoardContent from '@/features/board/components/BoardContent.vue';
 import CustomAlert from '@/shared/components/ui/CustomAlert.vue';
 import PostListShimmer from '@/shared/components/ui/PostListShimmer.vue';
+import TabMenu from '@/shared/components/ui/TabMenu.vue';
 import api from '@/core/api/index';
 
 const { t } = useI18n();
@@ -192,31 +175,23 @@ const handleStickyButton = (listTopHeight: number) => {
 /* 사용자 정보 Store */
 const userInfo = useUserInfoStore();
 
-// .menu-wrap
-const menuBarLeft = ref('0px');
-const menuBarWidth = ref('0px');
+// 탭 메뉴 관련
+const activeTabIndex = ref(0);
+const tabMenuItems = computed(() => [
+	{ label: t('postView.myCountry'), active: activeTabIndex.value === 0 },
+	{ label: t('postView.interestCountry'), active: activeTabIndex.value === 1 },
+]);
 
-let menus = [
-	{ label: t('postView.myCountry'), active: ref(true) },
-	{ label: t('postView.interestCountry'), active: ref(false) },
-];
-
-const selectMenu = async (selectedMenu: ISelectMenu) => {
-	const isInterestCountryMenu =
-		selectedMenu.label === t('postView.interestCountry');
-	if (isInterestCountryMenu && !userInfo.userInterestCountry) {
+// 탭 변경 핸들러
+const onTabChange = (index: number) => {
+	const isInterestCountryTab = index === 1;
+	if (isInterestCountryTab && !userInfo.userInterestCountry) {
 		openAlert(t('postView.noInterestCountry'));
 		return;
 	}
-	selectedMenu.active.value = true;
-	menus
-		.filter(menu => menu !== selectedMenu)
-		.forEach(menu => {
-			menu.active.value = false;
-		});
-	nextTick(() => {
-		updateMenuBar();
-	});
+	
+	activeTabIndex.value = index;
+	
 	selectCategoryValue.value = {
 		name: 'selectItems.allCategories',
 		code: 'ALL',
@@ -227,7 +202,8 @@ const selectMenu = async (selectedMenu: ISelectMenu) => {
 		code: 'CREATED_DATE',
 	};
 	initState();
-	if (isInterestCountryMenu) {
+	
+	if (isInterestCountryTab) {
 		country.value = interestCountry.value
 			? interestCountry.value
 			: country.value;
@@ -236,13 +212,6 @@ const selectMenu = async (selectedMenu: ISelectMenu) => {
 	}
 };
 
-const updateMenuBar = () => {
-	const activeButton = document.querySelector(
-		'.menu__list.active .button',
-	) as HTMLElement | null;
-	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
-	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
-};
 
 const selectTitle = ref('');
 const selectList = ref<ISelectItem[]>([]);
@@ -400,7 +369,6 @@ onMounted(() => {
 	interestCountry.value = userInfo.userInterestCountry
 		? userInfo.userInterestCountry
 		: undefined;
-	updateMenuBar();
 	// country 값 설정으로 watch가 트리거되어 fetchBoardList가 자동 호출됨
 	window.addEventListener('scroll', handleScroll);
 });

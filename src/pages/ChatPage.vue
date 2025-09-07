@@ -10,35 +10,12 @@
 
 		<!-- 상단 고정 영역 -->
 		<div class="sticky-wrap">
-			<!-- 탭 메뉴 (HomePage 스타일 참고) -->
-			<div class="menu-wrap">
-				<ul class="menu__inner">
-					<li :class="{ active: activeTab === 'my' }" class="menu__list">
-						<button
-							type="button"
-							@click="switchTab('my')"
-							class="button"
-							:aria-selected="activeTab === 'my' ? 'true' : 'false'"
-						>
-							내 채팅방
-						</button>
-					</li>
-					<li :class="{ active: activeTab === 'country' }" class="menu__list">
-						<button
-							type="button"
-							@click="switchTab('country')"
-							class="button"
-							:aria-selected="activeTab === 'country' ? 'true' : 'false'"
-						>
-							국가별 채팅방
-						</button>
-					</li>
-				</ul>
-				<span
-					class="menu__bar"
-					:style="{ left: activeTab === 'my' ? '0%' : '50%', width: '50%' }"
-				></span>
-			</div>
+			<!-- 탭 메뉴 -->
+			<TabMenu
+				:tabs="tabMenuItems"
+				:modelValue="activeTabIndex"
+				@tab-change="onTabChange"
+			/>
 		</div>
 
 		<div class="list-top-wrap" v-if="activeTab === 'country'">
@@ -323,7 +300,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onActivated, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onActivated, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserInfoStore } from '@/features/user/stores/userInfo';
 import type { IChatRoom } from '@/features/chat/types/index';
@@ -332,6 +309,7 @@ import TheTopBox from '@/shared/components/common/TheTopBox.vue';
 import MoreModal from '@/shared/components/ui/MoreModal.vue';
 import SelectDialog from '@/shared/components/ui/SelectDialog.vue';
 import CustomAlert from '@/shared/components/ui/CustomAlert.vue';
+import TabMenu from '@/shared/components/ui/TabMenu.vue';
 import { useCountryStore } from '@/features/country/stores/country';
 import { countryCodeToFlagCode } from '@/shared/utils/flagMapping';
 import { useI18n } from 'vue-i18n';
@@ -346,9 +324,16 @@ const { t } = useI18n();
 
 // 상태 관리
 const activeTab = ref<'my' | 'country'>('my');
+const activeTabIndex = ref(0);
 const chatRooms = ref<IChatRoom[]>([]);
 const selectedCountryId = ref('');
 const loading = ref(false);
+
+// 탭 메뉴 데이터
+const tabMenuItems = computed(() => [
+	{ label: '내 채팅방', active: activeTabIndex.value === 0 },
+	{ label: '국가별 채팅방', active: activeTabIndex.value === 1 },
+]);
 
 // 채팅방 생성 모달
 const showCreateRoomModal = ref(false);
@@ -424,12 +409,13 @@ const sortChatRoomsByLatestMessage = (rooms: IChatRoom[]) => {
 
 // 국가 목록은 countryStore에서 가져옴
 
-// 탭 전환
-const switchTab = (tab: 'my' | 'country') => {
-	activeTab.value = tab;
+// 탭 변경 핸들러
+const onTabChange = (index: number) => {
+	activeTabIndex.value = index;
+	activeTab.value = index === 0 ? 'my' : 'country';
 	chatRooms.value = [];
 
-	if (tab === 'my') {
+	if (index === 0) {
 		loadMyChatRooms();
 	} else {
 		// 국가별 채팅방 탭으로 전환 시 바로 전체국가 채팅방 조회
