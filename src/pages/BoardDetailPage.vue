@@ -231,11 +231,6 @@
 								<i class="blind">좋아요</i>
 								<span class="item__count">{{ reply.likeCount }}</span>
 							</button>
-							<button
-								type="button"
-								class="list__item cmt"
-								@click="openReplyWrite(index, reply.nickname || null)"
-							></button>
 							<p class="list__item past">
 								<i class="blind">작성시간</i>
 								<span class="item__count">
