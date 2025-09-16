@@ -12,31 +12,6 @@
 				</button>
 			</div>
 			<div class="modal-body" ref="scrollBody">
-				<div class="sticky-wrap" :class="{ active: isStickyWrap }">
-					<div class="menu-wrap">
-						<ul class="menu__inner">
-							<li
-								v-for="(menu, index) in menus"
-								:key="index"
-								:class="{ active: menu.active.value }"
-								class="menu__list"
-							>
-								<button
-									type="button"
-									@click="selectMenu(menu)"
-									class="button"
-									:aria-selected="menu.active.value ? 'true' : 'false'"
-								>
-									{{ menu.label }}
-								</button>
-							</li>
-						</ul>
-						<span
-							class="menu__bar"
-							:style="{ left: menuBarLeft, width: menuBarWidth }"
-						></span>
-					</div>
-				</div>
 				<div class="list-wrap">
 					<BoardContent
 						v-for="(item, index) in state.posts"
@@ -53,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, nextTick, onUnmounted, Ref } from 'vue';
+import { onMounted, ref, onUnmounted } from 'vue';
 import { getBookmarkedPostApi } from '@/features/board/services/post';
 import { useI18n } from 'vue-i18n';
 import { emptyJobPost } from '@/shared/utils/emptyObjects';
@@ -73,10 +48,7 @@ const initializeState = () => ({
 
 const state = ref(initializeState());
 
-const menus = [
-	{ label: t('bookMark.post'), active: ref(true) },
-	{ label: t('bookMark.jobPost'), active: ref(false) },
-];
+// 메뉴 탭 제거 - 일반 게시글 북마크만 표시
 
 const closeModal = () => {
 	emits('update:bookmarkValue', false);
@@ -96,50 +68,13 @@ const fetchBookmarkList = async () => {
 	}
 };
 
-// 스크롤 관련 상태 및 이벤트 핸들러
-const isStickyWrap = ref(false);
-const menuBarLeft = ref('0px');
-const menuBarWidth = ref('0px');
 const scrollBody = ref<HTMLElement | null>(null);
-
-const handleScrollEvent = () => {
-	if (scrollBody.value) {
-		scrollBody.value.addEventListener('scroll', handleStickyWrap);
-	}
-};
-
-const handleStickyWrap = () => {
-	if (scrollBody.value) {
-		isStickyWrap.value = scrollBody.value.scrollTop > 0;
-	}
-};
-
-const updateMenuBar = () => {
-	const activeButton = document.querySelector(
-		'.menu__list.active .button',
-	) as HTMLElement | null;
-	menuBarLeft.value = activeButton ? `${activeButton.offsetLeft}px` : '0px';
-	menuBarWidth.value = activeButton ? `${activeButton.offsetWidth}px` : '0px';
-};
-
-// 메뉴 선택
-const selectMenu = (selectedMenu: { active: Ref<boolean>; label?: string }) => {
-	selectedMenu.active.value = true;
-	menus
-		.filter(menu => menu !== selectedMenu)
-		.forEach(menu => (menu.active.value = false));
-	nextTick(() => updateMenuBar());
-};
 
 onMounted(() => {
 	fetchBookmarkList();
-	updateMenuBar();
-	handleScrollEvent();
 });
 
 onUnmounted(() => {
-	if (scrollBody.value) {
-		scrollBody.value.removeEventListener('scroll', handleStickyWrap);
-	}
+	// cleanup if needed
 });
 </script>
