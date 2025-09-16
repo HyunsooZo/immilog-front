@@ -65,7 +65,7 @@
 		<div class="list-wrap">
 			<!-- 최신글일 때만 글쓰기 버튼 표시 -->
 			<button
-				v-if="!isPopularTab"
+				v-if="!isPopularTab && !onPostModal"
 				type="button"
 				class="button-icon button--post _sticky"
 				@click="openPostModal"
